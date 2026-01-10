@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>MP3 학습 플레이어</title>
+
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #000;
+      color: #FFD600;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      border: 2px solid #FFD600;
+      padding: 25px;
+      border-radius: 15px;
+      background-color: #111;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #FFD600;
+      background: #000;
+      color: #FFD600;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: #FFD600;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .progress-container {
+      width: 100%;
+      height: 25px;
+      background-color: #333;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background-color: #FFD600;
+      border-radius: 12px;
+      transition: width 0.2s linear;
+    }
+
+    canvas {
+      width: 100%;
+      height: 120px;
+      background:#000;
+      border:2px solid #FFD600;
+      border-radius:12px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+
+<div class="container">
+  <h1>MP3 학습 플레이어</h1>
+
+  <p>https://github.com/Jaydo14/English-audio.git</p>
+
+  <input id="mp3Url" type="text" placeholder="https://username.github.io/repo/audio.mp3">
+
+  <button onclick="loadAudio()">재생하기</button>
+
+  <audio id="audioPlayer" controls style="width:100%; margin-top:15px;"></audio>
+
+  <!-- 🔊 파형 비주얼라이저 -->
+  <canvas id="visualizer"></canvas>
+
+  <!-- 📊 진행률 -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div style="margin-top:10px;">
+    학습률: <span id="percent">0</span> %
+  </div>
+
+  <div style="margin-top:10px;">
+    Firebase 저장 상태: <span id="saveStatus">아직 저장 안됨</span>
+  </div>
+</div>
+
+<!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* 🔥🔥🔥 Firebase 설정 영역 🔥🔥🔥
+   Firebase 콘솔에서 복사한 설정을 여기 넣으세요 */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB2wi17U3OtAxyWRTBWrD4dwfLa8byN97Q",
+  authDomain: "build-a-monster-8299b.firebaseapp.com",
+  projectId: "build-a-monster-8299b",
+  storageBucket: "build-a-monster-8299b.firebasestorage.app",
+  messagingSenderId: "763957471990",
+  appId: "1:763957471990:web:908147b5f8dd23607d9ad7",
+  measurementId: "G-8GTCHR67PS"
+};
+
+// Firebase 초기화
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+/* 🎧 오디오 요소 */
+const audio = document.getElementById("audioPlayer");
+const progressBar = document.getElementById("progressBar");
+const percentText = document.getElementById("percent");
+const saveStatus = document.getElementById("saveStatus");
+
+/* 🎧 오디오 불러오기 */
+function loadAudio() {
+  const url = document.getElementById("mp3Url").value;
+  audio.src = url;
+  audio.play();
+  startVisualizer();
+}
+
+/* 📊 진행률 + Firestore 저장 */
+audio.addEventListener("timeupdate", () => {
+  if (!audio.duration) return;
+
+  const percent = (audio.currentTime / audio.duration) * 100;
+
+  progressBar.style.width = percent + "%";
+  percentText.innerText = percent.toFixed(1);
+
+  // 5% 단위로 저장
+  if (Math.round(percent) % 5 === 0) {
+    saveProgress(percent.toFixed(1));
+  }
+});
+
+/* 📝 Firestore 저장 함수 */
+function saveProgress(percent) {
+  saveStatus.innerText = "저장 중...";
+
+  db.collection("learningProgress").add({
+    mp3: audio.src,
+    percent: percent,
+    timestamp: new Date()
+  })
+  .then(() => {
+    saveStatus.innerText = "저장 완료 👍";
+  })
+  .catch(() => {
+    saveStatus.innerText = "저장 실패 ❌";
+  });
+}
+
+/* 🔊 파형 비주얼라이저 */
+let audioCtx, analyser, source;
+
+function startVisualizer() {
+  const canvas = document.getElementById("visualizer");
+  const ctx = canvas.getContext("2d");
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 256;
+
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  function draw() {
+    requestAnimationFrame(draw);
+
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    analyser.getByteFrequencyData(dataArray);
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const barWidth = (canvas.width / bufferLength) * 1.8;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+      let barHeight = dataArray[i];
+
+      ctx.fillStyle = "#FFD600";
+      ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+      x += barWidth + 1;
+    }
+  }
+
+  draw();
+}
+</script>
+
+</body>
+</html>
+<link rel="manifest" href="manifest.json">
