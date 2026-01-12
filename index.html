@@ -1,47 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>English App</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>학습 앱</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin-top: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* 공통 버튼 스타일 */
+    button {
+      width: 100%;
+      padding: 16px 0;
+      margin: 8px 0;
+      border-radius: 999px;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform .1s ease;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(.97);
+    }
+
+    /* Unit 선택 화면 버튼 중앙 정렬 */
+    .unit-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .unit-list button {
+      width: 80%;
+    }
+
+    /* 문제 박스 */
+    .box {
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      padding: 30px;
+      margin: 20px 0;
+      border-radius: 16px;
+      background: #fafafa;
+      border: 2px solid #ddd;
+    }
+
+    /* 성공시: 녹색 반짝임 */
+    .success {
+      animation: sparkle 0.6s ease;
+      border-color: #2ecc71;
+      background: #e9f9ef;
+    }
+
+    @keyframes sparkle {
+      0% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
+      50% { box-shadow: 0 0 20px rgba(46, 204, 113, .8); }
+      100% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
+    }
+
+    /* 실패시: 빨간 흔들림 */
+    .fail {
+      animation: shake 0.4s ease;
+      border-color: #e74c3c;
+      background: #fdecea;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* 모바일 대응 추가 확대 */
+    @media (max-width: 480px) {
+      .box {
+        font-size: 26px;
+        padding: 24px;
+      }
+
+      button {
+        font-size: 20px;
+        padding: 18px 0;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container">
 
-  <!-- 로그인 -->
-  <div id="login-box" class="box">
-    <h2>로그인</h2>
-    <input id="username" type="text" placeholder="이름을 입력하세요" />
-    <button onclick="login()">로그인</button>
-  </div>
+    <!-- 로그인 화면(필요 시 확장 가능) -->
+    <section id="login-screen" class="">
+      <h1>학습 앱</h1>
+      <button id="startBtn">시작하기</button>
+    </section>
 
-  <!-- UNIT 선택 -->
-  <div id="app" class="box" style="display:none">
-    <h2>Choose Unit</h2>
+    <!-- Unit 선택 화면 -->
+    <section id="unit-screen" class="hidden">
+      <h2>Unit 선택</h2>
 
-    <div id="unit-buttons" class="unit-center">
-      <button onclick="selectUnit(1)">Unit 1</button>
-      <button onclick="selectUnit(2)">Unit 2</button>
-      <button onclick="selectUnit(3)">Unit 3</button>
-      <button onclick="selectUnit(4)">Unit 4</button>
-      <button onclick="selectUnit(5)">Unit 5</button>
-      <button onclick="selectUnit(6)">Unit 6</button>
-      <button onclick="selectUnit(7)">Unit 7</button>
-      <button onclick="selectUnit(8)">Unit 8</button>
-    </div>
-  </div>
+      <div class="unit-list">
+        <button class="unit-btn" data-unit="1">Unit 1</button>
+        <button class="unit-btn" data-unit="2">Unit 2</button>
+        <button class="unit-btn" data-unit="3">Unit 3</button>
+      </div>
+    </section>
 
-  <!-- 학습 화면 -->
-  <div id="study-box" class="box" style="display:none">
-    <h2>Study</h2>
+    <!-- 학습 메인 화면 -->
+    <section id="study-screen" class="hidden">
+      <h2 id="unit-title"></h2>
 
-    <div id="sentence">Press Start</div>
+      <div id="questionBox" class="box">
+        문제 영역
+      </div>
 
-    <div id="progress-wrap">
-      <div id="progress"></div>
-    </div>
+      <button id="correctBtn" style="background:#2ecc71;color:white;">정답</button>
+      <button id="wrongBtn" style="background:#e74c3c;color:white;">오답</button>
 
-    <button onclick="startStudy()">Start</button>
+      <button id="backToUnit" style="background:#bdc3c7;">Unit 선택으로</button>
+    </section>
+
   </div>
 
   <script src="app.js"></script>
