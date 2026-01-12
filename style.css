@@ -1,95 +1,32 @@
-/* 전체 배경 */
 body {
-  margin: 0;
-  font-family: 'Pretendard', Arial, sans-serif;
-  background: #0a0a0a;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  padding: 20px;
 }
 
-/* 중앙 카드 박스 */
-.container {
-  width: 95%;
-  max-width: 420px;
-  background: #111;
-  border-radius: 18px;
-  padding: 25px 20px;
-  box-shadow: 0 0 25px rgba(255, 211, 0, 0.2);
+#login-box, #app {
+  max-width: 360px;
+  margin: auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* 큰 제목 */
-h1 {
-  text-align: center;
-  color: #FFD300;
-  margin-bottom: 10px;
-}
-
-/* 화면 섹션 숨김 컨트롤 */
-.screen { display: none; }
-.screen.active { display: block; }
-
-/* 입력 폼 */
 input {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  padding: 10px;
+  margin-top: 8px;
+  box-sizing: border-box;
 }
 
-/* 기본 버튼 */
 button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 25px;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  background: #FFD300;
-  color: black;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(255, 211, 0, 0.4);
-}
-
-/* 진행률 바 */
-.progress-wrap {
-  margin-top: 15px;
-}
-
-.progress-bar-bg {
-  width: 100%;
-  height: 12px;
-  background: #333;
-  border-radius: 12px;
-}
-
-.progress-bar {
-  width: 0%;
-  height: 12px;
-  background: #FFD300;
-  border-radius: 12px;
-  transition: 0.3s;
-}
-
-/* 문장 박스 */
-.sentence-box {
-  background: #000;
-  border-left: 5px solid #FFD300;
-  padding: 12px;
-  border-radius: 10px;
   margin-top: 12px;
-  min-height: 50px;
-  display: flex;
-  align-items: center;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
+#buttons button {
+  margin-top: 6px;
 }
