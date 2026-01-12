@@ -1,58 +1,90 @@
-body {
-  background: #000000;
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
+body{
+  margin:0;
+  background:#000;
+  color:white;
+  font-family:Arial;
+  text-align:center;
 }
 
-.box {
-  max-width: 600px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 2px solid #39ff14;
-  border-radius: 20px;
+/* 공통 박스 */
+.box{
+  max-width:420px;
+  margin:0 auto;
+  padding:20px;
 }
 
-button {
-  background: #111;
-  color: white;
-  border: 2px solid #39ff14;
-  border-radius: 12px;
-  padding: 10px 15px;
-  margin: 5px;
+/* 입력창 */
+input{
+  width:90%;
+  padding:14px;
+  margin:8px;
+  font-size:18px;
+  border-radius:10px;
+  border:none;
 }
 
-button:hover {
-  background: #39ff14;
-  color: black;
+/* 버튼 공통 */
+button{
+  width:90%;
+  padding:16px;
+  margin-top:10px;
+  font-size:20px;
+  border-radius:12px;
+  border:2px solid #39ff14;
+  background:black;
+  color:#39ff14;
 }
 
-.unitBtn {
-  display: inline-block;
-  margin: 6px;
+/* 모바일 터치 영역 크게 */
+button:active{
+  transform:scale(0.97);
 }
 
-#sentenceBox {
-  padding: 15px;
-  border: 1px solid #39ff14;
-  border-radius: 10px;
-  min-height: 60px;
-  margin-bottom: 10px;
+/* 유닛 버튼 grid */
+.unitGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+/* 문장 */
+.sentence{
+  min-height:120px;
+  font-size:22px;
+  line-height:32px;
+  margin-top:20px;
+}
+
+/* 뒤로가기 버튼 */
+.backBtn{
+  width:auto;
+  padding:10px 14px;
+  font-size:16px;
+  margin-bottom:10px;
 }
 
 /* 진행률 바 */
-#progress-wrap {
-  width: 100%;
-  height: 18px;
-  background: #222;
-  border-radius: 10px;
-  margin-top: 10px;
+#progress-wrap{
+  width:90%;
+  height:10px;
+  background:#333;
+  border-radius:10px;
+  margin:10px auto;
 }
 
-#progress {
-  height: 18px;
-  width: 0%;
-  background: #39ff14;
-  border-radius: 10px;
-  transition: width 0.3s;
+#progress{
+  width:0%;
+  height:10px;
+  background:#39ff14;
+  border-radius:10px;
+}
+
+#progressPercent{
+  margin-top:5px;
+}
+
+/* 형광 하이라이트 */
+.highlight{
+  color:#39ff14;
+  font-weight:bold;
 }
