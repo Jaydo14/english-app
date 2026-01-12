@@ -1,166 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>English Speaking App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>English Speaking App</title>
 
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
+<style>
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
+/* 기본 레이아웃 */
+body {
+  margin: 0;
+  background: #000000;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
 
-    h1 {
-      color: #b0ff3b;
-    }
+/* 중앙 카드 박스 */
+.box {
+  width: 95%;
+  max-width: 420px;
+  background: #0d0d0d;
+  border: 2px solid #39ff14;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
 
-    .box {
-      border: 2px solid #b0ff3b;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-    }
+/* 제목 */
+h1 {
+  color: #39ff14;
+}
 
-    button {
-      background: #b0ff3b;
-      color: #000;
-      border: none;
-      padding: 14px 22px;
-      border-radius: 12px;
-      font-size: 18px;
-      margin: 8px;
-      cursor: pointer;
-      width: 85%;
-      max-width: 300px;
-    }
+/* 버튼 스타일 */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border: 2px solid #39ff14;
+  border-radius: 12px;
+  background: black;
+  color: white;
+  font-size: 16px;
+}
 
-    button:active {
-      transform: scale(0.97);
-    }
+/* 유닛 버튼 묶음 */
+#unit-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
 
-    /* 진행률 바 영역 */
-    #progress-wrap {
-      width: 90%;
-      max-width: 400px;
-      height: 14px;
-      background: #333;
-      margin: 10px auto;
-      border-radius: 7px;
-      overflow: hidden;
-    }
+/* 진행률 바 */
+#progress-wrap {
+  width: 100%;
+  height: 14px;
+  background: #333;
+  border-radius: 10px;
+  margin-top: 10px;
+}
 
-    #progress {
-      width: 0%;
-      height: 100%;
-      background: #b0ff3b;
-      transition: width 0.3s;
-    }
+#progress {
+  height: 100%;
+  width: 0%;
+  background: #39ff14;
+  border-radius: 10px;
+}
 
-    #progress-percent {
-      margin-top: 6px;
-      font-size: 18px;
-      color: #b0ff3b;
-    }
+/* 파형 캔버스 */
+#visualizer {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: black;
+  border: 2px solid #39ff14;
+}
 
-    /* 문장 박스 */
-    #sentence {
-      margin-top: 20px;
-      font-size: 22px;
-      min-height: 70px;
-    }
+/* 문장 표시 */
+#sentence {
+  font-size: 18px;
+  min-height: 60px;
+}
 
-    /* 성공 효과 - 녹색 반짝임 */
-    .success {
-      animation: glow 0.6s ease-out;
-      color: #b0ff3b;
-    }
+/* 인식 성공 효과 */
+.success {
+  animation: flash 0.5s;
+}
 
-    @keyframes glow {
-      0% { text-shadow: 0 0 0px #b0ff3b; }
-      100% { text-shadow: 0 0 20px #b0ff3b; }
-    }
+@keyframes flash {
+  0% { color:#39ff14; }
+  100% { color:white; }
+}
 
-    /* 실패 효과 - 빨간 흔들림 */
-    .fail {
-      animation: shake 0.4s;
-      color: #ff4b4b;
-    }
+/* 인식 실패 효과 */
+.fail {
+  animation: shake 0.4s;
+}
 
-    @keyframes shake {
-      0% { transform: translateX(0px); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
-      100% { transform: translateX(0px); }
-    }
+@keyframes shake {
+  0% { transform: translateX(-5px); color:red;}
+  50% { transform: translateX(5px); color:red;}
+  100% { transform: translateX(0); color:white;}
+}
 
-    /* 모바일 최적화 */
-    @media (max-width: 600px) {
-      h1 { font-size: 22px; }
-      #sentence { font-size: 18px; }
-      button { font-size: 16px; padding: 12px 16px; }
-    }
-  </style>
+</style>
 </head>
 
 <body>
-  <div class="container">
 
-    <!-- 로그인 화면 -->
-    <div id="login-box" class="box">
-      <h1>English Study App</h1>
-      <p>로그인 버튼을 눌러 시작하세요</p>
-      <button onclick="login()">Login</button>
-    </div>
+<div class="box">
 
-    <!-- 앱 영역 -->
-    <div id="app" style="display:none;">
-      
-      <div class="box">
-        <h2>Unit 선택</h2>
+  <h1>English Speaking App</h1>
 
-        <div id="unit-buttons">
-          <button onclick="selectUnit(1)">Unit 1</button>
-          <button onclick="selectUnit(2)">Unit 2</button>
-          <button onclick="selectUnit(3)">Unit 3</button>
-          <button onclick="selectUnit(4)">Unit 4</button>
-          <button onclick="selectUnit(5)">Unit 5</button>
-          <button onclick="selectUnit(6)">Unit 6</button>
-          <button onclick="selectUnit(7)">Unit 7</button>
-          <button onclick="selectUnit(8)">Unit 8</button>
-        </div>
-      </div>
-
-      <!-- 학습 화면 -->
-      <div id="study-box" class="box" style="display:none;">
-        <h2>학습 진행</h2>
-
-        <div id="progress-wrap">
-          <div id="progress"></div>
-        </div>
-
-        <div id="progress-percent">0%</div>
-
-        <p id="sentence">문장이 표시됩니다</p>
-
-        <button onclick="startStudy()">Start</button>
-      </div>
-    </div>
-
+  <!-- 로그인 화면 -->
+  <div id="login-box">
+    <input id="id" placeholder="ID" style="width:100%;padding:10px;margin-top:10px;">
+    <input id="pw" type="password" placeholder="Password" style="width:100%;padding:10px;margin-top:10px;">
+    <button onclick="login()">Login</button>
   </div>
 
-  <!-- JS 파일 연결 -->
-  <script src="app.js"></script>
+  <!-- Unit 선택 -->
+  <div id="app" style="display:none;">
+    <h2>Select Unit</h2>
+
+    <div id="unit-buttons">
+      <button onclick="selectUnit(1)">Unit 1</button>
+      <button onclick="selectUnit(2)">Unit 2</button>
+      <button onclick="selectUnit(3)">Unit 3</button>
+      <button onclick="selectUnit(4)">Unit 4</button>
+      <button onclick="selectUnit(5)">Unit 5</button>
+      <button onclick="selectUnit(6)">Unit 6</button>
+      <button onclick="selectUnit(7)">Unit 7</button>
+      <button onclick="selectUnit(8)">Unit 8</button>
+    </div>
+  </div>
+
+  <!-- 학습 화면 -->
+  <div id="study-box" style="display:none;">
+    <h2>Study</h2>
+
+    <p id="sentence">Press Start</p>
+
+    <!-- 파형 -->
+    <canvas id="visualizer" width="330" height="100"></canvas>
+
+    <!-- 진행률 바 -->
+    <div id="progress-wrap">
+      <div id="progress"></div>
+    </div>
+    <p id="percentText">0%</p>
+
+    <button onclick="startStudy()">Start</button>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
