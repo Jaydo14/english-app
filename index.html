@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>English Practice App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
@@ -29,12 +28,12 @@
     }
 
     .recognized {
-      color: #39ff14; /* 형광 녹색 */
+      color: #39ff14; /* 형광녹색 */
       font-weight: bold;
     }
 
     .remaining {
-      color: white;
+      color: #ffffff;
     }
 
     button {
@@ -44,10 +43,6 @@
       margin: 5px;
       cursor: pointer;
     }
-
-    #loginSection, #studySection {
-      display: none;
-    }
   </style>
 </head>
 
@@ -56,14 +51,16 @@
 
   <h2>🔊 영어 문장 따라 말하기</h2>
 
-  <div id="loginSection">
+  <!-- 로그인 영역: 처음에 보이도록 강제 -->
+  <div id="loginSection" style="display:block;">
     <p>로그인 후 학습을 시작하세요</p>
     <input id="username" placeholder="아이디 입력">
     <br><br>
-    <button onclick="login()">로그인</button>
+    <button id="loginBtn">로그인</button>
   </div>
 
-  <div id="studySection">
+  <!-- 학습 영역: 처음엔 숨김 -->
+  <div id="studySection" style="display:none;">
     <h3 id="unitTitle"></h3>
 
     <p class="sentence">
@@ -80,6 +77,7 @@
 
 </div>
 
+<!-- 👇 제일 아래에서 app.js 로드 -->
 <script src="app.js"></script>
 </body>
 </html>
