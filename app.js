@@ -1,6 +1,3 @@
-// ----------------------
-// UNIT 문장 데이터
-// ----------------------
 const units = {
   1: [
     "What's your favorite food?",
@@ -14,9 +11,6 @@ const units = {
   ]
 };
 
-// ----------------------
-// MP3 파일 리스트
-// ----------------------
 const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
   "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
@@ -28,16 +22,12 @@ const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
-// ----------------------
-// 화면 요소
-// ----------------------
 const loginBox = document.getElementById("login-box");
 const app = document.getElementById("app");
-const unitButtons = document.getElementById("unit-buttons");
 const studyBox = document.getElementById("study-box");
 const sentenceText = document.getElementById("sentence");
 const progressBar = document.getElementById("progress");
-const progressPercent = document.getElementById("progress-percent");
+const percentText = document.getElementById("percentText");
 
 let currentUnit = 1;
 let index = 0;
@@ -46,52 +36,30 @@ const totalCycles = 5;
 
 const player = new Audio();
 
-// ----------------------
-// 모바일 터치 + 클릭 둘 다 인식
-// ----------------------
-function bindClick(el, handler) {
-  el.addEventListener("click", handler);
-  el.addEventListener("touchstart", handler, { passive: true });
-}
-
-// ----------------------
 // 로그인
-// ----------------------
 window.login = function () {
   loginBox.style.display = "none";
   app.style.display = "block";
 };
 
-// ----------------------
-// UNIT 선택
-// ----------------------
+// Unit 선택
 window.selectUnit = function (n) {
   currentUnit = n;
   index = 0;
   cycle = 1;
-
+  app.style.display = "none";
   studyBox.style.display = "block";
-
   updateProgress();
-  sentenceText.innerText = units[currentUnit][index];
 };
 
-// ----------------------
-// 진행률 업데이트 (막대 + % 숫자)
-// ----------------------
+// 진행률
 function updateProgress() {
-  const percent =
-    ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
-
-  const rounded = Math.floor(percent);
-
-  progressBar.style.width = rounded + "%";
-  progressPercent.innerText = rounded + "%";
+  const percent = ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
+  progressBar.style.width = percent + "%";
+  percentText.innerText = Math.floor(percent) + "%";
 }
 
-// ----------------------
-// 음성 인식 설정
-// ----------------------
+// 음성 인식
 window.SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -99,54 +67,118 @@ const recognizer = new SpeechRecognition();
 recognizer.lang = "en-US";
 recognizer.interimResults = false;
 
-// ----------------------
+// 저장
+function saveProgress() {
+  localStorage.setItem("progress_unit_" + currentUnit, JSON.stringify({
+    index,
+    cycle
+  }));
+}
+
+function loadProgress() {
+  const data = localStorage.getItem("progress_unit_" + currentUnit);
+  if (!data) return;
+  const saved = JSON.parse(data);
+  index = saved.index;
+  cycle = saved.cycle;
+}
+
 // Start 버튼
-// ----------------------
 window.startStudy = function () {
+  loadProgress();
   playSentence();
 };
 
-// ----------------------
-// 문장 음성 재생
-// ----------------------
+// 파형 비주얼라이저
+const canvas = document.getElementById("visualizer");
+const ctx = canvas.getContext("2d");
+
+let audioContext;
+let analyser;
+let source;
+
+function initVisualizer() {
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioContext.createAnalyser();
+  analyser.fftSize = 256;
+}
+
+function connectAudio() {
+  if (!audioContext) initVisualizer();
+
+  source = audioContext.createMediaElementSource(player);
+  source.connect(analyser);
+  analyser.connect(audioContext.destination);
+
+  visualize();
+}
+
+function visualize() {
+  const WIDTH = canvas.width;
+  const HEIGHT = canvas.height;
+
+  requestAnimationFrame(visualize);
+
+  let dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteTimeDomainData(dataArray);
+
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#39ff14";
+
+  ctx.beginPath();
+
+  let sliceWidth = WIDTH / dataArray.length;
+  let x = 0;
+
+  for (let i = 0; i < dataArray.length; i++) {
+    let v = dataArray[i] / 128.0;
+    let y = (v * HEIGHT) / 2;
+
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+
+    x += sliceWidth;
+  }
+
+  ctx.lineTo(WIDTH, HEIGHT / 2);
+  ctx.stroke();
+}
+
+// 문장 재생
 function playSentence() {
-  sentenceText.classList.remove("success", "fail");
+
+  sentenceText.className = "";
 
   sentenceText.innerText = units[currentUnit][index];
 
   player.src = audioList[index];
   player.play();
 
+  connectAudio();
+
   player.onended = () => {
     recognizer.start();
   };
 }
 
-// ----------------------
-// 🎙 음성 인식 결과 처리
-// ----------------------
+// 인식 결과 처리
 recognizer.onresult = (event) => {
   const text = event.results[0][0].transcript;
-  console.log("인식:", text);
 
-  // 매우 간단한 일치 판정
-  const target = units[currentUnit][index].toLowerCase();
-  const spoken = text.toLowerCase();
-
-  if (spoken.includes(target.slice(0, 5))) {
-    sentenceText.classList.remove("fail");
-    sentenceText.classList.add("success");
-  } else {
-    sentenceText.classList.remove("success");
-    sentenceText.classList.add("fail");
-  }
+  sentenceText.className = "success";
 
   nextStep();
 };
 
-// ----------------------
-// 다음 문장으로 이동
-// ----------------------
+// 인식 실패
+recognizer.onerror = () => {
+  sentenceText.className = "fail";
+};
+
+// 다음 단계
 function nextStep() {
   index++;
 
@@ -161,5 +193,6 @@ function nextStep() {
   }
 
   updateProgress();
+  saveProgress();
   playSentence();
 }
