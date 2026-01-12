@@ -1,5 +1,5 @@
 /* -------------------------
-   UNIT 문장 데이터
+   UNIT 데이터
 -------------------------- */
 const units = {
   1: [
@@ -15,7 +15,7 @@ const units = {
 };
 
 /* -------------------------
-   MP3 파일 리스트 (GitHub Raw 주소)
+   MP3 주소
 -------------------------- */
 const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
@@ -28,20 +28,18 @@ const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
-let currentUnit = 1;
 let index = 0;
-
-let recognition = null;
-const audioPlayer = new Audio();
+let audioPlayer = new Audio();
 
 /* -------------------------
    로그인
 -------------------------- */
 document.getElementById("loginBtn").addEventListener("click", () => {
+
   const name = document.getElementById("username").value.trim();
 
-  if (!name) {
-    alert("이름을 입력하세요!");
+  if (!name){
+    alert("이름을 입력하세요");
     return;
   }
 
@@ -51,23 +49,24 @@ document.getElementById("loginBtn").addEventListener("click", () => {
 /* -------------------------
    UNIT 선택
 -------------------------- */
-function selectUnit(n) {
-  currentUnit = n;
+function selectUnit(n){
   index = 0;
 
   document.getElementById("studySection").style.display = "block";
+
   showSentence();
 }
 
 /* -------------------------
-   문장 표시 + MP3 재생
+   문장 표시 + 음성 재생
 -------------------------- */
-function showSentence() {
-  const sentence = units[currentUnit][index];
+function showSentence(){
 
-  document.getElementById("targetSentence").innerText = sentence;
+  const text = units[1][index];
+
+  document.getElementById("targetSentence").innerText = text;
   document.getElementById("recognizedText").innerHTML = "";
-  document.getElementById("progressRate").innerHTML = "인식 진행률: 0%";
+  document.getElementById("progressRate").innerText = "인식 진행률: 0%";
 
   audioPlayer.src = audioList[index];
   audioPlayer.play();
@@ -78,83 +77,67 @@ function showSentence() {
 }
 
 /* -------------------------
-   다음 문장
+   음성 인식
 -------------------------- */
-function nextSentence() {
-  index++;
+function startRecognition(){
 
-  if (index >= units[currentUnit].length) {
-    alert("Unit 학습 완료!");
-    index = 0;
-  }
-
-  showSentence();
-}
-
-/* -------------------------
-   음성인식 시작
--------------------------- */
-function startRecognition() {
-  recognition = new webkitSpeechRecognition();
+  const recognition = new webkitSpeechRecognition();
   recognition.lang = "en-US";
   recognition.continuous = true;
   recognition.interimResults = true;
 
-  const target = units[currentUnit][index].toLowerCase();
+  const target = units[1][index].toLowerCase();
 
   recognition.onresult = (event) => {
+
     let spoken = "";
 
-    for (let i = event.resultIndex; i < event.results.length; i++) {
+    for(let i = 0; i < event.results.length; i++){
       spoken += event.results[i][0].transcript;
     }
 
-    spoken = spoken.toLowerCase().trim();
+    spoken = spoken.toLowerCase();
 
-    visualizeRecognition(target, spoken);
-  };
-
-  recognition.onend = () => {
-    // nothing
+    visualize(target, spoken);
   };
 
   recognition.start();
 }
 
 /* -------------------------
-   인식 진행률 + 글자색 변화
+   인식 진행률 표시
 -------------------------- */
-function visualizeRecognition(target, spoken) {
-  let html = "";
+function visualize(target, spoken){
+
   let match = 0;
 
-  for (let i = 0; i < target.length; i++) {
-    const t = target[i];
-    const s = spoken[i];
-
-    if (s === undefined) {
-      html += `<span style="color:#666">${t}</span>`;
-      continue;
-    }
-
-    if (t === s) {
-      html += `<span style="color:#19ff6b;font-weight:bold">${t}</span>`;
+  for(let i = 0; i < target.length; i++){
+    if(spoken[i] === target[i]){
       match++;
-    } else {
-      html += `<span style="color:#ff4d4d">${t}</span>`;
     }
   }
 
   const percent = Math.round((match / target.length) * 100);
 
-  document.getElementById("recognizedText").innerHTML = html;
-  document.getElementById("progressRate").innerHTML = `인식 진행률: ${percent}%`;
+  document.getElementById("progressRate").innerText =
+    "인식 진행률: " + percent + "%";
 
-  // 50% 기준 넘어가면 자동 다음 문장
-  if (percent >= 50) {
-    document.getElementById("progressRate").style.color = "#19ff6b";
+  if(percent >= 50){
     nextSentence();
-  } else {
-    document.getElementById("progressRate").style.color = "#ff4d4d";
   }
+}
+
+/* -------------------------
+   다음 문장
+-------------------------- */
+function nextSentence(){
+
+  index++;
+
+  if(index >= units[1].length){
+    alert("Unit 완료!");
+    index = 0;
+  }
+
+  showSentence();
 }
