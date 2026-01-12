@@ -85,3 +85,39 @@ function updateProgress() {
   document.getElementById("progress").innerText =
     Math.floor(percent) + "%";
 }
+
+const audioList = [
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/1_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/2_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/3_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/4_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/5_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/6_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/7_en.mp3",
+  "https://raw.githubusercontent.com/Jaydo14/english-app/main/8_en.mp3"
+];
+
+const player = document.getElementById("player");
+let index = 0;
+
+function playNext() {
+  if (index >= audioList.length) {
+    console.log("모든 학습 문장 완료");
+    return;
+  }
+
+  player.src = audioList[index];
+  player.play();
+  index++;
+
+  player.onended = () => {
+    playNext();
+  };
+}
+
+// 🚀 Start 버튼 눌렀을 때 실행
+document.getElementById("startButton").addEventListener("click", () => {
+  index = 0;
+  playNext();
+});
+
