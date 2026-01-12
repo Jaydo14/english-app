@@ -1,118 +1,64 @@
-// -------------------------
-// 로그인 처리
-// -------------------------
-function login() {
-  document.getElementById("login-screen").style.display = "none";
-  document.getElementById("unit-screen").style.display = "block";
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-// -------------------------
-// Unit 선택 처리
-// -------------------------
-function selectUnit(unitNumber) {
-  currentUnit = unitNumber;
+  // ====== 로그인 ======
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  document.getElementById("unit-screen").style.display = "none";
-  document.getElementById("study-screen").style.display = "block";
+  const loginBox = document.getElementById("login-box");
+  const appBox = document.getElementById("app");
+  const loginMessage = document.getElementById("login-message");
 
-  document.getElementById("unit-title").innerText = "Unit " + unitNumber;
-}
+  // 원하는 아이디 / 비번으로 변경 가능
+  const CORRECT_ID = "test";
+  const CORRECT_PW = "1234";
 
-// -------------------------
-// 학습 변수
-// -------------------------
-let currentSentenceIndex = 0;
-let currentCycle = 1;
-let totalCycles = 5;
+  loginBtn.addEventListener("click", () => {
+    const id = document.getElementById("username").value;
+    const pw = document.getElementById("password").value;
 
-let recognizing = false;
+    if (id === CORRECT_ID && pw === CORRECT_PW) {
+      loginMessage.textContent = "Login success!";
+      loginBox.style.display = "none";
+      appBox.style.display = "block";
+    } else {
+      loginMessage.textContent = "Wrong ID or Password";
+    }
+  });
 
-// GitHub mp3 주소 목록 (여기에 네 파일 주소 넣기)
-const audioList = [
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/3_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/4_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/5_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/6_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/7_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
-];
+  logoutBtn.addEventListener("click", () => {
+    appBox.style.display = "none";
+    loginBox.style.display = "block";
+  });
 
-const player = new Audio();
 
-// -------------------------
-// Start 버튼 누르면 시작
-// -------------------------
-function startStudy() {
-  currentSentenceIndex = 0;
-  currentCycle = 1;
+  // ====== 음성 재생 ======
+  const audioFiles = [
+    "1_en.mp3",
+    "2_en.mp3",
+    "3_en.mp3",
+    "4_en.mp3",
+    "5_en.mp3",
+    "6_en.mp3",
+    "7_en.mp3",
+    "8_en.mp3"
+  ];
 
-  document.getElementById("start-btn").style.display = "none";
+  const buttonsDiv = document.getElementById("buttons");
+  const audio = new Audio();
 
-  playNativeAudio();
-}
+  // 버튼 자동 생성
+  audioFiles.forEach((file, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = `Play ${index + 1}`;
 
-// -------------------------
-// 원어민 음성 재생
-// -------------------------
-function playNativeAudio() {
+    btn.addEventListener("click", () => {
+      // 🔥 캐시 문제 방지 (지금 문제가 이거였음)
+      audio.src = file + "?v=" + Date.now();
+      audio.load();
+      audio.play();
+    });
 
-  // 8문장 끝났으면 사이클 증가
-  if (currentSentenceIndex >= audioList.length) {
-    currentSentenceIndex = 0;
-    currentCycle++;
-  }
+    buttonsDiv.appendChild(btn);
+  });
 
-  // 5사이클 끝났으면 완료
-  if (currentCycle > totalCycles) {
-    alert("🎉 학습 완료!");
-    return;
-  }
-
-  updateProgress();
-
-  player.src = audioList[currentSentenceIndex];
-  player.play();
-
-  player.onended = () => {
-    startSpeechRecognition();
-  };
-}
-
-// -------------------------
-// 음성 인식 시작
-// -------------------------
-function startSpeechRecognition() {
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  const recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
-
-  recognition.start();
-
-  recognition.onresult = (event) => {
-    // 사용자가 말하면 다음 문장으로
-    currentSentenceIndex++;
-    playNativeAudio();
-  };
-
-  recognition.onerror = () => {
-    // 에러가 나도 그냥 다음으로 진행
-    currentSentenceIndex++;
-    playNativeAudio();
-  };
-}
-
-// -------------------------
-// 진행률 표시 (%)
-// -------------------------
-function updateProgress() {
-  const percent =
-    ((currentCycle - 1) * 8 + currentSentenceIndex + 1) / (5 * 8) * 100;
-
-  document.getElementById("progress").innerText =
-    Math.floor(percent) + "%";
-}
+});
