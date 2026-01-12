@@ -87,14 +87,14 @@ function updateProgress() {
 }
 
 const audioList = [
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/1_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/2_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/3_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/4_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/5_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/6_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/7_en.mp3",
-  "https://raw.githubusercontent.com/Jaydo14/english-app/main/8_en.mp3"
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/3_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/4_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/5_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/6_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/7_en.mp3",
+  "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
 const player = document.getElementById("player");
