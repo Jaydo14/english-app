@@ -49,3 +49,27 @@ window.onload = () => {
     buttonsDiv.appendChild(b);
   });
 };
+
+// -------------------
+// 음성 인식 추가
+// -------------------
+
+window.SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognizer = new SpeechRecognition();
+recognizer.lang = "en-US";
+recognizer.interimResults = false;
+
+const sttBtn = document.createElement("button");
+sttBtn.textContent = "🎤 말하기 시작";
+buttons.appendChild(sttBtn);
+
+sttBtn.onclick = () => {
+  recognizer.start();
+};
+
+recognizer.onresult = (event) => {
+  const text = event.results[0][0].transcript;
+  alert("인식된 문장: " + text);
+};
