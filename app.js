@@ -60,7 +60,14 @@ window.selectUnit = function (n) {
   currentUnit = n;
   index = 0;
   cycle = 1;
+
+  // Unit 선택 화면 숨김
+  app.style.display = "none";
+
+  // 학습 화면 표시
   studyBox.style.display = "block";
+
+  loadProgress();
   updateProgress();
   sentenceText.innerText = units[currentUnit][index];
 };
@@ -69,7 +76,8 @@ window.selectUnit = function (n) {
 // 진행률 업데이트
 // ----------------------
 function updateProgress() {
-  const percent = ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
+  const percent =
+    ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
   progressBar.style.width = Math.floor(percent) + "%";
 }
 
@@ -87,17 +95,22 @@ recognizer.interimResults = false;
 // 학습 기록 저장
 // ----------------------
 function saveProgress() {
-  localStorage.setItem("progress_unit_" + currentUnit, JSON.stringify({
-    index,
-    cycle
-  }));
+  localStorage.setItem(
+    "progress_unit_" + currentUnit,
+    JSON.stringify({
+      index,
+      cycle
+    })
+  );
 }
 
 // ----------------------
 // 학습 기록 불러오기
 // ----------------------
 function loadProgress() {
-  const data = localStorage.getItem("progress_unit_" + currentUnit);
+  const data = localStorage.getItem(
+    "progress_unit_" + currentUnit
+  );
   if (!data) return;
 
   const saved = JSON.parse(data);
@@ -117,7 +130,6 @@ window.startStudy = function () {
 // 문장 음성 재생
 // ----------------------
 function playSentence() {
-
   // 문장 표시
   sentenceText.innerText = units[currentUnit][index];
 
@@ -125,7 +137,7 @@ function playSentence() {
   player.src = audioList[index];
   player.play();
 
-  // 음성 끝난 뒤 자동 음성인식 시작
+  // 음성 끝난 뒤 자동 인식 시작
   player.onended = () => {
     recognizer.start();
   };
@@ -135,24 +147,60 @@ function playSentence() {
 // 음성 인식 처리
 // ----------------------
 recognizer.onresult = (event) => {
-  const text = event.results[0][0].transcript;
-  console.log("인식:", text);
+  const text = event.results[0][0].transcript.toLowerCase();
+  const target = units[currentUnit][index].toLowerCase();
 
-  // 자동 다음 단계
-  nextStep();
+  console.log("사용자 인식:", text);
+
+  // 단어 단위 포함률 계산
+  let success = 0;
+  const words = target.split(" ");
+
+  words.forEach(word => {
+    if (text.includes(word)) success++;
+  });
+
+  const rate = success / words.length;
+
+  // ------------------
+  // 성공 판정
+  // ------------------
+  if (rate >= 0.6) {
+    sentenceText.classList.remove("fail");
+    sentenceText.classList.add("success");
+
+    setTimeout(() => {
+      sentenceText.classList.remove("success");
+      nextStep();
+    }, 500);
+  }
+  // ------------------
+  // 실패 판정
+  // ------------------
+  else {
+    sentenceText.classList.remove("success");
+    sentenceText.classList.add("fail");
+
+    setTimeout(() => {
+      sentenceText.classList.remove("fail");
+      recognizer.start(); // 재시도
+    }, 600);
+  }
 };
 
+// ----------------------
+// 다음 단계로 이동
+// ----------------------
 function nextStep() {
-
   index++;
 
-  // 8문장 끝 → 다음 사이클
+  // 8문장 끝나면 다음 사이클
   if (index >= 8) {
     index = 0;
     cycle++;
   }
 
-  // 학습 완료
+  // 전체 학습 완료
   if (cycle > totalCycles) {
     alert("🎉 학습 완료!");
     return;
