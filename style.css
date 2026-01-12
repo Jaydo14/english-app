@@ -1,99 +1,69 @@
-/* 전체 화면 */
 body {
-  margin: 0;
   background: #000;
   color: #fff;
-  font-family: Pretendard, Arial;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  font-family: Arial;
 }
 
-/* 중앙 카드 */
+/* 카드 박스 */
 .box {
-  background: #0d0d0d;
-  padding: 30px;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 420px;
-  box-shadow: 0 0 25px rgba(57, 255, 20, 0.25);
-}
-
-/* 제목 */
-h2 {
-  margin-top: 0;
-  color: #39ff14;
-  text-align: center;
-}
-
-/* 입력창 */
-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #39ff14;
-  background: #000;
-  color: #fff;
-}
-
-/* 버튼 공통 */
-button {
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px 14px;
-  border: none;
+  border: 1px solid #0f0;
+  padding: 20px;
+  margin: 20px auto;
+  width: 320px;
   border-radius: 12px;
-  font-size: 16px;
-  background: #39ff14;
-  color: #000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
+  box-shadow: 0 0 20px #0f08;
 }
 
-/* 버튼 효과 */
-button:hover {
-  box-shadow: 0 0 12px #39ff14;
-  transform: translateY(-2px);
+/* 버튼 */
+button {
+  background: black;
+  color: #0f0;
+  border: 1px solid #0f0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin: 6px;
 }
 
-/* UNIT 버튼 그리드 */
-#unit-buttons button {
-  width: 48%;
-  margin: 1%;
-}
-
-/* 현재 학습 문장 */
-#sentence {
-  margin-top: 14px;
-  padding: 12px;
-  border: 1px solid #39ff14;
-  border-radius: 10px;
-  min-height: 60px;
-  text-align: center;
+/* UNIT 버튼 가운데 정렬 */
+.unit-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 /* 진행률 바 */
 #progress-wrap {
   width: 100%;
-  height: 12px;
-  border-radius: 20px;
+  height: 10px;
   background: #222;
-  margin-top: 18px;
+  margin-top: 10px;
 }
 
 #progress {
   height: 100%;
   width: 0%;
-  background: #39ff14;
-  border-radius: 20px;
-  transition: width .25s linear;
+  background: #0f0;
 }
 
-/* 모바일 대응 */
-@media (max-width: 480px) {
-  .box {
-    padding: 20px;
-  }
+/* 🔵 인식 성공 → 네온 반짝임 */
+.success {
+  animation: flash-green 0.6s ease;
+}
+
+@keyframes flash-green {
+  0% { color: #0f0; text-shadow: 0 0 5px #0f0; }
+  100% { color: white; text-shadow: none; }
+}
+
+/* 🔴 인식 실패 → 빨간색 흔들림 */
+.fail {
+  animation: shake-red 0.5s ease;
+}
+
+@keyframes shake-red {
+  0% { transform: translateX(0); color: #f33; }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
+  100% { transform: translateX(0); color:white; }
 }
