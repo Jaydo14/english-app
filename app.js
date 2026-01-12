@@ -1,18 +1,3 @@
-let sentences = [
-  "What's your favorite food?",
-  "My favorite food is Korean food.",
-  "I like all kinds of Korean food.",
-  "What's your favorite among them?",
-  "I really enjoy different kinds of stews and soups.",
-  "If I have to pick one, I would pick seaweed soup.",
-  "But I'm not very picky about food.",
-  "So I enjoy all types of cuisine."
-];
-
-let currentSentenceIndex = 0;
-let currentCycle = 1;
-let totalCycles = 5;
-
 // -------------------------
 // 로그인 처리
 // -------------------------
