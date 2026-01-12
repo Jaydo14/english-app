@@ -31,11 +31,8 @@
       margin-top: 0;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
-    /* 공통 버튼 스타일 */
     button {
       width: 100%;
       padding: 16px 0;
@@ -48,12 +45,8 @@
       transition: transform .1s ease;
       touch-action: manipulation;
     }
+    button:active { transform: scale(.97); }
 
-    button:active {
-      transform: scale(.97);
-    }
-
-    /* Unit 선택 화면 버튼 중앙 정렬 */
     .unit-list {
       display: flex;
       flex-direction: column;
@@ -61,62 +54,56 @@
       align-items: center;
       gap: 12px;
     }
+    .unit-list button { width: 80%; }
 
-    .unit-list button {
-      width: 80%;
-    }
-
-    /* 문제 박스 */
     .box {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: bold;
       text-align: center;
-      padding: 30px;
+      padding: 26px;
       margin: 20px 0;
       border-radius: 16px;
       background: #fafafa;
       border: 2px solid #ddd;
     }
 
-    /* 성공시: 녹색 반짝임 */
+    /* 성공: 녹색 반짝임 */
     .success {
       animation: sparkle 0.6s ease;
-      border-color: #2ecc71;
-      background: #e9f9ef;
+      border-color:#2ecc71;
+      background:#e9f9ef;
     }
-
     @keyframes sparkle {
-      0% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
-      50% { box-shadow: 0 0 20px rgba(46, 204, 113, .8); }
-      100% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
+      0%{box-shadow:0 0 0 rgba(46,204,113,0)}
+      50%{box-shadow:0 0 20px rgba(46,204,113,.8)}
+      100%{box-shadow:0 0 0 rgba(46,204,113,0)}
     }
 
-    /* 실패시: 빨간 흔들림 */
+    /* 실패: 빨간 흔들림 */
     .fail {
-      animation: shake 0.4s ease;
-      border-color: #e74c3c;
-      background: #fdecea;
+      animation: shake .4s ease;
+      border-color:#e74c3c;
+      background:#fdecea;
     }
-
     @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
-      100% { transform: translateX(0); }
+      0%{transform:translateX(0)}
+      25%{transform:translateX(-8px)}
+      50%{transform:translateX(8px)}
+      75%{transform:translateX(-8px)}
+      100%{transform:translateX(0)}
     }
 
-    /* 모바일 대응 추가 확대 */
-    @media (max-width: 480px) {
-      .box {
-        font-size: 26px;
-        padding: 24px;
-      }
+    /* 진행률 표시 */
+    #progress {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 6px;
+      color:#555;
+    }
 
-      button {
-        font-size: 20px;
-        padding: 18px 0;
-      }
+    @media (max-width: 480px) {
+      .box { font-size: 24px; padding: 22px; }
+      button { font-size: 20px; padding: 18px 0; }
     }
   </style>
 </head>
@@ -124,13 +111,13 @@
 <body>
   <div class="container">
 
-    <!-- 로그인 화면(필요 시 확장 가능) -->
-    <section id="login-screen" class="">
+    <!-- 시작 화면 -->
+    <section id="login-screen">
       <h1>학습 앱</h1>
       <button id="startBtn">시작하기</button>
     </section>
 
-    <!-- Unit 선택 화면 -->
+    <!-- Unit 선택 -->
     <section id="unit-screen" class="hidden">
       <h2>Unit 선택</h2>
 
@@ -141,13 +128,14 @@
       </div>
     </section>
 
-    <!-- 학습 메인 화면 -->
+    <!-- 학습 화면 -->
     <section id="study-screen" class="hidden">
       <h2 id="unit-title"></h2>
 
-      <div id="questionBox" class="box">
-        문제 영역
-      </div>
+      <div id="questionBox" class="box">문제 영역</div>
+
+      <!-- 진행률 % 표시 -->
+      <div id="progress">진행률: 0%</div>
 
       <button id="correctBtn" style="background:#2ecc71;color:white;">정답</button>
       <button id="wrongBtn" style="background:#e74c3c;color:white;">오답</button>
