@@ -1,57 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>English App</title>
-
-<link rel="stylesheet" href="style.css">
-
+  <meta charset="UTF-8" />
+  <title>English App</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-<!-- 로그인 화면 -->
-<section id="loginSection" class="box">
-  <h2>Login</h2>
-  <input type="text" id="id" placeholder="ID">
-  <input type="password" id="pw" placeholder="Password">
-  <button id="loginBtn">Login</button>
-</section>
-
-<!-- Unit 선택 화면 -->
-<section id="unitSection" class="box" style="display:none;">
-  <button class="backBtn" onclick="goLogin()">← Back</button>
-  <h2>Select Unit</h2>
-
-  <div class="unitGrid">
-    <button class="unitBtn" data-unit="1">Unit 1</button>
-    <button class="unitBtn" data-unit="2">Unit 2</button>
-    <button class="unitBtn" data-unit="3">Unit 3</button>
-    <button class="unitBtn" data-unit="4">Unit 4</button>
-    <button class="unitBtn" data-unit="5">Unit 5</button>
-    <button class="unitBtn" data-unit="6">Unit 6</button>
-    <button class="unitBtn" data-unit="7">Unit 7</button>
-    <button class="unitBtn" data-unit="8">Unit 8</button>
+  <!-- 로그인 -->
+  <div id="login-box" class="box">
+    <h2>로그인</h2>
+    <input id="username" type="text" placeholder="이름을 입력하세요" />
+    <button onclick="login()">로그인</button>
   </div>
-</section>
 
-<!-- 학습 화면 -->
-<section id="studySection" class="box" style="display:none;">
-  <button class="backBtn" onclick="goUnits()">← Back</button>
+  <!-- UNIT 선택 -->
+  <div id="app" class="box" style="display:none">
+    <h2>Choose Unit</h2>
 
-  <h2 id="unitTitle">Unit</h2>
-
-  <div id="sentenceText" class="sentence"></div>
-
-  <div id="progress-wrap">
-    <div id="progress"></div>
+    <div id="unit-buttons" class="unit-center">
+      <button onclick="selectUnit(1)">Unit 1</button>
+      <button onclick="selectUnit(2)">Unit 2</button>
+      <button onclick="selectUnit(3)">Unit 3</button>
+      <button onclick="selectUnit(4)">Unit 4</button>
+      <button onclick="selectUnit(5)">Unit 5</button>
+      <button onclick="selectUnit(6)">Unit 6</button>
+      <button onclick="selectUnit(7)">Unit 7</button>
+      <button onclick="selectUnit(8)">Unit 8</button>
+    </div>
   </div>
-  <div id="progressPercent"></div>
 
-  <button id="startBtn">START</button>
-</section>
+  <!-- 학습 화면 -->
+  <div id="study-box" class="box" style="display:none">
+    <h2>Study</h2>
 
-<script src="app.js"></script>
+    <div id="sentence">Press Start</div>
+
+    <div id="progress-wrap">
+      <div id="progress"></div>
+    </div>
+
+    <button onclick="startStudy()">Start</button>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
