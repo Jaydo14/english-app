@@ -97,19 +97,27 @@ const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
+const player = document.getElementById("player");
 let index = 0;
-const player = new Audio();
 
 function playNext() {
-  if (index >= audioList.length) return;
+  if (index >= audioList.length) {
+    console.log("모든 학습 문장 완료");
+    return;
+  }
 
   player.src = audioList[index];
   player.play();
+  index++;
 
   player.onended = () => {
-    index++;
     playNext();
   };
 }
 
-<button onclick="playNext()">Start</button>
+// 🚀 Start 버튼 눌렀을 때 실행
+document.getElementById("startButton").addEventListener("click", () => {
+  index = 0;
+  playNext();
+});
+
