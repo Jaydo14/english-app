@@ -1,212 +1,85 @@
-// ----------------------
-// UNIT 문장 데이터
-// ----------------------
-const units = {
-  1: [
-    "What's your favorite food?",
-    "My favorite food is Korean food.",
-    "I like all kinds of Korean food.",
-    "What's your favorite among them?",
-    "I really enjoy different kinds of stews and soups.",
-    "If I have to pick one, I would pick seaweed soup.",
-    "But I'm not very picky about food.",
-    "So I enjoy all types of cuisine."
-  ]
-};
+// 공통: 모바일 터치 + 클릭 모두 인식
+function bindClick(id, handler) {
+  const el = document.getElementById(id);
+  el.addEventListener("click", handler);
+  el.addEventListener("touchstart", handler, { passive: true });
+}
 
-// ----------------------
-// MP3 파일 리스트 (GitHub raw 경로)
-// ----------------------
-const audioList = [
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/3_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/4_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/5_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/6_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/7_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
-];
-
-// ----------------------
 // 화면 요소
-// ----------------------
-const loginBox = document.getElementById("login-box");
-const app = document.getElementById("app");
-const unitButtons = document.getElementById("unit-buttons");
-const studyBox = document.getElementById("study-box");
-const sentenceText = document.getElementById("sentence");
-const progressBar = document.getElementById("progress");
+const loginScreen = document.getElementById("login-screen");
+const unitScreen = document.getElementById("unit-screen");
+const studyScreen = document.getElementById("study-screen");
+
+const unitTitle = document.getElementById("unit-title");
+const questionBox = document.getElementById("questionBox");
+const progressText = document.getElementById("progress");
 
 let currentUnit = 1;
-let index = 0;
-let cycle = 1;
-const totalCycles = 5;
+let currentIndex = 0;
+const totalQuestions = 10; // 원하는 총 문제 수
 
-const player = new Audio();
+// 임시 문제 데이터
+function makeQuestion(unit, idx) {
+  return `Unit ${unit} - 문제 ${idx + 1}`;
+}
 
-// ----------------------
-// 로그인
-// ----------------------
-window.login = function () {
-  loginBox.style.display = "none";
-  app.style.display = "block";
-};
-
-// ----------------------
-// UNIT 선택
-// ----------------------
-window.selectUnit = function (n) {
-  currentUnit = n;
-  index = 0;
-  cycle = 1;
-
-  // Unit 선택 화면 숨김
-  app.style.display = "none";
-
-  // 학습 화면 표시
-  studyBox.style.display = "block";
-
-  loadProgress();
-  updateProgress();
-  sentenceText.innerText = units[currentUnit][index];
-};
-
-// ----------------------
 // 진행률 업데이트
-// ----------------------
 function updateProgress() {
-  const percent =
-    ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
-  progressBar.style.width = Math.floor(percent) + "%";
+  const percent = Math.round((currentIndex / totalQuestions) * 100);
+  progressText.textContent = `진행률: ${percent}%`;
 }
 
-// ----------------------
-// 음성 인식 설정
-// ----------------------
-window.SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-const recognizer = new SpeechRecognition();
-recognizer.lang = "en-US";
-recognizer.interimResults = false;
-
-// ----------------------
-// 학습 기록 저장
-// ----------------------
-function saveProgress() {
-  localStorage.setItem(
-    "progress_unit_" + currentUnit,
-    JSON.stringify({
-      index,
-      cycle
-    })
-  );
-}
-
-// ----------------------
-// 학습 기록 불러오기
-// ----------------------
-function loadProgress() {
-  const data = localStorage.getItem(
-    "progress_unit_" + currentUnit
-  );
-  if (!data) return;
-
-  const saved = JSON.parse(data);
-  index = saved.index;
-  cycle = saved.cycle;
-}
-
-// ----------------------
-// Start 버튼
-// ----------------------
-window.startStudy = function () {
-  loadProgress();
-  playSentence();
-};
-
-// ----------------------
-// 문장 음성 재생
-// ----------------------
-function playSentence() {
-  // 문장 표시
-  sentenceText.innerText = units[currentUnit][index];
-
-  // mp3 재생
-  player.src = audioList[index];
-  player.play();
-
-  // 음성 끝난 뒤 자동 인식 시작
-  player.onended = () => {
-    recognizer.start();
-  };
-}
-
-// ----------------------
-// 음성 인식 처리
-// ----------------------
-recognizer.onresult = (event) => {
-  const text = event.results[0][0].transcript.toLowerCase();
-  const target = units[currentUnit][index].toLowerCase();
-
-  console.log("사용자 인식:", text);
-
-  // 단어 단위 포함률 계산
-  let success = 0;
-  const words = target.split(" ");
-
-  words.forEach(word => {
-    if (text.includes(word)) success++;
-  });
-
-  const rate = success / words.length;
-
-  // ------------------
-  // 성공 판정
-  // ------------------
-  if (rate >= 0.6) {
-    sentenceText.classList.remove("fail");
-    sentenceText.classList.add("success");
-
-    setTimeout(() => {
-      sentenceText.classList.remove("success");
-      nextStep();
-    }, 500);
-  }
-  // ------------------
-  // 실패 판정
-  // ------------------
-  else {
-    sentenceText.classList.remove("success");
-    sentenceText.classList.add("fail");
-
-    setTimeout(() => {
-      sentenceText.classList.remove("fail");
-      recognizer.start(); // 재시도
-    }, 600);
-  }
-};
-
-// ----------------------
-// 다음 단계로 이동
-// ----------------------
-function nextStep() {
-  index++;
-
-  // 8문장 끝나면 다음 사이클
-  if (index >= 8) {
-    index = 0;
-    cycle++;
-  }
-
-  // 전체 학습 완료
-  if (cycle > totalCycles) {
-    alert("🎉 학습 완료!");
+// 다음 문제 표시
+function nextQuestion() {
+  if (currentIndex >= totalQuestions) {
+    questionBox.textContent = "학습 완료!";
     return;
   }
-
+  questionBox.classList.remove("success", "fail");
+  questionBox.textContent = makeQuestion(currentUnit, currentIndex);
   updateProgress();
-  saveProgress();
-  playSentence();
 }
+
+// 시작 버튼
+bindClick("startBtn", () => {
+  loginScreen.classList.add("hidden");
+  unitScreen.classList.remove("hidden");
+});
+
+// Unit 버튼 (터치 대응)
+document.querySelectorAll(".unit-btn").forEach(btn => {
+  btn.addEventListener("click", selectUnit);
+  btn.addEventListener("touchstart", selectUnit, { passive: true });
+});
+
+function selectUnit(e) {
+  currentUnit = e.target.dataset.unit;
+  currentIndex = 0;
+
+  unitTitle.textContent = `Unit ${currentUnit} 학습`;
+  unitScreen.classList.add("hidden");
+  studyScreen.classList.remove("hidden");
+
+  nextQuestion();
+}
+
+// 정답 버튼
+bindClick("correctBtn", () => {
+  questionBox.classList.remove("fail");
+  questionBox.classList.add("success");
+
+  currentIndex++;
+  setTimeout(nextQuestion, 500);
+});
+
+// 오답 버튼
+bindClick("wrongBtn", () => {
+  questionBox.classList.remove("success");
+  questionBox.classList.add("fail");
+});
+
+// 뒤로가기
+bindClick("backToUnit", () => {
+  studyScreen.classList.add("hidden");
+  unitScreen.classList.remove("hidden");
+});
