@@ -1,89 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>English Speaking App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>English Speaking App</title>
 
   <style>
     body {
+      font-family: Arial;
       margin: 0;
-      background: #000000;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      text-align: center;
+      padding: 20px;
+      background: #f5f5f5;
     }
 
     .container {
-      max-width: 600px;
-      margin: auto;
+      max-width: 480px;
+      margin: 0 auto;
+      background: white;
       padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     }
 
-    h1 {
-      color: #00ff6a;
-      font-size: 26px;
-    }
-
-    .box {
-      background: #111111;
-      border: 2px solid #00ff6a;
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 15px;
-    }
-
-    input {
-      width: 90%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
+    h1, h2 {
+      text-align: center;
     }
 
     button {
-      background: #00ff6a;
-      color: black;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 10px;
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
       font-size: 18px;
-      margin: 6px;
+      border-radius: 8px;
+      border: none;
+      background: #3a7afe;
+      color: white;
     }
 
     button:active {
-      transform: scale(0.96);
+      background: #2a5ed6;
     }
 
-    .unit-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+    .sentence {
+      font-size: 20px;
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
     }
 
-    .unit-btn {
-      width: 120px;
-      padding: 12px;
+    .recognized {
       font-size: 18px;
-      border-radius: 12px;
-      border: 2px solid #00ff6a;
-      background: black;
-      color: #00ff6a;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.6;
     }
 
-    #progressBox {
-      margin-top: 14px;
-      font-size: 16px;
-      color: #00ff6a;
-    }
-
-    /* 모바일 최적화 */
-    @media (max-width: 480px) {
-      h1 { font-size: 22px; }
-      button { width: 90%; font-size: 16px; }
-      .unit-btn { width: 45%; font-size: 14px; }
+    .progress {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -91,24 +67,34 @@
 <body>
   <div class="container">
 
-    <h1>AI Speaking Trainer</h1>
+    <h1>English Speaking App</h1>
 
-    <!-- 로그인 화면 -->
-    <div id="login-box" class="box">
-      <h2>Login</h2>
+    <h2>로그인</h2>
+    <input type="text" id="username" placeholder="이름 입력" style="width:100%;padding:12px;font-size:16px;">
+    <button id="loginBtn">로그인하기</button>
 
-      <input id="id" placeholder="ID 입력">
-      <input id="pw" type="password" placeholder="PW 입력">
-
-      <button onclick="login()">Login</button>
+    <div id="unitSection" style="display:none;">
+      <h2>Unit 선택</h2>
+      <button onclick="selectUnit(1)">Unit 1</button>
+      <button onclick="selectUnit(2)">Unit 2</button>
+      <button onclick="selectUnit(3)">Unit 3</button>
     </div>
 
-    <!-- 메인 앱 -->
-    <div id="app" style="display:none;">
+    <div id="studySection" style="display:none;">
+      <h2>학습</h2>
+      <div id="targetSentence" class="sentence"></div>
 
-      <div class="box">
-        <h2>Select Unit</h2>
+      <div id="recognizedText" class="recognized"></div>
 
-        <div class="unit-buttons">
-          <button class="unit-btn" onclick="selectUnit(1)">Unit 1</button>
-          <button c
+      <div id="progressRate" class="progress"></div>
+
+      <button id="startBtn">Start 음성인식</button>
+      <button id="stopBtn">Stop</button>
+      <button id="nextBtn">다음 문장</button>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
