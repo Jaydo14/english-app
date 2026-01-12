@@ -1,78 +1,99 @@
+/* 전체 화면 */
 body {
-  background: #0d0d0d;
-  color: white;
+  margin: 0;
+  background: #000;
+  color: #fff;
   font-family: Pretendard, Arial;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
-#login-box, #app {
-  background: #111;
-  padding: 40px;
-  border-radius: 20px;
-  width: 400px;
-  box-shadow: 0 0 40px rgba(255, 215, 0, .25);
+/* 중앙 카드 */
+.box {
+  background: #0d0d0d;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.25);
 }
 
+/* 제목 */
 h2 {
-  margin-bottom: 15px;
+  margin-top: 0;
+  color: #39ff14;
+  text-align: center;
 }
 
+/* 입력창 */
 input {
   width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
+  padding: 12px 14px;
   border-radius: 10px;
-  border: none;
+  border: 1px solid #39ff14;
+  background: #000;
+  color: #fff;
 }
 
+/* 버튼 공통 */
 button {
   width: 100%;
-  padding: 14px;
-  border-radius: 30px;
+  margin-top: 16px;
+  padding: 12px 14px;
   border: none;
+  border-radius: 12px;
   font-size: 16px;
+  background: #39ff14;
+  color: #000;
+  font-weight: bold;
   cursor: pointer;
+  transition: 0.2s;
 }
 
-#loginBtn, #logoutBtn {
-  background: #ffd400;
-  color: black;
-  font-weight: 800;
+/* 버튼 효과 */
+button:hover {
+  box-shadow: 0 0 12px #39ff14;
+  transform: translateY(-2px);
 }
 
-#buttons button {
-  margin-top: 8px;
-  background: black;
-  color: yellow;
-  border: 1px solid yellow;
+/* UNIT 버튼 그리드 */
+#unit-buttons button {
+  width: 48%;
+  margin: 1%;
 }
 
+/* 현재 학습 문장 */
+#sentence {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #39ff14;
+  border-radius: 10px;
+  min-height: 60px;
+  text-align: center;
+}
+
+/* 진행률 바 */
 #progress-wrap {
   width: 100%;
-  height: 10px;
-  background: #333;
-  border-radius: 5px;
-  margin-top: 10px;
+  height: 12px;
+  border-radius: 20px;
+  background: #222;
+  margin-top: 18px;
 }
 
 #progress {
+  height: 100%;
   width: 0%;
-  height: 10px;
-  background: #ffd400;
-  border-radius: 5px;
+  background: #39ff14;
+  border-radius: 20px;
+  transition: width .25s linear;
 }
 
-@media (max-width: 600px) {
-  #login-box, #app {
-    width: 90%;
+/* 모바일 대응 */
+@media (max-width: 480px) {
+  .box {
     padding: 20px;
-  }
-
-  button {
-    font-size: 14px;
-    padding: 10px;
   }
 }
