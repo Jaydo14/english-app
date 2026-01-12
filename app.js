@@ -87,7 +87,7 @@ window.startStudy = function () {
 function playSentence() {
   // 텍스트 표시 및 스타일 초기화
   sentenceText.classList.remove("success", "fail");
-  sentenceText.style.color = "#fff"; // 기본 흰색으로 복구
+  sentenceText.style.color = "#fff"; // 기본 흰색 복구
   sentenceText.innerText = units[currentUnit][index];
   
   // 진행률 업데이트
@@ -103,7 +103,8 @@ function playSentence() {
 
   // 오디오가 끝나면 음성인식 시작
   player.onended = () => {
-    sentenceText.style.color = "#ffff00"; // 듣기 모드일 때 노란색 (힌트)
+    // 듣기 모드일 때는 '노란색'으로 표시 (말하세요 신호)
+    sentenceText.style.color = "#ffff00"; 
     recognizer.start();
   };
 }
@@ -134,7 +135,9 @@ recognizer.onerror = (event) => {
   console.log("인식 에러:", event.error);
   sentenceText.innerText = "Try again";
   sentenceText.classList.add("fail");
-  sentenceText.style.color = "#39ff14"; // 에러 메시지도 형광 녹색
+  
+  // 에러 시 빨간색 표시
+  sentenceText.style.color = "#ff4b4b"; 
   
   setTimeout(() => {
      playSentence(); 
@@ -142,7 +145,7 @@ recognizer.onerror = (event) => {
 };
 
 // ----------------------
-// 8. 정답 비교 로직 (수정됨: 색상 #39ff14 통일)
+// 8. 정답 비교 로직 (수정됨: Great=녹색, Try again=빨강)
 // ----------------------
 function checkAnswer(spoken, target) {
   // 특수문자 제거 및 소문자 변환 함수
@@ -171,7 +174,9 @@ function checkAnswer(spoken, target) {
     sentenceText.innerText = "Great!";
     sentenceText.classList.remove("fail");
     sentenceText.classList.add("success");
-    // .success 클래스는 CSS에서 이미 #39ff14 (형광 녹색)입니다.
+    
+    // 성공 시 형광 녹색 강제 적용
+    sentenceText.style.color = "#39ff14"; 
 
     // 0.5초 뒤 다음 문장으로
     setTimeout(nextStep, 500); 
@@ -182,8 +187,8 @@ function checkAnswer(spoken, target) {
     sentenceText.classList.remove("success");
     sentenceText.classList.add("fail");
     
-    // 실패 시 CSS의 기본 색상(빨강)을 무시하고 형광 녹색(#39ff14)으로 강제 변경
-    sentenceText.style.color = "#39ff14"; 
+    // 실패 시 빨간색 강제 적용
+    sentenceText.style.color = "#ff4b4b"; 
 
     // 0.5초 뒤 현재 문장 다시 듣기
     setTimeout(() => {
@@ -196,7 +201,7 @@ function checkAnswer(spoken, target) {
 // 9. 다음 단계 이동
 // ----------------------
 function nextStep() {
-  sentenceText.style.color = "#fff"; // 다시 기본 흰색으로 복구
+  sentenceText.style.color = "#fff"; // 색상 복구 (흰색)
   
   index++; // 다음 문장
 
