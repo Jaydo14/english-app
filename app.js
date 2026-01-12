@@ -87,6 +87,7 @@ window.startStudy = function () {
 function playSentence() {
   // 텍스트 표시 및 스타일 초기화
   sentenceText.classList.remove("success", "fail");
+  sentenceText.style.color = "#fff"; // 기본 흰색
   sentenceText.innerText = units[currentUnit][index];
   
   // 진행률 업데이트
@@ -131,42 +132,57 @@ recognizer.onresult = (event) => {
 // 음성 인식이 끊겼을 때 에러 방지
 recognizer.onerror = (event) => {
   console.log("인식 에러:", event.error);
-  sentenceText.innerText = "다시 말씀해 주세요.";
+  sentenceText.innerText = "Try again";
+  sentenceText.classList.add("fail");
   setTimeout(() => {
      playSentence(); // 에러나면 다시 재생
   }, 1000);
 };
 
 // ----------------------
-// 8. 정답 비교 로직 (업그레이드됨)
+// 8. 정답 비교 로직 (수정됨: 50% 일치 & UI 변경)
 // ----------------------
 function checkAnswer(spoken, target) {
   // 특수문자 제거 및 소문자 변환 함수
   const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
 
-  const userClean = clean(spoken);
-  const targetClean = clean(target);
+  // 단어 단위로 쪼개기
+  const userWords = clean(spoken).split(/\s+/); // 공백 기준으로 자름
+  const targetWords = clean(target).split(/\s+/);
 
-  // 정확히 일치하거나, 사용자가 말한 내용에 정답이 포함되어 있으면 성공
-  if (userClean === targetClean || userClean.includes(targetClean)) {
+  let matchCount = 0;
+
+  // 타겟 문장의 단어가 사용자 발음에 얼마나 포함되어 있는지 카운트
+  targetWords.forEach(word => {
+    if (userWords.includes(word)) {
+      matchCount++;
+    }
+  });
+
+  // 일치율 계산
+  const accuracy = matchCount / targetWords.length;
+  console.log("일치율:", accuracy * 100, "%");
+
+  // 판정 로직: 50% 이상 맞으면 정답 (0.5)
+  if (accuracy >= 0.5) {
     // 성공!
+    sentenceText.innerText = "Great!"; // 기존 텍스트 없애고 Great!만 표시
     sentenceText.classList.remove("fail");
     sentenceText.classList.add("success");
-    sentenceText.innerText = "Great! " + target; // 피드백
 
-    // 1.5초 뒤 다음 문장으로
-    setTimeout(nextStep, 1500); 
+    // 1초 뒤 다음 문장으로
+    setTimeout(nextStep, 1000); 
 
   } else {
     // 실패
+    sentenceText.innerText = "Try again"; // 인식된 문장 표시 안 함
     sentenceText.classList.remove("success");
     sentenceText.classList.add("fail");
-    sentenceText.innerText = "Try again: " + spoken; // 내가 뭐라고 했는지 보여줌
 
-    // 1.5초 뒤 현재 문장 다시 듣기 (무한 반복)
+    // 1초 뒤 현재 문장 다시 듣기
     setTimeout(() => {
         playSentence(); 
-    }, 1500);
+    }, 1000);
   }
 }
 
@@ -199,7 +215,6 @@ function nextStep() {
 // ----------------------
 function updateProgress() {
   const totalSentences = units[currentUnit].length;
-  // 전체 진척도 계산: (현재바퀴수-1 * 문장수 + 현재문장번호) / (전체목표바퀴수 * 문장수)
   const currentCount = ((cycle - 1) * totalSentences) + (index + 1);
   const totalCount = totalCycles * totalSentences;
   
