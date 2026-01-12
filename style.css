@@ -1,69 +1,119 @@
 body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
   background: #000;
   color: #fff;
-  font-family: Arial;
 }
 
-/* 카드 박스 */
-.box {
-  border: 1px solid #0f0;
+/* 전체 중앙 정렬 컨테이너 */
+.container {
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
-  margin: 20px auto;
-  width: 320px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px #0f08;
 }
 
-/* 버튼 */
+/* 모바일 카드 박스 */
+.box {
+  background: #111;
+  border: 2px solid #39ff14; /* 형광 초록 */
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+/* 큰 제목 */
+h1, h2, h3 {
+  color: #39ff14;
+  text-align: center;
+}
+
+/* 입력창 크게 */
+input {
+  width: 90%;
+  padding: 14px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid #39ff14;
+  background: #000;
+  color: white;
+  margin-top: 10px;
+}
+
+/* 버튼 크게 (손가락 크기) */
 button {
-  background: black;
-  color: #0f0;
-  border: 1px solid #0f0;
-  padding: 10px 16px;
-  border-radius: 8px;
-  margin: 6px;
+  width: 95%;
+  padding: 16px;
+  font-size: 20px;
+  margin-top: 12px;
+  background: #39ff14;
+  color: black;
+  border-radius: 14px;
+  border: none;
+  font-weight: bold;
 }
 
-/* UNIT 버튼 가운데 정렬 */
-.unit-center {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+/* Unit 버튼 2열 정렬 */
+#unit-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 /* 진행률 바 */
 #progress-wrap {
   width: 100%;
-  height: 10px;
-  background: #222;
-  margin-top: 10px;
+  height: 16px;
+  background: #333;
+  border-radius: 20px;
+  margin-top: 15px;
 }
 
 #progress {
   height: 100%;
   width: 0%;
-  background: #0f0;
+  background: #39ff14;
+  border-radius: 20px;
 }
 
-/* 🔵 인식 성공 → 네온 반짝임 */
+/* 학습 문장 크게 표시 */
+#sentence {
+  font-size: 22px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* 성공 효과 */
 .success {
-  animation: flash-green 0.6s ease;
+  color: #39ff14;
+  text-shadow: 0 0 8px #39ff14;
 }
 
-@keyframes flash-green {
-  0% { color: #0f0; text-shadow: 0 0 5px #0f0; }
-  100% { color: white; text-shadow: none; }
-}
-
-/* 🔴 인식 실패 → 빨간색 흔들림 */
+/* 실패 효과 */
 .fail {
-  animation: shake-red 0.5s ease;
+  color: red;
+  animation: shake 0.2s linear 3;
 }
 
-@keyframes shake-red {
-  0% { transform: translateX(0); color: #f33; }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); color:white; }
+@keyframes shake {
+  0% { transform: translateX(-5px);}
+  50% { transform: translateX(5px);}
+  100% { transform: translateX(0);}
+}
+
+/* 📱 모바일 특화 */
+@media (max-width: 550px) {
+
+  .container {
+    padding: 10px;
+  }
+
+  button {
+    font-size: 18px;
+    padding: 14px;
+  }
+
+  #sentence {
+    font-size: 20px;
+  }
 }
