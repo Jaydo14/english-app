@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Speech Learning App</title>
+  <meta charset="UTF-8" />
+  <title>English App</title>
 </head>
 
 <body>
 
   <!-- 로그인 화면 -->
   <div id="login-box">
-    <h2>Login</h2>
-    <input type="text" id="email" placeholder="Email"><br>
-    <input type="password" id="password" placeholder="Password"><br>
+    <h2>로그인</h2>
+    <input id="user-id" placeholder="아이디 입력"><br><br>
     <button onclick="login()">로그인</button>
   </div>
 
-  <!-- 유닛 선택 화면 -->
-  <div id="unit-screen" style="display:none;">
-    <h2>Select Unit</h2>
-    <button onclick="selectUnit(1)">Unit 1</button>
-    <button onclick="selectUnit(2)">Unit 2</button>
-    <button onclick="selectUnit(3)">Unit 3</button>
-    <button onclick="selectUnit(4)">Unit 4</button>
-    <button onclick="selectUnit(5)">Unit 5</button>
-    <button onclick="selectUnit(6)">Unit 6</button>
-    <button onclick="selectUnit(7)">Unit 7</button>
-    <button onclick="selectUnit(8)">Unit 8</button>
-  </div>
+  <!-- 메인 앱 화면 -->
+  <div id="app" style="display:none;">
 
-  <!-- 학습 화면 -->
-  <div id="study-screen" style="display:none;">
-    <h2>Study Mode</h2>
-    <button onclick="startUnit()">Start</button>
-    <audio id="audio-player"></audio>
-  </div>
+    <h2>Unit 선택</h2>
 
-  <!-- 진행률 표시바 -->
-  <div id="progress-wrap">
-    <div id="progress"></div>
+    <div id="unit-buttons">
+      <button onclick="selectUnit(1)">Unit 1</button>
+      <button onclick="selectUnit(2)">Unit 2</button>
+      <button onclick="selectUnit(3)">Unit 3</button>
+      <button onclick="selectUnit(4)">Unit 4</button>
+      <button onclick="selectUnit(5)">Unit 5</button>
+      <button onclick="selectUnit(6)">Unit 6</button>
+      <button onclick="selectUnit(7)">Unit 7</button>
+      <button onclick="selectUnit(8)">Unit 8</button>
+    </div>
+
+    <!-- 학습 화면 -->
+    <div id="study-box" style="display:none;">
+
+      <h3 id="sentence">문장이 표시됩니다</h3>
+
+      <button onclick="startStudy()">Start</button>
+
+      <audio id="audio-player" controls></audio>
+
+      <!-- 진행률 바 -->
+      <div id="progress-wrap" style="width:100%;height:12px;background:#333;">
+        <div id="progress" style="height:12px;width:0%;background:yellow;"></div>
+      </div>
+
+    </div>
+
   </div>
 
   <script src="app.js"></script>
-
 </body>
 </html>
