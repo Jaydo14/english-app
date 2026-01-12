@@ -1,76 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>English App</title>
+  <meta charset="UTF-8">
+  <title>English Practice App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  background:black;
-  color:white;
-  font-family:Arial;
-  text-align:center;
-}
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(135deg, #1d2671, #c33764);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
 
-.box{
-  border:2px solid #19ff6b;
-  padding:20px;
-  margin:15px;
-  border-radius:12px;
-}
+    #app {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(0,0,0,0.4);
+      padding: 20px;
+      border-radius: 20px;
+    }
 
-button{
-  background:#19ff6b;
-  color:black;
-  padding:12px 20px;
-  border:none;
-  border-radius:10px;
-  font-size:18px;
-  font-weight:bold;
-}
+    .sentence {
+      font-size: 22px;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
 
-#studySection, #unitSection{
-  display:none;
-}
+    .recognized {
+      color: #39ff14; /* 형광 녹색 */
+      font-weight: bold;
+    }
 
-#progressRate{
-  margin-top:10px;
-  font-size:18px;
-}
-</style>
+    .remaining {
+      color: white;
+    }
+
+    button {
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: none;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    #loginSection, #studySection {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
+<div id="app">
 
-<h2>AI English App</h2>
+  <h2>🔊 영어 문장 따라 말하기</h2>
 
-<!-- 로그인 -->
-<div class="box">
-  <h3>로그인</h3>
-  <input id="username" placeholder="이름 입력">
-  <br><br>
-  <button id="loginBtn">로그인</button>
-</div>
+  <div id="loginSection">
+    <p>로그인 후 학습을 시작하세요</p>
+    <input id="username" placeholder="아이디 입력">
+    <br><br>
+    <button onclick="login()">로그인</button>
+  </div>
 
-<!-- UNIT 선택 -->
-<div id="unitSection" class="box">
-  <h3>Unit 선택</h3>
+  <div id="studySection">
+    <h3 id="unitTitle"></h3>
 
-  <button onclick="selectUnit(1)">Unit 1</button>
-</div>
+    <p class="sentence">
+      <span id="recognizedText" class="recognized"></span>
+      <span id="remainingText" class="remaining"></span>
+    </p>
 
-<!-- 학습 영역 -->
-<div id="studySection" class="box">
-  <h3>학습 중</h3>
+    <button onclick="playAudio()">🔈 오디오 듣기</button>
+    <button onclick="startRecognition()">🎤 말하기 시작</button>
+    <button onclick="nextSentence()">➡ 다음 문장</button>
 
-  <p id="targetSentence"></p>
+    <p id="status"></p>
+  </div>
 
-  <p id="recognizedText"></p>
-
-  <p id="progressRate">인식 진행률: 0%</p>
-
-  <button onclick="showSentence()">Start</button>
 </div>
 
 <script src="app.js"></script>
