@@ -87,7 +87,7 @@ window.startStudy = function () {
 function playSentence() {
   // 텍스트 표시 및 스타일 초기화
   sentenceText.classList.remove("success", "fail");
-  sentenceText.style.color = "#fff"; // 기본 흰색
+  sentenceText.style.color = "#fff"; // 기본 흰색으로 복구
   sentenceText.innerText = units[currentUnit][index];
   
   // 진행률 업데이트
@@ -103,7 +103,7 @@ function playSentence() {
 
   // 오디오가 끝나면 음성인식 시작
   player.onended = () => {
-    sentenceText.style.color = "#ffff00"; // 듣기 모드일 때 노란색으로 표시 (시각적 힌트)
+    sentenceText.style.color = "#ffff00"; // 듣기 모드일 때 노란색 (힌트)
     recognizer.start();
   };
 }
@@ -134,20 +134,22 @@ recognizer.onerror = (event) => {
   console.log("인식 에러:", event.error);
   sentenceText.innerText = "Try again";
   sentenceText.classList.add("fail");
+  sentenceText.style.color = "#39ff14"; // 에러 메시지도 형광 녹색
+  
   setTimeout(() => {
-     playSentence(); // 에러나면 다시 재생
-  }, 1000);
+     playSentence(); 
+  }, 500);
 };
 
 // ----------------------
-// 8. 정답 비교 로직 (수정됨: 50% 일치 & UI 변경)
+// 8. 정답 비교 로직 (수정됨: 색상 #39ff14 통일)
 // ----------------------
 function checkAnswer(spoken, target) {
   // 특수문자 제거 및 소문자 변환 함수
   const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
 
   // 단어 단위로 쪼개기
-  const userWords = clean(spoken).split(/\s+/); // 공백 기준으로 자름
+  const userWords = clean(spoken).split(/\s+/); 
   const targetWords = clean(target).split(/\s+/);
 
   let matchCount = 0;
@@ -163,26 +165,30 @@ function checkAnswer(spoken, target) {
   const accuracy = matchCount / targetWords.length;
   console.log("일치율:", accuracy * 100, "%");
 
-  // 판정 로직: 50% 이상 맞으면 정답 (0.5)
+  // 판정 로직: 50% 이상 맞으면 정답
   if (accuracy >= 0.5) {
     // 성공!
-    sentenceText.innerText = "Great!"; // 기존 텍스트 없애고 Great!만 표시
+    sentenceText.innerText = "Great!";
     sentenceText.classList.remove("fail");
     sentenceText.classList.add("success");
+    // .success 클래스는 CSS에서 이미 #39ff14 (형광 녹색)입니다.
 
-    // 1초 뒤 다음 문장으로
-    setTimeout(nextStep, 1000); 
+    // 0.5초 뒤 다음 문장으로
+    setTimeout(nextStep, 500); 
 
   } else {
     // 실패
-    sentenceText.innerText = "Try again"; // 인식된 문장 표시 안 함
+    sentenceText.innerText = "Try again";
     sentenceText.classList.remove("success");
     sentenceText.classList.add("fail");
+    
+    // 실패 시 CSS의 기본 색상(빨강)을 무시하고 형광 녹색(#39ff14)으로 강제 변경
+    sentenceText.style.color = "#39ff14"; 
 
-    // 1초 뒤 현재 문장 다시 듣기
+    // 0.5초 뒤 현재 문장 다시 듣기
     setTimeout(() => {
         playSentence(); 
-    }, 1000);
+    }, 500);
   }
 }
 
@@ -190,7 +196,7 @@ function checkAnswer(spoken, target) {
 // 9. 다음 단계 이동
 // ----------------------
 function nextStep() {
-  sentenceText.style.color = "#fff"; // 색상 복구
+  sentenceText.style.color = "#fff"; // 다시 기본 흰색으로 복구
   
   index++; // 다음 문장
 
