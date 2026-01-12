@@ -1,6 +1,6 @@
-// ----------------------
-// UNIT 문장 데이터
-// ----------------------
+/* -------------------------
+   UNIT 문장 데이터
+-------------------------- */
 const units = {
   1: [
     "What's your favorite food?",
@@ -14,9 +14,9 @@ const units = {
   ]
 };
 
-// ----------------------
-// MP3 파일 리스트
-// ----------------------
+/* -------------------------
+   MP3 파일 리스트 (GitHub Raw 주소)
+-------------------------- */
 const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
   "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
@@ -28,134 +28,133 @@ const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
-// ----------------------
-// 화면 요소
-// ----------------------
-const loginBox = document.getElementById("login-box");
-const app = document.getElementById("app");
-const sentenceText = document.getElementById("sentence");
-const recognizedText = document.getElementById("recognized");
-
 let currentUnit = 1;
 let index = 0;
-let cycle = 1;
-const totalCycles = 5;
 
-const player = new Audio();
-player.crossOrigin = "anonymous";
+let recognition = null;
+const audioPlayer = new Audio();
 
-// ----------------------
-// 로그인
-// ----------------------
-window.login = function () {
-  loginBox.style.display = "none";
-  app.style.display = "block";
-};
+/* -------------------------
+   로그인
+-------------------------- */
+document.getElementById("loginBtn").addEventListener("click", () => {
+  const name = document.getElementById("username").value.trim();
 
-// ----------------------
-// UNIT 선택
-// ----------------------
-window.selectUnit = function (n) {
-  currentUnit = n;
-  index = 0;
-  cycle = 1;
-};
-
-// ----------------------
-// 음성 인식
-// ----------------------
-window.SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-
-const recognizer = new SpeechRecognition();
-recognizer.lang = "en-US";
-recognizer.interimResults = true;   // 🔥 실시간 인식 활성화
-
-// ----------------------
-// Start 버튼
-// ----------------------
-window.startStudy = function () {
-  playSentence();
-};
-
-// ----------------------
-// 원어민 음성 재생
-// ----------------------
-function playSentence() {
-
-  const text = units[currentUnit][index];
-  sentenceText.innerText = text;
-  recognizedText.innerHTML = "";
-
-  player.src = audioList[index];
-  player.play();
-
-  player.onended = () => {
-    recognizer.start();
-  };
-}
-
-// ----------------------
-// 단어 일치율 계산 함수
-// ----------------------
-function similarityPercent(target, spoken) {
-
-  target = target.toLowerCase();
-  spoken = spoken.toLowerCase();
-
-  const targetWords = target.split(" ");
-  const spokenWords = spoken.split(" ");
-
-  let match = 0;
-
-  targetWords.forEach((w, i) => {
-    if (spokenWords[i] && spokenWords[i] === w) match++;
-  });
-
-  return (match / targetWords.length) * 100;
-}
-
-// ----------------------
-// 실시간 하이라이트 표시
-// ----------------------
-recognizer.onresult = (event) => {
-
-  const spoken = event.results[0][0].transcript;
-  const target = units[currentUnit][index];
-
-  const percent = similarityPercent(target, spoken);
-
-  // 🔥 하이라이트 처리
-  const spokenLength = spoken.length;
-
-  recognizedText.innerHTML =
-    `<span style="color:#00ff6a;">${target.slice(0, spokenLength)}</span>` +
-    `<span style="color:white;">${target.slice(spokenLength)}</span>` +
-    `<br><span style="color:#00ff6a;">(${percent.toFixed(0)}%)</span>`;
-
-  // 50% 이상 → 자동 다음 문장
-  if (percent >= 50) {
-    recognizer.stop();
-    nextStep();
-  }
-};
-
-// ----------------------
-// 다음 단계
-// ----------------------
-function nextStep() {
-
-  index++;
-
-  if (index >= 8) {
-    index = 0;
-    cycle++;
-  }
-
-  if (cycle > totalCycles) {
-    alert("🎉 학습 완료!");
+  if (!name) {
+    alert("이름을 입력하세요!");
     return;
   }
 
-  playSentence();
+  document.getElementById("unitSection").style.display = "block";
+});
+
+/* -------------------------
+   UNIT 선택
+-------------------------- */
+function selectUnit(n) {
+  currentUnit = n;
+  index = 0;
+
+  document.getElementById("studySection").style.display = "block";
+  showSentence();
+}
+
+/* -------------------------
+   문장 표시 + MP3 재생
+-------------------------- */
+function showSentence() {
+  const sentence = units[currentUnit][index];
+
+  document.getElementById("targetSentence").innerText = sentence;
+  document.getElementById("recognizedText").innerHTML = "";
+  document.getElementById("progressRate").innerHTML = "인식 진행률: 0%";
+
+  audioPlayer.src = audioList[index];
+  audioPlayer.play();
+
+  audioPlayer.onended = () => {
+    startRecognition();
+  };
+}
+
+/* -------------------------
+   다음 문장
+-------------------------- */
+function nextSentence() {
+  index++;
+
+  if (index >= units[currentUnit].length) {
+    alert("Unit 학습 완료!");
+    index = 0;
+  }
+
+  showSentence();
+}
+
+/* -------------------------
+   음성인식 시작
+-------------------------- */
+function startRecognition() {
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = "en-US";
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  const target = units[currentUnit][index].toLowerCase();
+
+  recognition.onresult = (event) => {
+    let spoken = "";
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      spoken += event.results[i][0].transcript;
+    }
+
+    spoken = spoken.toLowerCase().trim();
+
+    visualizeRecognition(target, spoken);
+  };
+
+  recognition.onend = () => {
+    // nothing
+  };
+
+  recognition.start();
+}
+
+/* -------------------------
+   인식 진행률 + 글자색 변화
+-------------------------- */
+function visualizeRecognition(target, spoken) {
+  let html = "";
+  let match = 0;
+
+  for (let i = 0; i < target.length; i++) {
+    const t = target[i];
+    const s = spoken[i];
+
+    if (s === undefined) {
+      html += `<span style="color:#666">${t}</span>`;
+      continue;
+    }
+
+    if (t === s) {
+      html += `<span style="color:#19ff6b;font-weight:bold">${t}</span>`;
+      match++;
+    } else {
+      html += `<span style="color:#ff4d4d">${t}</span>`;
+    }
+  }
+
+  const percent = Math.round((match / target.length) * 100);
+
+  document.getElementById("recognizedText").innerHTML = html;
+  document.getElementById("progressRate").innerHTML = `인식 진행률: ${percent}%`;
+
+  // 50% 기준 넘어가면 자동 다음 문장
+  if (percent >= 50) {
+    document.getElementById("progressRate").style.color = "#19ff6b";
+    nextSentence();
+  } else {
+    document.getElementById("progressRate").style.color = "#ff4d4d";
+  }
 }
