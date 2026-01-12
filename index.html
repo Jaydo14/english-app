@@ -1,57 +1,56 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>English Speaking App</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>English App</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
-
 <body>
-<div id="app" class="box">
 
-  <h1>🔊 English Speaking Practice</h1>
+<!-- 로그인 화면 -->
+<section id="loginSection" class="box">
+  <h2>Login</h2>
+  <input type="text" id="id" placeholder="ID">
+  <input type="password" id="pw" placeholder="Password">
+  <button id="loginBtn">Login</button>
+</section>
 
-  <!-- 로그인 화면 -->
-  <div id="loginSection">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Enter your name" />
-    <button id="loginBtn">Login</button>
+<!-- Unit 선택 화면 -->
+<section id="unitSection" class="box" style="display:none;">
+  <button class="backBtn" onclick="goLogin()">← Back</button>
+  <h2>Select Unit</h2>
+
+  <div class="unitGrid">
+    <button class="unitBtn" data-unit="1">Unit 1</button>
+    <button class="unitBtn" data-unit="2">Unit 2</button>
+    <button class="unitBtn" data-unit="3">Unit 3</button>
+    <button class="unitBtn" data-unit="4">Unit 4</button>
+    <button class="unitBtn" data-unit="5">Unit 5</button>
+    <button class="unitBtn" data-unit="6">Unit 6</button>
+    <button class="unitBtn" data-unit="7">Unit 7</button>
+    <button class="unitBtn" data-unit="8">Unit 8</button>
   </div>
+</section>
 
-  <!-- 유닛 선택 화면 -->
-  <div id="unitSection" style="display:none;">
-    <h2>Select Unit</h2>
+<!-- 학습 화면 -->
+<section id="studySection" class="box" style="display:none;">
+  <button class="backBtn" onclick="goUnits()">← Back</button>
 
-    <div id="unitButtons">
-      <button class="unitBtn" data-unit="1">Unit 1</button>
-      <button class="unitBtn" data-unit="2">Unit 2</button>
-      <button class="unitBtn" data-unit="3">Unit 3</button>
-      <button class="unitBtn" data-unit="4">Unit 4</button>
-      <button class="unitBtn" data-unit="5">Unit 5</button>
-      <button class="unitBtn" data-unit="6">Unit 6</button>
-      <button class="unitBtn" data-unit="7">Unit 7</button>
-      <button class="unitBtn" data-unit="8">Unit 8</button>
-    </div>
+  <h2 id="unitTitle">Unit</h2>
+
+  <div id="sentenceText" class="sentence"></div>
+
+  <div id="progress-wrap">
+    <div id="progress"></div>
   </div>
+  <div id="progressPercent"></div>
 
-  <!-- 학습 화면 -->
-  <div id="studySection" style="display:none;">
-    <h2 id="unitTitle"></h2>
-
-    <div id="sentenceBox">
-      <p id="sentenceText"></p>
-    </div>
-
-    <button id="startBtn">Start</button>
-
-    <div id="progress-wrap">
-      <div id="progress"></div>
-    </div>
-
-    <p id="progressPercent"></p>
-  </div>
-
-</div>
+  <button id="startBtn">START</button>
+</section>
 
 <script src="app.js"></script>
 </body>
