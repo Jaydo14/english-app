@@ -1,122 +1,115 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>English Speaking App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>학습 앱</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f5f5f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      text-align: center;
     }
 
     .container {
-      width: 100%;
-      max-width: 480px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
       padding: 20px;
     }
 
-    h1, h2 {
-      text-align: center;
-      margin-top: 0;
+    h1 {
+      color: #b0ff3b;
     }
 
-    .hidden {
-      display: none;
+    .box {
+      border: 2px solid #b0ff3b;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
     }
 
-    /* 공통 버튼 스타일 */
     button {
-      width: 100%;
-      padding: 16px 0;
-      margin: 8px 0;
-      border-radius: 999px;
+      background: #b0ff3b;
+      color: #000;
       border: none;
+      padding: 14px 22px;
+      border-radius: 12px;
       font-size: 18px;
-      font-weight: bold;
+      margin: 8px;
       cursor: pointer;
-      transition: transform .1s ease;
-      touch-action: manipulation;
+      width: 85%;
+      max-width: 300px;
     }
 
     button:active {
-      transform: scale(.97);
+      transform: scale(0.97);
     }
 
-    /* Unit 선택 화면 버튼 중앙 정렬 */
-    .unit-list {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
+    /* 진행률 바 영역 */
+    #progress-wrap {
+      width: 90%;
+      max-width: 400px;
+      height: 14px;
+      background: #333;
+      margin: 10px auto;
+      border-radius: 7px;
+      overflow: hidden;
     }
 
-    .unit-list button {
-      width: 80%;
+    #progress {
+      width: 0%;
+      height: 100%;
+      background: #b0ff3b;
+      transition: width 0.3s;
     }
 
-    /* 문제 박스 */
-    .box {
-      font-size: 30px;
-      font-weight: bold;
-      text-align: center;
-      padding: 30px;
-      margin: 20px 0;
-      border-radius: 16px;
-      background: #fafafa;
-      border: 2px solid #ddd;
+    #progress-percent {
+      margin-top: 6px;
+      font-size: 18px;
+      color: #b0ff3b;
     }
 
-    /* 성공시: 녹색 반짝임 */
+    /* 문장 박스 */
+    #sentence {
+      margin-top: 20px;
+      font-size: 22px;
+      min-height: 70px;
+    }
+
+    /* 성공 효과 - 녹색 반짝임 */
     .success {
-      animation: sparkle 0.6s ease;
-      border-color: #2ecc71;
-      background: #e9f9ef;
+      animation: glow 0.6s ease-out;
+      color: #b0ff3b;
     }
 
-    @keyframes sparkle {
-      0% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
-      50% { box-shadow: 0 0 20px rgba(46, 204, 113, .8); }
-      100% { box-shadow: 0 0 0px rgba(46, 204, 113, .0); }
+    @keyframes glow {
+      0% { text-shadow: 0 0 0px #b0ff3b; }
+      100% { text-shadow: 0 0 20px #b0ff3b; }
     }
 
-    /* 실패시: 빨간 흔들림 */
+    /* 실패 효과 - 빨간 흔들림 */
     .fail {
-      animation: shake 0.4s ease;
-      border-color: #e74c3c;
-      background: #fdecea;
+      animation: shake 0.4s;
+      color: #ff4b4b;
     }
 
     @keyframes shake {
-      0% { transform: translateX(0); }
+      0% { transform: translateX(0px); }
       25% { transform: translateX(-8px); }
       50% { transform: translateX(8px); }
       75% { transform: translateX(-8px); }
-      100% { transform: translateX(0); }
+      100% { transform: translateX(0px); }
     }
 
-    /* 모바일 대응 추가 확대 */
-    @media (max-width: 480px) {
-      .box {
-        font-size: 26px;
-        padding: 24px;
-      }
-
-      button {
-        font-size: 20px;
-        padding: 18px 0;
-      }
+    /* 모바일 최적화 */
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      #sentence { font-size: 18px; }
+      button { font-size: 16px; padding: 12px 16px; }
     }
   </style>
 </head>
@@ -124,39 +117,50 @@
 <body>
   <div class="container">
 
-    <!-- 로그인 화면(필요 시 확장 가능) -->
-    <section id="login-screen" class="">
-      <h1>학습 앱</h1>
-      <button id="startBtn">시작하기</button>
-    </section>
+    <!-- 로그인 화면 -->
+    <div id="login-box" class="box">
+      <h1>English Study App</h1>
+      <p>로그인 버튼을 눌러 시작하세요</p>
+      <button onclick="login()">Login</button>
+    </div>
 
-    <!-- Unit 선택 화면 -->
-    <section id="unit-screen" class="hidden">
-      <h2>Unit 선택</h2>
+    <!-- 앱 영역 -->
+    <div id="app" style="display:none;">
+      
+      <div class="box">
+        <h2>Unit 선택</h2>
 
-      <div class="unit-list">
-        <button class="unit-btn" data-unit="1">Unit 1</button>
-        <button class="unit-btn" data-unit="2">Unit 2</button>
-        <button class="unit-btn" data-unit="3">Unit 3</button>
+        <div id="unit-buttons">
+          <button onclick="selectUnit(1)">Unit 1</button>
+          <button onclick="selectUnit(2)">Unit 2</button>
+          <button onclick="selectUnit(3)">Unit 3</button>
+          <button onclick="selectUnit(4)">Unit 4</button>
+          <button onclick="selectUnit(5)">Unit 5</button>
+          <button onclick="selectUnit(6)">Unit 6</button>
+          <button onclick="selectUnit(7)">Unit 7</button>
+          <button onclick="selectUnit(8)">Unit 8</button>
+        </div>
       </div>
-    </section>
 
-    <!-- 학습 메인 화면 -->
-    <section id="study-screen" class="hidden">
-      <h2 id="unit-title"></h2>
+      <!-- 학습 화면 -->
+      <div id="study-box" class="box" style="display:none;">
+        <h2>학습 진행</h2>
 
-      <div id="questionBox" class="box">
-        문제 영역
+        <div id="progress-wrap">
+          <div id="progress"></div>
+        </div>
+
+        <div id="progress-percent">0%</div>
+
+        <p id="sentence">문장이 표시됩니다</p>
+
+        <button onclick="startStudy()">Start</button>
       </div>
-
-      <button id="correctBtn" style="background:#2ecc71;color:white;">정답</button>
-      <button id="wrongBtn" style="background:#e74c3c;color:white;">오답</button>
-
-      <button id="backToUnit" style="background:#bdc3c7;">Unit 선택으로</button>
-    </section>
+    </div>
 
   </div>
 
+  <!-- JS 파일 연결 -->
   <script src="app.js"></script>
 </body>
 </html>
