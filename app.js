@@ -1,4 +1,6 @@
-// ---------- UNIT 문장 데이터 ----------
+// ----------------------
+// UNIT 문장 데이터
+// ----------------------
 const units = {
   1: [
     "What's your favorite food?",
@@ -12,7 +14,9 @@ const units = {
   ]
 };
 
-// ---------- MP3 파일 리스트 (GitHub raw 주소) ----------
+// ----------------------
+// MP3 파일 리스트 (GitHub raw 경로)
+// ----------------------
 const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
   "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
@@ -24,87 +28,185 @@ const audioList = [
   "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
 ];
 
+// ----------------------
+// 화면 요소
+// ----------------------
+const loginBox = document.getElementById("login-box");
+const app = document.getElementById("app");
+const unitButtons = document.getElementById("unit-buttons");
+const studyBox = document.getElementById("study-box");
+const sentenceText = document.getElementById("sentence");
+const progressBar = document.getElementById("progress");
+
 let currentUnit = 1;
 let index = 0;
+let cycle = 1;
+const totalCycles = 5;
 
-let recognition;
+const player = new Audio();
 
-// ---------- 로그인 ----------
-document.getElementById("loginBtn").onclick = () => {
-  document.getElementById("loginSection").style.display = "none";
-  document.getElementById("unitSection").style.display = "block";
+// ----------------------
+// 로그인
+// ----------------------
+window.login = function () {
+  loginBox.style.display = "none";
+  app.style.display = "block";
 };
 
-// ---------- 유닛 선택 ----------
-document.querySelectorAll(".unitBtn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    currentUnit = btn.dataset.unit;
-    index = 0;
-    document.getElementById("unitTitle").innerText = `Unit ${currentUnit}`;
-    document.getElementById("unitSection").style.display = "none";
-    document.getElementById("studySection").style.display = "block";
-    showSentence();
-  });
-});
+// ----------------------
+// UNIT 선택
+// ----------------------
+window.selectUnit = function (n) {
+  currentUnit = n;
+  index = 0;
+  cycle = 1;
 
-// ---------- 문장 표시 ----------
-function showSentence() {
-  const sentence = units[currentUnit][index];
-  document.getElementById("sentenceText").innerText = sentence;
+  // Unit 선택 화면 숨김
+  app.style.display = "none";
 
-  const percent = Math.round(((index) / units[currentUnit].length) * 100);
-  document.getElementById("progress").style.width = percent + "%";
-  document.getElementById("progressPercent").innerText = percent + "% 완료";
-}
+  // 학습 화면 표시
+  studyBox.style.display = "block";
 
-// ---------- 오디오 + 음성인식 ----------
-document.getElementById("startBtn").onclick = () => {
-  playAudioThenRecognize();
+  loadProgress();
+  updateProgress();
+  sentenceText.innerText = units[currentUnit][index];
 };
 
-function playAudioThenRecognize() {
-
-  // 현재 문장 표시
-  const sentence = units[currentUnit][index];
-  document.getElementById("sentenceText").innerText = sentence;
-
-  // 오디오 재생 (리스트에서 선택)
-  const audio = new Audio(audioList[index]);
-  audio.play();
-
-  audio.onended = () => startRecognition(sentence);
+// ----------------------
+// 진행률 업데이트
+// ----------------------
+function updateProgress() {
+  const percent =
+    ((cycle - 1) * 8 + (index + 1)) / (totalCycles * 8) * 100;
+  progressBar.style.width = Math.floor(percent) + "%";
 }
 
-// ---------- STT ----------
-function startRecognition(targetText) {
-  window.SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+// ----------------------
+// 음성 인식 설정
+// ----------------------
+window.SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
 
-  recognition = new SpeechRecognition();
-  recognition.lang = "en-US";
-  recognition.interimResults = false;
+const recognizer = new SpeechRecognition();
+recognizer.lang = "en-US";
+recognizer.interimResults = false;
 
-  recognition.start();
+// ----------------------
+// 학습 기록 저장
+// ----------------------
+function saveProgress() {
+  localStorage.setItem(
+    "progress_unit_" + currentUnit,
+    JSON.stringify({
+      index,
+      cycle
+    })
+  );
+}
 
-  recognition.onresult = e => {
-    const spoken = e.results[0][0].transcript.toLowerCase();
-    const target = targetText.toLowerCase();
+// ----------------------
+// 학습 기록 불러오기
+// ----------------------
+function loadProgress() {
+  const data = localStorage.getItem(
+    "progress_unit_" + currentUnit
+  );
+  if (!data) return;
 
-    // 간단 매칭 (앞부분만 비교)
-    if (spoken.includes(target.slice(0, 5))) {
-      index++;
+  const saved = JSON.parse(data);
+  index = saved.index;
+  cycle = saved.cycle;
+}
 
-      if (index >= units[currentUnit].length) {
-        alert("Unit Completed!");
-        index = 0;
-      }
+// ----------------------
+// Start 버튼
+// ----------------------
+window.startStudy = function () {
+  loadProgress();
+  playSentence();
+};
 
-      showSentence();
-      playAudioThenRecognize();
+// ----------------------
+// 문장 음성 재생
+// ----------------------
+function playSentence() {
+  // 문장 표시
+  sentenceText.innerText = units[currentUnit][index];
 
-    } else {
-      alert("Try again 🙂");
-      playAudioThenRecognize();
-    }
+  // mp3 재생
+  player.src = audioList[index];
+  player.play();
+
+  // 음성 끝난 뒤 자동 인식 시작
+  player.onended = () => {
+    recognizer.start();
   };
+}
+
+// ----------------------
+// 음성 인식 처리
+// ----------------------
+recognizer.onresult = (event) => {
+  const text = event.results[0][0].transcript.toLowerCase();
+  const target = units[currentUnit][index].toLowerCase();
+
+  console.log("사용자 인식:", text);
+
+  // 단어 단위 포함률 계산
+  let success = 0;
+  const words = target.split(" ");
+
+  words.forEach(word => {
+    if (text.includes(word)) success++;
+  });
+
+  const rate = success / words.length;
+
+  // ------------------
+  // 성공 판정
+  // ------------------
+  if (rate >= 0.6) {
+    sentenceText.classList.remove("fail");
+    sentenceText.classList.add("success");
+
+    setTimeout(() => {
+      sentenceText.classList.remove("success");
+      nextStep();
+    }, 500);
+  }
+  // ------------------
+  // 실패 판정
+  // ------------------
+  else {
+    sentenceText.classList.remove("success");
+    sentenceText.classList.add("fail");
+
+    setTimeout(() => {
+      sentenceText.classList.remove("fail");
+      recognizer.start(); // 재시도
+    }, 600);
+  }
+};
+
+// ----------------------
+// 다음 단계로 이동
+// ----------------------
+function nextStep() {
+  index++;
+
+  // 8문장 끝나면 다음 사이클
+  if (index >= 8) {
+    index = 0;
+    cycle++;
+  }
+
+  // 전체 학습 완료
+  if (cycle > totalCycles) {
+    alert("🎉 학습 완료!");
+    return;
+  }
+
+  updateProgress();
+  saveProgress();
+  playSentence();
 }
