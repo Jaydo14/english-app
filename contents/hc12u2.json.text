@@ -1,0 +1,47 @@
+[
+  {
+    "en": "How do you get to the academy?",
+    "ko": "너 보통 학원 뭐타고 와?",
+    "audio": "1_en.mp3"
+  },
+  {
+    "en": "First, I walk to the bus stop.",
+    "ko": "우선 정류장까지는 걸어가",
+    "audio": "2_en.mp3"
+  },
+    {
+    "en": "It takes about five minutes on foot.",
+    "ko": "5분정도 걸려",
+    "audio": "3_en.mp3"
+  },
+    {
+    "en": "Then I take the bus to the subway station.",
+    "ko": "그런 다음에 버스타고 지하철 역까지 가",
+    "audio": "4_en.mp3"
+  },
+    {
+    "en": "What subway line do you take?",
+    "ko": "몇호선 타는데?",
+    "audio": "5_en.mp3"
+  },
+    {
+    "en": "I take line number seven.",
+    "ko": "7호선",
+    "audio": "6_en.mp3"
+  },
+    {
+    "en": "Then I transfer to line number two.",
+    "ko": "그리고 2호선으로 환승해",
+    "audio": "7_en.mp3"
+  },
+    {
+    "en": "How long does the whole trip take?",
+    "ko": "다해서 얼마나 걸리는데?",
+    "audio": "8_en.mp3"
+  },
+  {
+    "en": "It takes about an hour and a half if there's no traffic.",
+    "ko": "안 막히면 한시간 반정도 걸려",
+    "audio": "9_en.mp3"
+  }
+]

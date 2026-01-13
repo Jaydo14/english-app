@@ -1,0 +1,42 @@
+[
+  {
+    "en": "What did you eat for lunch?",
+    "ko": "점심 뭐 먹었어?",
+    "audio": "1_en.mp3"
+  },
+  {
+    "en": "I had pasta and salad.",
+    "ko": "파스타랑 샐러드 먹었어",
+    "audio": "2_en.mp3"
+  },
+    {
+    "en": "Where did you go?",
+    "ko": "어디 가서 먹었는데?",
+    "audio": "3_en.mp3"
+  },
+    {
+    "en": "I went to an Italian joint right across from my school.",
+    "ko": "학교 맞은 편에 있는 이탈리아 음식점으로 갔었어",
+    "audio": 4_en.mp3"
+  },
+    {
+    "en": "The chef is from Italy and he makes the best pizza ever.",
+    "ko": "거기 쉐프가 이탈리아에서 왔는데 피자가 먹어본 것 중에 제일 맛있더라고",
+    "audio": "5_en.mp3"
+  },
+    {
+    "en": "And it's really affordable.",
+    "ko": "그리고 가격도 괜찮아",
+    "audio": "6_en.mp3"
+  },
+    {
+    "en": "How much does it cost?",
+    "ko": "얼만데?",
+    "audio": "7_en.mp3"
+  },
+  {
+    "en": "About twenty thousand won for two people.",
+    "ko": "둘이가면 2만원정도 나와",
+    "audio": "8_en.mp3"
+  }
+]
