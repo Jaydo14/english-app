@@ -17,7 +17,7 @@
     {
     "en": "I prefer to watch movies at the theater.",
     "ko": "영화관에서 보는게 더 좋아",
-    "audio": 4_en.mp3"
+    "audio": "4_en.mp3"
   },
     {
     "en": "How come?",
@@ -40,3 +40,4 @@
     "audio": "8_en.mp3"
   }
 ]
+
