@@ -1,80 +1,108 @@
-// ----------------------
-// 1. UNIT 문장 데이터
-// ----------------------
-const units = {
-  1: [
-    "What's your favorite food?",
-    "My favorite food is Korean food.",
-    "I like all kinds of Korean food.",
-    "What's your favorite among them?",
-    "I really enjoy different kinds of stews and soups.",
-    "If I have to pick one, I would pick seaweed soup.",
-    "But I'm not very picky about food.",
-    "So I enjoy all types of cuisine."
-  ]
-};
+// ======================================================
+// 1. 기본 설정 (GitHub 주소 연결)
+// ======================================================
+const REPO_USER = "jaydo14"; 
+const REPO_NAME = "english-app";
+// contents 폴더를 바라보도록 주소 설정
+const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
+
+// 🚨 [중요] 아까 만든 구글 스크립트 주소를 따옴표 안에 넣어주세요!
+const GOOGLE_SCRIPT_URL = "여기에_구글_스크립트_주소를_붙여넣으세요"; 
+
 
 // ----------------------
-// 2. MP3 파일 리스트 (Github 경로)
-// ----------------------
-const audioList = [
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/1_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/2_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/3_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/4_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/5_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/6_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/7_en.mp3",
-  "https://raw.githubusercontent.com/jaydo14/english-app/main/8_en.mp3"
-];
-
-// ----------------------
-// 3. 화면 요소 가져오기
+// 2. 변수 및 요소 설정
 // ----------------------
 const loginBox = document.getElementById("login-box");
 const app = document.getElementById("app");
-const unitButtons = document.getElementById("unit-buttons");
 const studyBox = document.getElementById("study-box");
 const sentenceText = document.getElementById("sentence");
+const sentenceKor = document.getElementById("sentence-kor");
 const progressBar = document.getElementById("progress");
 const progressPercent = document.getElementById("progress-percent");
+const phoneInput = document.getElementById("phone-input");
+const contentSelect = document.getElementById("content-select");
 
-// 상태 변수
+let currentType = ""; // 예: hc12u
 let currentUnit = 1;
+let currentData = []; // 가져온 문장들이 여기에 담김
 let index = 0;
 let cycle = 1;
-const totalCycles = 5; // 총 5회 반복 학습
-const player = new Audio(); // 오디오 플레이어
+const totalCycles = 5; 
+const player = new Audio(); 
 
 // ----------------------
-// 4. 초기 설정 및 로그인
+// 3. 기능 초기화 & 로그인
 // ----------------------
-// 모바일 터치 지연 방지
 function bindClick(el, handler) {
   el.addEventListener("click", handler);
   el.addEventListener("touchstart", handler, { passive: true });
 }
 
-// 로그인 함수
 window.login = function () {
+  const inputVal = phoneInput.value.trim();
+  
+  if (inputVal.length < 1) {
+    alert("번호를 입력해주세요.");
+    return;
+  }
+
+  // 1. 선택한 교재 이름 가져오기 (예: hc12u)
+  currentType = contentSelect.value;
+  
+  // 2. 화면에 표시할 이름
+  const typeText = contentSelect.options[contentSelect.selectedIndex].text;
+  
+  alert(`환영합니다!\n[${typeText}] 학습을 시작합니다.`);
+  document.getElementById("welcome-msg").innerText = `Unit 선택 (${typeText})`;
+  
   loginBox.style.display = "none";
   app.style.display = "block";
 };
 
 // ----------------------
-// 5. Unit 선택 및 학습 시작
+// 4. GitHub에서 파일 불러오기
 // ----------------------
-window.selectUnit = function (n) {
+window.selectUnit = async function (n) {
   currentUnit = n;
-  index = 0;
-  cycle = 1;
+  
+  // ⭐ 파일 이름 조립하기: "hc12u" + "1" + ".json" -> "hc12u1.json"
+  // (업로드하신 파일명과 정확히 일치해야 합니다)
+  const fileName = `${currentType}${currentUnit}.json`;
+  const fullUrl = BASE_URL + fileName;
 
-  // UI 전환
+  console.log("가져올 파일 주소:", fullUrl);
+
+  // 로딩 화면 표시
   studyBox.style.display = "block";
-  document.querySelector('.box:not(#study-box)').style.display = 'none'; // Unit 선택창 숨기기
+  document.querySelector('.box:not(#study-box)').style.display = 'none';
+  sentenceText.innerText = "데이터를 불러오는 중...";
+  sentenceKor.innerText = "잠시만 기다려주세요.";
 
-  updateProgress();
-  sentenceText.innerText = "Start 버튼을 눌러주세요";
+  try {
+    // 인터넷에서 파일 읽어오기
+    const response = await fetch(fullUrl);
+    
+    if (!response.ok) {
+      throw new Error("파일을 찾을 수 없습니다. (404)");
+    }
+
+    currentData = await response.json();
+    console.log("데이터 로딩 성공:", currentData);
+    
+    // 학습 준비 완료
+    index = 0;
+    cycle = 1;
+    updateProgress();
+    sentenceText.innerText = "Start 버튼을 눌러주세요";
+    sentenceKor.innerText = ""; 
+
+  } catch (error) {
+    console.error(error);
+    alert(`[오류] '${fileName}' 파일을 찾을 수 없습니다.\nGitHub 'contents' 폴더에 파일이 있는지 확인해주세요.`);
+    studyBox.style.display = "none";
+    document.querySelector('.box:not(#study-box)').style.display = 'block';
+  }
 };
 
 window.startStudy = function () {
@@ -82,156 +110,146 @@ window.startStudy = function () {
 };
 
 // ----------------------
-// 6. 핵심: 오디오 재생 -> 음성인식
+// 5. 재생 및 화면 표시
 // ----------------------
 function playSentence() {
-  // 텍스트 표시 및 스타일 초기화
   sentenceText.classList.remove("success", "fail");
-  sentenceText.style.color = "#fff"; // 기본 흰색 복구
-  sentenceText.innerText = units[currentUnit][index];
+  sentenceText.style.color = "#fff"; 
   
-  // 진행률 업데이트
+  const item = currentData[index];
+
+  // 영어와 한국어 표시
+  sentenceText.innerText = item.en;
+  sentenceKor.innerText = item.ko;
+  
   updateProgress();
 
-  // 오디오 소스 설정
-  player.src = audioList[index];
-  
-  // 재생 시작
-  player.play().catch(e => {
-    console.log("자동 재생 막힘, 사용자 인터랙션 필요", e);
-  });
+  // 오디오 재생
+  if (item.audio) {
+    // contents 폴더 안에 있는 오디오 파일을 실행
+    // 예: BASE_URL + "u1en1.mp3"
+    player.src = BASE_URL + item.audio;
+    player.play().catch(e => console.log("재생 오류 (터치 필요)", e));
+  } else {
+    alert("이 문장에는 오디오 정보가 없습니다.");
+  }
 
-  // 오디오가 끝나면 음성인식 시작
   player.onended = () => {
-    // 듣기 모드일 때는 '노란색'으로 표시 (말하세요 신호)
     sentenceText.style.color = "#ffff00"; 
     recognizer.start();
   };
 }
 
 // ----------------------
-// 7. 음성 인식 설정 (Web Speech API)
+// 6. 음성 인식 및 정답 체크
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 const recognizer = new SpeechRecognition();
 recognizer.lang = "en-US";
 recognizer.interimResults = false;
 recognizer.maxAlternatives = 1;
 
-// 음성 인식 결과 처리
 recognizer.onresult = (event) => {
   const spokenText = event.results[0][0].transcript;
-  const targetText = units[currentUnit][index];
+  const targetText = currentData[index].en;
   
-  console.log("사용자 발음:", spokenText);
-  console.log("목표 문장:", targetText);
-
+  console.log("내 발음:", spokenText);
   checkAnswer(spokenText, targetText);
 };
 
-// 음성 인식이 끊겼을 때 에러 방지
 recognizer.onerror = (event) => {
-  console.log("인식 에러:", event.error);
+  console.log("인식 에러", event.error);
   sentenceText.innerText = "Try again";
+  sentenceKor.innerText = "";
+  
   sentenceText.classList.add("fail");
-  
-  // 에러 시 빨간색 표시
   sentenceText.style.color = "#ff4b4b"; 
-  
-  setTimeout(() => {
-     playSentence(); 
-  }, 500);
+  setTimeout(() => { playSentence(); }, 500);
 };
 
-// ----------------------
-// 8. 정답 비교 로직 (수정됨: Great=녹색, Try again=빨강)
-// ----------------------
 function checkAnswer(spoken, target) {
-  // 특수문자 제거 및 소문자 변환 함수
   const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
-
-  // 단어 단위로 쪼개기
   const userWords = clean(spoken).split(/\s+/); 
   const targetWords = clean(target).split(/\s+/);
 
   let matchCount = 0;
-
-  // 타겟 문장의 단어가 사용자 발음에 얼마나 포함되어 있는지 카운트
   targetWords.forEach(word => {
-    if (userWords.includes(word)) {
-      matchCount++;
-    }
+    if (userWords.includes(word)) matchCount++;
   });
 
-  // 일치율 계산
   const accuracy = matchCount / targetWords.length;
-  console.log("일치율:", accuracy * 100, "%");
 
-  // 판정 로직: 50% 이상 맞으면 정답
   if (accuracy >= 0.5) {
-    // 성공!
+    // 정답
     sentenceText.innerText = "Great!";
+    sentenceKor.innerText = ""; 
+    
     sentenceText.classList.remove("fail");
     sentenceText.classList.add("success");
-    
-    // 성공 시 형광 녹색 강제 적용
     sentenceText.style.color = "#39ff14"; 
-
-    // 0.5초 뒤 다음 문장으로
     setTimeout(nextStep, 500); 
 
   } else {
-    // 실패
+    // 오답
     sentenceText.innerText = "Try again";
+    sentenceKor.innerText = ""; 
+
     sentenceText.classList.remove("success");
     sentenceText.classList.add("fail");
-    
-    // 실패 시 빨간색 강제 적용
     sentenceText.style.color = "#ff4b4b"; 
-
-    // 0.5초 뒤 현재 문장 다시 듣기
-    setTimeout(() => {
-        playSentence(); 
-    }, 500);
+    setTimeout(() => { playSentence(); }, 500);
   }
 }
 
 // ----------------------
-// 9. 다음 단계 이동
+// 7. 다음 단계 및 저장
 // ----------------------
 function nextStep() {
-  sentenceText.style.color = "#fff"; // 색상 복구 (흰색)
-  
-  index++; // 다음 문장
+  sentenceText.style.color = "#fff"; 
+  index++; 
 
-  // Unit의 모든 문장을 다 들었을 때
-  if (index >= units[currentUnit].length) {
-    index = 0; // 첫 문장으로 리셋
-    cycle++;   // 1회독 추가
+  // 한 바퀴 돌았나?
+  if (index >= currentData.length) {
+    index = 0; 
+    cycle++;   
+    sendDataToGoogle(); // 저장
   }
 
-  // 목표 횟수(5회)를 다 채웠을 때
   if (cycle > totalCycles) {
     alert("🎉 학습 완료! 수고하셨습니다.");
-    location.reload(); // 처음 화면으로
+    location.reload(); 
     return;
   }
 
   playSentence();
 }
 
-// ----------------------
-// 10. 진행률 표시 UI
-// ----------------------
+// 구글 시트 저장 함수
+function sendDataToGoogle() {
+  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
+
+  const data = {
+    action: "save",
+    phone: phoneInput.value.trim(),
+    unit: "Unit " + currentUnit,
+    cycle: cycle - 1
+  };
+
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).then(() => console.log("저장 완료"));
+}
+
 function updateProgress() {
-  const totalSentences = units[currentUnit].length;
+  const totalSentences = currentData.length;
   const currentCount = ((cycle - 1) * totalSentences) + (index + 1);
   const totalCount = totalCycles * totalSentences;
   
   let percent = (currentCount / totalCount) * 100;
   if (percent > 100) percent = 100;
-  
   const rounded = Math.floor(percent);
 
   progressBar.style.width = rounded + "%";
