@@ -117,3 +117,12 @@ button {
     font-size: 20px;
   }
 }
+
+/* 유닛 버튼 안의 작은 제목 스타일 */
+.unit-title {
+  font-size: 14px; /* 제목보다 작게 */
+  font-weight: normal; /* 굵기 빼기 */
+  color: #333; /* 약간 흐린 검정 (버튼 배경에 따라 조정) */
+  display: block; /* 다음 줄에 확실히 나오게 */
+  margin-top: 4px;
+}
