@@ -2,41 +2,41 @@
   {
     "en": "What kind of music do you listen to?",
     "ko": "너 보통 무슨 음악 들어?",
-    "audio": "1_en.mp3"
+    "audio": "u1en1.mp3"
   },
   {
     "en": "I like all kinds but I like to listen to pop the most.",
     "ko": "다 좋아하는데 팝이 제일 좋아",
-    "audio": "2_en.mp3"
+    "audio": "u1en2.mp3"
   },
     {
     "en": "The genre changes depending on my mood.",
     "ko": "그냥 기분 따라 듣고 싶은거 들어",
-    "audio": "3_en.mp3"
+    "audio": "u1en3.mp3"
   },
     {
     "en": "Who's your favorite singer?",
     "ko": "가장 좋아하는 가수가 누군데?",
-    "audio": "4_en.mp3"
+    "audio": "u1en4.mp3"
   },
     {
     "en": "My favorite singer is Bruno Mars.",
     "ko": "브루노 마스 가장 좋아해",
-    "audio": "5_en.mp3"
+    "audio": "u1en5.mp3"
   },
     {
     "en": "He's really talented.",
     "ko": "완전 천재야",
-    "audio": "6_en.mp3"
+    "audio": "u1en6.mp3"
   },
     {
     "en": "Can you recommend me a song?",
     "ko": "노래 하나만 추천해줄래?",
-    "audio": "7_en.mp3"
+    "audio": "u1en7.mp3"
   },
   {
     "en": "I recommend you listen to 'Marry you'.",
     "ko": "'메리 유'라는 노래 들어봐",
-    "audio": "8_en.mp3"
+    "audio": "u1en8.mp3"
   }
 ]
