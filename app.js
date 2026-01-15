@@ -1,13 +1,12 @@
 // ======================================================
-// 1. 기본 설정 (GitHub 주소 연결)
+// 1. 기본 설정
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
-// contents 폴더를 바라보도록 주소 설정
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
-// 🚨 [중요] 아까 만든 구글 스크립트 주소를 따옴표 안에 넣어주세요!
-const GOOGLE_SCRIPT_URL = "여기에_구글_스크립트_주소를_붙여넣으세요"; 
+// 🚨 구글 스크립트 주소 꼭 확인하세요!
+const GOOGLE_SCRIPT_URL = "https://script.google.com/a/macros/babbayoung.com/s/AKfycbyRwrVXaOs4j8jZSVdGblIcNu79fREqxxw-k0g19Ek4zC7DzbLzp4uRwbQ5ab4ci0VBsQ/exec"; 
 
 
 // ----------------------
@@ -21,43 +20,69 @@ const sentenceKor = document.getElementById("sentence-kor");
 const progressBar = document.getElementById("progress");
 const progressPercent = document.getElementById("progress-percent");
 const phoneInput = document.getElementById("phone-input");
-const contentSelect = document.getElementById("content-select");
 
-let currentType = ""; // 예: hc12u
+let currentType = ""; 
 let currentUnit = 1;
-let currentData = []; // 가져온 문장들이 여기에 담김
+let currentData = []; 
 let index = 0;
 let cycle = 1;
-const totalCycles = 5; 
+
+// ⭐ [수정됨] 총 18번 반복으로 변경
+const totalCycles = 18; 
+
 const player = new Audio(); 
 
 // ----------------------
-// 3. 기능 초기화 & 로그인
+// 3. 기능 초기화 & 로그인 (자동 배정 기능)
 // ----------------------
 function bindClick(el, handler) {
   el.addEventListener("click", handler);
   el.addEventListener("touchstart", handler, { passive: true });
 }
 
+// ⭐ [수정됨] 로그인: 구글 시트에서 교재 정보 가져오기
 window.login = function () {
   const inputVal = phoneInput.value.trim();
+  const loginBtn = document.querySelector("#login-box button");
   
   if (inputVal.length < 1) {
     alert("번호를 입력해주세요.");
     return;
   }
 
-  // 1. 선택한 교재 이름 가져오기 (예: hc12u)
-  currentType = contentSelect.value;
-  
-  // 2. 화면에 표시할 이름
-  const typeText = contentSelect.options[contentSelect.selectedIndex].text;
-  
-  alert(`환영합니다!\n[${typeText}] 학습을 시작합니다.`);
-  document.getElementById("welcome-msg").innerText = `Unit 선택 (${typeText})`;
-  
-  loginBox.style.display = "none";
-  app.style.display = "block";
+  // 버튼 잠그기 (중복 클릭 방지)
+  loginBtn.disabled = true;
+  loginBtn.innerText = "정보 확인 중...";
+
+  // 구글 스크립트에 물어보기 (GET 요청)
+  fetch(GOOGLE_SCRIPT_URL + "?phone=" + inputVal)
+  .then(res => res.json())
+  .then(data => {
+    if (data.result === "success") {
+      // 1. 성공! 구글 시트에 적힌 교재코드(type)를 가져옴
+      currentType = data.type; // 예: hc12u
+      const studentName = data.name;
+
+      alert(`반갑습니다, ${studentName}님!\n오늘도 화이팅하세요!`);
+      
+      // 교재 이름 표시 (옵션)
+      document.getElementById("welcome-msg").innerText = "Unit 선택";
+      
+      loginBox.style.display = "none";
+      app.style.display = "block";
+    } else {
+      // 실패
+      alert("등록되지 않은 번호입니다. 선생님께 문의하세요.");
+      loginBtn.disabled = false;
+      loginBtn.innerText = "Login";
+    }
+  })
+  .catch(error => {
+    console.error(error);
+    alert("접속 오류! 인터넷 연결을 확인하세요.");
+    loginBtn.disabled = false;
+    loginBtn.innerText = "Login";
+  });
 };
 
 // ----------------------
@@ -66,40 +91,29 @@ window.login = function () {
 window.selectUnit = async function (n) {
   currentUnit = n;
   
-  // ⭐ 파일 이름 조립하기: "hc12u" + "1" + ".json" -> "hc12u1.json"
-  // (업로드하신 파일명과 정확히 일치해야 합니다)
+  // 파일명 조합: 구글시트에서 받은 코드 + 유닛번호 + .json
   const fileName = `${currentType}${currentUnit}.json`;
   const fullUrl = BASE_URL + fileName;
 
-  console.log("가져올 파일 주소:", fullUrl);
-
-  // 로딩 화면 표시
   studyBox.style.display = "block";
   document.querySelector('.box:not(#study-box)').style.display = 'none';
-  sentenceText.innerText = "데이터를 불러오는 중...";
-  sentenceKor.innerText = "잠시만 기다려주세요.";
+  sentenceText.innerText = "Loading...";
+  sentenceKor.innerText = "";
 
   try {
-    // 인터넷에서 파일 읽어오기
     const response = await fetch(fullUrl);
-    
-    if (!response.ok) {
-      throw new Error("파일을 찾을 수 없습니다. (404)");
-    }
+    if (!response.ok) throw new Error("파일 없음");
 
     currentData = await response.json();
-    console.log("데이터 로딩 성공:", currentData);
     
-    // 학습 준비 완료
+    // 학습 시작
     index = 0;
     cycle = 1;
     updateProgress();
-    sentenceText.innerText = "Start 버튼을 눌러주세요";
-    sentenceKor.innerText = ""; 
+    sentenceText.innerText = "Start 버튼을 누르세요";
 
   } catch (error) {
-    console.error(error);
-    alert(`[오류] '${fileName}' 파일을 찾을 수 없습니다.\nGitHub 'contents' 폴더에 파일이 있는지 확인해주세요.`);
+    alert(`[오류] 학습 자료(${fileName})를 찾을 수 없습니다.`);
     studyBox.style.display = "none";
     document.querySelector('.box:not(#study-box)').style.display = 'block';
   }
@@ -117,21 +131,16 @@ function playSentence() {
   sentenceText.style.color = "#fff"; 
   
   const item = currentData[index];
-
-  // 영어와 한국어 표시
   sentenceText.innerText = item.en;
   sentenceKor.innerText = item.ko;
   
   updateProgress();
 
-  // 오디오 재생
   if (item.audio) {
-    // contents 폴더 안에 있는 오디오 파일을 실행
-    // 예: BASE_URL + "u1en1.mp3"
     player.src = BASE_URL + item.audio;
-    player.play().catch(e => console.log("재생 오류 (터치 필요)", e));
+    player.play().catch(e => console.log("재생 오류", e));
   } else {
-    alert("이 문장에는 오디오 정보가 없습니다.");
+    alert("오디오 없음");
   }
 
   player.onended = () => {
@@ -141,7 +150,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 6. 음성 인식 및 정답 체크
+// 6. 음성 인식
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -152,16 +161,12 @@ recognizer.maxAlternatives = 1;
 recognizer.onresult = (event) => {
   const spokenText = event.results[0][0].transcript;
   const targetText = currentData[index].en;
-  
-  console.log("내 발음:", spokenText);
   checkAnswer(spokenText, targetText);
 };
 
 recognizer.onerror = (event) => {
-  console.log("인식 에러", event.error);
   sentenceText.innerText = "Try again";
   sentenceKor.innerText = "";
-  
   sentenceText.classList.add("fail");
   sentenceText.style.color = "#ff4b4b"; 
   setTimeout(() => { playSentence(); }, 500);
@@ -180,20 +185,15 @@ function checkAnswer(spoken, target) {
   const accuracy = matchCount / targetWords.length;
 
   if (accuracy >= 0.5) {
-    // 정답
     sentenceText.innerText = "Great!";
     sentenceKor.innerText = ""; 
-    
     sentenceText.classList.remove("fail");
     sentenceText.classList.add("success");
     sentenceText.style.color = "#39ff14"; 
     setTimeout(nextStep, 500); 
-
   } else {
-    // 오답
     sentenceText.innerText = "Try again";
     sentenceKor.innerText = ""; 
-
     sentenceText.classList.remove("success");
     sentenceText.classList.add("fail");
     sentenceText.style.color = "#ff4b4b"; 
@@ -208,15 +208,14 @@ function nextStep() {
   sentenceText.style.color = "#fff"; 
   index++; 
 
-  // 한 바퀴 돌았나?
   if (index >= currentData.length) {
     index = 0; 
     cycle++;   
-    sendDataToGoogle(); // 저장
+    sendDataToGoogle(); 
   }
 
   if (cycle > totalCycles) {
-    alert("🎉 학습 완료! 수고하셨습니다.");
+    alert("🎉 오늘의 학습 목표 달성! 수고하셨습니다.");
     location.reload(); 
     return;
   }
@@ -224,25 +223,23 @@ function nextStep() {
   playSentence();
 }
 
-// 구글 시트 저장 함수
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
-
   const data = {
     action: "save",
     phone: phoneInput.value.trim(),
     unit: "Unit " + currentUnit,
     cycle: cycle - 1
   };
-
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
-  }).then(() => console.log("저장 완료"));
+  });
 }
 
+// ⭐ [수정됨] 퍼센트만 표시하고 Cycle 정보는 숨기기
 function updateProgress() {
   const totalSentences = currentData.length;
   const currentCount = ((cycle - 1) * totalSentences) + (index + 1);
@@ -253,5 +250,6 @@ function updateProgress() {
   const rounded = Math.floor(percent);
 
   progressBar.style.width = rounded + "%";
-  progressPercent.innerText = rounded + "% (Cycle " + cycle + "/" + totalCycles + ")";
+  // "Cycle 1/18" 글자 삭제하고 %만 표시
+  progressPercent.innerText = rounded + "%";
 }
