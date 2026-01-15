@@ -6,7 +6,7 @@ const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
 // 🚨 구글 스크립트 주소 꼭 확인하세요!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwH7rQpGF4vmemEKdU3P24dKwg7-U8YEdXZozzcEuPnt5ZkCLjhb841sgX4WdYqSVn6dg/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBhy2qH47_xrC9UY8A9O2WWsAtEkXPlK8LtPMuheib9uTY_KVZUsDhd7O8sUxIM62mfA/exec"; 
 
 
 // ----------------------
