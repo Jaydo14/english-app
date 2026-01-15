@@ -4,134 +4,32 @@
   <meta charset="UTF-8" />
   <title>English Speaking App</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      background: #000;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h1 {
-      color: #b0ff3b;
-    }
-
-    .box {
-      border: 2px solid #b0ff3b;
-      border-radius: 15px;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    button {
-      background: #b0ff3b;
-      color: #000;
-      border: none;
-      padding: 14px 22px;
-      border-radius: 12px;
-      font-size: 18px;
-      margin: 8px;
-      cursor: pointer;
-      width: 85%;
-      max-width: 300px;
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
-
-    /* 진행률 바 영역 */
-    #progress-wrap {
-      width: 90%;
-      max-width: 400px;
-      height: 14px;
-      background: #333;
-      margin: 10px auto;
-      border-radius: 7px;
-      overflow: hidden;
-    }
-
-    #progress {
-      width: 0%;
-      height: 100%;
-      background: #b0ff3b;
-      transition: width 0.3s;
-    }
-
-    #progress-percent {
-      margin-top: 6px;
-      font-size: 18px;
-      color: #b0ff3b;
-    }
-
-    /* 문장 박스 */
-    #sentence {
-      margin-top: 20px;
-      font-size: 22px;
-      min-height: 70px;
-    }
-
-    /* 성공 효과 - 녹색 반짝임 */
-    .success {
-      animation: glow 0.6s ease-out;
-      color: #b0ff3b;
-    }
-
-    @keyframes glow {
-      0% { text-shadow: 0 0 0px #b0ff3b; }
-      100% { text-shadow: 0 0 20px #b0ff3b; }
-    }
-
-    /* 실패 효과 - 빨간 흔들림 */
-    .fail {
-      animation: shake 0.4s;
-      color: #ff4b4b;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0px); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
-      100% { transform: translateX(0px); }
-    }
-
-    /* 모바일 최적화 */
-    @media (max-width: 600px) {
-      h1 { font-size: 22px; }
-      #sentence { font-size: 18px; }
-      button { font-size: 16px; padding: 12px 16px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <div class="container">
 
-    <!-- 로그인 화면 -->
     <div id="login-box" class="box">
       <h1>English Study App</h1>
-      <p>로그인 버튼을 눌러 시작하세요</p>
+      <p>로그인 정보를 입력하세요</p>
+      
+      <input type="text" id="phone-input" placeholder="핸드폰 번호 (예: 1234)" style="text-align:center;">
+      
+      <p style="margin-top:15px; font-size:14px; color:#aaa;">학습할 교재 선택</p>
+      <select id="content-select" style="width:90%; padding:10px; font-size:16px; border-radius:10px;">
+        <option value="hc12u">HC 1-2 (기초 과정)</option>
+      </select>
+
       <button onclick="login()">Login</button>
     </div>
 
-    <!-- 앱 영역 -->
     <div id="app" style="display:none;">
       
       <div class="box">
-        <h2>Unit 선택</h2>
-
+        <h2 id="welcome-msg">Unit 선택</h2>
         <div id="unit-buttons">
-          <button onclick="selectUnit(1)">Unit 1 - Food</button>
+          <button onclick="selectUnit(1)">Unit 1</button>
           <button onclick="selectUnit(2)">Unit 2</button>
           <button onclick="selectUnit(3)">Unit 3</button>
           <button onclick="selectUnit(4)">Unit 4</button>
@@ -142,26 +40,22 @@
         </div>
       </div>
 
-      <!-- 학습 화면 -->
       <div id="study-box" class="box" style="display:none;">
         <h2>학습 진행</h2>
-
         <div id="progress-wrap">
           <div id="progress"></div>
         </div>
-
         <div id="progress-percent">0%</div>
 
-        <p id="sentence">문장이 표시됩니다</p>
+        <p id="sentence" style="font-size:24px; font-weight:bold; margin-bottom:5px;">Loading...</p>
+        <p id="sentence-kor" style="font-size:16px; color:#aaa; margin-top:0;">해석이 여기에 나옵니다</p>
 
         <button onclick="startStudy()">Start</button>
       </div>
+    
     </div>
-
   </div>
 
-  <!-- JS 파일 연결 -->
   <script src="app.js"></script>
 </body>
 </html>
-
