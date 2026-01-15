@@ -12,15 +12,10 @@
 
     <div id="login-box" class="box">
       <h1>English Study App</h1>
-      <p>로그인 정보를 입력하세요</p>
+      <p>핸드폰 번호를 입력하세요</p>
       
-      <input type="text" id="phone-input" placeholder="핸드폰 번호 (예: 1234)" style="text-align:center;">
+      <input type="text" id="phone-input" placeholder="예: 1234" style="text-align:center;">
       
-      <p style="margin-top:15px; font-size:14px; color:#aaa;">학습할 교재 선택</p>
-      <select id="content-select" style="width:90%; padding:10px; font-size:16px; border-radius:10px;">
-        <option value="hc12u">HC 1-2 (기초 과정)</option>
-      </select>
-
       <button onclick="login()">Login</button>
     </div>
 
@@ -29,14 +24,14 @@
       <div class="box">
         <h2 id="welcome-msg">Unit 선택</h2>
         <div id="unit-buttons">
-          <button onclick="selectUnit(1)">Unit 1</button>
-          <button onclick="selectUnit(2)">Unit 2</button>
-          <button onclick="selectUnit(3)">Unit 3</button>
-          <button onclick="selectUnit(4)">Unit 4</button>
-          <button onclick="selectUnit(5)">Unit 5</button>
-          <button onclick="selectUnit(6)">Unit 6</button>
-          <button onclick="selectUnit(7)">Unit 7</button>
-          <button onclick="selectUnit(8)">Unit 8</button>
+          <button onclick="selectUnit(1)">Unit 1<br><span class="unit-title">Music</span></button>
+          <button onclick="selectUnit(2)">Unit 2<br><span class="unit-title">Directions</span></button>
+          <button onclick="selectUnit(3)">Unit 3<br><span class="unit-title">Favorite beverage/snack</span></button>
+          <button onclick="selectUnit(4)">Unit 4<br><span class="unit-title">Where to watch movies</span></button>
+          <button onclick="selectUnit(5)">Unit 5<br><span class="unit-title">Lunch</span></button>
+          <button onclick="selectUnit(6)">Unit 6<br><span class="unit-title">Vacation</span></button>
+          <button onclick="selectUnit(7)">Unit 7<br><span class="unit-title">New years</span></button>
+          <button onclick="selectUnit(8)">Unit 8<br><span class="unit-title">Switch lives</span></button>
         </div>
       </div>
 
