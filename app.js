@@ -231,7 +231,7 @@ function checkAnswer(spoken, target) {
 
   const accuracy = matchCount / targetWords.length;
 
-  if (accuracy >= 0.5) {
+  if (accuracy >= 0.7) {
     sentenceText.innerText = "Great!";
     sentenceKor.innerText = ""; 
     sentenceText.classList.remove("fail");
