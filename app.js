@@ -5,15 +5,13 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
-// 🚨 구글 스크립트 주소 (기존 것 그대로 쓰세요)
+// 🚨 [필수] 배포한 구글 스크립트(웹 앱) 주소를 따옴표 안에 넣어주세요!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjrkSJiUr2Vt7AglXAVoAYo6UXaP0guBMj2krTu5bD2HsdxhYWMJRA8rhyt47ZDFl1/exec"; 
 
 const totalCycles = 18;
 
-// ⭐ [수정됨] 교재별 제목 데이터베이스
-// 여기에 새 교재가 생길 때마다 추가해주면 됩니다.
+// 교재별 제목 데이터베이스
 const bookDatabase = {
-  // 기존 교재
   "hc12u": {
     1: "Music",
     2: "Directions",
@@ -24,8 +22,6 @@ const bookDatabase = {
     7: "New years",
     8: "Switch lives"
   },
-  // ⭐ 새로 추가한 교재 (fc21u)
-  // 따옴표 안의 제목을 실제 교재 내용에 맞게 고쳐주세요!
   "fc21u": {
     1: "Restaurant",
     2: "Birthday",
@@ -37,7 +33,6 @@ const bookDatabase = {
     8: "Education"
   }
 };
-
 
 // ----------------------
 // 2. 변수 및 요소 가져오기
@@ -52,6 +47,10 @@ const progressBar = document.getElementById("progress");
 const progressPercent = document.getElementById("progress-percent");
 const phoneInput = document.getElementById("phone-input");
 
+// ⭐ 버튼 요소 가져오기 (수정됨)
+const startBtn = document.getElementById("start-btn");
+const skipBtn = document.getElementById("skip-btn");
+
 let currentType = ""; 
 let currentUnit = 1;
 let currentData = []; 
@@ -61,21 +60,15 @@ let cycle = 1;
 const player = new Audio(); 
 
 // ----------------------
-// 3. 초기화 및 유닛 버튼 생성 (제목 자동 적용)
+// 3. 초기화 및 유닛 버튼 생성
 // ----------------------
 function renderUnitButtons() {
   unitButtonsContainer.innerHTML = ""; 
-  
-  // 현재 교재(currentType)에 맞는 제목들 가져오기
-  // 만약 제목이 없으면 그냥 빈칸("")으로 둠
   const currentTitles = bookDatabase[currentType] || {};
 
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    
-    // 제목이 있으면 넣고, 없으면 Unit 번호만 표시
     const titleText = currentTitles[i] ? `<br><span class="unit-title">${currentTitles[i]}</span>` : "";
-    
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => selectUnit(i);
     unitButtonsContainer.appendChild(btn);
@@ -83,7 +76,7 @@ function renderUnitButtons() {
 }
 
 // ----------------------
-// 4. 로그인 (구글 시트 연동)
+// 4. 로그인
 // ----------------------
 window.login = function () {
   const inputVal = phoneInput.value.trim();
@@ -101,18 +94,16 @@ window.login = function () {
   .then(res => res.json())
   .then(data => {
     if (data.result === "success") {
-      // 로그인 성공
-      currentType = data.type; // 예: hc12u 또는 fc21u
+      currentType = data.type; 
       const studentName = data.name;
 
-      // 교재 코드가 데이터베이스에 있는지 확인 (없으면 경고)
       if (!bookDatabase[currentType]) {
         console.warn("제목 데이터가 없는 교재입니다: " + currentType);
       }
 
       alert(`반갑습니다, ${studentName}님!\n[${currentType}] 과정을 학습합니다.`);
       
-      renderUnitButtons(); // 버튼 생성 (제목 적용)
+      renderUnitButtons();
       document.getElementById("welcome-msg").innerText = "Unit 선택";
       
       loginBox.style.display = "none";
@@ -138,7 +129,6 @@ window.selectUnit = async function (n) {
   currentUnit = n;
   
   const fileName = `${currentType}${currentUnit}.json`;
-  // 경로: contents / 교재코드 / 파일명
   const fullUrl = BASE_URL + currentType + "/" + fileName;
 
   studyBox.style.display = "block";
@@ -146,8 +136,10 @@ window.selectUnit = async function (n) {
   sentenceText.innerText = "Loading...";
   sentenceKor.innerText = "";
 
-  const startBtn = document.querySelector("#study-box button");
+  // ⭐ [수정됨] 버튼 상태 초기화
+  // 유닛을 새로 들어오면 Skip 버튼은 숨기고, Start 버튼은 원래대로
   if (startBtn) startBtn.innerText = "Start";
+  if (skipBtn) skipBtn.style.display = "none"; 
 
   try {
     const response = await fetch(fullUrl);
@@ -155,6 +147,7 @@ window.selectUnit = async function (n) {
 
     currentData = await response.json();
     
+    // 자동 이어하기 로직
     const userPhone = phoneInput.value.trim();
     const saveKey = `save_${userPhone}_unit${currentUnit}`;
     const savedData = localStorage.getItem(saveKey);
@@ -179,13 +172,13 @@ window.selectUnit = async function (n) {
 };
 
 // ----------------------
-// 6. 학습 시작
+// 6. 학습 시작 (버튼 클릭 시)
 // ----------------------
 window.startStudy = function () {
-  const startBtn = document.querySelector("#study-box button");
-  if (startBtn) {
-    startBtn.innerText = "Listen again";
-  }
+  // ⭐ [수정됨] 학습 시작하면 Skip 버튼 보여주기
+  if (startBtn) startBtn.innerText = "Listen again";
+  if (skipBtn) skipBtn.style.display = "inline-block"; // Skip 버튼 등장!
+
   playSentence();
 };
 
@@ -203,7 +196,6 @@ function playSentence() {
   updateProgress();
 
   if (item.audio) {
-    // 경로: contents / 교재코드 / 오디오파일명
     player.src = BASE_URL + currentType + "/" + item.audio;
     player.play().catch(e => console.log("재생 오류", e));
   } else {
@@ -269,12 +261,17 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 9. 다음 단계 및 저장
+// 9. 다음 단계 (Skip 버튼도 이 함수를 씀)
 // ----------------------
-function nextStep() {
+// ⭐ window.nextStep 으로 등록해서 HTML에서 바로 부를 수 있게 함
+window.nextStep = function() {
+  // 음성인식 중이라면 멈추기 (충돌 방지)
+  try { recognizer.abort(); } catch(e) {}
+
   sentenceText.style.color = "#fff"; 
   index++; 
 
+  // 저장 로직
   const userPhone = phoneInput.value.trim();
   const saveKey = `save_${userPhone}_unit${currentUnit}`;
   const state = { index: index, cycle: cycle };
@@ -299,7 +296,7 @@ function nextStep() {
   }
 
   playSentence();
-}
+};
 
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
