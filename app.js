@@ -5,23 +5,39 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
-// 🚨 [필수] 배포한 구글 스크립트(웹 앱) 주소를 따옴표 안에 넣어주세요!
+// 🚨 구글 스크립트 주소 (기존 것 그대로 쓰세요)
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjrkSJiUr2Vt7AglXAVoAYo6UXaP0guBMj2krTu5bD2HsdxhYWMJRA8rhyt47ZDFl1/exec"; 
 
-// 학습 반복 횟수 설정 (18회)
 const totalCycles = 18;
 
-// 유닛별 제목 설정
-const unitTitles = {
-  1: "Music",
-  2: "Directions",
-  3: "Favorite beverage and snack",
-  4: "Where you like to watch movies",
-  5: "Lunch",
-  6: "Vacation",
-  7: "New years",
-  8: "Switch lives"
+// ⭐ [수정됨] 교재별 제목 데이터베이스
+// 여기에 새 교재가 생길 때마다 추가해주면 됩니다.
+const bookDatabase = {
+  // 기존 교재
+  "hc12u": {
+    1: "Music",
+    2: "Directions",
+    3: "Favorite beverage and snack",
+    4: "Where you like to watch movies",
+    5: "Lunch",
+    6: "Vacation",
+    7: "New years",
+    8: "Switch lives"
+  },
+  // ⭐ 새로 추가한 교재 (fc21u)
+  // 따옴표 안의 제목을 실제 교재 내용에 맞게 고쳐주세요!
+  "fc21u": {
+    1: "Restaurant",
+    2: "Birthday",
+    3: "Expenses",
+    4: "Dream job",
+    5: "Movies",
+    6: "Eating healthy",
+    7: "Traveling alone",
+    8: "Education"
+  }
 };
+
 
 // ----------------------
 // 2. 변수 및 요소 가져오기
@@ -36,7 +52,7 @@ const progressBar = document.getElementById("progress");
 const progressPercent = document.getElementById("progress-percent");
 const phoneInput = document.getElementById("phone-input");
 
-let currentType = ""; // 교재 코드 (예: hc12u) -> 폴더 이름으로 사용됨
+let currentType = ""; 
 let currentUnit = 1;
 let currentData = []; 
 let index = 0;
@@ -45,15 +61,22 @@ let cycle = 1;
 const player = new Audio(); 
 
 // ----------------------
-// 3. 초기화 및 유닛 버튼 생성
+// 3. 초기화 및 유닛 버튼 생성 (제목 자동 적용)
 // ----------------------
 function renderUnitButtons() {
   unitButtonsContainer.innerHTML = ""; 
   
+  // 현재 교재(currentType)에 맞는 제목들 가져오기
+  // 만약 제목이 없으면 그냥 빈칸("")으로 둠
+  const currentTitles = bookDatabase[currentType] || {};
+
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    // 버튼 내용: 윗줄엔 Unit 번호, 아랫줄엔 제목
-    btn.innerHTML = `Unit ${i}<br><span class="unit-title">${unitTitles[i]}</span>`;
+    
+    // 제목이 있으면 넣고, 없으면 Unit 번호만 표시
+    const titleText = currentTitles[i] ? `<br><span class="unit-title">${currentTitles[i]}</span>` : "";
+    
+    btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => selectUnit(i);
     unitButtonsContainer.appendChild(btn);
   }
@@ -79,12 +102,17 @@ window.login = function () {
   .then(data => {
     if (data.result === "success") {
       // 로그인 성공
-      currentType = data.type; // 예: hc12u
+      currentType = data.type; // 예: hc12u 또는 fc21u
       const studentName = data.name;
 
-      alert(`반갑습니다, ${studentName}님!\n오늘도 화이팅하세요!`);
+      // 교재 코드가 데이터베이스에 있는지 확인 (없으면 경고)
+      if (!bookDatabase[currentType]) {
+        console.warn("제목 데이터가 없는 교재입니다: " + currentType);
+      }
+
+      alert(`반갑습니다, ${studentName}님!\n[${currentType}] 과정을 학습합니다.`);
       
-      renderUnitButtons();
+      renderUnitButtons(); // 버튼 생성 (제목 적용)
       document.getElementById("welcome-msg").innerText = "Unit 선택";
       
       loginBox.style.display = "none";
@@ -104,15 +132,13 @@ window.login = function () {
 };
 
 // ----------------------
-// 5. 유닛 선택 및 데이터 로드 (폴더 경로 수정됨)
+// 5. 유닛 선택 및 데이터 로드
 // ----------------------
 window.selectUnit = async function (n) {
   currentUnit = n;
   
   const fileName = `${currentType}${currentUnit}.json`;
-  
-  // ⭐ [중요] 경로 수정됨: contents / 교재코드 / 파일명
-  // 예: contents/hc12u/hc12u1.json
+  // 경로: contents / 교재코드 / 파일명
   const fullUrl = BASE_URL + currentType + "/" + fileName;
 
   studyBox.style.display = "block";
@@ -120,7 +146,6 @@ window.selectUnit = async function (n) {
   sentenceText.innerText = "Loading...";
   sentenceKor.innerText = "";
 
-  // 버튼 글씨 초기화 (Start로 되돌림)
   const startBtn = document.querySelector("#study-box button");
   if (startBtn) startBtn.innerText = "Start";
 
@@ -130,7 +155,6 @@ window.selectUnit = async function (n) {
 
     currentData = await response.json();
     
-    // === 자동 이어하기 로직 ===
     const userPhone = phoneInput.value.trim();
     const saveKey = `save_${userPhone}_unit${currentUnit}`;
     const savedData = localStorage.getItem(saveKey);
@@ -138,19 +162,17 @@ window.selectUnit = async function (n) {
     index = 0;
     cycle = 1;
 
-    // 저장된 기록이 있으면 덮어쓰기
     if (savedData) {
       const parsed = JSON.parse(savedData);
       index = parsed.index;
       cycle = parsed.cycle;
     }
-    // ========================
 
     updateProgress();
     sentenceText.innerText = "Start 버튼을 눌러주세요";
 
   } catch (error) {
-    alert(`[오류] 파일(${fileName})을 찾을 수 없습니다.\nGitHub의 ${currentType} 폴더 안에 파일이 있는지 확인하세요.`);
+    alert(`[오류] 파일을 찾을 수 없습니다.\n(${fileName})`);
     studyBox.style.display = "none";
     document.querySelector('.box:not(#study-box)').style.display = 'block';
   }
@@ -160,17 +182,15 @@ window.selectUnit = async function (n) {
 // 6. 학습 시작
 // ----------------------
 window.startStudy = function () {
-  // 버튼 글씨 변경 (Start -> Listen again)
   const startBtn = document.querySelector("#study-box button");
   if (startBtn) {
     startBtn.innerText = "Listen again";
   }
-
   playSentence();
 };
 
 // ----------------------
-// 7. 문장 재생 (오디오 경로 수정됨)
+// 7. 재생 및 화면 표시
 // ----------------------
 function playSentence() {
   sentenceText.classList.remove("success", "fail");
@@ -183,7 +203,7 @@ function playSentence() {
   updateProgress();
 
   if (item.audio) {
-    // ⭐ [중요] 오디오 경로 수정: contents / 교재코드 / 오디오파일명
+    // 경로: contents / 교재코드 / 오디오파일명
     player.src = BASE_URL + currentType + "/" + item.audio;
     player.play().catch(e => console.log("재생 오류", e));
   } else {
@@ -231,7 +251,7 @@ function checkAnswer(spoken, target) {
 
   const accuracy = matchCount / targetWords.length;
 
-  if (accuracy >= 0.7) {
+  if (accuracy >= 0.5) {
     sentenceText.innerText = "Great!";
     sentenceKor.innerText = ""; 
     sentenceText.classList.remove("fail");
@@ -255,29 +275,25 @@ function nextStep() {
   sentenceText.style.color = "#fff"; 
   index++; 
 
-  // 현재 위치 자동 저장 (핸드폰 LocalStorage)
   const userPhone = phoneInput.value.trim();
   const saveKey = `save_${userPhone}_unit${currentUnit}`;
   const state = { index: index, cycle: cycle };
   localStorage.setItem(saveKey, JSON.stringify(state));
 
-  // 사이클 완료 시
   if (index >= currentData.length) {
     index = 0; 
     cycle++;   
     
-    // 사이클 업데이트 저장
     state.index = 0;
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
 
-    sendDataToGoogle(); // 구글 시트 전송
+    sendDataToGoogle(); 
   }
 
-  // 전체 목표 달성 시
   if (cycle > totalCycles) {
     alert("🎉 학습 완료! 수고하셨습니다.");
-    localStorage.removeItem(saveKey); // 완료했으니 기록 삭제
+    localStorage.removeItem(saveKey); 
     location.reload(); 
     return;
   }
