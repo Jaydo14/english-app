@@ -101,7 +101,7 @@ window.login = function () {
         console.warn("제목 데이터가 없는 교재입니다: " + currentType);
       }
 
-      alert(`반갑습니다, ${studentName}님!\n[${currentType}] 과정을 학습합니다.`);
+      alert(`반갑습니다, ${studentName}님!\n오늘도 화이팅 입니다!!!`);
       
       renderUnitButtons();
       document.getElementById("welcome-msg").innerText = "Unit 선택";
