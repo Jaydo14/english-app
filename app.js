@@ -47,7 +47,6 @@ const progressBar = document.getElementById("progress");
 const progressPercent = document.getElementById("progress-percent");
 const phoneInput = document.getElementById("phone-input");
 
-// ⭐ 버튼 요소 가져오기 (수정됨)
 const startBtn = document.getElementById("start-btn");
 const skipBtn = document.getElementById("skip-btn");
 
@@ -58,9 +57,36 @@ let index = 0;
 let cycle = 1;
 
 const player = new Audio(); 
+let wakeLock = null; // ⭐ 화면 꺼짐 방지용 변수
 
 // ----------------------
-// 3. 초기화 및 유닛 버튼 생성
+// 3. 화면 꺼짐 방지 함수 (Wake Lock)
+// ----------------------
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('화면 켜짐 유지 활성화');
+      
+      // 혹시 화면 잠금이 풀리면 다시 요청
+      wakeLock.addEventListener('release', () => {
+        console.log('화면 켜짐 유지 해제됨');
+      });
+    }
+  } catch (err) {
+    console.log(`${err.name}, ${err.message}`);
+  }
+}
+
+// 화면을 갔다 왔을 때 다시 잠금 요청
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    await requestWakeLock();
+  }
+});
+
+// ----------------------
+// 4. 초기화 및 유닛 버튼 생성
 // ----------------------
 function renderUnitButtons() {
   unitButtonsContainer.innerHTML = ""; 
@@ -76,7 +102,7 @@ function renderUnitButtons() {
 }
 
 // ----------------------
-// 4. 로그인
+// 5. 로그인
 // ----------------------
 window.login = function () {
   const inputVal = phoneInput.value.trim();
@@ -101,7 +127,8 @@ window.login = function () {
         console.warn("제목 데이터가 없는 교재입니다: " + currentType);
       }
 
-      alert(`반갑습니다, ${studentName}님!\n오늘도 화이팅 입니다!!!`);
+      // ⭐ 문구 변경
+      alert(`${studentName}님, 오늘도 화이팅 입니다.`);
       
       renderUnitButtons();
       document.getElementById("welcome-msg").innerText = "Unit 선택";
@@ -123,7 +150,7 @@ window.login = function () {
 };
 
 // ----------------------
-// 5. 유닛 선택 및 데이터 로드
+// 6. 유닛 선택 및 데이터 로드
 // ----------------------
 window.selectUnit = async function (n) {
   currentUnit = n;
@@ -136,8 +163,6 @@ window.selectUnit = async function (n) {
   sentenceText.innerText = "Loading...";
   sentenceKor.innerText = "";
 
-  // ⭐ [수정됨] 버튼 상태 초기화
-  // 유닛을 새로 들어오면 Skip 버튼은 숨기고, Start 버튼은 원래대로
   if (startBtn) startBtn.innerText = "Start";
   if (skipBtn) skipBtn.style.display = "none"; 
 
@@ -147,7 +172,6 @@ window.selectUnit = async function (n) {
 
     currentData = await response.json();
     
-    // 자동 이어하기 로직
     const userPhone = phoneInput.value.trim();
     const saveKey = `save_${userPhone}_unit${currentUnit}`;
     const savedData = localStorage.getItem(saveKey);
@@ -172,18 +196,20 @@ window.selectUnit = async function (n) {
 };
 
 // ----------------------
-// 6. 학습 시작 (버튼 클릭 시)
+// 7. 학습 시작 (Wake Lock 실행)
 // ----------------------
 window.startStudy = function () {
-  // ⭐ [수정됨] 학습 시작하면 Skip 버튼 보여주기
   if (startBtn) startBtn.innerText = "Listen again";
-  if (skipBtn) skipBtn.style.display = "inline-block"; // Skip 버튼 등장!
+  if (skipBtn) skipBtn.style.display = "inline-block";
+
+  // ⭐ 학습 시작하면 화면 꺼짐 방지 요청!
+  requestWakeLock();
 
   playSentence();
 };
 
 // ----------------------
-// 7. 재생 및 화면 표시
+// 8. 재생 및 화면 표시
 // ----------------------
 function playSentence() {
   sentenceText.classList.remove("success", "fail");
@@ -204,12 +230,13 @@ function playSentence() {
 
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; 
-    recognizer.start();
+    // 음성인식이 꺼져있으면 다시 켬
+    try { recognizer.start(); } catch(e) {}
   };
 }
 
 // ----------------------
-// 8. 음성 인식 및 정답 체크
+// 9. 음성 인식 및 정답 체크
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -217,18 +244,27 @@ recognizer.lang = "en-US";
 recognizer.interimResults = false;
 recognizer.maxAlternatives = 1;
 
-recognizer.onresult = (event) => {
-  const spokenText = event.results[0][0].transcript;
-  const targetText = currentData[index].en;
-  checkAnswer(spokenText, targetText);
-};
-
+// ⭐ 음성인식 오류 발생 시 (화면 꺼졌다가 켜졌을 때 등)
 recognizer.onerror = (event) => {
+  console.log("음성인식 에러:", event.error);
+  // 단순히 인식을 못한 게 아니라(no-speech), 아예 차단된 경우(not-allowed, audio-capture) 처리
+  if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+     // 화면이 꺼져서 마이크 권한을 잃었을 가능성이 높음
+     // Listen again 버튼을 누르게 유도하거나 조용히 종료
+     return;
+  }
+
   sentenceText.innerText = "Try again";
   sentenceKor.innerText = "";
   sentenceText.classList.add("fail");
   sentenceText.style.color = "#ff4b4b"; 
   setTimeout(() => { playSentence(); }, 500);
+};
+
+recognizer.onresult = (event) => {
+  const spokenText = event.results[0][0].transcript;
+  const targetText = currentData[index].en;
+  checkAnswer(spokenText, targetText);
 };
 
 function checkAnswer(spoken, target) {
@@ -261,17 +297,14 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 9. 다음 단계 (Skip 버튼도 이 함수를 씀)
+// 10. 다음 단계
 // ----------------------
-// ⭐ window.nextStep 으로 등록해서 HTML에서 바로 부를 수 있게 함
 window.nextStep = function() {
-  // 음성인식 중이라면 멈추기 (충돌 방지)
   try { recognizer.abort(); } catch(e) {}
 
   sentenceText.style.color = "#fff"; 
   index++; 
 
-  // 저장 로직
   const userPhone = phoneInput.value.trim();
   const saveKey = `save_${userPhone}_unit${currentUnit}`;
   const state = { index: index, cycle: cycle };
@@ -291,6 +324,12 @@ window.nextStep = function() {
   if (cycle > totalCycles) {
     alert("🎉 학습 완료! 수고하셨습니다.");
     localStorage.removeItem(saveKey); 
+    
+    // 공부 끝났으니 화면 켜짐 유지 해제
+    if (wakeLock !== null) {
+      wakeLock.release().then(() => { wakeLock = null; });
+    }
+
     location.reload(); 
     return;
   }
