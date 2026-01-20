@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <title>English Speaking App</title>
@@ -11,7 +11,7 @@
   <div class="container">
 
     <div id="login-box" class="box">
-      <h1>BUILD A MONSTER</h1>
+      <h1>Build A Monster</h1>
       <p>핸드폰 번호를 입력하세요</p>
       
       <input type="text" id="phone-input" placeholder="예: 1234" style="text-align:center;">
@@ -23,20 +23,12 @@
       
       <div class="box">
         <h2 id="welcome-msg">Unit 선택</h2>
-        <div id="unit-buttons">
-          <button onclick="selectUnit(1)">Unit 1<br><span class="unit-title">Music</span></button>
-          <button onclick="selectUnit(2)">Unit 2<br><span class="unit-title">Directions</span></button>
-          <button onclick="selectUnit(3)">Unit 3<br><span class="unit-title">Favorite beverage/snack</span></button>
-          <button onclick="selectUnit(4)">Unit 4<br><span class="unit-title">Where to watch movies</span></button>
-          <button onclick="selectUnit(5)">Unit 5<br><span class="unit-title">Lunch</span></button>
-          <button onclick="selectUnit(6)">Unit 6<br><span class="unit-title">Vacation</span></button>
-          <button onclick="selectUnit(7)">Unit 7<br><span class="unit-title">New years</span></button>
-          <button onclick="selectUnit(8)">Unit 8<br><span class="unit-title">Switch lives</span></button>
-        </div>
+        <div id="unit-buttons"></div>
       </div>
 
       <div id="study-box" class="box" style="display:none;">
         <h2>학습 진행</h2>
+        
         <div id="progress-wrap">
           <div id="progress"></div>
         </div>
@@ -49,9 +41,16 @@
       </div>
     
     </div>
+
+    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px; line-height: 1.6;">
+      <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
+      <p>본 프로그램의 소스 코드 및 콘텐츠(음원, 데이터)를<br>
+      무단으로 복제, 분석, 배포할 경우 저작권법에 의거하여<br>
+      민형사상 책임을 물을 수 있습니다.</p>
+    </footer>
+
   </div>
 
   <script src="app.js"></script>
 </body>
 </html>
-
