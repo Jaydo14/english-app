@@ -5,12 +5,11 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
-// 🚨 [필수] 아까 새로 만든 구글 스크립트 주소를 여기에 넣으세요!
+// 🚨 [필수] 구글 스크립트 새 주소 확인!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumwsr9-BsBTYXeb_sFdBKBCwa0Vd1gMchYDryJ-dpSxinm5WDB2TjkkQ0d/exec"; 
 
-const totalCycles = 18; // 18바퀴가 목표
+const totalCycles = 18; // 18바퀴가 100% 기준
 
-// 교재별 제목 데이터베이스
 const bookDatabase = {
   "hc12u": {
     1: "Music",
@@ -60,15 +59,15 @@ const player = new Audio();
 let wakeLock = null; 
 
 // ----------------------
-// 3. 화면 꺼짐 방지 함수 (Wake Lock)
+// 3. 화면 꺼짐 방지
 // ----------------------
 async function requestWakeLock() {
   try {
     if ('wakeLock' in navigator) {
       wakeLock = await navigator.wakeLock.request('screen');
-      console.log('화면 켜짐 유지 활성화');
+      console.log('Wake Lock active');
       wakeLock.addEventListener('release', () => {
-        console.log('화면 켜짐 유지 해제됨');
+        console.log('Wake Lock released');
       });
     }
   } catch (err) {
@@ -83,7 +82,7 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 // ----------------------
-// 4. 초기화 및 유닛 버튼 생성
+// 4. 초기화 및 버튼 생성
 // ----------------------
 function renderUnitButtons() {
   unitButtonsContainer.innerHTML = ""; 
@@ -146,7 +145,7 @@ window.login = function () {
 };
 
 // ----------------------
-// 6. 유닛 선택 및 데이터 로드
+// 6. 유닛 선택
 // ----------------------
 window.selectUnit = async function (n) {
   currentUnit = n;
@@ -192,7 +191,7 @@ window.selectUnit = async function (n) {
 };
 
 // ----------------------
-// 7. 학습 시작 (Wake Lock 실행)
+// 7. 학습 시작
 // ----------------------
 window.startStudy = function () {
   if (startBtn) startBtn.innerText = "Listen again";
@@ -229,7 +228,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 9. 음성 인식 및 정답 체크
+// 9. 음성 인식
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -284,7 +283,7 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 10. 다음 단계
+// 10. 다음 단계 (무한 학습 + 알림 로직 수정)
 // ----------------------
 window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
@@ -299,6 +298,7 @@ window.nextStep = function() {
 
   sendDataToGoogle(); 
 
+  // 사이클 완료 시
   if (index >= currentData.length) {
     index = 0; 
     cycle++;   
@@ -307,40 +307,34 @@ window.nextStep = function() {
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
     
-    // 사이클 넘어가도 저장
     sendDataToGoogle();
+
+    // ⭐ [수정됨] 100% 달성 순간 (18바퀴 끝내고 19바퀴 진입 시점)
+    // 로그아웃 하지 않고 알림만 띄움
+    if (cycle === totalCycles + 1) {
+       alert("🎉 100% 달성! 축하합니다!\n\n[확인]을 누르면 계속해서 누적 학습을 진행할 수 있습니다.");
+    }
   }
 
-  if (cycle > totalCycles) {
-    alert("🎉 학습 완료! 수고하셨습니다.");
-    localStorage.removeItem(saveKey); 
-    if (wakeLock !== null) {
-      wakeLock.release().then(() => { wakeLock = null; });
-    }
-    location.reload(); 
-    return;
-  }
+  // ⭐ 기존의 '학습 종료/로그아웃' 코드를 삭제함.
+  // 사용자가 멈출 때까지 영원히 nextStep 진행.
 
   playSentence();
 };
 
 // ----------------------
-// 11. 구글 전송 및 진행률 계산 (수정됨)
+// 11. 구글 전송 및 진행률 계산
 // ----------------------
 
-// ⭐ [수정됨] 18바퀴 기준 전체 진행률 계산 함수
 function getGlobalProgress() {
   if (!currentData || currentData.length === 0) return 0;
   
   const totalSentences = currentData.length;
-  // 전체 목표 = 18바퀴 * 문장 수
   const totalGoal = totalCycles * totalSentences;
-  // 현재까지 한 양 = (지난 바퀴 * 문장 수) + 현재 문장 번호
   const currentCount = ((cycle - 1) * totalSentences) + index;
   
-  // 퍼센트 계산
+  // 퍼센트 계산 (100% 넘어도 그대로 리턴)
   let p = (currentCount / totalGoal) * 100;
-  if (p > 100) p = 100; // 100% 넘지 않게 고정
   
   return Math.floor(p);
 }
@@ -348,7 +342,7 @@ function getGlobalProgress() {
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
   
-  // 전체 진도율(0~100%)을 가져옴
+  // 100%가 넘는 값도 그대로 엑셀로 전송 (예: 105%)
   const percent = getGlobalProgress();
 
   const data = {
@@ -367,12 +361,14 @@ function sendDataToGoogle() {
 }
 
 function updateProgress() {
-  // 전체 진도율(0~100%)
   const percent = getGlobalProgress();
   
-  // 화면 글씨: 0% ~ 100%
+  // ⭐ [텍스트] 숫자는 계속 올라감 (100%, 101%, 150%...)
   progressPercent.innerText = percent + "%";
 
-  // 막대바: 0% ~ 100%
-  progressBar.style.width = percent + "%";
+  // ⭐ [막대바] 100%가 최대치 (더 이상 뚫고 나가지 않음)
+  let barWidth = percent;
+  if (barWidth > 100) barWidth = 100;
+  
+  progressBar.style.width = barWidth + "%";
 }
