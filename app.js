@@ -6,7 +6,7 @@ const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
 // 🚨 [필수] 배포한 구글 스크립트(웹 앱) 주소를 따옴표 안에 넣어주세요!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjrkSJiUr2Vt7AglXAVoAYo6UXaP0guBMj2krTu5bD2HsdxhYWMJRA8rhyt47ZDFl1/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwtn1xF2FAjDMF06Qp4TLOvOX6BR4QV-CVaLS7ogyKnGy3mIWQqVXJRJqr0Sn8viGs/exec"; 
 
 const totalCycles = 18;
 
