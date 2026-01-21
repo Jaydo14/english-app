@@ -310,7 +310,7 @@ window.nextStep = function() {
   const state = { index: index, cycle: cycle };
   localStorage.setItem(saveKey, JSON.stringify(state));
 
-  // ⭐ [핵심 수정] 문장 하나 끝날 때마다 무조건 저장 (퍼센트 업데이트)
+  // ⭐ [핵심] 문장 하나 끝날 때마다 무조건 구글로 전송
   sendDataToGoogle(); 
 
   // 사이클(1바퀴) 완료 체크
@@ -321,10 +321,6 @@ window.nextStep = function() {
     state.index = 0;
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
-
-    // 사이클 끝났을 때도 저장 (0%로 리셋되거나 100% 유지 등 정책에 따라 다름)
-    // 여기서는 nextStep 호출 직전 index 기준으로 이미 100%가 전송되었으므로
-    // cycle이 올라간 상태만 저장하면 됩니다.
   }
 
   if (cycle > totalCycles) {
@@ -342,17 +338,18 @@ window.nextStep = function() {
   playSentence();
 };
 
-// 구글 시트로 데이터 전송 (퍼센트 계산 수정됨)
+// 구글 시트로 데이터 전송 (퍼센트 계산 로직 수정됨)
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
   
   const totalSentences = currentData.length;
   
-  // ⭐ [핵심 수정] 퍼센트 계산 로직
-  // index는 방금 1 증가했음. (예: 10개 중 1개 완료 -> index=1)
+  // ⭐ [퍼센트 계산 공식]
+  // (현재 문장 번호 / 전체 문장 수) * 100
+  // 예: 10문장 중 1개 완료하면 10%, 5개면 50%
   let percent = Math.floor((index / totalSentences) * 100);
   
-  // 100% 넘어가면 100으로 고정
+  // 100%가 넘어가면 100으로 고정 (사이클이 돌아도 최대 100)
   if (percent > 100) percent = 100;
 
   const data = {
@@ -362,9 +359,6 @@ function sendDataToGoogle() {
     percent: percent 
   };
   
-  // (서버 부하 방지를 위해 콘솔에 로그만 찍고, 실제 전송은 fetch로)
-  // console.log("전송 중:", percent + "%");
-
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
