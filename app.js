@@ -297,19 +297,23 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 10. 다음 단계
+// 10. 다음 단계 (실시간 저장 기능 강화)
 // ----------------------
 window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
 
   sentenceText.style.color = "#fff"; 
-  index++; 
+  index++; // 진도 나감
 
   const userPhone = phoneInput.value.trim();
   const saveKey = `save_${userPhone}_unit${currentUnit}`;
   const state = { index: index, cycle: cycle };
   localStorage.setItem(saveKey, JSON.stringify(state));
 
+  // ⭐ [핵심 수정] 문장 하나 끝날 때마다 무조건 저장 (퍼센트 업데이트)
+  sendDataToGoogle(); 
+
+  // 사이클(1바퀴) 완료 체크
   if (index >= currentData.length) {
     index = 0; 
     cycle++;   
@@ -318,14 +322,15 @@ window.nextStep = function() {
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
 
-    sendDataToGoogle(); 
+    // 사이클 끝났을 때도 저장 (0%로 리셋되거나 100% 유지 등 정책에 따라 다름)
+    // 여기서는 nextStep 호출 직전 index 기준으로 이미 100%가 전송되었으므로
+    // cycle이 올라간 상태만 저장하면 됩니다.
   }
 
   if (cycle > totalCycles) {
     alert("🎉 학습 완료! 수고하셨습니다.");
     localStorage.removeItem(saveKey); 
     
-    // 공부 끝났으니 화면 켜짐 유지 해제
     if (wakeLock !== null) {
       wakeLock.release().then(() => { wakeLock = null; });
     }
@@ -337,33 +342,29 @@ window.nextStep = function() {
   playSentence();
 };
 
-// 구글 시트로 데이터 전송 (수정됨: 퍼센트 전송)
+// 구글 시트로 데이터 전송 (퍼센트 계산 수정됨)
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
   
-  // 퍼센트 계산
   const totalSentences = currentData.length;
-  // 현재 Unit에서 몇 개나 했는지 계산 (Cycle 무시하고 현재 인덱스 기준)
-  // 만약 Cycle이 2 이상이면 100%로 칠 수도 있지만, 
-  // 요청하신 건 '현재 학습량'이므로 단순 계산합니다.
   
-  let percent = 0;
+  // ⭐ [핵심 수정] 퍼센트 계산 로직
+  // index는 방금 1 증가했음. (예: 10개 중 1개 완료 -> index=1)
+  let percent = Math.floor((index / totalSentences) * 100);
   
-  // 학습이 끝났으면(다음 사이클로 넘어갔으면) 100%
-  if (index === 0 && cycle > 1) {
-     percent = 100;
-  } else {
-     // 진행 중이면 (현재위치 / 전체문장수) * 100
-     percent = Math.floor((index / totalSentences) * 100);
-  }
+  // 100% 넘어가면 100으로 고정
+  if (percent > 100) percent = 100;
 
   const data = {
     action: "save",
     phone: phoneInput.value.trim(),
     unit: "Unit " + currentUnit,
-    percent: percent // 여기가 핵심! (예: 40)
+    percent: percent 
   };
   
+  // (서버 부하 방지를 위해 콘솔에 로그만 찍고, 실제 전송은 fetch로)
+  // console.log("전송 중:", percent + "%");
+
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
