@@ -5,10 +5,10 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 
-// 🚨 [필수] 배포한 구글 스크립트(웹 앱) 주소를 따옴표 안에 넣어주세요!
+// 🚨 [필수] 아까 새로 만든 구글 스크립트 주소를 여기에 넣으세요!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumwsr9-BsBTYXeb_sFdBKBCwa0Vd1gMchYDryJ-dpSxinm5WDB2TjkkQ0d/exec"; 
 
-const totalCycles = 18;
+const totalCycles = 18; // 18바퀴가 목표
 
 // 교재별 제목 데이터베이스
 const bookDatabase = {
@@ -284,7 +284,7 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 10. 다음 단계 (실시간 저장 기능)
+// 10. 다음 단계
 // ----------------------
 window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
@@ -297,7 +297,6 @@ window.nextStep = function() {
   const state = { index: index, cycle: cycle };
   localStorage.setItem(saveKey, JSON.stringify(state));
 
-  // ⭐ 문장 끝날 때마다 저장
   sendDataToGoogle(); 
 
   if (index >= currentData.length) {
@@ -307,7 +306,8 @@ window.nextStep = function() {
     state.index = 0;
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
-    // 사이클 넘어가도 한번 더 저장 (100% -> 101% 되는 순간)
+    
+    // 사이클 넘어가도 저장
     sendDataToGoogle();
   }
 
@@ -325,24 +325,31 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 11. 구글 전송 및 화면 표시 업데이트
+// 11. 구글 전송 및 진행률 계산 (수정됨)
 // ----------------------
 
-// 퍼센트 계산 공통 함수 (누적 퍼센트)
-function getCumulativePercent() {
+// ⭐ [수정됨] 18바퀴 기준 전체 진행률 계산 함수
+function getGlobalProgress() {
+  if (!currentData || currentData.length === 0) return 0;
+  
   const totalSentences = currentData.length;
-  if (!totalSentences) return 0;
-  // 공식: (지난 사이클 * 100) + (현재 진행률)
-  // 예: 1바퀴 돌고 50% 진행했으면 = 100 + 50 = 150%
-  let p = ((cycle - 1) * 100) + Math.floor((index / totalSentences) * 100);
-  return p;
+  // 전체 목표 = 18바퀴 * 문장 수
+  const totalGoal = totalCycles * totalSentences;
+  // 현재까지 한 양 = (지난 바퀴 * 문장 수) + 현재 문장 번호
+  const currentCount = ((cycle - 1) * totalSentences) + index;
+  
+  // 퍼센트 계산
+  let p = (currentCount / totalGoal) * 100;
+  if (p > 100) p = 100; // 100% 넘지 않게 고정
+  
+  return Math.floor(p);
 }
 
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
   
-  // ⭐ [수정됨] 누적 퍼센트(예: 120, 250)를 보냄
-  const percent = getCumulativePercent();
+  // 전체 진도율(0~100%)을 가져옴
+  const percent = getGlobalProgress();
 
   const data = {
     action: "save",
@@ -360,17 +367,12 @@ function sendDataToGoogle() {
 }
 
 function updateProgress() {
-  const percent = getCumulativePercent();
+  // 전체 진도율(0~100%)
+  const percent = getGlobalProgress();
   
-  // ⭐ 화면 글씨: 누적 퍼센트로 표시 (예: "150%")
-  // 이제 엑셀에 찍히는 숫자와 화면에 보이는 숫자가 똑같습니다.
+  // 화면 글씨: 0% ~ 100%
   progressPercent.innerText = percent + "%";
 
-  // 막대바(Bar): 18바퀴 목표 대비 얼마나 찼는지 (시각적 효과)
-  // 1800%가 만약 100% 길이
-  const totalGoalPercent = 1800; // 18 cycles * 100%
-  let barWidth = (percent / totalGoalPercent) * 100;
-  if (barWidth > 100) barWidth = 100; // 꽉 차면 멈춤
-  
-  progressBar.style.width = barWidth + "%";
+  // 막대바: 0% ~ 100%
+  progressBar.style.width = percent + "%";
 }
