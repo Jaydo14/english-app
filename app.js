@@ -57,7 +57,7 @@ let index = 0;
 let cycle = 1;
 
 const player = new Audio(); 
-let wakeLock = null; // ⭐ 화면 꺼짐 방지용 변수
+let wakeLock = null; 
 
 // ----------------------
 // 3. 화면 꺼짐 방지 함수 (Wake Lock)
@@ -67,8 +67,6 @@ async function requestWakeLock() {
     if ('wakeLock' in navigator) {
       wakeLock = await navigator.wakeLock.request('screen');
       console.log('화면 켜짐 유지 활성화');
-      
-      // 혹시 화면 잠금이 풀리면 다시 요청
       wakeLock.addEventListener('release', () => {
         console.log('화면 켜짐 유지 해제됨');
       });
@@ -78,7 +76,6 @@ async function requestWakeLock() {
   }
 }
 
-// 화면을 갔다 왔을 때 다시 잠금 요청
 document.addEventListener('visibilitychange', async () => {
   if (wakeLock !== null && document.visibilityState === 'visible') {
     await requestWakeLock();
@@ -127,7 +124,6 @@ window.login = function () {
         console.warn("제목 데이터가 없는 교재입니다: " + currentType);
       }
 
-      // ⭐ 문구 변경
       alert(`${studentName}님, 오늘도 화이팅 입니다.`);
       
       renderUnitButtons();
@@ -202,9 +198,7 @@ window.startStudy = function () {
   if (startBtn) startBtn.innerText = "Listen again";
   if (skipBtn) skipBtn.style.display = "inline-block";
 
-  // ⭐ 학습 시작하면 화면 꺼짐 방지 요청!
   requestWakeLock();
-
   playSentence();
 };
 
@@ -230,7 +224,6 @@ function playSentence() {
 
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; 
-    // 음성인식이 꺼져있으면 다시 켬
     try { recognizer.start(); } catch(e) {}
   };
 }
@@ -244,16 +237,10 @@ recognizer.lang = "en-US";
 recognizer.interimResults = false;
 recognizer.maxAlternatives = 1;
 
-// ⭐ 음성인식 오류 발생 시 (화면 꺼졌다가 켜졌을 때 등)
 recognizer.onerror = (event) => {
-  console.log("음성인식 에러:", event.error);
-  // 단순히 인식을 못한 게 아니라(no-speech), 아예 차단된 경우(not-allowed, audio-capture) 처리
   if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-     // 화면이 꺼져서 마이크 권한을 잃었을 가능성이 높음
-     // Listen again 버튼을 누르게 유도하거나 조용히 종료
      return;
   }
-
   sentenceText.innerText = "Try again";
   sentenceKor.innerText = "";
   sentenceText.classList.add("fail");
@@ -297,23 +284,22 @@ function checkAnswer(spoken, target) {
 }
 
 // ----------------------
-// 10. 다음 단계 (실시간 저장 기능 강화)
+// 10. 다음 단계 (실시간 저장 기능)
 // ----------------------
 window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
 
   sentenceText.style.color = "#fff"; 
-  index++; // 진도 나감
+  index++; 
 
   const userPhone = phoneInput.value.trim();
   const saveKey = `save_${userPhone}_unit${currentUnit}`;
   const state = { index: index, cycle: cycle };
   localStorage.setItem(saveKey, JSON.stringify(state));
 
-  // ⭐ [핵심] 문장 하나 끝날 때마다 무조건 구글로 전송
+  // ⭐ 문장 끝날 때마다 저장
   sendDataToGoogle(); 
 
-  // 사이클(1바퀴) 완료 체크
   if (index >= currentData.length) {
     index = 0; 
     cycle++;   
@@ -321,16 +307,16 @@ window.nextStep = function() {
     state.index = 0;
     state.cycle = cycle;
     localStorage.setItem(saveKey, JSON.stringify(state));
+    // 사이클 넘어가도 한번 더 저장 (100% -> 101% 되는 순간)
+    sendDataToGoogle();
   }
 
   if (cycle > totalCycles) {
     alert("🎉 학습 완료! 수고하셨습니다.");
     localStorage.removeItem(saveKey); 
-    
     if (wakeLock !== null) {
       wakeLock.release().then(() => { wakeLock = null; });
     }
-
     location.reload(); 
     return;
   }
@@ -338,19 +324,25 @@ window.nextStep = function() {
   playSentence();
 };
 
-// 구글 시트로 데이터 전송 (퍼센트 계산 로직 수정됨)
+// ----------------------
+// 11. 구글 전송 및 화면 표시 업데이트
+// ----------------------
+
+// 퍼센트 계산 공통 함수 (누적 퍼센트)
+function getCumulativePercent() {
+  const totalSentences = currentData.length;
+  if (!totalSentences) return 0;
+  // 공식: (지난 사이클 * 100) + (현재 진행률)
+  // 예: 1바퀴 돌고 50% 진행했으면 = 100 + 50 = 150%
+  let p = ((cycle - 1) * 100) + Math.floor((index / totalSentences) * 100);
+  return p;
+}
+
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
   
-  const totalSentences = currentData.length;
-  
-  // ⭐ [퍼센트 계산 공식]
-  // (현재 문장 번호 / 전체 문장 수) * 100
-  // 예: 10문장 중 1개 완료하면 10%, 5개면 50%
-  let percent = Math.floor((index / totalSentences) * 100);
-  
-  // 100%가 넘어가면 100으로 고정 (사이클이 돌아도 최대 100)
-  if (percent > 100) percent = 100;
+  // ⭐ [수정됨] 누적 퍼센트(예: 120, 250)를 보냄
+  const percent = getCumulativePercent();
 
   const data = {
     action: "save",
@@ -368,14 +360,17 @@ function sendDataToGoogle() {
 }
 
 function updateProgress() {
-  const totalSentences = currentData.length;
-  const currentCount = ((cycle - 1) * totalSentences) + (index + 1);
-  const totalCount = totalCycles * totalSentences;
+  const percent = getCumulativePercent();
   
-  let percent = (currentCount / totalCount) * 100;
-  if (percent > 100) percent = 100;
-  const rounded = Math.floor(percent);
+  // ⭐ 화면 글씨: 누적 퍼센트로 표시 (예: "150%")
+  // 이제 엑셀에 찍히는 숫자와 화면에 보이는 숫자가 똑같습니다.
+  progressPercent.innerText = percent + "%";
 
-  progressBar.style.width = rounded + "%";
-  progressPercent.innerText = rounded + "%";
+  // 막대바(Bar): 18바퀴 목표 대비 얼마나 찼는지 (시각적 효과)
+  // 1800%가 만약 100% 길이
+  const totalGoalPercent = 1800; // 18 cycles * 100%
+  let barWidth = (percent / totalGoalPercent) * 100;
+  if (barWidth > 100) barWidth = 100; // 꽉 차면 멈춤
+  
+  progressBar.style.width = barWidth + "%";
 }
