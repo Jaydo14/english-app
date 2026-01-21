@@ -337,13 +337,31 @@ window.nextStep = function() {
   playSentence();
 };
 
+// 구글 시트로 데이터 전송 (수정됨: 퍼센트 전송)
 function sendDataToGoogle() {
   if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("주소를")) return;
+  
+  // 퍼센트 계산
+  const totalSentences = currentData.length;
+  // 현재 Unit에서 몇 개나 했는지 계산 (Cycle 무시하고 현재 인덱스 기준)
+  // 만약 Cycle이 2 이상이면 100%로 칠 수도 있지만, 
+  // 요청하신 건 '현재 학습량'이므로 단순 계산합니다.
+  
+  let percent = 0;
+  
+  // 학습이 끝났으면(다음 사이클로 넘어갔으면) 100%
+  if (index === 0 && cycle > 1) {
+     percent = 100;
+  } else {
+     // 진행 중이면 (현재위치 / 전체문장수) * 100
+     percent = Math.floor((index / totalSentences) * 100);
+  }
+
   const data = {
     action: "save",
     phone: phoneInput.value.trim(),
     unit: "Unit " + currentUnit,
-    cycle: cycle - 1
+    percent: percent // 여기가 핵심! (예: 40)
   };
   
   fetch(GOOGLE_SCRIPT_URL, {
