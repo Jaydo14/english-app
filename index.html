@@ -6,37 +6,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container">
+
     <div id="login-box" class="box">
       <h1>Build A Monster</h1>
       <p>핸드폰 번호를 입력하세요</p>
+      
       <input type="text" id="phone-input" placeholder="예: 01012345678" style="text-align:center;">
+      
       <button onclick="login()">Login</button>
     </div>
+
     <div id="app" style="display:none;">
+      
       <div class="box">
         <h2 id="welcome-msg">Unit 선택</h2>
         <div id="unit-buttons"></div>
       </div>
+
       <div id="study-box" class="box" style="display:none;">
         <h2>학습 진행</h2>
+        
         <div id="progress-wrap">
           <div id="progress"></div>
         </div>
         <div id="progress-percent">0%</div>
+
         <p id="sentence" style="font-size:20px; font-weight:bold; margin-bottom:5px;">Loading...</p>
         <p id="sentence-kor" style="font-size:16px; color:#aaa; margin-top:0;">해석이 여기에 나옵니다</p>
+
         <div id="control-area" style="margin-top: 20px;">
           <button id="start-btn" onclick="startStudy()">Start</button>
+          
           <button id="skip-btn" onclick="nextStep()" style="display:none; margin-left:10px; background-color: #888;">Skip</button>
         </div>
+
       </div>
+    
     </div>
-    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px;">
+
+    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px; line-height: 1.6;">
       <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
+      <p>본 프로그램의 소스 코드 및 콘텐츠(음원, 데이터)를<br>
+      무단으로 복제, 분석, 배포할 경우 저작권법에 의거하여<br>
+      민형사상 책임을 물을 수 있습니다.</p>
     </footer>
+
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
+
