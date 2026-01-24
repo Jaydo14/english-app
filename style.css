@@ -1,111 +1,62 @@
-:root {
-  --primary: #39ff14;         /* 형광 초록색 */
-  --bg: #0d1117;              /* 어두운 배경 */
-  --card-bg: #161b22;         /* 카드 배경 */
-  --border: #30363d;          /* 테두리 색 */
-  --text: #ffffff;
-  --text-dim: #8b949e;        /* 흐릿한 텍스트 */
-  --playing-bg: rgba(57, 255, 20, 0.15); /* 재생 중 배경 */
-}
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Pretendard', sans-serif;
-  display: flex;
-  justify-content: center;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #000;
+  color: #fff;
 }
-
-#app {
-  width: 100%;
+.container {
   max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
 }
-
-/* 심플한 카드 스타일 */
 .box {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
+  background: #111;
+  border: 2px solid #39ff14;
   border-radius: 20px;
-  padding: 25px 20px;
-  margin-top: 20px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  padding: 20px;
+  margin-top: 15px;
+  text-align: center;
 }
-
-/* 버튼 크기 키우기 (모바일 최적화) */
-button {
-  width: 100%;
-  padding: 22px;
+h1, h2, h3 {
+  color: #39ff14;
+}
+input {
+  width: 90%;
+  padding: 14px;
   font-size: 18px;
-  font-weight: 700;
-  border: none;
+  border-radius: 10px;
+  border: 1px solid #39ff14;
+  background: #000;
+  color: white;
+}
+button {
+  width: 95%;
+  padding: 16px;
+  font-size: 20px;
+  background: #39ff14;
+  color: black;
   border-radius: 14px;
-  cursor: pointer;
-  margin-bottom: 12px;
-  transition: all 0.2s;
+  border: none;
+  font-weight: bold;
 }
-
-.main-btn {
-  background: var(--primary);
-  color: #000;
-}
-
-.sub-btn {
-  background: #21262d;
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-button:active {
-  transform: scale(0.97);
-}
-
-/* 유닛 버튼 2열 배치 */
 #unit-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
-
-#unit-buttons button {
-  padding: 30px 10px;
-  background: #21262d;
-  color: #fff;
+#progress-wrap {
+  width: 100%;
+  height: 16px;
+  background: #333;
+  border-radius: 20px;
 }
-
-/* 반복 듣기 아이템 */
-.repeat-item {
-  padding: 18px;
-  border-radius: 15px;
-  border: 1px solid transparent;
-  margin-bottom: 10px;
-  transition: all 0.3s;
-}
-
-/* ⭐ 현재 재생 중인 문장 강조 */
-.playing {
-  background: var(--playing-bg);
-  border-color: var(--primary);
-  box-shadow: 0 0 15px rgba(57, 255, 20, 0.1);
-}
-
-/* 프로그레스 바 */
-#progress-container {
-  height: 8px;
-  background: #30363d;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
 #progress {
   height: 100%;
-  background: var(--primary);
-  transition: width 0.3s;
+  background: #39ff14;
+  border-radius: 20px;
+}
+.unit-title {
+  font-size: 14px;
+  color: #333;
+  display: block;
 }
