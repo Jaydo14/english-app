@@ -26,6 +26,38 @@
         <div id="unit-buttons"></div>
       </div>
 
+      <div id="menu-box" class="box" style="display: none;">
+        <h2 id="menu-title">Select Mode</h2>
+        <div class="menu-buttons">
+          <button onclick="startScriptMode()">Script</button>
+          <button onclick="startDevMode()">Vocab</button>
+          <button onclick="startDevMode()">AS Correction</button>
+          <button onclick="startRepeatMode()">반복듣기</button>
+        </div>
+        <button class="sub-btn" onclick="goBackToUnit()">Back to Units</button>
+      </div>
+
+      <div id="dev-box" class="box" style="display: none;">
+        <h2>개발중...</h2>
+        <p>이 기능은 현재 준비 중입니다.</p>
+        <button class="main-btn" onclick="showMenu()">Back</button>
+      </div>
+
+      <div id="repeat-box" class="box" style="display: none;">
+        <h2>반복 듣기</h2>
+        <div id="repeat-list" style="text-align: left; margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
+          </div>
+        
+        <div class="control-panel">
+          <label>반복 횟수: <input type="number" id="repeat-count" value="3" style="width: 50px; text-align: center;"></label>
+          <br><br>
+          <button id="repeat-play-btn" class="main-btn" onclick="runRepeatAudio()">재생 시작</button>
+          <button class="sub-btn" onclick="stopRepeatAudio()">정지</button>
+        </div>
+        <br>
+        <button class="sub-btn" onclick="showMenu()">Back to Menu</button>
+      </div>
+
       <div id="study-box" class="box" style="display:none;">
         <h2>학습 진행</h2>
         
@@ -59,5 +91,6 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
 
