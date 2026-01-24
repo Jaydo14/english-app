@@ -1,8 +1,9 @@
 // ======================================================
-// 1. 기본 설정 및 상수
+// 1. 기본 설정 (절대 주소 끝에 / 를 확인하세요)
 // ======================================================
 const REPO_USER = "jaydo14"; 
-const REPO_NAME = "Build A Monster";
+const REPO_NAME = "english-app";
+// 주소 끝에 /가 꼭 있어야 파일 경로가 뭉치지 않습니다.
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumwsr9-BsBTYXeb_sFdBKBCwa0Vd1gMchYDryJ-dpSxinm5WDB2TjkkQ0d/exec"; 
 
@@ -65,7 +66,7 @@ async function requestWakeLock() {
 }
 
 // ----------------------
-// 4. 로그인 및 유닛 선택
+// 4. 로그인 및 유닛 선택 (수정됨: Loading 문구 제거)
 // ----------------------
 window.login = function () {
   const inputVal = phoneInput.value.trim();
@@ -109,6 +110,7 @@ function renderUnitButtons() {
 window.selectUnit = async function (n) {
   currentUnit = n;
   const fileName = `${currentType}${currentUnit}.json`;
+  // 폴더 경로(currentType)를 주소 중간에 명확히 넣어줍니다.
   const fullUrl = BASE_URL + currentType + "/" + fileName;
 
   try {
@@ -118,7 +120,7 @@ window.selectUnit = async function (n) {
     document.getElementById("menu-title").innerText = `Unit ${currentUnit}`;
     showMenu();
   } catch (e) {
-    alert("파일을 불러올 수 없습니다.");
+    alert("데이터 파일을 찾을 수 없습니다. 폴더와 파일명을 확인해주세요.");
   }
 };
 
@@ -164,6 +166,7 @@ function playSentence() {
   updateProgress();
 
   if (item.audio) {
+    // 소리 파일도 방 이름(currentType) 폴더 안에서 찾습니다.
     player.src = BASE_URL + currentType + "/" + item.audio;
     player.play().catch(e => console.log(e));
   }
@@ -220,7 +223,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 7. 반복 듣기 모드 (2초 대기 적용)
+// 7. 반복 듣기 모드 (번호 제거 & 2초 대기)
 // ----------------------
 window.startRepeatMode = function() {
   showBox(repeatBox);
@@ -230,6 +233,7 @@ window.startRepeatMode = function() {
   currentData.forEach((item, idx) => {
     const div = document.createElement("div");
     div.className = "repeat-item"; 
+    // 문장 앞에 있던 ${idx + 1}. 을 삭제했습니다.
     div.innerHTML = `
       <div style="color:var(--primary); font-weight:700; margin-bottom:4px;">${item.en}</div>
       <div style="color:var(--text-sub); font-size:14px;">${item.ko}</div>
@@ -252,7 +256,7 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) break;
       await playAudioPromise(currentData[i].audio, i);
     }
-    // [수정] 사이클 종료 후 2초 대기
+    // 사이클 종료 후 2초 대기 (요청 사항)
     if (c < count && isRepeating) {
       await new Promise(r => setTimeout(r, 2000));
     }
@@ -277,6 +281,7 @@ function playAudioPromise(file, idx) {
       items[idx].style.borderColor = "var(--primary)";
       items[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+    // 오디오 파일 경로에 폴더명(currentType) 추가
     player.src = BASE_URL + currentType + "/" + file;
     player.play().then(() => {
       player.onended = () => {
@@ -291,6 +296,7 @@ function playAudioPromise(file, idx) {
 // 8. 프로그레스 및 서버 저장
 // ----------------------
 function updateProgress() {
+  if (!currentData.length) return;
   const total = totalCycles * currentData.length;
   const current = ((cycle - 1) * currentData.length) + index;
   const p = Math.min(Math.floor((current / total) * 100), 100);
