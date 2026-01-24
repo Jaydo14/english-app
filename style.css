@@ -1,128 +1,84 @@
+:root {
+  --primary-color: #39ff14;
+  --bg-color: #0a0a0a;
+  --card-bg: #1a1a1a;
+  --text-main: #ffffff;
+  --text-dim: #aaaaaa;
+}
+
 body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: 'Pretendard', -apple-system, sans-serif;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #000;
-  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-/* 전체 중앙 정렬 컨테이너 */
-.container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* 모바일 카드 박스 */
 .box {
-  background: #111;
-  border: 2px solid #39ff14; /* 형광 초록 */
-  border-radius: 20px;
-  padding: 20px;
-  margin-top: 15px;
-  text-align: center;
-}
-
-/* 큰 제목 */
-h1, h2, h3 {
-  color: #39ff14;
-  text-align: center;
-}
-
-/* 입력창 크게 */
-input {
   width: 90%;
-  padding: 14px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: 1px solid #39ff14;
-  background: #000;
-  color: white;
-  margin-top: 10px;
+  max-width: 420px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 30px 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(57, 255, 20, 0.05);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* 버튼 크게 (손가락 크기) */
+/* 버튼 디자인 고도화 */
 button {
-  width: 95%;
-  padding: 16px;
-  font-size: 20px;
-  margin-top: 12px;
-  background: #39ff14;
-  color: black;
-  border-radius: 14px;
+  border-radius: 16px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
-  font-weight: bold;
 }
 
-/* Unit 버튼 2열 정렬 */
+.main-btn {
+  background: linear-gradient(135deg, #39ff14 0%, #32cd32 100%);
+  color: #000;
+  box-shadow: 0 8px 15px rgba(57, 255, 20, 0.2);
+}
+
+.main-btn:active {
+  transform: scale(0.95);
+  filter: brightness(0.9);
+}
+
+.sub-btn {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-dim);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* 유닛 버튼 그리드 */
 #unit-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* 진행률 바 */
-#progress-wrap {
-  width: 100%;
-  height: 16px;
-  background: #333;
-  border-radius: 20px;
-  margin-top: 15px;
+#unit-buttons button {
+  background: #252525;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 20px 10px;
+  color: var(--text-main);
+}
+
+#unit-buttons button:hover {
+  border-color: var(--primary-color);
+  background: rgba(57, 255, 20, 0.05);
+}
+
+/* 진행바 세련되게 */
+#progress-container {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 100px;
 }
 
 #progress {
-  height: 100%;
-  width: 0%;
-  background: #39ff14;
-  border-radius: 20px;
-}
-
-/* 학습 문장 크게 표시 */
-#sentence {
-  font-size: 22px;
-  line-height: 1.5;
-  margin-top: 10px;
-}
-
-/* 성공 효과 */
-.success {
-  color: #39ff14;
-  text-shadow: 0 0 8px #39ff14;
-}
-
-/* 실패 효과 */
-.fail {
-  color: red;
-  animation: shake 0.2s linear 3;
-}
-
-@keyframes shake {
-  0% { transform: translateX(-5px);}
-  50% { transform: translateX(5px);}
-  100% { transform: translateX(0);}
-}
-
-/* 📱 모바일 특화 */
-@media (max-width: 550px) {
-
-  .container {
-    padding: 10px;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 14px;
-  }
-
-  #sentence {
-    font-size: 20px;
-  }
-}
-
-/* 유닛 버튼 안의 작은 제목 스타일 */
-.unit-title {
-  font-size: 14px; /* 제목보다 작게 */
-  font-weight: normal; /* 굵기 빼기 */
-  color: #333; /* 약간 흐린 검정 (버튼 배경에 따라 조정) */
-  display: block; /* 다음 줄에 확실히 나오게 */
-  margin-top: 4px;
+  box-shadow: 0 0 10px var(--primary-color);
 }
