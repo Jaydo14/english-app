@@ -2,95 +2,291 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>English Speaking App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
-</head>
+  <style>
+    /* ===========================
+       1. 기본 스타일 (Dark Theme)
+       =========================== */
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      /* 모바일에서 터치 시 하이라이트 제거 */
+      -webkit-tap-highlight-color: transparent;
+    }
 
-<body>
-  <div class="container">
+    h1, h2 {
+      margin-top: 20px;
+      color: #39ff14; /* 형광 녹색 */
+      text-shadow: 0 0 5px #39ff14;
+    }
 
-    <div id="login-box" class="box">
-      <h1>Build A Monster</h1>
-      <p>핸드폰 번호를 입력하세요</p>
-      
-      <input type="text" id="phone-input" placeholder="예: 01012345678" style="text-align:center;">
-      
-      <button onclick="login()">Login</button>
-    </div>
+    /* ===========================
+       2. 레이아웃 박스 공통
+       =========================== */
+    .box {
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid #333;
+      border-radius: 15px;
+      background-color: #111;
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+    }
 
-    <div id="app" style="display:none;">
-      
-      <div class="box">
-        <h2 id="welcome-msg">Unit 선택</h2>
-        <div id="unit-buttons"></div>
-      </div>
+    /* ===========================
+       3. 입력창 및 버튼 스타일
+       =========================== */
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      width: 70%;
+      border-radius: 5px;
+      border: 1px solid #555;
+      background-color: #222;
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
 
-      <div id="menu-box" class="box" style="display: none;">
-        <h2 id="menu-title">Select Mode</h2>
-        <div class="menu-buttons">
-          <button onclick="startScriptMode()">Script</button>
-          <button onclick="startDevMode()">Vocab</button>
-          <button onclick="startDevMode()">AS Correction</button>
-          <button onclick="startRepeatMode()">반복듣기</button>
-        </div>
-        <button class="sub-btn" onclick="goBackToUnit()">Back to Units</button>
-      </div>
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
 
-      <div id="dev-box" class="box" style="display: none;">
-        <h2>개발중...</h2>
-        <p>이 기능은 현재 준비 중입니다.</p>
-        <button class="main-btn" onclick="showMenu()">Back</button>
-      </div>
+    /* 메인 액션 버튼 (형광 녹색) */
+    .main-btn {
+      background-color: #39ff14;
+      color: #000;
+      padding: 15px 30px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .main-btn:active {
+      transform: scale(0.98);
+      background-color: #32cd11;
+    }
 
-      <div id="repeat-box" class="box" style="display: none;">
-        <h2>반복 듣기</h2>
-        <div id="repeat-list" style="text-align: left; margin-bottom: 20px; max-height: 300px; overflow-y: auto;">
-          </div>
-        
-        <div class="control-panel">
-          <label>반복 횟수: <input type="number" id="repeat-count" value="3" style="width: 50px; text-align: center;"></label>
-          <br><br>
-          <button id="repeat-play-btn" class="main-btn" onclick="runRepeatAudio()">재생 시작</button>
-          <button class="sub-btn" onclick="stopRepeatAudio()">정지</button>
-        </div>
-        <br>
-        <button class="sub-btn" onclick="showMenu()">Back to Menu</button>
-      </div>
+    /* 보조 버튼 (회색 테두리) */
+    .sub-btn {
+      background-color: transparent;
+      border: 1px solid #555;
+      color: #aaa;
+      padding: 10px 20px;
+      margin-top: 15px;
+      width: 80%;
+    }
+    .sub-btn:active {
+      background-color: #222;
+    }
 
-      <div id="study-box" class="box" style="display:none;">
-        <h2>학습 진행</h2>
-        
-        <div id="progress-wrap">
-          <div id="progress"></div>
-        </div>
-        <div id="progress-percent">0%</div>
+    /* ===========================
+       4. 유닛 선택 버튼 그리드
+       =========================== */
+    #unit-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2열 배치 */
+      gap: 10px;
+      margin-top: 20px;
+    }
 
-        <p id="sentence" style="font-size:20px; font-weight:bold; margin-bottom:5px;">Loading...</p>
-        <p id="sentence-kor" style="font-size:16px; color:#aaa; margin-top:0;">해석이 여기에 나옵니다</p>
-
-        <div id="control-area" style="margin-top: 20px;">
-          <button id="start-btn" onclick="startStudy()">Start</button>
-          
-          <button id="skip-btn" onclick="nextStep()" style="display:none; margin-left:10px; background-color: #888;">Skip</button>
-        </div>
-
-      </div>
+    #unit-buttons button {
+      background-color: #006400; /* 짙은 녹색 */
+      color: #fff;
+      padding: 15px;
+      border: 1px solid #39ff14;
+    }
     
+    #unit-buttons button:active {
+      background-color: #39ff14;
+      color: #000;
+    }
+
+    .unit-title {
+      font-size: 12px;
+      color: #aaa;
+      font-weight: normal;
+    }
+
+    /* ===========================
+       5. 메뉴 선택 버튼 (Script, Vocab 등)
+       =========================== */
+    .menu-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .menu-buttons button {
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #39ff14;
+      padding: 15px;
+      font-size: 18px;
+    }
+    
+    .menu-buttons button:active {
+      background-color: #39ff14;
+      color: #000;
+    }
+
+    /* ===========================
+       6. 학습 화면 (Script)
+       =========================== */
+    #sentence {
+      font-size: 22px;
+      margin: 30px 0;
+      line-height: 1.4;
+      min-height: 60px;
+    }
+    
+    #sentence-kor {
+      font-size: 16px;
+      color: #aaa;
+      margin-bottom: 20px;
+      min-height: 30px;
+    }
+
+    .success { animation: pop 0.3s ease; }
+    .fail { animation: shake 0.3s ease; }
+
+    /* 진행바 */
+    #progress-container {
+      width: 100%;
+      background-color: #333;
+      height: 10px;
+      border-radius: 5px;
+      margin: 20px 0 5px 0;
+      overflow: hidden;
+    }
+    
+    #progress {
+      height: 100%;
+      background-color: #39ff14;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    
+    #progress-percent {
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* ===========================
+       7. 반복 듣기 리스트
+       =========================== */
+    /* 스크롤바 디자인 (크롬/사파리) */
+    #repeat-list::-webkit-scrollbar {
+      width: 8px;
+    }
+    #repeat-list::-webkit-scrollbar-thumb {
+      background: #555; 
+      border-radius: 4px;
+    }
+    #repeat-list::-webkit-scrollbar-track {
+      background: #222; 
+    }
+
+    /* ===========================
+       8. 애니메이션 효과
+       =========================== */
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="login-box" class="box">
+    <h1>English App</h1>
+    <p>핸드폰 뒷번호 4자리 입력</p>
+    <input type="text" id="phone-input" placeholder="1234" maxlength="4" onkeypress="if(event.keyCode==13) login()">
+    <button class="main-btn" onclick="login()">Login</button>
+  </div>
+
+  <div id="app" style="display: none;">
+    <h1 id="welcome-msg">Unit 선택</h1>
+
+    <div id="unit-selection-area">
+       <div id="unit-buttons">
+         </div>
     </div>
 
-    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px; line-height: 1.6;">
-      <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
-      <p>본 프로그램의 소스 코드 및 콘텐츠(음원, 데이터)를<br>
-      무단으로 복제, 분석, 배포할 경우 저작권법에 의거하여<br>
-      민형사상 책임을 물을 수 있습니다.</p>
-    </footer>
+    <div id="menu-box" class="box" style="display: none;">
+      <h2 id="menu-title">Select Mode</h2>
+      <div class="menu-buttons">
+        <button onclick="startScriptMode()">Script</button>
+        <button onclick="startDevMode()">Vocab</button>
+        <button onclick="startDevMode()">AS Correction</button>
+        <button onclick="startRepeatMode()">반복듣기</button>
+      </div>
+      <button class="sub-btn" onclick="goBackToUnit()">Back to Units</button>
+    </div>
+
+    <div id="study-box" class="box" style="display: none;">
+      <div id="progress-container">
+        <div id="progress"></div>
+      </div>
+      <div id="progress-percent">0%</div>
+
+      <div id="sentence">Loading...</div>
+      <div id="sentence-kor"></div>
+      
+      <button id="start-btn" class="main-btn" onclick="startStudy()">Start</button>
+      <br>
+      <button id="skip-btn" class="sub-btn" onclick="nextStep()" style="display:none; margin-top:10px;">Skip (Next)</button>
+      <br>
+      <button class="sub-btn" onclick="showMenu()" style="margin-top: 30px;">Back to Menu</button>
+    </div>
+
+    <div id="repeat-box" class="box" style="display: none;">
+      <h2>반복 듣기</h2>
+      <div id="repeat-list" style="text-align: left; margin-bottom: 20px; max-height: 300px; overflow-y: auto; padding-right: 5px;">
+        </div>
+      
+      <div class="control-panel" style="background-color: #222; padding: 15px; border-radius: 10px;">
+        <label style="font-size: 14px; color: #aaa;">반복 횟수 : </label>
+        <input type="number" id="repeat-count" value="3" style="width: 50px; text-align: center; margin: 0;">
+        <span style="font-size: 14px; color: #aaa;"> 회</span>
+        <br><br>
+        <button id="repeat-play-btn" class="main-btn" onclick="runRepeatAudio()">재생 시작</button>
+        <button class="sub-btn" onclick="stopRepeatAudio()" style="border-color: #ff4b4b; color: #ff4b4b;">정지</button>
+      </div>
+      <br>
+      <button class="sub-btn" onclick="showMenu()">Back to Menu</button>
+    </div>
+
+    <div id="dev-box" class="box" style="display: none;">
+      <h2 style="color: #888;">준비 중...</h2>
+      <p style="margin: 40px 0; color: #aaa; line-height: 1.6;">
+        현재 개발 중인 기능입니다.<br>
+        조금만 기다려주세요! 🛠️
+      </p>
+      <button class="sub-btn" onclick="showMenu()">Back</button>
+    </div>
 
   </div>
 
   <script src="app.js"></script>
 </body>
 </html>
-
-
-
