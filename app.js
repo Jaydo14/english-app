@@ -171,140 +171,75 @@ function renderUnitButtons() {
   }
 }
 
-// ----------------------
-// 6. 유닛 선택 -> 데이터 로드 -> 메뉴 이동
-// ----------------------
+// [수정] 6. 유닛 선택 함수
 window.selectUnit = async function (n) {
   currentUnit = n;
   const fileName = `${currentType}${currentUnit}.json`;
   const fullUrl = BASE_URL + currentType + "/" + fileName;
 
-  // 로딩 표시
-  document.getElementById("welcome-msg").innerText = "Loading...";
-
+  // "Loading..." 문구를 표시하지 않고 바로 fetch 진행
   try {
     const response = await fetch(fullUrl);
     if (!response.ok) throw new Error("파일 없음");
 
     currentData = await response.json();
     
-    // 데이터 로드 성공하면 메뉴 화면으로 이동
-    document.getElementById("menu-title").innerText = `Unit ${currentUnit} Menu`;
+    document.getElementById("menu-title").innerText = `Unit ${currentUnit}`;
     showMenu();
 
   } catch (error) {
-    alert(`[오류] 파일을 찾을 수 없습니다.\n(${fileName})`);
-    document.getElementById("welcome-msg").innerText = "Unit 선택";
+    alert(`오류: 파일을 찾을 수 없습니다.`);
   }
 };
 
-window.showMenu = function() {
-  // 유닛 버튼 박스 숨기기 (id가 없어서 parentElement로 접근하거나, html 구조에 따라 다름)
-  document.getElementById("unit-buttons").parentElement.style.display = "none";
-  showBox(menuBox);
-};
-
-window.goBackToUnit = function() {
-  showBox(null); // 다 숨기고
-  document.getElementById("unit-buttons").parentElement.style.display = "block"; // 유닛박스만 켬
-  document.getElementById("welcome-msg").innerText = "Unit 선택";
-};
-
-// ----------------------
-// 7. 각 모드 진입 함수
-// ----------------------
-
-// A. Script (기존 학습 모드)
-window.startScriptMode = function() {
-  showBox(studyBox);
-  requestWakeLock();
-  
-  // 기존 로직 복원: 저장된 진행상황 불러오기
-  const userPhone = phoneInput.value.trim();
-  const saveKey = `save_${userPhone}_unit${currentUnit}`;
-  const savedData = localStorage.getItem(saveKey);
-
-  index = 0; 
-  cycle = 1;
-
-  if (savedData) {
-    const parsed = JSON.parse(savedData);
-    index = parsed.index;
-    cycle = parsed.cycle;
-  }
-  
-  if (startBtn) startBtn.innerText = "Start";
-  if (skipBtn) skipBtn.style.display = "none";
-  sentenceText.innerText = "Start 버튼을 눌러주세요";
-  sentenceKor.innerText = "";
-  updateProgress();
-};
-
-// B. Vocab & AS Correction (개발중)
-window.startDevMode = function() {
-  showBox(devBox);
-};
-
-// C. 반복 듣기 (새 기능)
+// [수정] 7-C. 반복 듣기 리스트 렌더링 (번호 제거)
 window.startRepeatMode = function() {
   showBox(repeatBox);
   requestWakeLock();
   isRepeating = false;
 
-  // 리스트 렌더링
   repeatList.innerHTML = "";
-  if(currentData.length === 0) {
-    repeatList.innerText = "데이터가 없습니다.";
-    return;
-  }
-
   currentData.forEach((item, idx) => {
     const div = document.createElement("div");
-    div.style.marginBottom = "10px";
-    div.style.padding = "10px";
-    div.style.backgroundColor = "#333";
-    div.style.borderRadius = "5px";
-    div.style.fontSize = "14px";
+    div.className = "repeat-item"; // CSS에서 스타일링 권장
+    div.style.cssText = "margin-bottom:12px; padding:15px; background:rgba(255,255,255,0.03); border-radius:12px;";
+    
+    // [번호 제거] ${idx + 1}. 부분을 삭제했습니다.
     div.innerHTML = `
-      <div style="color: #ffff00; margin-bottom: 4px;">${idx + 1}. ${item.en}</div>
-      <div style="color: #aaa;">${item.ko}</div>
+      <div style="color: var(--primary-color); font-weight:600; margin-bottom: 4px;">${item.en}</div>
+      <div style="color: #888; font-size: 13px;">${item.ko}</div>
     `;
     repeatList.appendChild(div);
   });
 };
 
-// ----------------------
-// 8. 반복 듣기 로직
-// ----------------------
+// [수정] 8. 반복 듣기 사이클 대기 시간 (2초로 변경)
 window.runRepeatAudio = async function() {
-  if (isRepeating) return; // 이미 실행 중이면 무시
+  if (isRepeating) return;
   const count = parseInt(repeatCountInput.value);
   
-  if (isNaN(count) || count < 1) {
-    alert("올바른 숫자를 입력하세요.");
-    return;
-  }
+  if (isNaN(count) || count < 1) return;
 
   isRepeating = true;
   document.getElementById("repeat-play-btn").innerText = "재생 중...";
-  document.getElementById("repeat-play-btn").disabled = true;
 
-  // 전체 사이클 반복 (사용자가 입력한 횟수만큼)
   for (let c = 1; c <= count; c++) {
-    if (!isRepeating) break; // 정지 버튼 눌렀으면 종료
+    if (!isRepeating) break;
 
-    // 한 유닛의 모든 오디오 순차 재생
     for (let i = 0; i < currentData.length; i++) {
       if (!isRepeating) break;
       await playAudioPromise(currentData[i].audio, i);
     }
 
-    // 한 사이클 끝남 -> 3초 대기 (마지막 바퀴가 아니면)
+    // [수정] 한 사이클 끝남 -> 2초 대기
     if (c < count && isRepeating) {
-      console.log("3초 대기 중...");
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise(resolve => setTimeout(resolve, 2000)); 
     }
   }
+
+  isRepeating = false;
+  document.getElementById("repeat-play-btn").innerText = "재생 시작";
+};
 
   // 종료 처리
   isRepeating = false;
