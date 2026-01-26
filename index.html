@@ -16,50 +16,49 @@
 </div>
 
     <div id="app" style="display:none;">
-      <div id="unit-selector" class="box">
-        <h2 id="welcome-msg">Unit 선택</h2>
-        <div id="unit-buttons"></div>
-      </div>
+  <div id="unit-selector" class="box">
+    <h2 id="welcome-msg">Unit 선택</h2>
+    <div id="unit-buttons"></div>
+  </div>
 
-      <div id="menu-box" class="box" style="display:none;">
-        <h2 id="menu-title">Select Mode</h2>
-        <button onclick="startScriptMode()">Script</button>
-        <button onclick="showDevPage('Voca')">Voca</button>
-        <button onclick="showDevPage('AS Correction')">AS Correction</button>
-        <button onclick="startRepeatMode()">반복듣기</button>
-        <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Unit 다시 고르기</button>
-      </div>
+  <div id="menu-box" class="box" style="display:none;">
+    <h2 id="menu-title">Select Mode</h2>
+    <button onclick="startScriptMode()">Script</button>
+    <button onclick="showDevPage('Voca')">Voca</button>
+    <button onclick="showDevPage('AS Correction')">AS Correction</button>
+    <button onclick="startRepeatMode()">반복듣기</button>
+    <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Unit 다시 고르기</button>
+  </div>
 
-      <div id="study-box" class="box" style="display:none;">
-        <div id="progress-wrap"><div id="progress"></div></div>
-        <div id="progress-percent">0%</div>
-        <p id="sentence" style="font-size:20px; font-weight:bold;">Ready?</p>
-        <p id="sentence-kor" style="font-size:16px; color:#aaa;">해석</p>
-        <div id="control-area" style="margin-top: 25px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-  <button id="start-btn" onclick="startStudy()" style="width: 95%;">Start</button>
-  
-  <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-    <button id="skip-btn" onclick="nextStep()" class="sub-action-btn" style="display:none;">Skip</button>
+  <div id="study-box" class="box" style="display:none;">
+    <div id="progress-wrap"><div id="progress"></div></div>
+    <div id="progress-percent">0%</div>
+    <p id="sentence" style="font-size:20px; font-weight:bold;">Ready?</p>
+    <p id="sentence-kor" style="font-size:16px; color:#aaa;">해석</p>
+    
+    <div id="control-area" style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
+      <button id="start-btn" onclick="startStudy()">Start</button>
+      <button id="skip-btn" onclick="nextStep()" class="sub-action-btn" style="display:none;">Skip</button>
+      <button onclick="showMenu()" class="sub-action-btn">메뉴로</button>
+    </div>
+  </div>
+
+  <div id="repeat-box" class="box" style="display:none;">
+    <h2>반복 듣기</h2>
+    <div style="margin-bottom:15px;">
+      <input type="number" id="repeat-count" value="3" style="width:60px; display:inline-block; border: 1px solid #39ff14; background: #000; color: #fff;"> 회 반복
+      <button id="repeat-start-btn" onclick="runRepeatAudio()" style="width:100px; display:inline-block; padding:10px;">시작</button>
+    </div>
+    <div id="repeat-list" style="text-align:left; max-height:350px; overflow-y:auto; border-top:1px solid #39ff14; padding-top:10px;"></div>
+    <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:20px;">메뉴로</button>
+  </div>
+
+  <div id="dev-box" class="box" style="display:none;">
+    <h2 id="dev-title">알림</h2>
+    <p style="padding:50px 0;">현재 개발 중인 기능입니다. 🛠️</p>
     <button onclick="showMenu()" class="sub-action-btn">메뉴로</button>
   </div>
 </div>
-
-      <div id="repeat-box" class="box" style="display:none;">
-        <h2>반복 듣기</h2>
-        <div style="margin-bottom:15px;">
-          <input type="number" id="repeat-count" value="3" style="width:60px; display:inline-block;"> 회 반복
-          <button id="repeat-start-btn" onclick="runRepeatAudio()" style="width:100px; display:inline-block; padding:10px;">시작</button>
-        </div>
-        <div id="repeat-list" style="text-align:left; max-height:350px; overflow-y:auto; border-top:1px solid #39ff14; padding-top:10px;"></div>
-        <button onclick="stopRepeatAudio(); showMenu();" style="background:#555; color:#fff; margin-top:20px;">메뉴로</button>
-      </div>
-
-      <div id="dev-box" class="box" style="display:none;">
-        <h2 id="dev-title">알림</h2>
-        <p style="padding:50px 0;">현재 개발 중인 기능입니다. 🛠️</p>
-        <button onclick="showMenu()">메뉴로</button>
-      </div>
-    </div>
 
     <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px;">
       <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
@@ -68,5 +67,6 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
 
