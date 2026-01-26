@@ -188,3 +188,19 @@ button {
   background-color: #444 !important;
   transform: scale(0.98);
 }
+
+/* 보조 버튼 (Skip, 메뉴로) 작게 정렬 */
+.sub-action-btn {
+  width: 65% !important;    /* 너비를 65%로 줄임 */
+  padding: 12px !important; /* 높이를 줄임 */
+  font-size: 16px !important;
+  background-color: #555 !important;
+  color: white !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* 반복듣기 아이템 효과 */
+.repeat-item { padding: 12px; border-radius: 12px; margin-bottom: 8px; border: 1px solid transparent; transition: 0.3s; }
+.playing { background-color: rgba(57, 255, 20, 0.2); border: 1px solid #39ff14; }
+.repeat-ko { font-size: 13px !important; color: #888; margin-top: 3px; }
