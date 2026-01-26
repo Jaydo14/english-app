@@ -21,31 +21,48 @@
 
     <div id="app" style="display:none;">
       
-      <div class="box">
-        <h2 id="welcome-msg">Unit 선택</h2>
-        <div id="unit-buttons"></div>
-      </div>
-
-      <div id="study-box" class="box" style="display:none;">
-        <h2>학습 진행</h2>
+      <div id="app" style="display:none;">
         
-        <div id="progress-wrap">
-          <div id="progress"></div>
-        </div>
-        <div id="progress-percent">0%</div>
+  <div id="unit-selector" class="box">
+    <h2 id="welcome-msg">Unit 선택</h2>
+    <div id="unit-buttons"></div>
+  </div>
 
-        <p id="sentence" style="font-size:20px; font-weight:bold; margin-bottom:5px;">Loading...</p>
-        <p id="sentence-kor" style="font-size:16px; color:#aaa; margin-top:0;">해석이 여기에 나옵니다</p>
+  <div id="menu-box" class="box" style="display:none;">
+    <h2 id="menu-title">Menu</h2>
+    <button class="main-btn" onclick="startScriptMode()">Script</button>
+    <button class="main-btn" onclick="showDevPage('Voca')">Voca</button>
+    <button class="main-btn" onclick="showDevPage('AS Correction')">AS Correction</button>
+    <button class="main-btn" onclick="startRepeatMode()">반복듣기</button>
+    <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Unit 다시 고르기</button>
+  </div>
 
-        <div id="control-area" style="margin-top: 20px;">
-          <button id="start-btn" onclick="startStudy()">Start</button>
-          
-          <button id="skip-btn" onclick="nextStep()" style="display:none; margin-left:10px; background-color: #888;">Skip</button>
-        </div>
+  <div id="study-box" class="box" style="display:none;">
+    <div id="progress-wrap"><div id="progress"></div></div>
+    <div id="progress-percent">0%</div>
+    <p id="sentence" style="font-size:20px; font-weight:bold;">Ready?</p>
+    <p id="sentence-kor" style="font-size:16px; color:#aaa;">해석</p>
+    <button id="start-btn" onclick="startStudy()">Start</button>
+    <button id="skip-btn" onclick="nextStep()" style="display:none; margin-left:10px; background-color: #888;">Skip</button>
+    <button onclick="showMenu()" style="background:#555; color:#fff; margin-top:10px;">메뉴로</button>
+  </div>
 
-      </div>
-    
+  <div id="repeat-box" class="box" style="display:none;">
+    <h2>반복 듣기</h2>
+    <div style="margin-bottom:15px;">
+      <input type="number" id="repeat-count" value="3" style="width:60px; display:inline-block;"> 회 반복
+      <button id="repeat-start-btn" onclick="runRepeatAudio()" style="width:100px; display:inline-block; padding:10px;">시작</button>
     </div>
+    <div id="repeat-list" style="text-align:left; max-height:400px; overflow-y:auto;"></div>
+    <button onclick="stopRepeatAudio(); showMenu();" style="background:#555; color:#fff; margin-top:10px;">메뉴로</button>
+  </div>
+
+  <div id="dev-box" class="box" style="display:none;">
+    <h2 id="dev-title">준비 중</h2>
+    <p style="padding:40px 0;">현재 개발 중인 기능입니다. 🛠️</p>
+    <button onclick="showMenu()">메뉴로</button>
+  </div>
+</div>
 
     <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px; line-height: 1.6;">
       <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
@@ -59,4 +76,5 @@
   <script src="app.js"></script>
 </body>
 </html>
+
 
