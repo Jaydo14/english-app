@@ -150,45 +150,83 @@ window.login = function () {
 window.selectUnit = async function (n) {
   currentUnit = n;
   
+  // 화면을 바꿔주는 조절 스위치입니다.
+function showBox(boxId) {
+  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box'];
+  boxes.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = (id === boxId) ? 'block' : 'none';
+  });
+}
+
+// 유닛을 선택하면 메뉴판(Script, 반복듣기 등)이 나오게 합니다.
+window.selectUnit = async function (n) {
+  currentUnit = n;
   const fileName = `${currentType}${currentUnit}.json`;
   const fullUrl = BASE_URL + currentType + "/" + fileName;
 
-  studyBox.style.display = "block";
-  document.querySelector('.box:not(#study-box)').style.display = 'none';
-  sentenceText.innerText = "Loading...";
-  sentenceKor.innerText = "";
-
-  if (startBtn) startBtn.innerText = "Start";
-  if (skipBtn) skipBtn.style.display = "none"; 
-
   try {
     const response = await fetch(fullUrl);
-    if (!response.ok) throw new Error("파일 없음");
-
     currentData = await response.json();
-    
-    const userPhone = phoneInput.value.trim();
-    const saveKey = `save_${userPhone}_unit${currentUnit}`;
-    const savedData = localStorage.getItem(saveKey);
-
-    index = 0;
-    cycle = 1;
-
-    if (savedData) {
-      const parsed = JSON.parse(savedData);
-      index = parsed.index;
-      cycle = parsed.cycle;
-    }
-
-    updateProgress();
-    sentenceText.innerText = "Start 버튼을 눌러주세요";
-
+    document.getElementById("menu-title").innerText = `Unit ${n}`;
+    showBox('menu-box'); // 메뉴 화면을 보여줘!
   } catch (error) {
-    alert(`[오류] 파일을 찾을 수 없습니다.\n(${fileName})`);
-    studyBox.style.display = "none";
-    document.querySelector('.box:not(#study-box)').style.display = 'block';
+    alert("데이터를 불러오지 못했습니다.");
   }
 };
+
+// 메뉴로 돌아가기 기능들
+window.showMenu = () => showBox('menu-box');
+window.goBackToUnits = () => showBox('unit-selector');
+
+// 각 버튼을 눌렀을 때 실행될 명령들
+window.startScriptMode = () => { index = 0; cycle = 1; updateProgress(); showBox('study-box'); };
+window.showDevPage = (name) => { document.getElementById('dev-title').innerText = name; showBox('dev-box'); };
+
+// 🔁 반복듣기 전용 기능
+window.startRepeatMode = () => {
+  showBox('repeat-box');
+  const listEl = document.getElementById('repeat-list');
+  listEl.innerHTML = ""; // 목록 초기화
+  currentData.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.id = `repeat-${idx}`;
+    div.innerHTML = `<div>${item.en}</div><div class="repeat-ko">${item.ko}</div>`;
+    listEl.appendChild(div);
+  });
+};
+
+window.runRepeatAudio = async function() {
+  const count = parseInt(document.getElementById('repeat-count').value) || 1;
+  isRepeating = true;
+  for (let c = 0; c < count; c++) {
+    if (!isRepeating) break;
+    for (let i = 0; i < currentData.length; i++) {
+      if (!isRepeating) break;
+      await playAudioPromise(i); // 한 문장씩 읽기
+    }
+    // ⭐ 사이클이 끝나면 딱 2초를 기다립니다.
+    if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
+  }
+  isRepeating = false;
+};
+
+function playAudioPromise(idx) {
+  return new Promise((resolve) => {
+    const item = currentData[idx];
+    const el = document.getElementById(`repeat-${idx}`);
+    // 가사 강조 표시
+    document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
+    if(el) {
+      el.classList.add('playing');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 자동으로 화면 이동
+    }
+    player.src = BASE_URL + currentType + "/" + item.audio;
+    player.play();
+    player.onended = () => resolve(); // 소리 끝나면 다음 문장으로
+  });
+}
 
 // ----------------------
 // 7. 학습 시작
