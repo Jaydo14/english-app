@@ -149,3 +149,21 @@ button {
   color: #888;
   margin-top: 3px;
 }
+
+/* 보조 버튼(Skip, 메뉴로) 전용 스타일 */
+.sub-action-btn {
+  width: 70% !important;    /* 버튼 너비를 70%로 줄임 (가운데 정렬됨) */
+  padding: 12px !important; /* 위아래 여백을 줄여서 크기 축소 */
+  font-size: 16px !important; /* 글자 크기 살짝 축소 */
+  background-color: #555 !important; /* 눈에 덜 띄는 회색 계열 */
+  color: white !important;
+  margin-top: 5px !important;
+  margin-left: auto !important; /* 좌우 마진 auto로 가운데 정렬 보장 */
+  margin-right: auto !important;
+}
+
+/* 마우스를 올리거나 터치했을 때 효과 */
+.sub-action-btn:active {
+  background-color: #444 !important;
+  transform: scale(0.98);
+}
