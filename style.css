@@ -150,16 +150,37 @@ button {
   margin-top: 3px;
 }
 
-/* 보조 버튼(Skip, 메뉴로) 전용 스타일 */
+/* 기존 스타일 유지하고 아래 내용만 추가/수정 하세요 */
+
 .sub-action-btn {
-  width: 70% !important;    /* 버튼 너비를 70%로 줄임 (가운데 정렬됨) */
-  padding: 12px !important; /* 위아래 여백을 줄여서 크기 축소 */
-  font-size: 16px !important; /* 글자 크기 살짝 축소 */
-  background-color: #555 !important; /* 눈에 덜 띄는 회색 계열 */
+  width: 70% !important;    /* 크기를 70%로 축소 */
+  padding: 12px !important; /* 높이를 줄임 */
+  font-size: 16px !important;
+  background-color: #555 !important;
   color: white !important;
   margin-top: 5px !important;
-  margin-left: auto !important; /* 좌우 마진 auto로 가운데 정렬 보장 */
+  margin-left: auto !important;
   margin-right: auto !important;
+}
+
+/* 반복듣기 강조 효과 */
+.repeat-item {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+
+.playing {
+  background-color: rgba(57, 255, 20, 0.2);
+  border: 1px solid #39ff14;
+}
+
+.repeat-ko {
+  font-size: 13px !important;
+  color: #888;
+  margin-top: 3px;
 }
 
 /* 마우스를 올리거나 터치했을 때 효과 */
