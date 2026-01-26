@@ -126,3 +126,26 @@ button {
   display: block; /* 다음 줄에 확실히 나오게 */
   margin-top: 4px;
 }
+
+/* 반복듣기 리스트 디자인 */
+.repeat-item {
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border: 1px solid transparent;
+  transition: all 0.3s;
+}
+
+/* ⭐ 현재 나오는 노래 가사처럼 강조되는 효과 */
+.playing {
+  background-color: rgba(57, 255, 20, 0.2);
+  border: 1px solid #39ff14;
+  font-weight: bold;
+}
+
+/* 한국어 해석은 작게 */
+.repeat-ko {
+  font-size: 13px !important;
+  color: #888;
+  margin-top: 3px;
+}
