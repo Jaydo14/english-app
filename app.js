@@ -8,7 +8,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumws
 
 const totalCycles = 18; 
 
-// [수정] 오타가 나기 쉬운 객체 구조를 깔끔하게 정리했습니다.
+// 유닛별 주제 데이터
 const bookDatabase = {
   "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
   "fc21u": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
@@ -23,7 +23,7 @@ let isRepeating = false;
 const player = new Audio();
 let wakeLock = null;
 
-// 효과음 설정 (contents/common/ 폴더에 업로드하신 파일)
+// 효과음 설정
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
@@ -40,7 +40,7 @@ function showBox(boxId) {
 }
 
 // ----------------------
-// 3. 로그인 및 유닛 선택
+// 3. 로그인 및 유닛 버튼 생성 (주제 로직 포함)
 // ----------------------
 window.login = function () {
   const phoneVal = document.getElementById("phone-input").value.trim();
@@ -56,7 +56,7 @@ window.login = function () {
     if (data.result === "success") {
       currentType = data.type;
       alert(`${data.name}님, 🔥오늘도 화이팅!🔥`);
-      renderUnitButtons();
+      renderUnitButtons(); // 버튼 생성 함수 호출
       showBox('unit-selector');
     } else {
       alert("등록되지 않은 번호입니다.");
@@ -66,12 +66,17 @@ window.login = function () {
   }).catch(() => { alert("접속 오류!"); loginBtn.disabled = false; });
 };
 
+// ⭐ [수정됨] 유닛 버튼에 주제(제목)를 다시 추가하는 함수입니다.
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
+  const currentTitles = bookDatabase[currentType] || {}; // 현재 교재의 제목 목록을 가져옵니다.
+
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    btn.innerHTML = `Unit ${i}`;
+    // 제목이 있으면 번호 아래에 작게 표시하고, 없으면 번호만 표시합니다.
+    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(0,0,0,0.6);">${currentTitles[i]}</span>` : "";
+    btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => selectUnit(i);
     container.appendChild(btn);
   }
@@ -139,12 +144,12 @@ recognizer.onresult = (event) => {
   targetWords.forEach(w => { if (userWords.includes(w)) matches++; });
 
   if (matches / targetWords.length >= 0.5) { // 50% 성공
-    successSound.play();
+    successSound.play().catch(e => {});
     document.getElementById("sentence").innerText = "Great!";
     document.getElementById("sentence").classList.add("success");
     setTimeout(nextStep, 700);
   } else {
-    failSound.play();
+    failSound.play().catch(e => {});
     document.getElementById("sentence").classList.add("fail");
     setTimeout(playSentence, 800);
   }
@@ -170,7 +175,7 @@ window.startRepeatMode = () => {
   currentData.forEach((item, idx) => {
     const div = document.createElement('div');
     div.className = 'repeat-item'; div.id = `repeat-${idx}`;
-    div.innerHTML = `<div>${item.en}</div><div class="repeat-ko">${item.ko}</div>`;
+    div.innerHTML = `<div>${item.en}</div><div class="repeat-ko" style="font-size:13px; color:#888;">${item.ko}</div>`;
     list.appendChild(div);
   });
 };
@@ -206,6 +211,7 @@ function updateProgress() {
 
 function sendDataToGoogle() {
   const phone = document.getElementById("phone-input").value.trim();
-  const data = { action: "save", phone: phone, unit: "Unit " + currentUnit, percent: document.getElementById("progress-percent").innerText.replace("%","") };
+  const percent = Math.floor((((cycle - 1) * currentData.length) + index) / (totalCycles * currentData.length) * 100);
+  const data = { action: "save", phone: phone, unit: "Unit " + currentUnit, percent: percent };
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
