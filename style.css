@@ -91,7 +91,7 @@ button {
 
 /* 실패 효과 */
 .fail {
-  color: red;
+  color: #ff4b4b;
   animation: shake 0.2s linear 3;
 }
 
