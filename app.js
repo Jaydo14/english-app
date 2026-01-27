@@ -6,7 +6,7 @@ const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumwsr9-BsBTYXeb_sFdBKBCwa0Vd1gMchYDryJ-dpSxinm5WDB2TjkkQ0d/exec"; 
 
-const totalCycles = 18; [cite_start]// 100% 기준 사이클 [cite: 3]
+const totalCycles = 18; [cite_start]// 100% 기준 사이클 [cite: 2]
 
 const bookDatabase = {
   "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
@@ -23,9 +23,9 @@ let index = 0;
 let cycle = 1;
 let isRepeating = false;
 const player = new Audio();
-let wakeLock = null; [cite_start]// 화면 꺼짐 방지용 [cite: 9]
+let wakeLock = null;
 
-// 효과음 설정 (common 폴더에 올린 파일 사용)
+// 효과음 설정
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
@@ -38,17 +38,18 @@ function showBox(boxId) {
     const el = document.getElementById(id);
     if(el) el.style.display = (id === boxId) ? 'block' : 'none';
   });
-  document.getElementById("app").style.display = "block";
+  const appContainer = document.getElementById("app");
+  if(appContainer) appContainer.style.display = "block";
 }
 
 async function requestWakeLock() {
   try {
     if ('wakeLock' in navigator) {
-      wakeLock = await navigator.wakeLock.request('screen'); [cite_start]// [cite: 9]
-      console.log('Wake Lock 활성화');
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('Wake Lock active');
     }
   } catch (err) {
-    console.log(`Wake Lock 에러: ${err.message}`); [cite_start]// [cite: 11]
+    console.log(`Wake Lock error: ${err.message}`);
   }
 }
 
@@ -71,7 +72,7 @@ window.login = function () {
       currentType = data.type; 
       alert(`${data.name}님, 오늘도 화이팅!`);
       renderUnitButtons();
-      [cite_start]showBox('unit-selector'); // 유닛 선택 화면으로 이동 [cite: 19]
+      showBox('unit-selector');
     } else {
       alert("등록되지 않은 번호입니다.");
       loginBtn.disabled = false;
@@ -86,6 +87,7 @@ window.login = function () {
 
 function renderUnitButtons() {
   const unitButtonsContainer = document.getElementById("unit-buttons");
+  if(!unitButtonsContainer) return;
   unitButtonsContainer.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
   for (let i = 1; i <= 8; i++) {
@@ -108,8 +110,9 @@ window.selectUnit = async function (n) {
   try {
     const response = await fetch(fullUrl);
     currentData = await response.json();
-    document.getElementById("menu-title").innerText = `Unit ${n} Menu`;
-    showBox('menu-box'); // 유닛 선택 후 메뉴판 노출
+    const menuTitle = document.getElementById("menu-title");
+    if(menuTitle) menuTitle.innerText = `Unit ${n} Menu`;
+    showBox('menu-box');
   } catch (error) {
     alert("파일을 찾을 수 없습니다.");
   }
@@ -118,7 +121,8 @@ window.selectUnit = async function (n) {
 window.showMenu = () => { stopRepeatAudio(); showBox('menu-box'); };
 window.goBackToUnits = () => showBox('unit-selector');
 window.showDevPage = (name) => {
-  document.getElementById('dev-title').innerText = name;
+  const devTitle = document.getElementById('dev-title');
+  if(devTitle) devTitle.innerText = name;
   showBox('dev-box');
 };
 
@@ -126,39 +130,46 @@ window.showDevPage = (name) => {
 [cite_start]// 6. Script 학습 모드 [cite: 28-33]
 // ----------------------
 window.startScriptMode = () => {
-  const phone = document.getElementById("phone-input").value.trim();
-  const saveKey = `save_${phone}_unit${currentUnit}`;
+  const phoneInput = document.getElementById("phone-input");
+  const saveKey = `save_${phoneInput.value.trim()}_unit${currentUnit}`;
   const savedData = localStorage.getItem(saveKey);
   index = 0; cycle = 1;
   if (savedData) {
     const parsed = JSON.parse(savedData);
-    index = parsed.index; cycle = parsed.cycle; [cite_start]// [cite: 25]
+    index = parsed.index; cycle = parsed.cycle;
   }
   updateProgress();
   showBox('study-box');
-  document.getElementById("sentence").innerText = "Start 버튼을 눌러주세요";
-  document.getElementById("sentence-kor").innerText = "";
+  const sentenceText = document.getElementById("sentence");
+  if(sentenceText) sentenceText.innerText = "Start 버튼을 눌러주세요";
+  const sentenceKor = document.getElementById("sentence-kor");
+  if(sentenceKor) sentenceKor.innerText = "";
 };
 
 window.startStudy = function () {
-  document.getElementById("start-btn").innerText = "Listen again";
-  document.getElementById("skip-btn").style.display = "inline-block";
-  requestWakeLock(); // 학습 시작 시 화면 켜짐 방지
+  const startBtn = document.getElementById("start-btn");
+  if(startBtn) startBtn.innerText = "Listen again";
+  const skipBtn = document.getElementById("skip-btn");
+  if(skipBtn) skipBtn.style.display = "inline-block";
+  requestWakeLock();
   playSentence();
 };
 
 function playSentence() {
   const sentenceText = document.getElementById("sentence");
+  if(!sentenceText) return;
   sentenceText.classList.remove("success", "fail");
   sentenceText.style.color = "#fff"; 
   const item = currentData[index];
   sentenceText.innerText = item.en;
-  document.getElementById("sentence-kor").innerText = item.ko;
+  const sentenceKor = document.getElementById("sentence-kor");
+  if(sentenceKor) sentenceKor.innerText = item.ko;
   updateProgress();
 
-  player.src = BASE_URL + currentType + "/" + item.audio;
-  player.play().catch(e => console.log(e));
-
+  if (item.audio) {
+    player.src = BASE_URL + currentType + "/" + item.audio;
+    player.play().catch(e => console.log(e));
+  }
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; 
     try { recognizer.start(); } catch(e) {}
@@ -185,17 +196,21 @@ recognizer.onresult = (event) => {
   const accuracy = matchCount / targetWords.length;
   const sText = document.getElementById("sentence");
 
-  [cite_start]if (accuracy >= 0.5) { // 50% 통과 시 성공 [cite: 38]
+  if (accuracy >= 0.5) { // 50% 통과 시 성공
     successSound.play().catch(e => {}); 
-    sText.innerText = "Great!";
-    sText.classList.add("success");
-    sText.style.color = "#39ff14"; 
+    if(sText) {
+        sText.innerText = "Great!";
+        sText.classList.add("success");
+        sText.style.color = "#39ff14"; 
+    }
     setTimeout(nextStep, 600); 
   } else {
     failSound.play().catch(e => {}); 
-    sText.innerText = "Try again";
-    sText.classList.add("fail");
-    sText.style.color = "#ff4b4b"; 
+    if(sText) {
+        sText.innerText = "Try again";
+        sText.classList.add("fail");
+        sText.style.color = "#ff4b4b"; 
+    }
     setTimeout(playSentence, 600);
   }
 };
@@ -204,8 +219,9 @@ window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
   index++; 
   if (index >= currentData.length) { index = 0; cycle++; }
-  const phone = document.getElementById("phone-input").value.trim();
-  localStorage.setItem(`save_${phone}_unit${currentUnit}`, JSON.stringify({index, cycle}));
+  const phoneInput = document.getElementById("phone-input");
+  const saveKey = `save_${phoneInput.value.trim()}_unit${currentUnit}`;
+  localStorage.setItem(saveKey, JSON.stringify({index, cycle}));
   sendDataToGoogle();
   if (cycle === totalCycles + 1) alert("🎉 100% 달성! 축하합니다!");
   playSentence();
@@ -217,6 +233,7 @@ window.nextStep = function() {
 window.startRepeatMode = () => {
   showBox('repeat-box');
   const list = document.getElementById('repeat-list');
+  if(!list) return;
   list.innerHTML = "";
   currentData.forEach((item, idx) => {
     const div = document.createElement('div');
@@ -227,7 +244,8 @@ window.startRepeatMode = () => {
 };
 
 window.runRepeatAudio = async function() {
-  const count = parseInt(document.getElementById('repeat-count').value) || 1;
+  const repeatCountInput = document.getElementById('repeat-count');
+  const count = parseInt(repeatCountInput ? repeatCountInput.value : 1) || 1;
   isRepeating = true;
   requestWakeLock();
   for (let c = 0; c < count; c++) {
@@ -242,7 +260,6 @@ window.runRepeatAudio = async function() {
         player.play(); player.onended = () => resolve();
       });
     }
-    // 사이클 종료 후 2초 대기
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -257,15 +274,17 @@ function updateProgress() {
   if (!currentData.length) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
-  document.getElementById("progress-percent").innerText = percent + "%"; [cite_start]// [cite: 51]
-  document.getElementById("progress").style.width = Math.min(percent, 100) + "%"; [cite_start]// [cite: 53]
+  const progressPercent = document.getElementById("progress-percent");
+  if(progressPercent) progressPercent.innerText = percent + "%";
+  const progressBar = document.getElementById("progress");
+  if(progressBar) progressBar.style.width = Math.min(percent, 100) + "%";
 }
 
 function sendDataToGoogle() {
-  const phone = document.getElementById("phone-input").value.trim();
+  const phoneInput = document.getElementById("phone-input");
   if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
-  const data = { action: "save", phone: phone, unit: "Unit " + currentUnit, percent: percent };
+  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: percent };
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
