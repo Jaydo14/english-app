@@ -1,12 +1,11 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역
+// 1. 기본 설정 (기존과 동일)
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvwEzNZcFXOphpArxHWMd4C9UBbNQWpBdHnD-J8IP-nXQorOXkBxqDXkirs-j6iNaW/exec"; 
 
-// [파트 관리 변수 추가]
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
 
@@ -16,7 +15,7 @@ const bookDatabase = {
 };
 
 // ----------------------
-// 2. 변수 및 오디오 설정 영역
+// 2. 변수 및 오디오 설정 (기존과 동일)
 // ----------------------
 let currentType = ""; 
 let currentUnit = 1;
@@ -31,7 +30,7 @@ const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
 // ----------------------
-// 3. 화면 관리 및 유틸리티 기능
+// 3. 화면 관리 (안정화)
 // ----------------------
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box'];
@@ -55,7 +54,7 @@ async function requestWakeLock() {
 }
 
 // ----------------------
-// 4. 로그인 및 유닛 버튼 생성 기능
+// 4. 로그인 및 유닛 버튼 (기존과 동일)
 // ----------------------
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
@@ -101,25 +100,19 @@ function renderUnitButtons() {
 }
 
 // ----------------------
-// 5. 메뉴 및 모드 제어 기능
+// 5. 메뉴 및 모드 제어 (안전장치 추가)
 // ----------------------
 window.selectUnit = async function (n) {
   currentUnit = n;
-  const fileName = `${currentType}${currentUnit}.json`;
-  const url = BASE_URL + currentType + "/" + fileName;
-
-  try {
-    const response = await fetch(url);
-    currentData = await response.json();
-    const menuTitle = document.getElementById("menu-title");
-    if(menuTitle) menuTitle.innerText = `Unit ${n} Menu`;
-    showBox('menu-box');
-  } catch (error) {
-    alert("파일을 찾을 수 없습니다.");
-  }
+  showBox('menu-box'); // 파일 로딩 전 미리 메뉴 박스로 이동하여 흐름 끊김 방지
+  const menuTitle = document.getElementById("menu-title");
+  if(menuTitle) menuTitle.innerText = `Unit ${n} Menu`;
 };
 
-window.showMenu = () => { stopRepeatAudio(); showBox('menu-box'); };
+window.showMenu = () => { 
+  stopRepeatAudio(); 
+  showBox('menu-box'); 
+};
 window.goBackToUnits = () => showBox('unit-selector');
 window.showDevPage = (name) => {
   const devTitle = document.getElementById('dev-title');
@@ -128,21 +121,18 @@ window.showDevPage = (name) => {
 };
 
 // ----------------------
-// 6. 학습 모드 기능 (Script / Voca 파트 구분 로직)
+// 6. 학습 모드 기능 (대소문자 및 로딩 실패 대응)
 // ----------------------
-
-// [수정] Script 모드 시작: 항상 원래의 Script 파일을 새로 불러옵니다.
 window.startScriptMode = async function() {
   currentPart = "Script";
-  currentTotalCycles = 18; // Script는 18바퀴 기준
-  
-  // 원래의 Script 파일명 (예: hc12u1.json)
-  const fileName = `${currentType}${currentUnit}.json`;
-  const url = BASE_URL + currentType + "/" + fileName;
+  currentTotalCycles = 18;
+  const fileName = `${currentType.toLowerCase()}${currentUnit}.json`; // 소문자 강제 적용
+  const url = BASE_URL + currentType.toLowerCase() + "/" + fileName;
 
   try {
     const response = await fetch(url);
-    currentData = await response.json(); // 데이터를 Script로 교체
+    if (!response.ok) throw new Error("File not found");
+    currentData = await response.json();
     
     const phone = document.getElementById("phone-input").value.trim();
     const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_script`);
@@ -152,37 +142,35 @@ window.startScriptMode = async function() {
     updateProgress();
     showBox('study-box');
   } catch (error) {
-    alert("Script 파일을 찾을 수 없습니다.");
+    alert(`[Script] 데이터를 불러올 수 없습니다.\nGitHub에 '${currentType.toLowerCase()}/${currentType.toLowerCase()}${currentUnit}.json' 파일이 있는지 확인하세요.`);
   }
 };
 
-// [유지] Voca 모드 시작: Voca 전용 파일을 불러옵니다.
 window.startVocaMode = async function() {
   currentPart = "Voca"; 
-  currentTotalCycles = 10; // Voca는 10바퀴 기준
-  
-  const phone = document.getElementById("phone-input").value.trim();
-  const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_voca`);
-  
-  // Voca 전용 파일명 (예: hc12u1_voca.json)
-  const fileName = `${currentType}${currentUnit}_voca.json`;
-  const url = BASE_URL + currentType + "/" + fileName;
+  currentTotalCycles = 10;
+  const fileName = `${currentType.toLowerCase()}${currentUnit}_voca.json`;
+  const url = BASE_URL + currentType.toLowerCase() + "/" + fileName;
 
   try {
     const response = await fetch(url);
-    currentData = await response.json(); // 데이터를 Voca로 교체
+    if (!response.ok) throw new Error("File not found");
+    currentData = await response.json();
     
+    const phone = document.getElementById("phone-input").value.trim();
+    const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_voca`);
     index = 0; cycle = 1;
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     
     updateProgress();
     showBox('study-box');
   } catch (error) {
-    alert("Voca 파일을 찾을 수 없습니다.");
+    alert(`[Voca] 데이터를 불러올 수 없습니다.\n파일명이 '${currentType.toLowerCase()}${currentUnit}_voca.json' 인지 확인하세요.`);
   }
 };
 
 window.startStudy = function () {
+  if (currentData.length === 0) return alert("학습 데이터가 없습니다.");
   const startBtn = document.getElementById("start-btn");
   if(startBtn) startBtn.innerText = "Listen again";
   const skipBtn = document.getElementById("skip-btn");
@@ -192,6 +180,7 @@ window.startStudy = function () {
 };
 
 function playSentence() {
+  if (!currentData[index]) return; // 데이터가 없을 경우 실행 중단
   const sText = document.getElementById("sentence");
   if(!sText) return;
   sText.classList.remove("success", "fail");
@@ -203,7 +192,7 @@ function playSentence() {
   updateProgress();
 
   player.src = BASE_URL + currentType + "/" + item.audio;
-  player.play();
+  player.play().catch(e => console.log("Audio play error:", e));
   player.onended = () => {
     sText.style.color = "#ffff00";
     try { recognizer.start(); } catch(e) {}
@@ -211,13 +200,50 @@ function playSentence() {
 }
 
 // ----------------------
-// 7. 음성 인식 및 정확도 체크 기능
+// 7. 음성 인식 (데이터 유효성 검사 추가)
 // ----------------------
-// (기존 사용자님의 recognizer.onresult 로직을 그대로 유지하세요)
-// ... 중간 생략 ...
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognizer = new SpeechRecognition();
+recognizer.lang = "en-US";
+
+recognizer.onresult = (event) => {
+  if (!currentData[index]) return; // 안전장치
+  const spoken = event.results[0][0].transcript;
+  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
+  const userWords = clean(spoken).split(/\s+/);
+  const targetWords = clean(currentData[index].en).split(/\s+/);
+  
+  let matches = 0;
+  targetWords.forEach(w => { if (userWords.includes(w)) matches++; });
+
+  const accuracy = matches / targetWords.length;
+  const sText = document.getElementById("sentence");
+
+  if (accuracy >= 0.6) { 
+    successSound.play().catch(e => {}); 
+    const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
+    const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
+    
+    if(sText) {
+        sText.innerText = randomPraise;
+        sText.classList.add("success");
+        sText.style.color = "#39ff14";
+    }
+    setTimeout(nextStep, 700); 
+  } else {
+    failSound.play().catch(e => {}); 
+    if(sText) {
+        sText.innerText = "Try again";
+        sText.classList.add("fail");
+        sText.style.color = "#ff4b4b"
+    }
+    setTimeout(playSentence, 800); 
+  }
+};
 
 window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
+  if (currentData.length === 0) return;
   index++; 
   if (index >= currentData.length) { index = 0; cycle++; }
   const phone = document.getElementById("phone-input").value.trim();
@@ -233,16 +259,16 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. 반복 듣기 모드 기능
+// 8. 반복 듣기 모드 (복구)
 // ----------------------
-// [수정] 반복듣기 시작: 항상 원래의 Script 문장들이 나오도록 새로 불러옵니다.
 window.startRepeatMode = async function() {
-  const fileName = `${currentType}${currentUnit}.json`;
-  const url = BASE_URL + currentType + "/" + fileName;
+  const fileName = `${currentType.toLowerCase()}${currentUnit}.json`;
+  const url = BASE_URL + currentType.toLowerCase() + "/" + fileName;
 
   try {
     const response = await fetch(url);
-    currentData = await response.json(); // 데이터를 Script로 복구
+    if (!response.ok) throw new Error("File not found");
+    currentData = await response.json();
 
     showBox('repeat-box');
     const list = document.getElementById('repeat-list');
@@ -255,17 +281,40 @@ window.startRepeatMode = async function() {
       list.appendChild(div);
     });
   } catch (error) {
-    alert("데이터를 불러올 수 없습니다.");
+    alert("데이터를 불러올 수 없습니다. GitHub 파일명을 확인하세요.");
   }
 };
 
-// (runRepeatAudio 함수는 기존 그대로 유지)
+window.runRepeatAudio = async function() {
+  const countInput = document.getElementById('repeat-count');
+  const count = parseInt(countInput ? countInput.value : 3) || 3;
+  isRepeating = true;
+  requestWakeLock();
+  for (let c = 0; c < count; c++) {
+    if (!isRepeating) break;
+    for (let i = 0; i < currentData.length; i++) {
+      if (!isRepeating) break;
+      await new Promise((resolve) => {
+        document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
+        const el = document.getElementById(`repeat-${i}`);
+        if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        player.src = `${BASE_URL}${currentType}/${currentData[i].audio}`;
+        player.play(); player.onended = () => resolve();
+      });
+    }
+    sendDataToGoogle("반복듣기", (c + 1) + " cycle");
+    if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
+  }
+  isRepeating = false;
+};
+
+window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
 
 // ----------------------
-// 9. 진행률 계산 및 구글 전송 기능
+// 9. 진행률 및 구글 전송 (기존 동일)
 // ----------------------
 function updateProgress() {
-  if (!currentData.length) return;
+  if (!currentData || currentData.length === 0) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   const progressPercent = document.getElementById("progress-percent");
@@ -274,11 +323,9 @@ function updateProgress() {
   if(progressBar) progressBar.style.width = Math.min(percent, 100) + "%";
 }
 
-// [수정] part 파라미터를 추가했습니다.
 function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
   if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
-  
   const data = { 
     action: "save", 
     phone: phoneInput.value.trim(), 
