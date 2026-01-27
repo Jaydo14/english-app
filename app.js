@@ -6,7 +6,7 @@ const REPO_NAME = "english-app"; // 깃허브 저장소 이름
 // 깃허브에 올린 음원 및 데이터 파일이 있는 경로 주소입니다.
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // 학습 기록을 저장할 구글 앱스 스크립트의 주소입니다.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby59SUYVVYThHqgp6-AcW6Ecvd3idY-6QiAl0Ze5H8avOTzrCe9fuQiQS8qusWGgIrA/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9oplNHbZ2xy35okdj_H0NhW_l1ajzc9-ItrL-WOFM3Cf1Mmra4akH8QSZsEQxgeD-/exec"; 
 
 const totalCycles = 18; // 진도율 100%를 만들기 위해 반복해야 하는 횟수입니다.
 
