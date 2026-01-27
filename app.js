@@ -59,7 +59,7 @@ window.login = function () {
   .then(data => {
     if (data.result === "success") {
       currentType = data.type; 
-      alert(`${data.name}님, 오늘도 화이팅!`);
+      alert(`${data.name}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
       showBox('unit-selector');
     } else {
