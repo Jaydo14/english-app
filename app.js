@@ -1,5 +1,5 @@
 // ======================================================
-// 1. 기본 설정 및 상수
+// 1. 기본 설정 및 상수 [cite: 1-4]
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
@@ -8,12 +8,14 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4tsK2iqumws
 
 const totalCycles = 18; 
 
-// 유닛별 주제 데이터
 const bookDatabase = {
   "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
   "fc21u": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
 };
 
+// ----------------------
+// 2. 변수 및 오디오 설정 [cite: 5-9]
+// ----------------------
 let currentType = ""; 
 let currentUnit = 1;
 let currentData = []; 
@@ -21,14 +23,14 @@ let index = 0;
 let cycle = 1;
 let isRepeating = false;
 const player = new Audio();
-let wakeLock = null;
+let wakeLock = null; // 화면 꺼짐 방지 변수 [cite: 9]
 
 // 효과음 설정
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
 // ----------------------
-// 2. 화면 관리 함수
+// 3. 화면 관리 및 꺼짐 방지 로직 
 // ----------------------
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box'];
@@ -39,134 +41,187 @@ function showBox(boxId) {
   document.getElementById("app").style.display = "block";
 }
 
+// ⭐ [복구] 화면 꺼짐 방지 함수 [cite: 9-11]
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('Wake Lock 활성화');
+    }
+  } catch (err) {
+    console.log(`Wake Lock 에러: ${err.name}, ${err.message}`); [cite: 11]
+  }
+}
+
+// 화면이 다시 보일 때 다시 활성화 [cite: 12]
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    await requestWakeLock();
+  }
+});
+
 // ----------------------
-// 3. 로그인 및 유닛 버튼 생성 (주제 로직 포함)
+// 4. 로그인 및 유닛 생성 [cite: 13-19]
 // ----------------------
 window.login = function () {
-  const phoneVal = document.getElementById("phone-input").value.trim();
-  if (phoneVal.length < 1) return alert("번호를 입력해주세요.");
+  const phoneInput = document.getElementById("phone-input");
+  const inputVal = phoneInput.value.trim();
+  if (inputVal.length < 1) return alert("번호를 입력해주세요.");
   
   const loginBtn = document.querySelector("#login-box button");
   loginBtn.disabled = true;
-  loginBtn.innerText = "Checking...";
+  loginBtn.innerText = "확인 중...";
 
-  fetch(GOOGLE_SCRIPT_URL + "?phone=" + phoneVal)
+  fetch(GOOGLE_SCRIPT_URL + "?phone=" + inputVal)
   .then(res => res.json())
   .then(data => {
     if (data.result === "success") {
-      currentType = data.type;
-      alert(`${data.name}님, 🔥오늘도 화이팅!🔥`);
-      renderUnitButtons(); // 버튼 생성 함수 호출
+      currentType = data.type; 
+      alert(`${data.name}님, 🔥오늘도 화이팅!🔥`); [cite: 18]
+      renderUnitButtons();
       showBox('unit-selector');
     } else {
-      alert("등록되지 않은 번호입니다.");
+      alert("등록되지 않은 번호입니다."); [cite: 19]
       loginBtn.disabled = false;
       loginBtn.innerText = "Login";
     }
   }).catch(() => { alert("접속 오류!"); loginBtn.disabled = false; });
 };
 
-// ⭐ [수정됨] 유닛 버튼에 주제(제목)를 다시 추가하는 함수입니다.
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
-  const currentTitles = bookDatabase[currentType] || {}; // 현재 교재의 제목 목록을 가져옵니다.
-
+  const currentTitles = bookDatabase[currentType] || {};
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    // 제목이 있으면 번호 아래에 작게 표시하고, 없으면 번호만 표시합니다.
-    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(0,0,0,0.6);">${currentTitles[i]}</span>` : "";
+    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(0,0,0,0.6);">${currentTitles[i]}</span>` : ""; [cite: 15]
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => selectUnit(i);
     container.appendChild(btn);
   }
 }
 
+// ----------------------
+// 5. 유닛 선택 및 메뉴 [cite: 20-27]
+// ----------------------
 window.selectUnit = async function (n) {
   currentUnit = n;
-  const url = `${BASE_URL}${currentType}/${currentType}${n}.json`;
+  const fileName = `${currentType}${currentUnit}.json`;
+  const fullUrl = BASE_URL + currentType + "/" + fileName; [cite: 21]
+
   try {
-    const res = await fetch(url);
-    currentData = await res.json();
+    const response = await fetch(fullUrl);
+    currentData = await response.json(); [cite: 23]
     document.getElementById("menu-title").innerText = `Unit ${n} Menu`;
-    showBox('menu-box');
-  } catch (e) { alert("파일을 찾을 수 없습니다."); }
+    showBox('menu-box'); 
+  } catch (error) {
+    alert(`[오류] 파일을 찾을 수 없습니다.`); [cite: 27]
+  }
 };
 
 window.showMenu = () => { stopRepeatAudio(); showBox('menu-box'); };
 window.goBackToUnits = () => showBox('unit-selector');
-window.showDevPage = (name) => { document.getElementById('dev-title').innerText = name; showBox('dev-box'); };
+window.showDevPage = (name) => {
+  document.getElementById('dev-title').innerText = name;
+  showBox('dev-box');
+};
 
 // ----------------------
-// 4. Script 학습 (50% 인식 로직)
+// 6. Script 학습 모드 [cite: 28-33]
 // ----------------------
 window.startScriptMode = () => {
-  const phone = document.getElementById("phone-input").value.trim();
-  const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}`);
+  const phoneInput = document.getElementById("phone-input");
+  const saveKey = `save_${phoneInput.value.trim()}_unit${currentUnit}`;
+  const savedData = localStorage.getItem(saveKey); [cite: 24]
   index = 0; cycle = 1;
-  if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
+  if (savedData) {
+    const parsed = JSON.parse(savedData);
+    index = parsed.index; cycle = parsed.cycle; [cite: 25]
+  }
   updateProgress();
   showBox('study-box');
   document.getElementById("sentence").innerText = "Start 버튼을 눌러주세요";
   document.getElementById("sentence-kor").innerText = "";
 };
 
-window.startStudy = () => {
+window.startStudy = function () {
   document.getElementById("start-btn").innerText = "Listen again";
-  document.getElementById("skip-btn").style.display = "inline-block";
+  document.getElementById("skip-btn").style.display = "inline-block"; [cite: 29]
+  requestWakeLock(); // ⭐ 학습 시작 시 화면 꺼짐 방지 활성화 
   playSentence();
 };
 
 function playSentence() {
-  const sText = document.getElementById("sentence");
-  sText.classList.remove("success", "fail");
-  sText.style.color = "#fff";
+  const sentenceText = document.getElementById("sentence");
+  const sentenceKor = document.getElementById("sentence-kor");
+  sentenceText.classList.remove("success", "fail");
+  sentenceText.style.color = "#fff"; [cite: 30]
   const item = currentData[index];
-  sText.innerText = item.en;
-  document.getElementById("sentence-kor").innerText = item.ko;
+  sentenceText.innerText = item.en;
+  sentenceKor.innerText = item.ko; [cite: 30]
   updateProgress();
 
-  player.src = BASE_URL + currentType + "/" + item.audio;
-  player.play();
-  player.onended = () => { sText.style.color = "#ffff00"; try { recognizer.start(); } catch(e) {} };
+  if (item.audio) {
+    player.src = BASE_URL + currentType + "/" + item.audio; [cite: 31]
+    player.play().catch(e => console.log(e));
+  }
+  player.onended = () => {
+    sentenceText.style.color = "#ffff00"; [cite: 33]
+    try { recognizer.start(); } catch(e) {}
+  };
 }
 
+// ----------------------
+// 7. 음성 인식 및 정확도 (50%) [cite: 34-39]
+// ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
-recognizer.lang = "en-US";
+recognizer.lang = "en-US"; [cite: 35]
+
 recognizer.onresult = (event) => {
   const spoken = event.results[0][0].transcript;
-  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
-  const userWords = clean(spoken).split(/\s+/);
-  const targetWords = clean(currentData[index].en).split(/\s+/);
+  const target = currentData[index].en;
   
-  let matches = 0;
-  targetWords.forEach(w => { if (userWords.includes(w)) matches++; });
+  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
+  const userWords = clean(spoken).split(/\s+/); 
+  const targetWords = clean(target).split(/\s+/);
 
-  if (matches / targetWords.length >= 0.5) { // 50% 성공
-    successSound.play().catch(e => {});
-    document.getElementById("sentence").innerText = "Great!";
-    document.getElementById("sentence").classList.add("success");
-    setTimeout(nextStep, 700);
+  let matchCount = 0;
+  targetWords.forEach(word => { if (userWords.includes(word)) matchCount++; });
+
+  const accuracy = matchCount / targetWords.length;
+  const sentenceText = document.getElementById("sentence");
+
+  if (accuracy >= 0.5) { // 50% 성공 로직 [cite: 38]
+    successSound.play().catch(e => {}); 
+    sentenceText.innerText = "Great!";
+    sentenceText.classList.add("success");
+    sentenceText.style.color = "#39ff14"; [cite: 38]
+    setTimeout(nextStep, 500); 
   } else {
-    failSound.play().catch(e => {});
-    document.getElementById("sentence").classList.add("fail");
-    setTimeout(playSentence, 800);
+    failSound.play().catch(e => {}); 
+    sentenceText.innerText = "Try again";
+    sentenceText.classList.add("fail");
+    sentenceText.style.color = "#ff4b4b"; [cite: 39]
+    setTimeout(playSentence, 500);
   }
 };
 
-window.nextStep = () => {
+window.nextStep = function() {
   try { recognizer.abort(); } catch(e) {}
-  index++;
+  index++; 
+  const phoneInput = document.getElementById("phone-input");
+  const userPhone = phoneInput.value.trim();
+  const saveKey = `save_${userPhone}_unit${currentUnit}`; [cite: 40]
   if (index >= currentData.length) { index = 0; cycle++; }
-  const phone = document.getElementById("phone-input").value.trim();
-  localStorage.setItem(`save_${phone}_unit${currentUnit}`, JSON.stringify({index, cycle}));
+  localStorage.setItem(saveKey, JSON.stringify({index, cycle})); [cite: 41]
   sendDataToGoogle();
+  if (cycle === totalCycles + 1) alert("🎉 100% 달성! 축하합니다!"); [cite: 43]
   playSentence();
 };
 
 // ----------------------
-// 5. 반복 듣기 (2초 대기)
+// 8. 반복 듣기 (2초 대기 + 강조)
 // ----------------------
 window.startRepeatMode = () => {
   showBox('repeat-box');
@@ -183,6 +238,8 @@ window.startRepeatMode = () => {
 window.runRepeatAudio = async function() {
   const count = parseInt(document.getElementById('repeat-count').value) || 1;
   isRepeating = true;
+  requestWakeLock(); // ⭐ 반복 재생 중에도 화면 꺼짐 방지
+  
   for (let c = 0; c < count; c++) {
     if (!isRepeating) break;
     for (let i = 0; i < currentData.length; i++) {
@@ -191,7 +248,7 @@ window.runRepeatAudio = async function() {
         document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        player.src = BASE_URL + currentType + "/" + currentData[i].audio;
+        player.src = `${BASE_URL}${currentType}/${currentData[i].audio}`;
         player.play(); player.onended = () => resolve();
       });
     }
@@ -202,16 +259,24 @@ window.runRepeatAudio = async function() {
 
 window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
 
+// ----------------------
+// 9. 진행률 및 구글 전송 [cite: 45-53]
+// ----------------------
+function getGlobalProgress() {
+  if (!currentData.length) return 0; [cite: 45]
+  const currentCount = ((cycle - 1) * currentData.length) + index; [cite: 46]
+  return Math.floor((currentCount / (totalCycles * currentData.length)) * 100); [cite: 47]
+}
+
 function updateProgress() {
-  if (!currentData.length) return;
-  const percent = Math.floor((((cycle - 1) * currentData.length) + index) / (totalCycles * currentData.length) * 100);
-  document.getElementById("progress-percent").innerText = percent + "%";
-  document.getElementById("progress").style.width = Math.min(percent, 100) + "%";
+  const percent = getGlobalProgress();
+  document.getElementById("progress-percent").innerText = percent + "%"; [cite: 51]
+  document.getElementById("progress").style.width = Math.min(percent, 100) + "%"; [cite: 53]
 }
 
 function sendDataToGoogle() {
-  const phone = document.getElementById("phone-input").value.trim();
-  const percent = Math.floor((((cycle - 1) * currentData.length) + index) / (totalCycles * currentData.length) * 100);
-  const data = { action: "save", phone: phone, unit: "Unit " + currentUnit, percent: percent };
-  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
+  const phoneInput = document.getElementById("phone-input");
+  if (!GOOGLE_SCRIPT_URL.startsWith("http")) return; [cite: 48]
+  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: getGlobalProgress() }; [cite: 49]
+  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) }); [cite: 50]
 }
