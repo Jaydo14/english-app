@@ -59,7 +59,7 @@ window.login = function () {
   .then(data => {
     if (data.result === "success") {
       currentType = data.type; 
-      alert(`${data.name}님, 🔥오늘도 화이팅 입니다!🔥`);
+      alert(`${data.name}님, 오늘도 화이팅!`);
       renderUnitButtons();
       showBox('unit-selector');
     } else {
@@ -207,7 +207,8 @@ window.startRepeatMode = () => {
 
 window.runRepeatAudio = async function() {
   isRepeating = true;
-  const count = parseInt(document.getElementById('repeat-count').value) || 1;
+  const countInput = document.getElementById('repeat-count');
+  const count = parseInt(countInput ? countInput.value : 3) || 3;
   requestWakeLock();
   for (let c = 0; c < count; c++) {
     if (!isRepeating) break;
@@ -217,7 +218,7 @@ window.runRepeatAudio = async function() {
         document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        player.src = BASE_URL + currentType + "/" + currentData[i].audio;
+        player.src = `${BASE_URL}${currentType}/${currentData[i].audio}`;
         player.play(); player.onended = () => resolve();
       });
     }
@@ -228,7 +229,7 @@ window.runRepeatAudio = async function() {
 
 window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
 
-// 7. 진행률
+// 7. 진행률 및 데이터 전송
 function updateProgress() {
   if (!currentData.length) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
@@ -241,7 +242,8 @@ function updateProgress() {
 
 function sendDataToGoogle() {
   const phoneInput = document.getElementById("phone-input");
-  const percent = Math.floor((((cycle - 1) * currentData.length) + index) / (totalCycles * currentData.length) * 100);
-  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: percent };
+  const currentCount = ((cycle - 1) * currentData.length) + index;
+  const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
+  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: percent + "%" };
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
