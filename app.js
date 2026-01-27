@@ -166,7 +166,7 @@ recognizer.onresult = (event) => {
   let matchCount = 0;
   targetWords.forEach(word => { if (userWords.includes(word)) matchCount++; });
 
-  if (matchCount / targetWords.length >= 0.5) {
+  if (matchCount / targetWords.length >= 0.6) {
     successSound.play().catch(e => {}); 
     const sText = document.getElementById("sentence");
     if(sText) { sText.innerText = "Great!"; sText.classList.add("success"); sText.style.color = "#39ff14"; }
