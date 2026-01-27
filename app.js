@@ -6,7 +6,7 @@ const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvwEzNZcFXOphpArxHWMd4C9UBbNQWpBdHnD-J8IP-nXQorOXkBxqDXkirs-j6iNaW/exec"; 
 
-// [수정] 파트별로 목표 사이클을 다르게 관리합니다.
+// [파트 관리 변수 추가]
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
 
@@ -128,12 +128,11 @@ window.showDevPage = (name) => {
 };
 
 // ----------------------
-// 6. 학습 모드 기능 (Script / Voca)
+// 6. 학습 모드 기능 (Script / Voca 통합)
 // ----------------------
-// [기존] Script 모드 시작
 window.startScriptMode = () => {
   currentPart = "Script";
-  currentTotalCycles = 18; // 18바퀴 목표
+  currentTotalCycles = 18;
   const phone = document.getElementById("phone-input").value.trim();
   const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_script`);
   index = 0; cycle = 1;
@@ -142,15 +141,13 @@ window.startScriptMode = () => {
   showBox('study-box');
 };
 
-// [신규] Voca 모드 시작
 window.startVocaMode = async function() {
   currentPart = "Voca"; 
-  currentTotalCycles = 10; // 10바퀴 목표
+  currentTotalCycles = 10;
   
   const phone = document.getElementById("phone-input").value.trim();
   const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_voca`);
   
-  // Voca용 파일명: hc12u1_voca.json 형식
   const fileName = `${currentType}${currentUnit}_voca.json`;
   const url = BASE_URL + currentType + "/" + fileName;
 
@@ -162,7 +159,7 @@ window.startVocaMode = async function() {
     updateProgress();
     showBox('study-box');
   } catch (error) {
-    alert("Voca 파일을 찾을 수 없습니다. (파일명 확인 필요)");
+    alert("Voca 파일을 찾을 수 없습니다.");
   }
 };
 
@@ -241,11 +238,10 @@ window.nextStep = function() {
   if (index >= currentData.length) { index = 0; cycle++; }
   const phone = document.getElementById("phone-input").value.trim();
   
-  // 파트별로 로컬 저장을 따로 합니다.
   const saveSuffix = currentPart === "Voca" ? "_voca" : "_script";
   localStorage.setItem(`save_${phone}_unit${currentUnit}${saveSuffix}`, JSON.stringify({index, cycle}));
   
-  // 구글 시트로 현재 파트 정보와 진도를 보냅니다.
+  // [수정] 현재 파트(Script/Voca) 정보를 함께 전송합니다.
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
@@ -286,9 +282,9 @@ window.runRepeatAudio = async function() {
         player.play(); player.onended = () => resolve();
       });
     }
-    // 한 사이클 완료 시 '반복듣기' 파트로 기록 전송
+    // [저장] 반복듣기 사이클 기록
     sendDataToGoogle("반복듣기", (c + 1) + " cycle");
-
+    
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -297,7 +293,7 @@ window.runRepeatAudio = async function() {
 window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
 
 // ----------------------
-// 9. 진행률 및 구글 전송 기능
+// 9. 진행률 계산 및 구글 전송 기능
 // ----------------------
 function updateProgress() {
   if (!currentData.length) return;
@@ -309,9 +305,11 @@ function updateProgress() {
   if(progressBar) progressBar.style.width = Math.min(percent, 100) + "%";
 }
 
+// [수정] part 파라미터를 추가했습니다.
 function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
   if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
+  
   const data = { 
     action: "save", 
     phone: phoneInput.value.trim(), 
