@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // 사용자님이 제공해주신 최신 GAS 주소입니다.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxEQ7Xtb5f2iGuvp0Ttrx_tuf4sr4JrsKJtrlNpRloa2buzh7cv32vXC9XXLi4ib4/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3oU2PWdhyXM8e0dSz-LuSXZF2bVP8SFap5koyjXToAg1MoOJb_Lh-6-3WLAwt8C_0/exec"; 
 
 const totalCycles = 18; 
 
@@ -292,5 +292,15 @@ function sendDataToGoogle(part, val) {
     percent: val,
     part: part 
   };
-  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
+  
+  // ⭐ 보낸 데이터를 크롬 콘솔창에 띄워줍니다.
+  console.log("구글로 보내는 데이터:", data);
+  
+  fetch(GOOGLE_SCRIPT_URL, { 
+    method: "POST", 
+    mode: "no-cors", 
+    body: JSON.stringify(data) 
+  }).then(() => {
+    console.log(part + " 저장 요청 완료!");
+  });
 }
