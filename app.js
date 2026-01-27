@@ -6,7 +6,7 @@ const REPO_NAME = "english-app"; // 깃허브 저장소 이름
 // 깃허브에 올린 음원 및 데이터 파일이 있는 경로 주소입니다.
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // 학습 기록을 저장할 구글 앱스 스크립트의 주소입니다.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9oplNHbZ2xy35okdj_H0NhW_l1ajzc9-ItrL-WOFM3Cf1Mmra4akH8QSZsEQxgeD-/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7NTgTRHQ5unvVlnbcviiECu1LLEASbNju9A4K3kjW8ZTgL7Cvhcd2dIjAQv2yTD_g/exec"; 
 
 const totalCycles = 18; // 진도율 100%를 만들기 위해 반복해야 하는 횟수입니다.
 
@@ -175,80 +175,24 @@ function playSentence() {
   };
 }
 
-// ----------------------
-// 7. 음성 인식 및 정확도 체크 기능
-// ----------------------
-window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognizer = new SpeechRecognition();
-recognizer.lang = "en-US"; // 영어 인식 설정
 
-recognizer.onresult = (event) => {
-  const spoken = event.results[0][0].transcript; // 사용자가 말한 내용
-  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
-  const userWords = clean(spoken).split(/\s+/);
-  const targetWords = clean(currentData[index].en).split(/\s+/);
-  
-  let matches = 0;
-  targetWords.forEach(w => { if (userWords.includes(w)) matches++; });
-
-  const accuracy = matches / targetWords.length;
-  const sText = document.getElementById("sentence");
-
-  if (accuracy >= 0.6) { // 단어의 50% 이상을 맞추면 성공으로 간주합니다.
-    successSound.play().catch(e => {}); 
-    
-    // ⭐ 칭찬 문구 리스트를 만듭니다. (원하는 문구를 추가/삭제할 수 있어요!)
-    const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
-    // ⭐ 리스트에서 하나를 무작위로 고릅니다.
-    const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
-    
-    if(sText) {
-        sText.innerText = randomPraise; // "Great!" 대신 랜덤 문구가 나옵니다.
-        sText.classList.add("success");
-        sText.style.color = "#39ff14";
-    }
-    setTimeout(nextStep, 700); // 0.7초 후 다음 문장으로 이동
-  } else {
-    failSound.play().catch(e => {}); // 삑! 효과음
-    if(sText) {
-        sText.innerText = "Try again";
-        sText.classList.add("fail");
-        sText.style.color = "#ff4b4b"
-    }
-    setTimeout(playSentence, 800); // 0.8초 후 문장 다시 들려주기
-  }
-};
-
-// 다음 단계(문장)로 넘어가는 함수입니다.
+// [수정] 7. 음성 인식 부분 (nextStep 호출 시 파트 지정)
 window.nextStep = function() {
-  try { recognizer.abort(); } catch(e) {} // 인식기 중단
-  index++; // 문장 번호 증가
-  if (index >= currentData.length) { index = 0; cycle++; } // 유닛 한 바퀴 다 돌면 사이클 증가
+  try { recognizer.abort(); } catch(e) {}
+  index++; 
+  if (index >= currentData.length) { index = 0; cycle++; }
   const phone = document.getElementById("phone-input").value.trim();
-  // 휴대폰 내부에 실시간 공부 기록을 저장합니다.
   localStorage.setItem(`save_${phone}_unit${currentUnit}`, JSON.stringify({index, cycle}));
-  sendDataToGoogle(); // 구글 시트로 진도율 데이터를 전송합니다.
+  
+  // ⭐ 학습 진도(%)를 'Script' 파트로 보냅니다.
+  const currentCount = ((cycle - 1) * currentData.length) + index;
+  const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
+  sendDataToGoogle("Script", percent + "%"); 
+  
   playSentence();
 };
 
-// ----------------------
-// 8. 반복 듣기 모드 기능
-// ----------------------
-window.startRepeatMode = () => {
-  showBox('repeat-box');
-  const list = document.getElementById('repeat-list');
-  if(!list) return;
-  list.innerHTML = "";
-  // 현재 유닛의 모든 문장을 목록으로 만듭니다.
-  currentData.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'repeat-item'; div.id = `repeat-${idx}`;
-    div.innerHTML = `<div>${item.en}</div><div class="repeat-ko" style="font-size:13px; color:#888;">${item.ko}</div>`;
-    list.appendChild(div);
-  });
-};
-
-// 목록에 있는 문장들을 지정한 횟수만큼 자동 재생하는 함수입니다.
+// [수정] 8. 반복 듣기 부분 (재생 완료 시 사이클 기록)
 window.runRepeatAudio = async function() {
   const countInput = document.getElementById('repeat-count');
   const count = parseInt(countInput ? countInput.value : 3) || 3;
@@ -259,26 +203,22 @@ window.runRepeatAudio = async function() {
     for (let i = 0; i < currentData.length; i++) {
       if (!isRepeating) break;
       await new Promise((resolve) => {
-        // 재생 중인 문장에 초록색 강조 테두리를 줍니다.
         document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         player.src = `${BASE_URL}${currentType}/${currentData[i].audio}`;
-        player.play(); player.onended = () => resolve(); // 소리가 끝나면 다음 문장으로
+        player.play(); player.onended = () => resolve();
       });
     }
-    // 한 사이클이 끝나면 2초간 쉬었다가 다음 반복을 시작합니다.
+    // ⭐ 한 사이클 완료 시 '반복듣기' 파트로 기록을 보냅니다.
+    sendDataToGoogle("반복듣기", (c + 1) + " cycle");
+
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
 };
 
-window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
-
-// ----------------------
-// 9. 진행률 계산 및 구글 전송 기능
-// ----------------------
-// 현재 전체 진도율이 몇 %인지 계산하고 막대 그래프를 업데이트합니다.
+// [수정] 9. 진행률 및 구글 전송 (파트 매개변수 추가)
 function updateProgress() {
   if (!currentData.length) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
@@ -289,13 +229,18 @@ function updateProgress() {
   if(progressBar) progressBar.style.width = Math.min(percent, 100) + "%";
 }
 
-// 구글 앱스 스크립트로 학습 데이터를 보냅니다.
-function sendDataToGoogle() {
+// ⭐ [중요] 파트 이름(part)과 보낼 값(val)을 받도록 수정되었습니다.
+function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
   if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
-  const currentCount = ((cycle - 1) * currentData.length) + index;
-  const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
-  // 전화번호, 유닛번호, 진도율을 묶어서 보냅니다.
-  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: percent };
+  
+  const data = { 
+    action: "save", 
+    phone: phoneInput.value.trim(), 
+    unit: "Unit " + currentUnit, 
+    percent: val, // % 또는 cycle 문자열 전송
+    part: part     // "Script" 또는 "반복듣기" 전송
+  };
+  
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
