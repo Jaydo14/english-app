@@ -199,6 +199,7 @@ recognizer.onresult = (event) => {
     if(sText) {
         sText.innerText = "Great!";
         sText.classList.add("success");
+        sText.style.color = "#39ff14";
     }
     setTimeout(nextStep, 700); // 0.7초 후 다음 문장으로 이동
   } else {
@@ -206,6 +207,7 @@ recognizer.onresult = (event) => {
     if(sText) {
         sText.innerText = "Try again";
         sText.classList.add("fail");
+        sText.style.color = "#ff4b4b"
     }
     setTimeout(playSentence, 800); // 0.8초 후 문장 다시 들려주기
   }
