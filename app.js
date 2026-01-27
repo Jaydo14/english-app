@@ -4,10 +4,11 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-// 사용자님이 제공해주신 최신 GAS 주소입니다.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3oU2PWdhyXM8e0dSz-LuSXZF2bVP8SFap5koyjXToAg1MoOJb_Lh-6-3WLAwt8C_0/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9oplNHbZ2xy35okdj_H0NhW_l1ajzc9-ItrL-WOFM3Cf1Mmra4akH8QSZsEQxgeD-/exec"; 
 
-const totalCycles = 18; 
+// [수정] 파트별로 목표 사이클을 다르게 관리합니다.
+let currentTotalCycles = 18; 
+let currentPart = "Script"; 
 
 const bookDatabase = {
   "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
@@ -32,7 +33,6 @@ const failSound = new Audio(BASE_URL + "common/fail.mp3");
 // ----------------------
 // 3. 화면 관리 및 유틸리티 기능
 // ----------------------
-// [오류 수정] 중괄호 폐쇄 확인 및 함수 정의 명확화
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box'];
   boxes.forEach(id => {
@@ -71,7 +71,7 @@ window.login = function () {
   .then(data => {
     if (data.result === "success") {
       currentType = data.type; 
-      alert(`${data.name}님, 🔥오늘도 화이팅 입니다!🔥`); // [수정] Class 정보 제외
+      alert(`${data.name}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
       showBox('unit-selector');
     } else {
@@ -128,15 +128,42 @@ window.showDevPage = (name) => {
 };
 
 // ----------------------
-// 6. Script 학습 모드 기능
+// 6. 학습 모드 기능 (Script / Voca)
 // ----------------------
+// [기존] Script 모드 시작
 window.startScriptMode = () => {
+  currentPart = "Script";
+  currentTotalCycles = 18; // 18바퀴 목표
   const phone = document.getElementById("phone-input").value.trim();
-  const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}`);
+  const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_script`);
   index = 0; cycle = 1;
   if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
   updateProgress();
   showBox('study-box');
+};
+
+// [신규] Voca 모드 시작
+window.startVocaMode = async function() {
+  currentPart = "Voca"; 
+  currentTotalCycles = 10; // 10바퀴 목표
+  
+  const phone = document.getElementById("phone-input").value.trim();
+  const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_voca`);
+  
+  // Voca용 파일명: hc12u1_voca.json 형식
+  const fileName = `${currentType}${currentUnit}_voca.json`;
+  const url = BASE_URL + currentType + "/" + fileName;
+
+  try {
+    const response = await fetch(url);
+    currentData = await response.json();
+    index = 0; cycle = 1;
+    if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
+    updateProgress();
+    showBox('study-box');
+  } catch (error) {
+    alert("Voca 파일을 찾을 수 없습니다. (파일명 확인 필요)");
+  }
 };
 
 window.startStudy = function () {
@@ -186,9 +213,8 @@ recognizer.onresult = (event) => {
   const accuracy = matches / targetWords.length;
   const sText = document.getElementById("sentence");
 
-  if (accuracy >= 0.6) { // 사용자 설정 인식률 유지
+  if (accuracy >= 0.6) { 
     successSound.play().catch(e => {}); 
-    
     const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
     const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
     
@@ -214,12 +240,15 @@ window.nextStep = function() {
   index++; 
   if (index >= currentData.length) { index = 0; cycle++; }
   const phone = document.getElementById("phone-input").value.trim();
-  localStorage.setItem(`save_${phone}_unit${currentUnit}`, JSON.stringify({index, cycle}));
   
-  // [수정] Script 파트로 진도율 전송
+  // 파트별로 로컬 저장을 따로 합니다.
+  const saveSuffix = currentPart === "Voca" ? "_voca" : "_script";
+  localStorage.setItem(`save_${phone}_unit${currentUnit}${saveSuffix}`, JSON.stringify({index, cycle}));
+  
+  // 구글 시트로 현재 파트 정보와 진도를 보냅니다.
   const currentCount = ((cycle - 1) * currentData.length) + index;
-  const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
-  sendDataToGoogle("Script", percent + "%"); 
+  const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
+  sendDataToGoogle(currentPart, percent + "%"); 
   
   playSentence();
 };
@@ -257,9 +286,9 @@ window.runRepeatAudio = async function() {
         player.play(); player.onended = () => resolve();
       });
     }
-    // [수정] 반복듣기 사이클 저장
+    // 한 사이클 완료 시 '반복듣기' 파트로 기록 전송
     sendDataToGoogle("반복듣기", (c + 1) + " cycle");
-    
+
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -268,23 +297,21 @@ window.runRepeatAudio = async function() {
 window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
 
 // ----------------------
-// 9. 진행률 계산 및 구글 전송 기능
+// 9. 진행률 및 구글 전송 기능
 // ----------------------
 function updateProgress() {
   if (!currentData.length) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
-  const percent = Math.floor((currentCount / (totalCycles * currentData.length)) * 100);
+  const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   const progressPercent = document.getElementById("progress-percent");
   if(progressPercent) progressPercent.innerText = percent + "%";
   const progressBar = document.getElementById("progress");
   if(progressBar) progressBar.style.width = Math.min(percent, 100) + "%";
 }
 
-// [수정] 파트별 저장 기능을 위한 파라미터 추가
 function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
   if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
-  
   const data = { 
     action: "save", 
     phone: phoneInput.value.trim(), 
@@ -292,15 +319,5 @@ function sendDataToGoogle(part, val) {
     percent: val,
     part: part 
   };
-  
-  // ⭐ 보낸 데이터를 크롬 콘솔창에 띄워줍니다.
-  console.log("구글로 보내는 데이터:", data);
-  
-  fetch(GOOGLE_SCRIPT_URL, { 
-    method: "POST", 
-    mode: "no-cors", 
-    body: JSON.stringify(data) 
-  }).then(() => {
-    console.log(part + " 저장 요청 완료!");
-  });
+  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
