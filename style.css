@@ -86,7 +86,6 @@ button {
 /* 성공 효과 */
 .success {
   color: #39ff14;
-  text-shadow: 0 0 8px #39ff14;
 }
 
 /* 실패 효과 */
