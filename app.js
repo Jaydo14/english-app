@@ -4,7 +4,7 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9oplNHbZ2xy35okdj_H0NhW_l1ajzc9-ItrL-WOFM3Cf1Mmra4akH8QSZsEQxgeD-/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3oU2PWdhyXM8e0dSz-LuSXZF2bVP8SFap5koyjXToAg1MoOJb_Lh-6-3WLAwt8C_0/exec"; 
 
 // [수정] 파트별로 목표 사이클을 다르게 관리합니다.
 let currentTotalCycles = 18; 
