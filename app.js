@@ -195,9 +195,15 @@ recognizer.onresult = (event) => {
   const sText = document.getElementById("sentence");
 
   if (accuracy >= 0.6) { // 단어의 50% 이상을 맞추면 성공으로 간주합니다.
-    successSound.play().catch(e => {}); // 딩동! 효과음
+    successSound.play().catch(e => {}); 
+    
+    // ⭐ 칭찬 문구 리스트를 만듭니다. (원하는 문구를 추가/삭제할 수 있어요!)
+    const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
+    // ⭐ 리스트에서 하나를 무작위로 고릅니다.
+    const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
+    
     if(sText) {
-        sText.innerText = "Great!";
+        sText.innerText = randomPraise; // "Great!" 대신 랜덤 문구가 나옵니다.
         sText.classList.add("success");
         sText.style.color = "#39ff14";
     }
