@@ -4,7 +4,7 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw-mZTx2giljATlZ2-PLLGJ2ln_rjfbvkfWO2Wp3eIZpgJb65wOTQdhPj2s-Zej1MZK/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsnsojGrItnXfmWyiUCnReQxngHRuWjGSt4ThEoYGnFWc6n7SNShooCNqbAS8xksw1/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -127,29 +127,42 @@ window.startASMode = async function() {
   }
 };
 
+// [app.js 내의 renderASPage 함수 부분을 이 내용으로 교체하세요]
 function renderASPage() {
   const container = document.getElementById('as-box');
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
 
   container.innerHTML = `
-    <h2 style="margin-bottom:20px;">AS Correction</h2>
-    <div style="text-align:left; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px;">
-      <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[Teacher's Question]</p>
-      <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
+    <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
+    
+    <div style="text-align:left; margin-bottom:15px;">
+      <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[AS Question]</p>
+      <p style="font-size:18px; line-height:1.4; color:#fff;">${asData.question}</p>
+      <hr style="border:0; border-top:1px solid #333; margin-top:15px;">
     </div>
-    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
-      <p style="color:#888; font-size:12px; margin-bottom:5px;">Your Answer (원문)</p>
-      <p style="color:#aaa; margin-bottom:15px; font-style:italic;">${asData.original}</p>
-      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Teacher's Correction (첨삭)</p>
-      <p style="font-size:19px; line-height:1.4;">${formatText(asData.corrected)}</p>
+
+    <div style="text-align:left; background:#222; padding:15px; border-radius:12px 12px 0 0; border-bottom:1px solid #111;">
+      <p style="color:#888; font-size:12px; margin-bottom:5px;">My Answer</p>
+      <p style="color:#aaa; font-style:italic;">${asData.original}</p>
     </div>
-    <div id="as-timer" style="font-size:30px; margin-bottom:20px; color:#39ff14; font-family:monospace;">00:00</div>
-    <button id="as-start-btn" onclick="startASStudy()">Start</button>
-    <div id="as-controls" style="display:none; flex-direction:column; gap:10px;">
-      <button onclick="playASAudio()" style="background:#555;">질문 다시듣기</button>
-      <button onclick="finishASStudy()" style="background:#39ff14; color:#000;">학습 완료</button>
+
+    <div style="text-align:left; background:#222; padding:15px; border-radius:0 0 12px 12px; margin-bottom:20px;">
+      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Feedback</p>
+      <p style="font-size:19px; line-height:1.4; color:#fff;">${formatText(asData.corrected)}</p>
     </div>
-    <button onclick="showMenu()" class="sub-action-btn" style="margin-top:20px;">Back</button>
+
+    <div id="as-timer" style="font-size:35px; margin-bottom:20px; color:#39ff14; font-family:monospace; font-weight:bold;">00:00</div>
+
+    <button id="as-start-btn" onclick="startASStudy()" style="width: 95%;">Start</button>
+    
+    <div id="as-controls" style="display:none; flex-direction:column; align-items:center; gap:10px; width:100%;">
+      <button onclick="playASAudio()" style="background:#555; width: 95%;">질문 다시듣기</button>
+      <button onclick="finishASStudy()" style="background:#39ff14; color:#000; width: 95%;">학습 완료</button>
+    </div>
+
+    <div style="width:100%; display:flex; justify-content:center;">
+       <button onclick="showMenu()" class="sub-action-btn" style="margin-top:15px;">Back</button>
+    </div>
   `;
 }
 
