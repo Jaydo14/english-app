@@ -1,5 +1,5 @@
 // ======================================================
-// 1. 기본 설정 및 상수
+// 1. 기본 설정 및 상수 영역
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
@@ -8,7 +8,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIML-Dc1uKbB
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
-let userName = ""; // 사용자 이름을 저장할 변수
+let userName = ""; // 로그인한 사용자 이름 저장
 
 const bookDatabase = {
   "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
@@ -27,7 +27,7 @@ let isRepeating = false;
 const player = new Audio();
 let wakeLock = null;
 
-// AS 전용 변수들
+// AS 전용 변수
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
@@ -36,7 +36,7 @@ const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
 // ----------------------
-// 3. 화면 관리 기능
+// 3. 화면 관리 및 유틸리티
 // ----------------------
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box'];
@@ -55,7 +55,7 @@ async function requestWakeLock() {
 }
 
 // ----------------------
-// 4. 로그인 및 유닛 버튼
+// 4. 로그인 및 유닛 생성
 // ----------------------
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
@@ -71,8 +71,8 @@ window.login = function () {
   .then(data => {
     if (data.result === "success") {
       currentType = data.type;
-      userName = data.name; // 이름 저장
-      alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
+      userName = data.name;
+      alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`); // Class 정보 제외
       renderUnitButtons();
       showBox('unit-selector');
     } else {
@@ -102,34 +102,33 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (첨삭 학습) 핵심 로직
+// 5. AS Correction 학습 로직
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
   const phone = document.getElementById("phone-input").value.trim();
   
-  // 구글 시트에서 첨삭 데이터를 가져옵니다.
-  const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
-  
   showBox('dev-box');
-  document.getElementById('dev-title').innerText = "Loading Data...";
+  document.getElementById('dev-title').innerText = "Loading...";
+  document.getElementById('dev-msg').innerText = "선생님의 첨삭 데이터를 불러오고 있습니다. ☕";
+
+  const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
 
   try {
     const res = await fetch(url);
     asData = await res.json();
-    if (!asData || !asData.question) throw new Error();
+    if (!asData || !asData.question || asData.question.trim() === "") throw new Error();
     
     renderASPage();
     showBox('as-box');
   } catch (e) {
-    alert("첨삭 데이터가 아직 없습니다. 선생님께 확인해 보세요!");
+    alert("아직 등록된 첨삭 내용이 없습니다. 선생님께 확인해 보세요! 😊");
     showMenu();
   }
 };
 
 function renderASPage() {
   const container = document.getElementById('as-box');
-  // [ ] 괄호를 빨간색으로 바꿔주는 비밀 공식
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
 
   container.innerHTML = `
@@ -139,9 +138,9 @@ function renderASPage() {
       <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
     </div>
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
-      <p style="color:#888; font-size:12px; margin-bottom:5px;">Original Sentence (원문)</p>
+      <p style="color:#888; font-size:12px; margin-bottom:5px;">Your Answer (원문)</p>
       <p style="color:#aaa; margin-bottom:15px; font-style:italic;">${asData.original}</p>
-      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Corrected Sentence (첨삭)</p>
+      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Teacher's Correction (첨삭)</p>
       <p style="font-size:19px; line-height:1.4;">${formatText(asData.corrected)}</p>
     </div>
     <div id="as-timer" style="font-size:30px; margin-bottom:20px; color:#39ff14; font-family:monospace;">00:00</div>
@@ -158,7 +157,6 @@ window.startASStudy = function() {
   document.getElementById('as-start-btn').style.display = 'none';
   document.getElementById('as-controls').style.display = 'flex';
   requestWakeLock();
-  
   asSeconds = 0;
   asTimer = setInterval(() => {
     asSeconds++;
@@ -166,22 +164,19 @@ window.startASStudy = function() {
     const s = (asSeconds % 60).toString().padStart(2, '0');
     document.getElementById('as-timer').innerText = `${m}:${s}`;
   }, 1000);
-
   playASAudio();
 };
 
 window.playASAudio = function() {
   player.src = BASE_URL + currentType + "/" + asData.audio;
-  player.play().catch(e => alert("음원 파일을 찾을 수 없습니다."));
+  player.play().catch(() => alert("음원 파일을 찾을 수 없습니다."));
 };
 
 window.finishASStudy = function() {
   clearInterval(asTimer);
   const m = Math.floor(asSeconds / 60);
   const s = asSeconds % 60;
-  const timeStr = `${m}분 ${s}초`;
-
-  sendDataToGoogle("AS Correction", timeStr);
+  sendDataToGoogle("AS Correction", `${m}분 ${s}초`);
   alert(`${userName}님, Have a good day❤`);
   showMenu();
 };
@@ -191,20 +186,17 @@ window.finishASStudy = function() {
 // ----------------------
 window.startScriptMode = async function() {
   currentPart = "Script"; currentTotalCycles = 18;
-  const fileName = `${currentType}${currentUnit}.json`;
-  loadStudyData(fileName, "script");
+  loadStudyData(`${currentType}${currentUnit}.json`, "script");
 };
 
 window.startVocaMode = async function() {
   currentPart = "Voca"; currentTotalCycles = 10;
-  const fileName = `${currentType}${currentUnit}_voca.json`;
-  loadStudyData(fileName, "voca");
+  loadStudyData(`${currentType}${currentUnit}_voca.json`, "voca");
 };
 
 async function loadStudyData(fileName, suffix) {
-  const url = BASE_URL + currentType + "/" + fileName;
   try {
-    const res = await fetch(url);
+    const res = await fetch(BASE_URL + currentType + "/" + fileName);
     currentData = await res.json();
     const phone = document.getElementById("phone-input").value.trim();
     const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_${suffix}`);
@@ -243,7 +235,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 7. 음성 인식 및 정확도 체크
+// 7. 음성 인식 및 정확도
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -260,14 +252,14 @@ recognizer.onresult = (event) => {
   const sText = document.getElementById("sentence");
 
   if (accuracy >= 0.6) { 
-    successSound.play().catch(e => {}); 
+    successSound.play().catch(() => {}); 
     const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
     const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
     if(sText) { sText.innerText = randomPraise; sText.classList.add("success"); sText.style.color = "#39ff14"; }
     setTimeout(nextStep, 700); 
   } else {
-    failSound.play().catch(e => {}); 
-    if(sText) { sText.innerText = "Try again"; sText.classList.add("fail"); sText.style.color = "#ff4b4b" }
+    failSound.play().catch(() => {}); 
+    if(sText) { sText.innerText = "Try again"; sText.classList.add("fail"); sText.style.color = "#ff4b4b"; }
     setTimeout(playSentence, 800); 
   }
 };
@@ -286,12 +278,11 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. 반복 듣기 모드
+// 8. 반복듣기 모드
 // ----------------------
 window.startRepeatMode = async function() {
-  const fileName = `${currentType}${currentUnit}.json`;
   try {
-    const res = await fetch(BASE_URL + currentType + "/" + fileName);
+    const res = await fetch(BASE_URL + currentType + "/" + currentType + currentUnit + ".json");
     currentData = await res.json();
     showBox('repeat-box');
     const list = document.getElementById('repeat-list');
@@ -330,7 +321,7 @@ window.runRepeatAudio = async function() {
 function stopRepeatAudio() { isRepeating = false; player.pause(); }
 
 // ----------------------
-// 9. 진행률 및 구글 전송
+// 9. 진행률 및 데이터 전송
 // ----------------------
 function updateProgress() {
   if (!currentData.length) return;
