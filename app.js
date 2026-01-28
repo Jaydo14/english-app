@@ -110,7 +110,7 @@ window.startASMode = async function() {
   
   showBox('dev-box');
   document.getElementById('dev-title').innerText = "Loading...";
-  document.getElementById('dev-msg').innerText = "선생님의 첨삭 데이터를 불러오고 있습니다. ☕";
+  document.getElementById('dev-msg').innerText = "Loading...☕";
 
   const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
 
