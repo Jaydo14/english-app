@@ -1,0 +1,32 @@
+[
+  {
+    "en": "I have this Japanese restaurant that I'm a regular at.",
+    "ko": "나 단골 일식집 있어",
+    "audio": "u1ven1.mp3"
+  },
+  {
+    "en": "I have this pub that I'm a regular at.",
+    "ko": "나 단골 술집 있어",
+    "audio": "u1ven2.mp3"
+  },
+    {
+    "en": "I have this shop that I'm a regular at.",
+    "ko": "나 단골 가게 있어",
+    "audio": "u1ven3.mp3"
+  },
+    {
+    "en": "It's a little bit pricey.",
+    "ko": "조금 비싸",
+    "audio": "u1ven4.mp3"
+  },
+    {
+    "en": "It's a little bit expensive.",
+    "ko": "조금 비싸",
+    "audio": "u1ven5.mp3"
+  },
+    {
+    "en": "It's a little bit overpriced.",
+    "ko": "조금 과해",
+    "audio": "u1ven6.mp3"
+  }
+]

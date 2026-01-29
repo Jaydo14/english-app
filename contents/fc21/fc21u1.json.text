@@ -1,0 +1,42 @@
+[
+  {
+    "en": "Do you have a favorite restaurant?",
+    "ko": "너 자주 가는 식당 있어?",
+    "audio": "u1en1.mp3"
+  },
+  {
+    "en": "I have this Japanese restaurant that I'm a regular at.",
+    "ko": "나 단골 일식집 있어",
+    "audio": "u1en2.mp3"
+  },
+    {
+    "en": "Why do you like that restaurant?",
+    "ko": "거기 왜 좋아하는데?",
+    "audio": "u1en3.mp3"
+  },
+    {
+    "en": "The quality of their sushi and rolls is second to none.",
+    "ko": "초밥이랑 롤 퀄리티가 죽이더라고",
+    "audio": "u1en4.mp3"
+  },
+    {
+    "en": "They use really fresh ingredients in all their dishes.",
+    "ko": "엄청 신선한 식재료로 모든 음식을 만들거든",
+    "audio": "u1en5.mp3"
+  },
+    {
+    "en": "How's the price?",
+    "ko": "가격은 어때?",
+    "audio": "u1en6.mp3"
+  },
+    {
+    "en": "For two people, it'll probably run you anywhere between seventy to eighty dollars.",
+    "ko": "둘이 가면 한 7~8만원 정도 해",
+    "audio": "u1en7.mp3"
+  },
+  {
+    "en": "It's a little bit pricey but I guarantee that every penny will be worth it.",
+    "ko": "조금 비싸긴 한데 전혀 아깝다는 생각은 안 들 거야",
+    "audio": "u1en8.mp3"
+  }
+]
