@@ -1,5 +1,5 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21)
+// 1. 기본 설정 및 상수 영역
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
@@ -31,13 +31,13 @@ let asTimer = null;
 let asSeconds = 0;
 let asData = null;
 
-let isAlertShown = false; // 100% 알림 플래그
+let isAlertShown = false; // 100% 달성 알림 플래그
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
 // ----------------------
-// 3. 화면 관리 및 유틸리티
+// 3. 화면 관리 및 커스텀 팝업 로직
 // ----------------------
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box'];
@@ -47,6 +47,18 @@ function showBox(boxId) {
   });
   const appContainer = document.getElementById("app");
   if(appContainer) appContainer.style.display = "block";
+}
+
+// 도메인 주소가 뜨지 않는 커스텀 팝업창 띄우기
+function showCustomModal(msg) {
+  document.getElementById('modal-msg').innerText = msg;
+  document.getElementById('custom-modal').style.display = 'flex';
+}
+
+// 팝업 닫기 후 학습 계속 진행
+function closeCustomModal() {
+  document.getElementById('custom-modal').style.display = 'none';
+  playSentence(); 
 }
 
 async function requestWakeLock() {
@@ -69,7 +81,7 @@ window.login = function () {
   .then(res => res.json())
   .then(data => {
     if (data.result === "success") {
-      currentType = data.type;
+      currentType = data.type; // hc12, fc21 등
       userName = data.name;
       alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
@@ -89,6 +101,7 @@ function renderUnitButtons() {
   const currentTitles = bookDatabase[currentType] || {};
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
+    // 유닛 제목 폰트 색상 검정(#000)으로 설정
     const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` : "";
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
@@ -159,6 +172,7 @@ window.startASStudy = function() {
 };
 
 window.playASAudio = function() {
+  // 깃허브 폴더명은 u가 붙어 있으므로 보정
   player.src = BASE_URL + currentType + "u/" + asData.audio;
   player.play().catch(() => alert("음원을 찾을 수 없습니다."));
 };
@@ -201,10 +215,8 @@ async function loadStudyData(fileName, suffix) {
 }
 
 window.startStudy = function () {
-  const startBtn = document.getElementById("start-btn");
-  if(startBtn) startBtn.innerText = "Listen again";
-  const skipBtn = document.getElementById("skip-btn");
-  if(skipBtn) skipBtn.style.display = "inline-block";
+  document.getElementById("start-btn").innerText = "Listen again";
+  document.getElementById("skip-btn").style.display = "inline-block";
   requestWakeLock();
   playSentence();
 };
@@ -216,6 +228,7 @@ function playSentence() {
   sText.style.color = "#fff";
   const item = currentData[index];
   sText.innerText = item.en;
+  // 영어 문장 폰트 크기 조정
   sText.style.fontSize = "18px"; 
   const sentenceKor = document.getElementById("sentence-kor");
   if(sentenceKor) { sentenceKor.innerText = item.ko; sentenceKor.style.fontSize = "15px"; }
@@ -229,30 +242,23 @@ function playSentence() {
 }
 
 // ----------------------
-// 7. 음성 인식 및 정확도
+// 7. 음성 인식 및 진행
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
 recognizer.lang = "en-US";
 
 recognizer.onresult = (event) => {
-  const spoken = event.results[0][0].transcript;
-  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
-  const userWords = clean(spoken).split(/\s+/);
-  const targetWords = clean(currentData[index].en).split(/\s+/);
-  let matches = 0;
-  targetWords.forEach(w => { if (userWords.includes(w)) matches++; });
-  const accuracy = matches / targetWords.length;
-  const sText = document.getElementById("sentence");
-
-  if (accuracy >= 0.6) { 
-    successSound.play().catch(() => {}); 
-    if(sText) { sText.innerText = "Excellent!"; sText.classList.add("success"); sText.style.color = "#39ff14"; }
-    setTimeout(nextStep, 700); 
+  const spoken = event.results[0][0].transcript.toLowerCase();
+  const target = currentData[index].en.toLowerCase().replace(/[.,?!'"]/g, "");
+  if (spoken.includes(target) || target.includes(spoken)) {
+    successSound.play(); document.getElementById("sentence").innerText = "Excellent!";
+    document.getElementById("sentence").style.color = "#39ff14";
+    setTimeout(nextStep, 700);
   } else {
-    failSound.play().catch(() => {}); 
-    if(sText) { sText.innerText = "Try again"; sText.classList.add("fail"); sText.style.color = "#ff4b4b"; }
-    setTimeout(playSentence, 800); 
+    failSound.play(); document.getElementById("sentence").innerText = "Try again";
+    document.getElementById("sentence").style.color = "#ff4b4b";
+    setTimeout(playSentence, 800);
   }
 };
 
@@ -263,16 +269,17 @@ window.nextStep = function() {
   const phone = document.getElementById("phone-input").value.trim();
   const suffix = currentPart === "Voca" ? "voca" : "script";
   localStorage.setItem(`save_${phone}_unit${currentUnit}_${suffix}`, JSON.stringify({index, cycle}));
+  
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
 
-  // ⭐ 100% 달성 시 폭죽 발사 + 알림창 띄우기
+  // ⭐ 100% 달성 시 폭죽 발사 + 커스텀 알림
   if (percent >= 100 && !isAlertShown) {
     isAlertShown = true;
-    triggerFireworkConfetti(); // 폭죽 발사
-    // 알림창 띄우기 (확인 누르면 바로 다음 문장 진행)
-    alert(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!\n계속해서 완벽하게 익혀보세요! 🔥`);
+    triggerFireworkConfetti(); // 폭죽 애니메이션 실행
+    showCustomModal(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!\n계속해서 완벽하게 익혀보세요! 🔥`);
+    return; // 확인 버튼 클릭 시 playSentence()가 실행됨
   }
   
   playSentence();
@@ -302,6 +309,7 @@ function renderResultsCards(data) {
     data.forEach(row => {
       let val = row.units[u] || "-";
       let displayVal = val;
+      // 0.04 같은 숫자를 퍼센트로 변환
       if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
         displayVal = Math.round(parseFloat(val) * 100) + "%";
       }
@@ -348,7 +356,6 @@ window.runRepeatAudio = async function() {
         player.play(); player.onended = () => resolve();
       });
     }
-    sendDataToGoogle("반복듣기", (c + 1) + " cycle");
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -365,26 +372,16 @@ function updateProgress() {
 }
 
 function sendDataToGoogle(part, val) {
-  const phoneInput = document.getElementById("phone-input");
-  const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: val, part: part };
-  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
+  const phone = document.getElementById("phone-input").value.trim();
+  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "save", phone, unit: "Unit " + currentUnit, percent: val, part }) });
 }
 
-// ======================================================
-// 폭죽 애니메이션 함수 (Fireworks Style)
-// ======================================================
+// 폭죽 애니메이션 함수
 function triggerFireworkConfetti() {
-  var duration = 4 * 1000; // 지속 시간 4초
-  var animationEnd = Date.now() + duration;
-  var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-
-  function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
+  var duration = 4 * 1000; var animationEnd = Date.now() + duration;
   var interval = setInterval(function() {
     var timeLeft = animationEnd - Date.now();
-    if (timeLeft <= 0) { return clearInterval(interval); }
-    var particleCount = 50 * (timeLeft / duration);
-    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+    if (timeLeft <= 0) return clearInterval(interval);
+    confetti({ particleCount: 50, startVelocity: 30, spread: 360, origin: { x: Math.random(), y: Math.random() - 0.2 } });
   }, 250);
 }
