@@ -4,7 +4,8 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsnsojGrItnXfmWyiUCnReQxngHRuWjGSt4ThEoYGnFWc6n7SNShooCNqbAS8xksw1/exec"; 
+// 사용자님이 제공해주신 최신 구글 스크립트 URL입니다.
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdzCnHFnu2oMfAKYVx_bpUWFTGjqub0x2CKXM5EhJ1S-ESJD62o4AQjvWDrlhvC8TD/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -39,7 +40,7 @@ const failSound = new Audio(BASE_URL + "common/fail.mp3");
 // 3. 화면 관리 및 유틸리티
 // ----------------------
 function showBox(boxId) {
-  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box'];
+  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box'];
   boxes.forEach(id => {
     const el = document.getElementById(id);
     if(el) el.style.display = (id === boxId) ? 'block' : 'none';
@@ -72,7 +73,7 @@ window.login = function () {
     if (data.result === "success") {
       currentType = data.type;
       userName = data.name;
-      alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`); // Class 정보 제외
+      alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
       showBox('unit-selector');
     } else {
@@ -92,17 +93,16 @@ function renderUnitButtons() {
     const btn = document.createElement("button");
     const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(0,0,0,0.6);">${currentTitles[i]}</span>` : "";
     btn.innerHTML = `Unit ${i}${titleText}`;
-    btn.onclick = () => selectUnit(i);
+    btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
   }
 }
 
-window.selectUnit = function (n) { currentUnit = n; showBox('menu-box'); };
 window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('menu-box'); };
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction 학습 로직
+// 5. AS Correction (첨삭 학습) 로직
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -110,58 +110,54 @@ window.startASMode = async function() {
   
   showBox('dev-box');
   document.getElementById('dev-title').innerText = "Loading...";
-  document.getElementById('dev-msg').innerText = "Loading...☕";
+  document.getElementById('dev-msg').innerText = "잠시만 기다려주세요.☕";
 
   const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
 
   try {
     const res = await fetch(url);
     asData = await res.json();
-    if (!asData || !asData.question || asData.question.trim() === "") throw new Error();
+    if (!asData || !asData.question) throw new Error();
     
     renderASPage();
     showBox('as-box');
   } catch (e) {
-    alert("아직 등록된 첨삭 내용이 없습니다. 선생님께 확인해 보세요! 😊");
+    alert("아직 등록된 첨삭 내용이 없습니다. 선생님께 확인해 보세요!");
     showMenu();
   }
 };
 
-// [app.js 내의 renderASPage 함수 부분을 이 내용으로 교체하세요]
 function renderASPage() {
   const container = document.getElementById('as-box');
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
 
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
-    
-    <div style="text-align:left; margin-bottom:15px;">
-      <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[AS Question]</p>
-      <p style="font-size:18px; line-height:1.4; color:#fff;">${asData.question}</p>
-      <hr style="border:0; border-top:1px solid #333; margin-top:15px;">
+    <div style="text-align:left; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+      <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[Teacher's Question]</p>
+      <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
     </div>
 
-    <div style="text-align:left; background:#222; padding:15px; border-radius:12px 12px 0 0; border-bottom:1px solid #111;">
-      <p style="color:#888; font-size:12px; margin-bottom:5px;">My Answer</p>
+    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
+      <p style="color:#888; font-size:12px; margin-bottom:5px;">Your Answer (원문)</p>
       <p style="color:#aaa; font-style:italic;">${asData.original}</p>
     </div>
 
-    <div style="text-align:left; background:#222; padding:15px; border-radius:0 0 12px 12px; margin-bottom:20px;">
-      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Feedback</p>
-      <p style="font-size:19px; line-height:1.4; color:#fff;">${formatText(asData.corrected)}</p>
+    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
+      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Teacher's Correction (첨삭)</p>
+      <p style="font-size:19px; line-height:1.4;">${formatText(asData.corrected)}</p>
     </div>
 
     <div id="as-timer" style="font-size:35px; margin-bottom:20px; color:#39ff14; font-family:monospace; font-weight:bold;">00:00</div>
-
     <button id="as-start-btn" onclick="startASStudy()" style="width: 95%;">Start</button>
     
     <div id="as-controls" style="display:none; flex-direction:column; align-items:center; gap:10px; width:100%;">
-      <button onclick="playASAudio()" style="background:#555; width: 95%;">질문 다시듣기</button>
-      <button onclick="finishASStudy()" style="background:#39ff14; color:#000; width: 95%;">학습 완료</button>
+      <button onclick="playASAudio()" style="background:#555; width:95%;">질문 다시듣기</button>
+      <button onclick="finishASStudy()" style="background:#39ff14; color:#000; width:95%;">학습 완료</button>
     </div>
 
-    <div style="width:100%; display:flex; justify-content:center;">
-       <button onclick="showMenu()" class="sub-action-btn" style="margin-top:15px;">Back</button>
+    <div style="width:100%; display:flex; justify-content:center; margin-top:15px;">
+      <button onclick="showMenu()" class="sub-action-btn" style="width:65% !important;">Back</button>
     </div>
   `;
 }
@@ -182,7 +178,7 @@ window.startASStudy = function() {
 
 window.playASAudio = function() {
   player.src = BASE_URL + currentType + "/" + asData.audio;
-  player.play().catch(() => alert("음원 파일을 찾을 수 없습니다."));
+  player.play().catch(e => alert("음원 파일을 찾을 수 없습니다."));
 };
 
 window.finishASStudy = function() {
@@ -195,7 +191,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. Script / Voca 학습 로직
+// 6. 학습 모드 기능 (Script / Voca)
 // ----------------------
 window.startScriptMode = async function() {
   currentPart = "Script"; currentTotalCycles = 18;
@@ -265,13 +261,13 @@ recognizer.onresult = (event) => {
   const sText = document.getElementById("sentence");
 
   if (accuracy >= 0.6) { 
-    successSound.play().catch(() => {}); 
+    successSound.play().catch(e => {}); 
     const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
     const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
     if(sText) { sText.innerText = randomPraise; sText.classList.add("success"); sText.style.color = "#39ff14"; }
     setTimeout(nextStep, 700); 
   } else {
-    failSound.play().catch(() => {}); 
+    failSound.play().catch(e => {}); 
     if(sText) { sText.innerText = "Try again"; sText.classList.add("fail"); sText.style.color = "#ff4b4b"; }
     setTimeout(playSentence, 800); 
   }
@@ -291,7 +287,41 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. 반복듣기 모드
+// 8. 학습 결과 페이지 로직
+// ----------------------
+window.showResultsPage = async function() {
+  const phone = document.getElementById("phone-input").value.trim();
+  showBox('dev-box');
+  document.getElementById('dev-title').innerText = "Loading Results...";
+
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const results = await res.json();
+    renderResultsTable(results);
+    showBox('results-box');
+  } catch (e) {
+    alert("데이터 로드 실패");
+    showBox('unit-selector');
+  }
+};
+
+function renderResultsTable(data) {
+  const container = document.getElementById('results-content');
+  let html = `<table style="width:100%; border-collapse:collapse; font-size:11px; color:#fff; border:1px solid #444;">
+    <tr style="background:#333; color:#39ff14;"><th style="padding:5px; border:1px solid #444;">파트</th>`;
+  for(let i=1; i<=8; i++) html += `<th style="padding:5px; border:1px solid #444;">U${i}</th>`;
+  html += `</tr>`;
+  data.forEach(row => {
+    html += `<tr><td style="padding:8px; border:1px solid #444; background:#222; font-weight:bold;">${row.part}</td>`;
+    row.units.forEach(v => { html += `<td style="padding:5px; border:1px solid #444;">${v||"-"}</td>`; });
+    html += `</tr>`;
+  });
+  html += `</table>`;
+  container.innerHTML = html;
+}
+
+// ----------------------
+// 9. 반복듣기 및 공통 로직
 // ----------------------
 window.startRepeatMode = async function() {
   try {
@@ -303,10 +333,10 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div');
       div.className = 'repeat-item'; div.id = `repeat-${idx}`;
-      div.innerHTML = `<div>${item.en}</div><div class="repeat-ko">${item.ko}</div>`;
+      div.innerHTML = `<div>${item.en}</div><div class="repeat-ko" style="font-size:13px; color:#888;">${item.ko}</div>`;
       list.appendChild(div);
     });
-  } catch (e) { alert("데이터를 불러올 수 없습니다."); }
+  } catch (e) { alert("데이터 로드 실패"); }
 };
 
 window.runRepeatAudio = async function() {
@@ -333,9 +363,6 @@ window.runRepeatAudio = async function() {
 
 function stopRepeatAudio() { isRepeating = false; player.pause(); }
 
-// ----------------------
-// 9. 진행률 및 데이터 전송
-// ----------------------
 function updateProgress() {
   if (!currentData.length) return;
   const currentCount = ((cycle - 1) * currentData.length) + index;
