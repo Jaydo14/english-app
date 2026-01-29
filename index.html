@@ -19,6 +19,7 @@
       <div id="unit-selector" class="box">
         <h2 id="welcome-msg">Unit 선택</h2>
         <div id="unit-buttons"></div>
+        <button onclick="showResultsPage()" style="background:#444; color:#39ff14; margin-top:20px; font-size:16px;">📊 나의 학습 결과 보기</button>
       </div>
 
       <div id="menu-box" class="box" style="display:none;">
@@ -35,7 +36,6 @@
         <div id="progress-percent">0%</div>
         <p id="sentence" style="font-size:20px; font-weight:bold;">Ready?</p>
         <p id="sentence-kor" style="font-size:16px; color:#aaa;"> </p>
-        
         <div id="control-area" style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
           <button id="start-btn" onclick="startStudy()" style="width: 95%;">Start</button>
           <button id="skip-btn" onclick="nextStep()" class="sub-action-btn" style="display:none;">Skip</button>
@@ -43,14 +43,19 @@
         </div>
       </div>
 
-      <div id="as-box" class="box" style="display:none;">
-        </div>
+      <div id="as-box" class="box" style="display:none;"></div>
+
+      <div id="results-box" class="box" style="display:none;">
+        <h2 style="color:#39ff14;">나의 학습 결과</h2>
+        <div id="results-content" style="overflow-x:auto; margin-top:15px;"></div>
+        <button onclick="showBox('unit-selector')" class="sub-action-btn" style="margin-top:20px;">돌아가기</button>
+      </div>
 
       <div id="repeat-box" class="box" style="display:none;">
         <h2>반복 듣기</h2>
         <div style="margin-bottom:15px;">
-          <input type="number" id="repeat-count" value="3" style="width:60px; display:inline-block; border: 1px solid #39ff14; background: #000; color: #fff;"> 회 반복
-          <button id="repeat-start-btn" onclick="runRepeatAudio()" style="width:100px; display:inline-block; padding:10px;">시작</button>
+          <input type="number" id="repeat-count" value="3" style="width:60px; background:#000; color:#fff; border:1px solid #39ff14;"> 회 반복
+          <button onclick="runRepeatAudio()" style="width:100px; padding:10px;">시작</button>
         </div>
         <div id="repeat-list" style="text-align:left; max-height:350px; overflow-y:auto; border-top:1px solid #39ff14; padding-top:10px;"></div>
         <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:20px;">메뉴로</button>
@@ -58,7 +63,7 @@
 
       <div id="dev-box" class="box" style="display:none;">
         <h2 id="dev-title">Loading...</h2>
-        <p id="dev-msg" style="padding:50px 0;">데이터를 가져오는 중입니다. 잠시만 기다려 주세요. ⏳</p>
+        <p id="dev-msg" style="padding:50px 0;">데이터를 가져오는 중입니다. ⏳</p>
       </div>
     </div>
 
