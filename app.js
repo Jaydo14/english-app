@@ -85,9 +85,16 @@ function renderUnitButtons() {
   if(!container) return;
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
+  
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(255,255,255,0.6);">${currentTitles[i]}</span>` : "";
+    
+    // [수정 전] color:rgba(255,255,255,0.6);
+    // [수정 후] color:#000; (또는 black)
+    const titleText = currentTitles[i] 
+      ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` 
+      : "";
+    
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
