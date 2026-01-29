@@ -1,15 +1,14 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21로 변경)
+// 1. 기본 설정 및 상수 영역
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-// 사용자님의 최신 구글 스크립트 URL
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk4c5JBHkWj9aZ4LxHocVgvPn9-uoYexKJY3J8CcgDYIstC4WC-oJUgD2MJ_jRav8p/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
-let userName = ""; // 사용자 이름 저장
+let userName = "";
 
 const bookDatabase = {
   "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
@@ -28,7 +27,6 @@ let isRepeating = false;
 const player = new Audio();
 let wakeLock = null;
 
-// AS 전용 변수
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
@@ -50,9 +48,7 @@ function showBox(boxId) {
 }
 
 async function requestWakeLock() {
-  try {
-    if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); }
-  } catch (err) { console.log(err); }
+  try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {}
 }
 
 // ----------------------
@@ -71,7 +67,7 @@ window.login = function () {
   .then(res => res.json())
   .then(data => {
     if (data.result === "success") {
-      currentType = data.type;
+      currentType = data.type; // 시트에서 가져온 hc12 또는 fc21
       userName = data.name;
       alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
@@ -91,7 +87,7 @@ function renderUnitButtons() {
   const currentTitles = bookDatabase[currentType] || {};
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(0,0,0,0.6);">${currentTitles[i]}</span>` : "";
+    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:rgba(255,255,255,0.6);">${currentTitles[i]}</span>` : "";
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
@@ -102,34 +98,28 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (My Answer / Feedback / 폰트 축소 반영)
+// 5. AS Correction (My Answer / Feedback)
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
   const phone = document.getElementById("phone-input").value.trim();
-  
   showBox('dev-box');
   document.getElementById('dev-title').innerText = "Loading...";
-  document.getElementById('dev-msg').innerText = "잠시만 기다려주세요.☕";
-
   const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
-
   try {
     const res = await fetch(url);
     asData = await res.json();
     if (!asData || !asData.question) throw new Error();
-    
     renderASPage();
     showBox('as-box');
-  } catch (e) {
-    alert("아직 등록된 첨삭 내용이 없습니다. 선생님께 확인해 보세요!");
-    showMenu();
-  }
+  } catch (e) { alert("첨삭 내용이 없습니다."); showMenu(); }
 };
 
 function renderASPage() {
   const container = document.getElementById('as-box');
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
+  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
+  const folderPath = currentType + "u"; 
 
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
@@ -137,26 +127,20 @@ function renderASPage() {
       <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[Teacher's Question]</p>
       <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
     </div>
-
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
       <p style="color:#888; font-size:12px; margin-bottom:5px;">My Answer</p>
       <p style="color:#aaa; font-style:italic; font-size:15px;">${asData.original}</p>
     </div>
-
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
       <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Feedback</p>
       <p style="font-size:17px; line-height:1.4;">${formatText(asData.corrected)}</p>
     </div>
-
     <div id="as-timer" style="font-size:28px; margin-bottom:20px; color:#39ff14; font-family:monospace; font-weight:bold;">00:00</div>
-    
     <button id="as-start-btn" onclick="startASStudy()" style="width: 95%;">Start</button>
-    
     <div id="as-controls" style="display:none; flex-direction:column; align-items:center; gap:10px; width:100%;">
       <button onclick="playASAudio()" style="background:#555; width:95%;">질문 다시듣기</button>
       <button onclick="finishASStudy()" style="background:#39ff14; color:#000; width:95%;">학습 완료</button>
     </div>
-
     <div style="width:100%; display:flex; justify-content:center; margin-top:15px;">
       <button onclick="showMenu()" class="sub-action-btn" style="width:65% !important;">Back to Menu</button>
     </div>
@@ -166,7 +150,6 @@ function renderASPage() {
 window.startASStudy = function() {
   document.getElementById('as-start-btn').style.display = 'none';
   document.getElementById('as-controls').style.display = 'flex';
-  requestWakeLock();
   asSeconds = 0;
   asTimer = setInterval(() => {
     asSeconds++;
@@ -178,8 +161,9 @@ window.startASStudy = function() {
 };
 
 window.playASAudio = function() {
-  player.src = BASE_URL + currentType + "/" + asData.audio;
-  player.play().catch(e => alert("음원 파일을 찾을 수 없습니다."));
+  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
+  player.src = BASE_URL + currentType + "u/" + asData.audio;
+  player.play().catch(() => alert("음원을 찾을 수 없습니다."));
 };
 
 window.finishASStudy = function() {
@@ -196,17 +180,19 @@ window.finishASStudy = function() {
 // ----------------------
 window.startScriptMode = async function() {
   currentPart = "Script"; currentTotalCycles = 18;
-  loadStudyData(`${currentType}${currentUnit}.json`, "script");
+  loadStudyData(`${currentType}u${currentUnit}.json`, "script"); // u를 붙여서 파일명 생성
 };
 
 window.startVocaMode = async function() {
   currentPart = "Voca"; currentTotalCycles = 10;
-  loadStudyData(`${currentType}${currentUnit}_voca.json`, "voca");
+  loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca"); // u를 붙여서 파일명 생성
 };
 
 async function loadStudyData(fileName, suffix) {
+  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
+  const url = BASE_URL + currentType + "u/" + fileName;
   try {
-    const res = await fetch(BASE_URL + currentType + "/" + fileName);
+    const res = await fetch(url);
     currentData = await res.json();
     const phone = document.getElementById("phone-input").value.trim();
     const saved = localStorage.getItem(`save_${phone}_unit${currentUnit}_${suffix}`);
@@ -214,7 +200,7 @@ async function loadStudyData(fileName, suffix) {
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     updateProgress();
     showBox('study-box');
-  } catch (e) { alert("파일을 찾을 수 없습니다."); }
+  } catch (e) { alert("데이터 로딩 실패: " + url); }
 }
 
 window.startStudy = function () {
@@ -232,16 +218,13 @@ function playSentence() {
   sText.classList.remove("success", "fail");
   sText.style.color = "#fff";
   const item = currentData[index];
-  // 영어 문장 폰트 크기 18px로 조정
   sText.innerText = item.en;
   sText.style.fontSize = "18px"; 
   const sentenceKor = document.getElementById("sentence-kor");
-  if(sentenceKor) {
-    sentenceKor.innerText = item.ko;
-    sentenceKor.style.fontSize = "15px";
-  }
+  if(sentenceKor) { sentenceKor.innerText = item.ko; sentenceKor.style.fontSize = "15px"; }
   updateProgress();
-  player.src = BASE_URL + currentType + "/" + item.audio;
+  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
+  player.src = BASE_URL + currentType + "u/" + item.audio;
   player.play();
   player.onended = () => {
     sText.style.color = "#ffff00";
@@ -267,13 +250,11 @@ recognizer.onresult = (event) => {
   const sText = document.getElementById("sentence");
 
   if (accuracy >= 0.6) { 
-    successSound.play().catch(e => {}); 
-    const praiseList = ["Great!", "Excellent!", "Perfect!", "Well done!", "Amazing!"];
-    const randomPraise = praiseList[Math.floor(Math.random() * praiseList.length)];
-    if(sText) { sText.innerText = randomPraise; sText.classList.add("success"); sText.style.color = "#39ff14"; }
+    successSound.play().catch(() => {}); 
+    if(sText) { sText.innerText = "Excellent!"; sText.classList.add("success"); sText.style.color = "#39ff14"; }
     setTimeout(nextStep, 700); 
   } else {
-    failSound.play().catch(e => {}); 
+    failSound.play().catch(() => {}); 
     if(sText) { sText.innerText = "Try again"; sText.classList.add("fail"); sText.style.color = "#ff4b4b"; }
     setTimeout(playSentence, 800); 
   }
@@ -293,22 +274,17 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. Progress Report (카드형 UI + 퍼센트 변환)
+// 8. Progress Report (카드형 UI)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
-  document.getElementById('dev-title').innerText = "Loading Results...";
-
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
     const results = await res.json();
     renderResultsCards(results);
     showBox('results-box');
-  } catch (e) {
-    alert("데이터 로드 실패");
-    showBox('unit-selector');
-  }
+  } catch (e) { alert("데이터 로드 실패"); showBox('unit-selector'); }
 };
 
 function renderResultsCards(data) {
@@ -321,16 +297,10 @@ function renderResultsCards(data) {
     data.forEach(row => {
       let val = row.units[u] || "-";
       let displayVal = val;
-      // 0.04 같은 숫자를 퍼센트로 변환
       if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
         displayVal = Math.round(parseFloat(val) * 100) + "%";
       }
-      cardHtml += `
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;">
-          <span style="color:#aaa;">${row.part}</span>
-          <span style="color:${displayVal==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${displayVal}</span>
-        </div>
-      `;
+      cardHtml += `<div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;"><span style="color:#aaa;">${row.part}</span><span style="color:${displayVal==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${displayVal}</span></div>`;
     });
     unitCard.innerHTML = cardHtml;
     container.appendChild(unitCard);
@@ -341,8 +311,10 @@ function renderResultsCards(data) {
 // 9. 반복듣기 및 공통 로직
 // ----------------------
 window.startRepeatMode = async function() {
+  // u를 붙여서 경로 및 파일명 생성
+  const fileName = `${currentType}u${currentUnit}.json`;
   try {
-    const res = await fetch(BASE_URL + currentType + "/" + currentType + currentUnit + ".json");
+    const res = await fetch(BASE_URL + currentType + "u/" + fileName);
     currentData = await res.json();
     showBox('repeat-box');
     const list = document.getElementById('repeat-list');
@@ -353,7 +325,7 @@ window.startRepeatMode = async function() {
       div.innerHTML = `<div>${item.en}</div><div class="repeat-ko" style="font-size:13px; color:#888;">${item.ko}</div>`;
       list.appendChild(div);
     });
-  } catch (e) { alert("데이터 로드 실패"); }
+  } catch (e) { alert("데이터 로드 실패: " + fileName); }
 };
 
 window.runRepeatAudio = async function() {
@@ -368,11 +340,10 @@ window.runRepeatAudio = async function() {
         document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        player.src = `${BASE_URL}${currentType}/${currentData[i].audio}`;
+        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; // u 경로 추가
         player.play(); player.onended = () => resolve();
       });
     }
-    sendDataToGoogle("반복듣기", (c + 1) + " cycle");
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -390,7 +361,6 @@ function updateProgress() {
 
 function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
-  if (!GOOGLE_SCRIPT_URL.startsWith("http")) return;
   const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: val, part: part };
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
 }
