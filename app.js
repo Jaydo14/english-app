@@ -1,5 +1,5 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역
+// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21로 변경)
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
@@ -8,7 +8,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk4c5JBHkWj9
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
-let userName = "";
+let userName = ""; 
 
 const bookDatabase = {
   "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
@@ -27,9 +27,13 @@ let isRepeating = false;
 const player = new Audio();
 let wakeLock = null;
 
+// AS 전용 변수
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
+
+// 100% 달성 알림 플래그 변수
+let isAlertShown = false;
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
@@ -67,7 +71,7 @@ window.login = function () {
   .then(res => res.json())
   .then(data => {
     if (data.result === "success") {
-      currentType = data.type; // 시트에서 가져온 hc12 또는 fc21
+      currentType = data.type;
       userName = data.name;
       alert(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
       renderUnitButtons();
@@ -85,16 +89,9 @@ function renderUnitButtons() {
   if(!container) return;
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
-  
   for (let i = 1; i <= 8; i++) {
     const btn = document.createElement("button");
-    
-    // [수정 전] color:rgba(255,255,255,0.6);
-    // [수정 후] color:#000; (또는 black)
-    const titleText = currentTitles[i] 
-      ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` 
-      : "";
-    
+    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` : "";
     btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
@@ -125,9 +122,6 @@ window.startASMode = async function() {
 function renderASPage() {
   const container = document.getElementById('as-box');
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
-  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
-  const folderPath = currentType + "u"; 
-
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
     <div style="text-align:left; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
@@ -168,7 +162,6 @@ window.startASStudy = function() {
 };
 
 window.playASAudio = function() {
-  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
   player.src = BASE_URL + currentType + "u/" + asData.audio;
   player.play().catch(() => alert("음원을 찾을 수 없습니다."));
 };
@@ -187,16 +180,16 @@ window.finishASStudy = function() {
 // ----------------------
 window.startScriptMode = async function() {
   currentPart = "Script"; currentTotalCycles = 18;
-  loadStudyData(`${currentType}u${currentUnit}.json`, "script"); // u를 붙여서 파일명 생성
+  loadStudyData(`${currentType}u${currentUnit}.json`, "script");
 };
 
 window.startVocaMode = async function() {
   currentPart = "Voca"; currentTotalCycles = 10;
-  loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca"); // u를 붙여서 파일명 생성
+  loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca");
 };
 
 async function loadStudyData(fileName, suffix) {
-  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
+  isAlertShown = false; // 학습 시작 시 알림 상태 초기화
   const url = BASE_URL + currentType + "u/" + fileName;
   try {
     const res = await fetch(url);
@@ -207,7 +200,7 @@ async function loadStudyData(fileName, suffix) {
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     updateProgress();
     showBox('study-box');
-  } catch (e) { alert("데이터 로딩 실패: " + url); }
+  } catch (e) { alert("파일을 찾을 수 없습니다."); }
 }
 
 window.startStudy = function () {
@@ -230,7 +223,6 @@ function playSentence() {
   const sentenceKor = document.getElementById("sentence-kor");
   if(sentenceKor) { sentenceKor.innerText = item.ko; sentenceKor.style.fontSize = "15px"; }
   updateProgress();
-  // GitHub 폴더는 u가 붙어 있으므로 경로 수정
   player.src = BASE_URL + currentType + "u/" + item.audio;
   player.play();
   player.onended = () => {
@@ -277,6 +269,14 @@ window.nextStep = function() {
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
+
+  // ⭐ 100% 달성 시 폭죽 애니메이션 실행 (알림창 대신)
+  if (percent >= 100 && !isAlertShown) {
+    isAlertShown = true;
+    triggerFireworkConfetti(); // 폭죽 함수 호출
+    // 폭죽이 터지는 동안에도 학습은 멈추지 않고 계속 진행됩니다.
+  }
+  
   playSentence();
 };
 
@@ -286,6 +286,7 @@ window.nextStep = function() {
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
+  document.getElementById('dev-title').innerText = "Loading Results...";
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
     const results = await res.json();
@@ -318,7 +319,6 @@ function renderResultsCards(data) {
 // 9. 반복듣기 및 공통 로직
 // ----------------------
 window.startRepeatMode = async function() {
-  // u를 붙여서 경로 및 파일명 생성
   const fileName = `${currentType}u${currentUnit}.json`;
   try {
     const res = await fetch(BASE_URL + currentType + "u/" + fileName);
@@ -332,7 +332,7 @@ window.startRepeatMode = async function() {
       div.innerHTML = `<div>${item.en}</div><div class="repeat-ko" style="font-size:13px; color:#888;">${item.ko}</div>`;
       list.appendChild(div);
     });
-  } catch (e) { alert("데이터 로드 실패: " + fileName); }
+  } catch (e) { alert("데이터 로드 실패"); }
 };
 
 window.runRepeatAudio = async function() {
@@ -347,10 +347,11 @@ window.runRepeatAudio = async function() {
         document.querySelectorAll('.repeat-item').forEach(r => r.classList.remove('playing'));
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.classList.add('playing'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; // u 경로 추가
+        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`;
         player.play(); player.onended = () => resolve();
       });
     }
+    sendDataToGoogle("반복듣기", (c + 1) + " cycle");
     if (c < count - 1 && isRepeating) await new Promise(r => setTimeout(r, 2000));
   }
   isRepeating = false;
@@ -370,4 +371,24 @@ function sendDataToGoogle(part, val) {
   const phoneInput = document.getElementById("phone-input");
   const data = { action: "save", phone: phoneInput.value.trim(), unit: "Unit " + currentUnit, percent: val, part: part };
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(data) });
+}
+
+// ======================================================
+// [신규] 폭죽 애니메이션 함수 (Fireworks Style)
+// ======================================================
+function triggerFireworkConfetti() {
+  var duration = 3 * 1000; // 3초 동안 지속
+  var animationEnd = Date.now() + duration;
+  var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+  function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+  var interval = setInterval(function() {
+    var timeLeft = animationEnd - Date.now();
+    if (timeLeft <= 0) { return clearInterval(interval); }
+    var particleCount = 50 * (timeLeft / duration);
+    // 화면 양쪽에서 폭죽 발사
+    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+  }, 250);
 }
