@@ -19,23 +19,22 @@
       <div id="unit-selector" class="box">
         <h2 id="welcome-msg">Unit 선택</h2>
         <div id="unit-buttons"></div>
-        <button onclick="showResultsPage()" style="background:#444; color:#39ff14; margin-top:20px; font-size:16px;">📊 나의 학습 결과 보기</button>
+        <button onclick="showResultsPage()" style="background:#444; color:#39ff14; margin-top:20px; font-size:16px;">📊 Progress Report</button>
       </div>
 
       <div id="menu-box" class="box" style="display:none;">
         <h2 id="menu-title">Select Mode</h2>
         <button onclick="startScriptMode()">Script</button>
-        <button onclick="startVocaMode()">Voca</button>
-        <button onclick="startASMode()">AS Correction</button>
+        <button onclick="startVocaMode()">Vocab</button> <button onclick="startASMode()">AS Correction</button>
         <button onclick="startRepeatMode()">반복듣기</button>
-        <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Unit 다시 고르기</button>
+        <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Back to Menu</button>
       </div>
 
       <div id="study-box" class="box" style="display:none;">
         <div id="progress-wrap"><div id="progress"></div></div>
         <div id="progress-percent">0%</div>
-        <p id="sentence" style="font-size:20px; font-weight:bold;">Ready?</p>
-        <p id="sentence-kor" style="font-size:16px; color:#aaa;"> </p>
+        <p id="sentence" style="font-size:18px; font-weight:bold;">Ready?</p>
+        <p id="sentence-kor" style="font-size:15px; color:#aaa;"> </p>
         <div id="control-area" style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
           <button id="start-btn" onclick="startStudy()" style="width: 95%;">Start</button>
           <button id="skip-btn" onclick="nextStep()" class="sub-action-btn" style="display:none;">Skip</button>
@@ -46,11 +45,10 @@
       <div id="as-box" class="box" style="display:none;"></div>
 
       <div id="results-box" class="box" style="display:none; max-height: 90vh; overflow-y: auto;">
-  <h2 style="color:#39ff14; margin-bottom: 20px;">나의 학습 리포트</h2>
-  <div id="results-content" style="padding: 0 5px;">
-    </div>
-  <button onclick="showBox('unit-selector')" class="sub-action-btn" style="margin-top:10px; position: sticky; bottom: 0;">Back to Menu</button>
-</div>
+        <h2 style="color:#39ff14;">Progress Report</h2>
+        <div id="results-content" style="padding: 0 5px;"></div>
+        <button onclick="showBox('unit-selector')" class="sub-action-btn" style="margin-top:20px;">Back to Menu</button>
+      </div>
 
       <div id="repeat-box" class="box" style="display:none;">
         <h2>반복 듣기</h2>
@@ -59,7 +57,7 @@
           <button onclick="runRepeatAudio()" style="width:100px; padding:10px;">시작</button>
         </div>
         <div id="repeat-list" style="text-align:left; max-height:350px; overflow-y:auto; border-top:1px solid #39ff14; padding-top:10px;"></div>
-        <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:20px;">메뉴로</button>
+        <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:20px;">Back to Menu</button>
       </div>
 
       <div id="dev-box" class="box" style="display:none;">
@@ -75,4 +73,3 @@
   <script src="app.js"></script>
 </body>
 </html>
-
