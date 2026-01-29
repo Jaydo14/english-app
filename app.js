@@ -305,21 +305,65 @@ window.showResultsPage = async function() {
   }
 };
 
-function renderResultsTable(data) {
+// [수정] 학습 결과 페이지 렌더링 로직 (카드형 + 퍼센트 변환)
+function renderResultsCards(data) {
   const container = document.getElementById('results-content');
-  let html = `<table style="width:100%; border-collapse:collapse; font-size:11px; color:#fff; border:1px solid #444;">
-    <tr style="background:#333; color:#39ff14;"><th style="padding:5px; border:1px solid #444;">파트</th>`;
-  for(let i=1; i<=8; i++) html += `<th style="padding:5px; border:1px solid #444;">U${i}</th>`;
-  html += `</tr>`;
-  data.forEach(row => {
-    html += `<tr><td style="padding:8px; border:1px solid #444; background:#222; font-weight:bold;">${row.part}</td>`;
-    row.units.forEach(v => { html += `<td style="padding:5px; border:1px solid #444;">${v||"-"}</td>`; });
-    html += `</tr>`;
-  });
-  html += `</table>`;
-  container.innerHTML = html;
+  container.innerHTML = ""; // 기존 내용 초기화
+
+  // 데이터 구조를 '유닛 중심'으로 재구성합니다. (Unit 1 ~ 8)
+  for (let u = 0; u < 8; u++) {
+    const unitCard = document.createElement('div');
+    unitCard.style.cssText = `
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      text-align: left;
+    `;
+
+    let cardHtml = `<h3 style="color: #39ff14; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 5px;">Unit ${u + 1}</h3>`;
+    
+    data.forEach(row => {
+      let val = row.units[u] || "-";
+      let displayVal = val;
+
+      // 1. 숫자인 경우 (0.04 등) 퍼센트로 변환
+      if (typeof val === 'number' || (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle'))) {
+        displayVal = Math.round(parseFloat(val) * 100) + "%";
+      }
+      
+      // 2. 값이 100%인 경우 색상 강조
+      const isComplete = displayVal === "100%";
+      const valColor = isComplete ? "#39ff14" : "#fff";
+
+      cardHtml += `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px;">
+          <span style="color: #aaa;">${row.part}</span>
+          <span style="color: ${valColor}; font-weight: bold;">${displayVal}</span>
+        </div>
+      `;
+    });
+
+    unitCard.innerHTML = cardHtml;
+    container.appendChild(unitCard);
+  }
 }
 
+// showResultsPage 함수 내부에서 호출하는 함수명도 변경해주세요.
+window.showResultsPage = async function() {
+  const phone = document.getElementById("phone-input").value.trim();
+  showBox('dev-box');
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const data = await res.json();
+    renderResultsCards(data); // 이름 변경됨
+    showBox('results-box');
+  } catch (e) {
+    alert("데이터 로드 실패");
+    showBox('unit-selector');
+  }
+};
 // ----------------------
 // 9. 반복듣기 및 공통 로직
 // ----------------------
