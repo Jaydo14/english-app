@@ -1,0 +1,32 @@
+[
+  {
+    "en": "What are you going to do there?",
+    "ko": "거기서 뭐 할껀데?",
+    "audio": "u7ven1.mp3"
+  },
+  {
+    "en": "What are you going to have there?",
+    "ko": "거기서 뭐 먹을껀데?",
+    "audio": "u7ven2.mp3"
+  },
+    {
+    "en": "What are you going to buy there?",
+    "ko": "거기서 뭐 살껀데?",
+    "audio": "u7ven3.mp3"
+  },
+    {
+    "en": "I absolutely hate going.",
+    "ko": "나 진짜 가기 싫어",
+    "audio": "u7ven4.mp3"
+  },
+    {
+    "en": "I absolutely hate memorizing.",
+    "ko": "나 진짜 기억하기 싫어",
+    "audio": "u7ven5.mp3"
+  },
+    {
+    "en": "I absolutely hate cleaning.",
+    "ko": "나 진짜 청소하는거 싫어",
+    "audio": "u7ven6.mp3"
+  }
+]

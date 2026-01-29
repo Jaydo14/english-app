@@ -1,0 +1,32 @@
+[
+  {
+    "en": "It takes about five minutes on foot.",
+    "ko": "걸어서 5분정도 걸려",
+    "audio": "u2ven1.mp3"
+  },
+  {
+    "en": "It takes about half an hour by subway.",
+    "ko": "지하철로 30분정도 걸려",
+    "audio": "u2ven2.mp3"
+  },
+    {
+    "en": "It takes about an hour by car.",
+    "ko": "차로 한시간정도 걸려",
+    "audio": "u2ven3.mp3"
+  },
+    {
+    "en": "If there's no traffic.",
+    "ko": "안막히면",
+    "audio": "u2ven4.mp3"
+  },
+    {
+    "en": "If there's heavy traffic.",
+    "ko": "많이 막히면",
+    "audio": "u2ven5.mp3"
+  },
+    {
+    "en": "If there's light traffic.",
+    "ko": "조금 막히면",
+    "audio": "u2ven6.mp3"
+  }
+]
