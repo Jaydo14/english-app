@@ -1,5 +1,5 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21로 변경)
+// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21)
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
@@ -27,13 +27,11 @@ let isRepeating = false;
 const player = new Audio();
 let wakeLock = null;
 
-// AS 전용 변수
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
 
-// 100% 달성 알림 플래그 변수
-let isAlertShown = false;
+let isAlertShown = false; // 100% 알림 플래그
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
@@ -108,7 +106,6 @@ window.startASMode = async function() {
   currentPart = "AS Correction";
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
-  document.getElementById('dev-title').innerText = "Loading...";
   const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
   try {
     const res = await fetch(url);
@@ -189,7 +186,7 @@ window.startVocaMode = async function() {
 };
 
 async function loadStudyData(fileName, suffix) {
-  isAlertShown = false; // 학습 시작 시 알림 상태 초기화
+  isAlertShown = false; 
   const url = BASE_URL + currentType + "u/" + fileName;
   try {
     const res = await fetch(url);
@@ -200,7 +197,7 @@ async function loadStudyData(fileName, suffix) {
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     updateProgress();
     showBox('study-box');
-  } catch (e) { alert("파일을 찾을 수 없습니다."); }
+  } catch (e) { alert("파일 로딩 실패"); }
 }
 
 window.startStudy = function () {
@@ -270,11 +267,12 @@ window.nextStep = function() {
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
 
-  // ⭐ 100% 달성 시 폭죽 애니메이션 실행 (알림창 대신)
+  // ⭐ 100% 달성 시 폭죽 발사 + 알림창 띄우기
   if (percent >= 100 && !isAlertShown) {
     isAlertShown = true;
-    triggerFireworkConfetti(); // 폭죽 함수 호출
-    // 폭죽이 터지는 동안에도 학습은 멈추지 않고 계속 진행됩니다.
+    triggerFireworkConfetti(); // 폭죽 발사
+    // 알림창 띄우기 (확인 누르면 바로 다음 문장 진행)
+    alert(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!\n계속해서 완벽하게 익혀보세요! 🔥`);
   }
   
   playSentence();
@@ -286,11 +284,10 @@ window.nextStep = function() {
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
-  document.getElementById('dev-title').innerText = "Loading Results...";
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
-    const results = await res.json();
-    renderResultsCards(results);
+    const data = await res.json();
+    renderResultsCards(data);
     showBox('results-box');
   } catch (e) { alert("데이터 로드 실패"); showBox('unit-selector'); }
 };
@@ -374,10 +371,10 @@ function sendDataToGoogle(part, val) {
 }
 
 // ======================================================
-// [신규] 폭죽 애니메이션 함수 (Fireworks Style)
+// 폭죽 애니메이션 함수 (Fireworks Style)
 // ======================================================
 function triggerFireworkConfetti() {
-  var duration = 3 * 1000; // 3초 동안 지속
+  var duration = 4 * 1000; // 지속 시간 4초
   var animationEnd = Date.now() + duration;
   var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
 
@@ -387,7 +384,6 @@ function triggerFireworkConfetti() {
     var timeLeft = animationEnd - Date.now();
     if (timeLeft <= 0) { return clearInterval(interval); }
     var particleCount = 50 * (timeLeft / duration);
-    // 화면 양쪽에서 폭죽 발사
     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
     confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
   }, 250);
