@@ -1,19 +1,19 @@
 // ======================================================
-// 1. 기본 설정 및 상수 영역
+// 1. 기본 설정 및 상수 영역 (교재 코드: hc12, fc21로 변경)
 // ======================================================
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-// 사용자님이 제공해주신 최신 구글 스크립트 URL입니다.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdzCnHFnu2oMfAKYVx_bpUWFTGjqub0x2CKXM5EhJ1S-ESJD62o4AQjvWDrlhvC8TD/exec"; 
+// 사용자님의 최신 구글 스크립트 URL
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwk4c5JBHkWj9aZ4LxHocVgvPn9-uoYexKJY3J8CcgDYIstC4WC-oJUgD2MJ_jRav8p/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
-let userName = ""; // 로그인한 사용자 이름 저장
+let userName = ""; // 사용자 이름 저장
 
 const bookDatabase = {
-  "hc12u": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
-  "fc21u": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
+  "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
+  "fc21": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
 };
 
 // ----------------------
@@ -102,7 +102,7 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (첨삭 학습) 로직
+// 5. AS Correction (My Answer / Feedback / 폰트 축소 반영)
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -139,16 +139,17 @@ function renderASPage() {
     </div>
 
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
-      <p style="color:#888; font-size:12px; margin-bottom:5px;">Your Answer (원문)</p>
-      <p style="color:#aaa; font-style:italic;">${asData.original}</p>
+      <p style="color:#888; font-size:12px; margin-bottom:5px;">My Answer</p>
+      <p style="color:#aaa; font-style:italic; font-size:15px;">${asData.original}</p>
     </div>
 
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
-      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Teacher's Correction (첨삭)</p>
-      <p style="font-size:19px; line-height:1.4;">${formatText(asData.corrected)}</p>
+      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Feedback</p>
+      <p style="font-size:17px; line-height:1.4;">${formatText(asData.corrected)}</p>
     </div>
 
-    <div id="as-timer" style="font-size:35px; margin-bottom:20px; color:#39ff14; font-family:monospace; font-weight:bold;">00:00</div>
+    <div id="as-timer" style="font-size:28px; margin-bottom:20px; color:#39ff14; font-family:monospace; font-weight:bold;">00:00</div>
+    
     <button id="as-start-btn" onclick="startASStudy()" style="width: 95%;">Start</button>
     
     <div id="as-controls" style="display:none; flex-direction:column; align-items:center; gap:10px; width:100%;">
@@ -157,7 +158,7 @@ function renderASPage() {
     </div>
 
     <div style="width:100%; display:flex; justify-content:center; margin-top:15px;">
-      <button onclick="showMenu()" class="sub-action-btn" style="width:65% !important;">Back</button>
+      <button onclick="showMenu()" class="sub-action-btn" style="width:65% !important;">Back to Menu</button>
     </div>
   `;
 }
@@ -191,7 +192,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. 학습 모드 기능 (Script / Voca)
+// 6. 학습 모드 기능 (Script / Vocab)
 // ----------------------
 window.startScriptMode = async function() {
   currentPart = "Script"; currentTotalCycles = 18;
@@ -231,9 +232,14 @@ function playSentence() {
   sText.classList.remove("success", "fail");
   sText.style.color = "#fff";
   const item = currentData[index];
+  // 영어 문장 폰트 크기 18px로 조정
   sText.innerText = item.en;
+  sText.style.fontSize = "18px"; 
   const sentenceKor = document.getElementById("sentence-kor");
-  if(sentenceKor) sentenceKor.innerText = item.ko;
+  if(sentenceKor) {
+    sentenceKor.innerText = item.ko;
+    sentenceKor.style.fontSize = "15px";
+  }
   updateProgress();
   player.src = BASE_URL + currentType + "/" + item.audio;
   player.play();
@@ -287,7 +293,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. 학습 결과 페이지 로직
+// 8. Progress Report (카드형 UI + 퍼센트 변환)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
@@ -297,7 +303,7 @@ window.showResultsPage = async function() {
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
     const results = await res.json();
-    renderResultsTable(results);
+    renderResultsCards(results);
     showBox('results-box');
   } catch (e) {
     alert("데이터 로드 실패");
@@ -305,65 +311,32 @@ window.showResultsPage = async function() {
   }
 };
 
-// [수정] 학습 결과 페이지 렌더링 로직 (카드형 + 퍼센트 변환)
 function renderResultsCards(data) {
   const container = document.getElementById('results-content');
-  container.innerHTML = ""; // 기존 내용 초기화
-
-  // 데이터 구조를 '유닛 중심'으로 재구성합니다. (Unit 1 ~ 8)
+  container.innerHTML = "";
   for (let u = 0; u < 8; u++) {
     const unitCard = document.createElement('div');
-    unitCard.style.cssText = `
-      background: #222;
-      border: 1px solid #333;
-      border-radius: 15px;
-      padding: 15px;
-      margin-bottom: 15px;
-      text-align: left;
-    `;
-
-    let cardHtml = `<h3 style="color: #39ff14; margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 5px;">Unit ${u + 1}</h3>`;
-    
+    unitCard.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
+    let cardHtml = `<h3 style="color:#39ff14; margin-bottom:12px; border-bottom:1px solid #333; padding-bottom:5px;">Unit ${u+1}</h3>`;
     data.forEach(row => {
       let val = row.units[u] || "-";
       let displayVal = val;
-
-      // 1. 숫자인 경우 (0.04 등) 퍼센트로 변환
-      if (typeof val === 'number' || (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle'))) {
+      // 0.04 같은 숫자를 퍼센트로 변환
+      if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
         displayVal = Math.round(parseFloat(val) * 100) + "%";
       }
-      
-      // 2. 값이 100%인 경우 색상 강조
-      const isComplete = displayVal === "100%";
-      const valColor = isComplete ? "#39ff14" : "#fff";
-
       cardHtml += `
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px;">
-          <span style="color: #aaa;">${row.part}</span>
-          <span style="color: ${valColor}; font-weight: bold;">${displayVal}</span>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;">
+          <span style="color:#aaa;">${row.part}</span>
+          <span style="color:${displayVal==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${displayVal}</span>
         </div>
       `;
     });
-
     unitCard.innerHTML = cardHtml;
     container.appendChild(unitCard);
   }
 }
 
-// showResultsPage 함수 내부에서 호출하는 함수명도 변경해주세요.
-window.showResultsPage = async function() {
-  const phone = document.getElementById("phone-input").value.trim();
-  showBox('dev-box');
-  try {
-    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
-    const data = await res.json();
-    renderResultsCards(data); // 이름 변경됨
-    showBox('results-box');
-  } catch (e) {
-    alert("데이터 로드 실패");
-    showBox('unit-selector');
-  }
-};
 // ----------------------
 // 9. 반복듣기 및 공통 로직
 // ----------------------
