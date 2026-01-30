@@ -22,9 +22,16 @@
       font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%;
     }
     /* 보안 경고 문구 스타일 */
-    .security-warning {
-      margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px;
+    .security-warning { margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px; }
+    /* 흔들림 애니메이션 */
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
+      100% { transform: translateX(0); }
     }
+    .shake { animation: shake 0.3s ease-in-out; }
   </style>
 </head>
 <body>
