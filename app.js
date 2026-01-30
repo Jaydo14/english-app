@@ -31,7 +31,6 @@ let asSeconds = 0;
 let asData = null;
 let isAlertShown = false; 
 
-// 팝업 후 실행할 동작을 저장하는 변수
 let modalCallback = null; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -49,18 +48,17 @@ function showBox(boxId) {
   document.getElementById("app").style.display = "block";
 }
 
-// 모든 alert을 대체할 커스텀 모달 함수
 function showCustomModal(msg, callback = null) {
-  player.pause(); // 알림 시 오디오 정지
+  player.pause(); 
   document.getElementById('modal-msg').innerText = msg;
   document.getElementById('custom-modal').style.display = 'flex';
-  modalCallback = callback; // 확인 버튼 클릭 시 실행할 함수 저장
+  modalCallback = callback; 
 }
 
 function closeCustomModal() {
   document.getElementById('custom-modal').style.display = 'none';
   if (modalCallback) {
-    modalCallback(); // 저장된 동작 실행
+    modalCallback(); 
     modalCallback = null;
   }
 }
@@ -70,7 +68,7 @@ async function requestWakeLock() {
 }
 
 // ----------------------
-// 4. 로그인 및 유닛 버튼 (커스텀 알림 적용)
+// 4. 로그인 및 유닛 버튼
 // ----------------------
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
@@ -87,7 +85,6 @@ window.login = function () {
       currentType = data.type; userName = data.name;
       renderUnitButtons();
       showBox('unit-selector');
-      // 로그인 시에도 커스텀 팝업 사용
       showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
     } else {
       showCustomModal("등록되지 않은 번호입니다.");
@@ -183,7 +180,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. 학습 모드 (독립 저장 & Listen again 버튼)
+// 6. 학습 모드 (독립 저장 키 & 버튼 초기화 로직 수정)
 // ----------------------
 window.startScriptMode = async function() { currentPart = "Script"; currentTotalCycles = 18; loadStudyData(`${currentType}u${currentUnit}.json`, "script"); };
 window.startVocaMode = async function() { currentPart = "Voca"; currentTotalCycles = 10; loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca"); };
@@ -198,17 +195,23 @@ async function loadStudyData(fileName, suffix) {
     index = 0; cycle = 1;
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     
-    // 처음 진입 시 버튼 설정 보존
+    // ⭐ [수정] 처음 진입 시 버튼을 'Start'로 초기화
     const startBtn = document.getElementById("start-btn");
-    if(startBtn) startBtn.innerText = "Listen again";
+    if(startBtn) startBtn.innerText = "Start";
     const skipBtn = document.getElementById("skip-btn");
-    if(skipBtn) skipBtn.style.display = "inline-block";
+    if(skipBtn) skipBtn.style.display = "none"; // 처음엔 Skip 숨김
 
     updateProgress(); showBox('study-box');
   } catch (e) { showCustomModal("학습 파일을 불러오지 못했습니다."); }
 }
 
 window.startStudy = function () {
+  // ⭐ [수정] Start를 누르는 순간 Listen again으로 변경 및 Skip 버튼 표시
+  const startBtn = document.getElementById("start-btn");
+  if(startBtn) startBtn.innerText = "Listen again";
+  const skipBtn = document.getElementById("skip-btn");
+  if(skipBtn) skipBtn.style.display = "inline-block";
+
   requestWakeLock(); playSentence();
 };
 
@@ -244,7 +247,7 @@ recognizer.onresult = (event) => {
     failSound.play(); 
     if(sText) {
       sText.innerText = "Try again"; sText.style.color = "#ff4b4b";
-      sText.classList.remove("shake"); void sText.offsetWidth; sText.classList.add("shake"); // 흔들림 효과 보존
+      sText.classList.remove("shake"); void sText.offsetWidth; sText.classList.add("shake"); 
     }
     setTimeout(playSentence, 800);
   }
@@ -261,7 +264,6 @@ window.nextStep = function() {
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
 
-  // 100% 달성 폭죽 + 커스텀 알림
   if (percent >= 100 && !isAlertShown) {
     isAlertShown = true; 
     triggerFireworkConfetti();
@@ -272,7 +274,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. Progress Report / 반복듣기 등
+// 8. Progress Report / 반복듣기 등 (보존)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
