@@ -47,6 +47,7 @@ function showBox(boxId) {
 }
 
 function showCustomModal(msg) {
+  player.pause(); // ⭐ 알림창이 뜰 때 연관 없는 오디오가 나오지 않도록 일시정지
   document.getElementById('modal-msg').innerText = msg;
   document.getElementById('custom-modal').style.display = 'flex';
 }
@@ -61,7 +62,7 @@ async function requestWakeLock() {
 }
 
 // ----------------------
-// 4. 로그인 및 유닛 버튼 (블랙 폰트)
+// 4. 로그인 및 유닛 버튼
 // ----------------------
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
@@ -99,7 +100,7 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (질문 표시 복구)
+// 5. AS Correction
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -115,11 +116,9 @@ window.startASMode = async function() {
 function renderASPage() {
   const container = document.getElementById('as-box');
   const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
-  
-  // ⭐ [Teacher's Question] 영역 다시 추가됨
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
-    <div style="text-align:left; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
+    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
       <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[Teacher's Question]</p>
       <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
     </div>
@@ -164,7 +163,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. 학습 모드 (독립 저장 키)
+// 6. 학습 모드
 // ----------------------
 window.startScriptMode = async function() { currentPart = "Script"; currentTotalCycles = 18; loadStudyData(`${currentType}u${currentUnit}.json`, "script"); };
 window.startVocaMode = async function() { currentPart = "Voca"; currentTotalCycles = 10; loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca"); };
@@ -178,13 +177,18 @@ async function loadStudyData(fileName, suffix) {
     const saved = localStorage.getItem(`save_${phone}_${currentType}_unit${currentUnit}_${suffix}`);
     index = 0; cycle = 1;
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
+    
+    // ⭐ 처음부터 Listen again 버튼으로 표시
+    const startBtn = document.getElementById("start-btn");
+    if(startBtn) startBtn.innerText = "Listen again";
+    const skipBtn = document.getElementById("skip-btn");
+    if(skipBtn) skipBtn.style.display = "inline-block";
+
     updateProgress(); showBox('study-box');
   } catch (e) { alert("파일 로딩 실패"); }
 }
 
 window.startStudy = function () {
-  document.getElementById("start-btn").innerText = "Listen again";
-  document.getElementById("skip-btn").style.display = "inline-block";
   requestWakeLock(); playSentence();
 };
 
@@ -200,7 +204,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 7. 음성 인식 및 흔들림 효과
+// 7. 음성 인식 및 진행
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -236,7 +240,9 @@ window.nextStep = function() {
   sendDataToGoogle(currentPart, percent + "%"); 
 
   if (percent >= 100 && !isAlertShown) {
-    isAlertShown = true; triggerFireworkConfetti();
+    isAlertShown = true; 
+    player.pause(); // ⭐ 폭죽과 알림이 나오기 전에 현재 오디오를 멈춤
+    triggerFireworkConfetti();
     showCustomModal(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!\n계속해서 완벽하게 익혀보세요! 🔥`);
     return;
   }
@@ -244,7 +250,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. Progress Report / 반복듣기 등 (동일 유지)
+// 8. Progress Report / 반복듣기 등
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
