@@ -21,6 +21,10 @@
       background: #39ff14; color: #000; border: none; padding: 12px 30px;
       font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%;
     }
+    /* 보안 경고 문구 스타일 */
+    .security-warning {
+      margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px;
+    }
   </style>
 </head>
 <body>
@@ -91,8 +95,11 @@
       </div>
     </div>
 
-    <footer style="margin-top: 50px; padding-bottom: 20px; text-align: center; color: #888; font-size: 12px;">
-      <p style="font-weight: bold;">Copyright © 2026 English App. All rights reserved.</p>
+    <footer style="margin-top: 30px; padding-bottom: 20px; text-align: center;">
+      <div class="security-warning">
+        경고: 본 시스템은 인가된 사용자만 접근 가능합니다. 무단 접근, 데이터 복제 및 유출 시 관련 법령에 의거하여 민·형사상의 법적 책임을 질 수 있으며, 모든 접속 로그는 실시간으로 기록됩니다.
+      </div>
+      <p style="color: #888; font-size: 11px; font-weight: bold; margin-top: 10px;">Copyright © 2026 English App. All rights reserved.</p>
     </footer>
   </div>
   <script src="app.js"></script>
