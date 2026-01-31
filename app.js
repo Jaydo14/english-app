@@ -10,6 +10,7 @@ let currentTotalCycles = 18;
 let currentPart = "Script"; 
 let userName = ""; 
 
+// ⭐ [수정] fc21 교재 Unit 8까지 제목 복구
 const bookDatabase = {
   "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
   "fc21": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
@@ -30,7 +31,6 @@ let asTimer = null;
 let asSeconds = 0;
 let asData = null;
 let isAlertShown = false; 
-
 let modalCallback = null; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -113,7 +113,7 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (질문 문장 보존)
+// 5. AS Correction
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -180,7 +180,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. 학습 모드 (독립 저장 키 & 버튼 초기화 로직 수정)
+// 6. 학습 모드
 // ----------------------
 window.startScriptMode = async function() { currentPart = "Script"; currentTotalCycles = 18; loadStudyData(`${currentType}u${currentUnit}.json`, "script"); };
 window.startVocaMode = async function() { currentPart = "Voca"; currentTotalCycles = 10; loadStudyData(`${currentType}u${currentUnit}_voca.json`, "voca"); };
@@ -195,23 +195,20 @@ async function loadStudyData(fileName, suffix) {
     index = 0; cycle = 1;
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
     
-    // ⭐ [수정] 처음 진입 시 버튼을 'Start'로 초기화
     const startBtn = document.getElementById("start-btn");
     if(startBtn) startBtn.innerText = "Start";
     const skipBtn = document.getElementById("skip-btn");
-    if(skipBtn) skipBtn.style.display = "none"; // 처음엔 Skip 숨김
+    if(skipBtn) skipBtn.style.display = "none";
 
     updateProgress(); showBox('study-box');
   } catch (e) { showCustomModal("학습 파일을 불러오지 못했습니다."); }
 }
 
 window.startStudy = function () {
-  // ⭐ [수정] Start를 누르는 순간 Listen again으로 변경 및 Skip 버튼 표시
   const startBtn = document.getElementById("start-btn");
   if(startBtn) startBtn.innerText = "Listen again";
   const skipBtn = document.getElementById("skip-btn");
   if(skipBtn) skipBtn.style.display = "inline-block";
-
   requestWakeLock(); playSentence();
 };
 
@@ -229,7 +226,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 7. 음성 인식 및 흔들림 효과 (보존)
+// 7. 음성 인식 및 흔들림 효과
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -274,7 +271,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. Progress Report / 반복듣기 등 (보존)
+// 8. Progress Report (Unit 8까지 고정 표시 및 오류 수정)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
@@ -289,6 +286,7 @@ window.showResultsPage = async function() {
 function renderResultsCards(data) {
   const container = document.getElementById('results-content');
   container.innerHTML = "";
+  // ⭐ [수정] 교재에 상관없이 데이터가 존재하는 Unit 8까지 모두 보여줌
   for (let u = 0; u < 8; u++) {
     const card = document.createElement('div');
     card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
@@ -298,7 +296,7 @@ function renderResultsCards(data) {
       if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
         val = Math.round(parseFloat(val) * 100) + "%";
       }
-      html += `<div style="display:flex; justify-content:space-between; font-size:14px; margin-top:5px;"><span style="color:#aaa;">${row.part}</span><span style="color:${val==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${val}</span></div>`;
+      html += `<div style="display:flex; justify-content:space-between; margin-top:5px; font-size:14px;"><span style="color:#aaa;">${row.part}</span><span style="color:${val==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${val}</span></div>`;
     });
     card.innerHTML = html; container.appendChild(card);
   }
