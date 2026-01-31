@@ -7,30 +7,30 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* 커스텀 팝업 스타일 */
+    /* 커스텀 팝업 스타일 (크기 축소 반영) */
     #custom-modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center;
     }
     .modal-content {
-      background: #111; border: 2px solid #39ff14; border-radius: 20px; padding: 30px;
-      text-align: center; width: 85%; max-width: 400px; box-shadow: 0 0 20px #39ff14;
+      background: #111; border: 2px solid #39ff14; border-radius: 15px; 
+      padding: 20px; /* 기존 30px에서 축소 */
+      text-align: center; 
+      width: 80%; /* 기존 85%에서 축소 */
+      max-width: 320px; /* 기존 400px에서 축소 */
+      box-shadow: 0 0 15px #39ff14;
     }
-    .modal-content p { color: #fff; font-size: 18px; line-height: 1.6; margin-bottom: 25px; white-space: pre-wrap; }
+    .modal-content p { 
+      color: #fff; font-size: 16px; /* 기존 18px에서 축소 */
+      line-height: 1.5; margin-bottom: 20px; white-space: pre-wrap; 
+    }
     .modal-content button {
-      background: #39ff14; color: #000; border: none; padding: 12px 30px;
-      font-size: 18px; font-weight: bold; border-radius: 10px; cursor: pointer; width: 100%;
+      background: #39ff14; color: #000; border: none; padding: 10px 0;
+      font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%;
     }
-    /* 보안 경고 문구 스타일 */
+    /* 보안 경고 및 애니메이션 생략 (기존과 동일) */
     .security-warning { margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px; }
-    /* 흔들림 애니메이션 */
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      50% { transform: translateX(8px); }
-      75% { transform: translateX(-8px); }
-      100% { transform: translateX(0); }
-    }
+    @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }
     .shake { animation: shake 0.3s ease-in-out; }
   </style>
 </head>
