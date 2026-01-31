@@ -10,10 +10,13 @@ let currentTotalCycles = 18;
 let currentPart = "Script"; 
 let userName = ""; 
 
-// ⭐ [수정] fc21 교재 Unit 8까지 제목 복구
+// ⭐ fc21 교재 Unit 8까지 제목 반영 (이미지 기반)
 const bookDatabase = {
   "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
-  "fc21": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
+  "fc21": { 
+    1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy",
+    7: "Traveling alone", 8: "Education" 
+  }
 };
 
 // ----------------------
@@ -37,7 +40,7 @@ const successSound = new Audio(BASE_URL + "common/success.mp3");
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
 
 // ----------------------
-// 3. 화면 관리 및 커스텀 팝업 (도메인 표시 제거)
+// 3. 화면 관리 및 커스텀 팝업
 // ----------------------
 function showBox(boxId) {
   const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box'];
@@ -57,10 +60,7 @@ function showCustomModal(msg, callback = null) {
 
 function closeCustomModal() {
   document.getElementById('custom-modal').style.display = 'none';
-  if (modalCallback) {
-    modalCallback(); 
-    modalCallback = null;
-  }
+  if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
 async function requestWakeLock() {
@@ -113,7 +113,7 @@ window.showMenu = () => { stopRepeatAudio(); clearInterval(asTimer); showBox('me
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction
+// 5. AS Correction (⭐ 줄바꿈 반영 로직 추가)
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -131,16 +131,24 @@ window.startASMode = async function() {
 
 function renderASPage() {
   const container = document.getElementById('as-box');
-  const formatText = (text) => text.replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
+  
+  // ⭐ [수정] 줄바꿈(\n)을 HTML 태그(<br>)로 변환하는 로직 추가
+  const formatText = (text) => {
+    if (!text) return "";
+    return String(text)
+      .replace(/\n/g, '<br>') // 구글 시트 줄바꿈 반영
+      .replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>');
+  };
+
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
     <div style="text-align:left; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
       <p style="color:#39ff14; font-size:14px; margin-bottom:5px;">[Teacher's Question]</p>
-      <p style="font-size:18px; line-height:1.4;">${asData.question}</p>
+      <p style="font-size:18px; line-height:1.4;">${formatText(asData.question)}</p>
     </div>
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
       <p style="color:#888; font-size:12px; margin-bottom:5px;">My Answer</p>
-      <p style="color:#aaa; font-style:italic; font-size:15px;">${asData.original}</p>
+      <p style="color:#aaa; font-style:italic; font-size:15px;">${formatText(asData.original)}</p>
     </div>
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;">
       <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">Feedback</p>
@@ -271,7 +279,7 @@ window.nextStep = function() {
 };
 
 // ----------------------
-// 8. Progress Report (Unit 8까지 고정 표시 및 오류 수정)
+// 8. Progress Report (⭐ 중복 제거 수정)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
@@ -286,12 +294,15 @@ window.showResultsPage = async function() {
 function renderResultsCards(data) {
   const container = document.getElementById('results-content');
   container.innerHTML = "";
-  // ⭐ [수정] 교재에 상관없이 데이터가 존재하는 Unit 8까지 모두 보여줌
+  
+  // 파트명이 있는 유효한 데이터만 필터링 (중복 방지)
+  const validData = data.filter(row => row.part && row.part.trim() !== "");
+
   for (let u = 0; u < 8; u++) {
     const card = document.createElement('div');
     card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
     let html = `<h3 style="color:#39ff14; border-bottom:1px solid #333; padding-bottom:5px;">Unit ${u+1}</h3>`;
-    data.forEach(row => {
+    validData.forEach(row => {
       let val = row.units[u] || "-";
       if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
         val = Math.round(parseFloat(val) * 100) + "%";
