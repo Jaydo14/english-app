@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // ⭐ [주의] 아래 URL이 최신 배포 URL인지 다시 한번 확인해 주세요.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxU2QQL5B1p0IG5tnsL_SE8NqcQs4IxMc-6_HGG5wSPKaGRX2oeN_8ZrPuXTSOsODigjw/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5k3eyubFZK1J5ZkoyHqj5yylHLITbMjndpM7jkenzQh9qjfaRfZCo1SCoxNm09weCig/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -260,6 +260,7 @@ async function processRecording() {
 window.submitAccurateSpeaking = async function() {
   const text = document.getElementById('student-text-input').value.trim();
   if (!text) return showCustomModal("원문 내용을 입력해주세요.");
+  
   showBox('dev-box');
   const payload = { 
     action: "uploadAS", 
@@ -270,17 +271,25 @@ window.submitAccurateSpeaking = async function() {
   };
   
   try {
-    const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-    const resultText = await res.text();
-    if (resultText === "Success") {
+    // URL 끝에 타임스탬프를 붙여 캐시 방지
+    const url = `${GOOGLE_SCRIPT_URL}?t=${Date.now()}`;
+    const res = await fetch(url, { 
+      method: "POST", 
+      body: JSON.stringify(payload) 
+    });
+    
+    const data = await res.json(); // createJsonResponse를 통해 항상 JSON으로 응답함
+    
+    if (data.result === "success") {
       triggerFireworkConfetti();
-      showCustomModal("제출 성공! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
+      showCustomModal("성공적으로 제출되었습니다! 🎉", () => showMenu());
     } else {
-      showCustomModal("제출 실패: " + resultText);
+      showCustomModal("제출 실패: " + data.message);
       showBox('as-record-box');
     }
   } catch (e) {
-    showCustomModal("서버 연결 실패. 배포 설정을 확인하세요.");
+    // 네트워크 오류 시 메시지
+    showCustomModal("서버 연결에 실패했습니다. 배포 설정을 다시 확인해 주세요.");
     showBox('as-record-box');
   }
 };
