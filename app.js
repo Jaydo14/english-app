@@ -4,7 +4,7 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Z_vzBdgso9bDc59x4thUB00KMWHNOeW_Piw4vCnLvimfPi7aym0M_XMhrsQGN07A/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwP9O3voo2AIOkb055CUs__TIXGd73Nf5aOO7__J3HCpZyT7JlR6F-h9Dt46tiM5wIY/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -272,29 +272,34 @@ window.submitAccurateSpeaking = async function() {
   if (!studentText) return showCustomModal("원문 내용을 입력해주세요.");
   
   showBox('dev-box');
-  const payload = {
-    action: "uploadAS",
-    phone: document.getElementById("phone-input").value.trim(),
-    unit: "Unit " + currentUnit,
-    studentText: studentText,
-    audioData: window.lastAudioBase64
+  const payload = { 
+    action: "uploadAS", 
+    phone: document.getElementById("phone-input").value.trim(), 
+    unit: "Unit " + currentUnit, 
+    studentText: studentText, 
+    audioData: window.lastAudioBase64 
   };
 
   try {
-    // CORS 오류 방지를 위해 mode: "no-cors" 사용
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(payload)
+    // mode: "no-cors"를 빼고 일반 fetch를 사용하여 서버 응답을 직접 받습니다.
+    const res = await fetch(GOOGLE_SCRIPT_URL, { 
+      method: "POST", 
+      body: JSON.stringify(payload) 
     });
 
-    // 전송 지연 고려하여 팝업 실행
-    setTimeout(() => {
+    const result = await res.text();
+    
+    if (result === "Success") {
       triggerFireworkConfetti();
       showCustomModal("성공적으로 제출되었습니다! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
-    }, 1000);
+    } else {
+      // 서버에서 보낸 에러 메시지를 사용자에게 보여줍니다.
+      showCustomModal("제출 실패: " + result); 
+      showBox('as-record-box');
+    }
   } catch (e) {
-    showCustomModal("제출 중 오류가 발생했습니다.");
+    // 네트워크 문제나 CORS 차단 시 실행됩니다.
+    showCustomModal("서버 연결에 실패했습니다. 구글 스크립트 배포 설정을 확인해 주세요.");
     showBox('as-record-box');
   }
 };
