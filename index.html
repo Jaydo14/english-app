@@ -7,20 +7,16 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    /* 커스텀 팝업 스타일 (70% 크기 축소) */
+    /* 커스텀 팝업 스타일 (아담한 크기) */
     #custom-modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center;
     }
     .modal-content {
-      background: #111; border: 2px solid #39ff14; border-radius: 15px; 
-      padding: 18px; 
-      text-align: center; 
-      width: 70%; 
-      max-width: 300px; 
-      box-shadow: 0 0 15px #39ff14;
+      background: #111; border: 2px solid #39ff14; border-radius: 15px; padding: 20px;
+      text-align: center; width: 75%; max-width: 320px; box-shadow: 0 0 15px #39ff14;
     }
-    .modal-content p { color: #fff; font-size: 15px; line-height: 1.5; margin-bottom: 20px; white-space: pre-wrap; }
+    .modal-content p { color: #fff; font-size: 16px; line-height: 1.5; margin-bottom: 20px; white-space: pre-wrap; }
     .modal-content button {
       background: #39ff14; color: #000; border: none; padding: 10px 0;
       font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%;
@@ -50,9 +46,32 @@
         <h2 id="menu-title">Select Mode</h2>
         <button onclick="startScriptMode()">Script</button>
         <button onclick="startVocaMode()">Vocab</button>
+        <button onclick="startAccurateSpeakingMode()" style="background:#ffea00; color:#000;">Accurate Speaking</button> 
         <button onclick="startASMode()">AS Correction</button>
         <button onclick="startRepeatMode()">반복듣기</button>
         <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Back to Menu</button>
+      </div>
+
+      <div id="as-record-box" class="box" style="display:none;">
+        <h2 style="color:#ffea00;">Accurate Speaking</h2>
+        <div style="text-align:left; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:15px;">
+          <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">[Teacher's Question]</p>
+          <p id="as-q-text" style="font-size:16px; line-height:1.4;"></p>
+        </div>
+        <button id="as-listen-btn" onclick="listenQuestion()">Listen Question</button>
+        
+        <div id="recording-ui" style="display:none; margin-top:20px;">
+          <div id="rec-timer" style="font-size:32px; color:#ff4b4b; font-weight:bold; margin-bottom:10px;">00:00</div>
+          <div style="color:#ff4b4b; margin-bottom:15px; font-weight:bold; animation: pulse 1s infinite;">🔴 Recording...</div>
+          <button onclick="stopRecording()" style="background:#ff4b4b; color:#fff;">Stop Recording</button>
+        </div>
+
+        <div id="submit-ui" style="display:none; margin-top:20px;">
+          <p style="font-size:14px; color:#aaa; margin-bottom:10px;">들린 질문에 대한 답변을 입력하세요.</p>
+          <textarea id="student-text-input" rows="4" placeholder="Your Answer (원문)" style="width:90%; background:#222; color:#fff; border:1px solid #39ff14; border-radius:10px; padding:10px; font-size:15px;"></textarea>
+          <button onclick="submitAccurateSpeaking()" style="margin-top:15px;">선생님에게 제출</button>
+        </div>
+        <button onclick="showMenu()" class="sub-action-btn" style="margin-top:20px;">Back</button>
       </div>
 
       <div id="study-box" class="box" style="display:none;">
