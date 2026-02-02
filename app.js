@@ -4,7 +4,8 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTyiuFagEcy4Z7ELBfD-gVmKczdk6B23AX0ccQ3ydLnU52dpcp2XTirXf96Uw66qBb/exec"; 
+// ⭐ [주의] 아래 URL이 최신 배포 URL인지 다시 한번 확인해 주세요.
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYZU3uJNdyiifkuAjeBpIWYp4kbn2NVUgCo9C74sCqVqRFmqt2tDNu7P3xM7ofSLDs/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -32,12 +33,10 @@ let asSeconds = 0;
 let asData = null;
 let isAlertShown = false; 
 
-// [신규] 녹음용 변수
-let mediaRecorder;
-let audioChunks = [];
-let recordingTimer;
-let recSeconds = 0;
-
+let mediaRecorder; 
+let audioChunks = []; 
+let recordingTimer; 
+let recSeconds = 0; 
 let modalCallback = null; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -118,14 +117,14 @@ function renderUnitButtons() {
 
 window.showMenu = () => { 
   stopRepeatAudio(); 
-  clearInterval(asTimer); 
-  clearInterval(recordingTimer); 
+  if (asTimer) clearInterval(asTimer); 
+  if (recordingTimer) clearInterval(recordingTimer); 
   showBox('menu-box'); 
 };
 window.goBackToUnits = () => showBox('unit-selector');
 
 // ----------------------
-// 5. AS Correction (피드백 확인 파트)
+// 5. AS Correction (선생님 피드백 확인)
 // ----------------------
 window.startASMode = async function() {
   currentPart = "AS Correction";
@@ -143,7 +142,6 @@ window.startASMode = async function() {
 
 function renderASPage() {
   const container = document.getElementById('as-box');
-  // 줄바꿈 반영 및 대괄호 강조 로직
   const formatText = (text) => {
     if(!text) return "";
     return String(text)
@@ -199,7 +197,7 @@ window.finishASStudy = function() {
 };
 
 // ----------------------
-// 6. Accurate Speaking (녹음 및 제출 파트)
+// 6. Accurate Speaking (녹음 및 학생 제출)
 // ----------------------
 window.startAccurateSpeakingMode = async function() {
   const phone = document.getElementById("phone-input").value.trim();
@@ -209,7 +207,6 @@ window.startAccurateSpeakingMode = async function() {
     const res = await fetch(url); asData = await res.json();
     document.getElementById('as-q-text').innerText = asData.question || "질문 정보가 없습니다.";
     showBox('as-record-box');
-    // UI 초기화
     document.getElementById('as-listen-btn').style.display = 'block';
     document.getElementById('recording-ui').style.display = 'none';
     document.getElementById('submit-ui').style.display = 'none';
@@ -219,16 +216,13 @@ window.startAccurateSpeakingMode = async function() {
 window.listenQuestion = function() {
   player.src = BASE_URL + currentType + "u/" + asData.audio;
   player.play();
-  // 질문 끝나면 자동 녹음 시작
   player.onended = () => { startRecording(); }; 
 };
 
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
-    audioChunks = [];
-    
+    mediaRecorder = new MediaRecorder(stream); audioChunks = [];
     document.getElementById('as-listen-btn').style.display = 'none';
     document.getElementById('recording-ui').style.display = 'block';
     
@@ -242,11 +236,9 @@ async function startRecording() {
       const m = Math.floor(recSeconds/60).toString().padStart(2,'0');
       const s = (recSeconds%60).toString().padStart(2,'0');
       document.getElementById('rec-timer').innerText = `${m}:${s}`;
-      if (recSeconds >= 60) stopRecording(); // 1분 자동 종료
+      if (recSeconds >= 60) stopRecording(); 
     }, 1000);
-  } catch (e) {
-    showCustomModal("마이크 사용 권한이 필요합니다.");
-  }
+  } catch (e) { showCustomModal("마이크 권한이 필요합니다."); }
 }
 
 window.stopRecording = function() {
@@ -259,47 +251,36 @@ window.stopRecording = function() {
 };
 
 async function processRecording() {
-  const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
   const reader = new FileReader();
-  reader.readAsDataURL(audioBlob);
-  reader.onloadend = () => {
-    window.lastAudioBase64 = reader.result.split(',')[1];
-  };
+  reader.readAsDataURL(blob);
+  reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; };
 }
 
 window.submitAccurateSpeaking = async function() {
-  const studentText = document.getElementById('student-text-input').value.trim();
-  if (!studentText) return showCustomModal("원문 내용을 입력해주세요.");
-  
+  const text = document.getElementById('student-text-input').value.trim();
+  if (!text) return showCustomModal("원문 내용을 입력해주세요.");
   showBox('dev-box');
   const payload = { 
     action: "uploadAS", 
     phone: document.getElementById("phone-input").value.trim(), 
     unit: "Unit " + currentUnit, 
-    studentText: studentText, 
+    studentText: text, 
     audioData: window.lastAudioBase64 
   };
-
+  
   try {
-    // mode: "no-cors"를 빼고 일반 fetch를 사용하여 서버 응답을 직접 받습니다.
-    const res = await fetch(GOOGLE_SCRIPT_URL, { 
-      method: "POST", 
-      body: JSON.stringify(payload) 
-    });
-
-    const result = await res.text();
-    
-    if (result === "Success") {
+    const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const resultText = await res.text();
+    if (resultText === "Success") {
       triggerFireworkConfetti();
-      showCustomModal("성공적으로 제출되었습니다! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
+      showCustomModal("제출 성공! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
     } else {
-      // 서버에서 보낸 에러 메시지를 사용자에게 보여줍니다.
-      showCustomModal("제출 실패: " + result); 
+      showCustomModal("제출 실패: " + resultText);
       showBox('as-record-box');
     }
   } catch (e) {
-    // 네트워크 문제나 CORS 차단 시 실행됩니다.
-    showCustomModal("서버 연결에 실패했습니다. 구글 스크립트 배포 설정을 확인해 주세요.");
+    showCustomModal("서버 연결 실패. 배포 설정을 확인하세요.");
     showBox('as-record-box');
   }
 };
@@ -319,27 +300,20 @@ async function loadStudyData(fileName, suffix) {
     const saved = localStorage.getItem(`save_${phone}_${currentType}_unit${currentUnit}_${suffix}`);
     index = 0; cycle = 1;
     if (saved) { const p = JSON.parse(saved); index = p.index; cycle = p.cycle; }
-    
-    const startBtn = document.getElementById("start-btn");
-    if(startBtn) startBtn.innerText = "Start";
-    const skipBtn = document.getElementById("skip-btn");
-    if(skipBtn) skipBtn.style.display = "none";
-
+    const startBtn = document.getElementById("start-btn"); if(startBtn) startBtn.innerText = "Start";
+    const skipBtn = document.getElementById("skip-btn"); if(skipBtn) skipBtn.style.display = "none";
     updateProgress(); showBox('study-box');
   } catch (e) { showCustomModal("학습 파일을 불러오지 못했습니다."); }
 }
 
 window.startStudy = function () {
-  const startBtn = document.getElementById("start-btn");
-  if(startBtn) startBtn.innerText = "Listen again";
-  const skipBtn = document.getElementById("skip-btn");
-  if(skipBtn) skipBtn.style.display = "inline-block";
+  const startBtn = document.getElementById("start-btn"); if(startBtn) startBtn.innerText = "Listen again";
+  const skipBtn = document.getElementById("skip-btn"); if(skipBtn) skipBtn.style.display = "inline-block";
   requestWakeLock(); playSentence();
 };
 
 function playSentence() {
-  const sText = document.getElementById("sentence");
-  if (!sText) return;
+  const sText = document.getElementById("sentence"); if (!sText) return;
   const item = currentData[index];
   sText.classList.remove("shake", "success", "fail"); 
   sText.innerText = item.en; sText.style.color = "#fff"; sText.style.fontSize = "18px";
@@ -360,7 +334,6 @@ recognizer.onresult = (event) => {
   const spoken = event.results[0][0].transcript.toLowerCase();
   const target = currentData[index].en.toLowerCase().replace(/[.,?!'"]/g, "");
   const sText = document.getElementById("sentence");
-  
   if (spoken.includes(target) || target.includes(spoken)) {
     successSound.play(); 
     if(sText) { sText.innerText = "Excellent!"; sText.style.color = "#39ff14"; sText.classList.remove("shake"); }
@@ -381,56 +354,44 @@ window.nextStep = function() {
   const phone = document.getElementById("phone-input").value.trim();
   const suffix = currentPart === "Voca" ? "voca" : "script";
   localStorage.setItem(`save_${phone}_${currentType}_unit${currentUnit}_${suffix}`, JSON.stringify({index, cycle}));
-  
   const currentCount = ((cycle - 1) * currentData.length) + index;
   const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
   sendDataToGoogle(currentPart, percent + "%"); 
-
   if (percent >= 100 && !isAlertShown) {
-    isAlertShown = true; 
-    triggerFireworkConfetti();
-    showCustomModal(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!\n계속해서 완벽하게 익혀보세요! 🔥`, () => playSentence());
+    isAlertShown = true; triggerFireworkConfetti();
+    showCustomModal(`축하합니다! 🎉\n${userName}님, ${currentPart} 파트 100% 목표를 달성하셨습니다!`, () => playSentence());
     return;
   }
   playSentence();
 };
 
 // ----------------------
-// 9. Progress Report (⭐ 중복 및 유닛 오류 수정)
+// 9. Progress Report (중복 제거 수정)
 // ----------------------
 window.showResultsPage = async function() {
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
-    const data = await res.json();
-    renderResultsCards(data); showBox('results-box');
+    const data = await res.json(); renderResultsCards(data); showBox('results-box');
   } catch (e) { showCustomModal("데이터 로드 실패", () => showBox('unit-selector')); }
 };
 
 function renderResultsCards(data) {
-  const container = document.getElementById('results-content');
-  container.innerHTML = "";
-  
-  // 중복된 파트 제거 로직
+  const container = document.getElementById('results-content'); container.innerHTML = "";
+  // 중복 데이터 방지 로직
   const uniqueParts = [];
-  const validData = data.filter(row => {
-    if (row.part && !uniqueParts.includes(row.part)) {
-      uniqueParts.push(row.part);
-      return true;
-    }
+  const filteredData = data.filter(row => {
+    if (row.part && !uniqueParts.includes(row.part)) { uniqueParts.push(row.part); return true; }
     return false;
   });
 
   for (let u = 0; u < 8; u++) {
-    const card = document.createElement('div');
-    card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
+    const card = document.createElement('div'); card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
     let html = `<h3 style="color:#39ff14; border-bottom:1px solid #333; padding-bottom:5px;">Unit ${u+1}</h3>`;
-    validData.forEach(row => {
+    filteredData.forEach(row => {
       let val = row.units[u] || "-";
-      if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle') && !val.toString().includes('%')) {
-        val = Math.round(parseFloat(val) * 100) + "%";
-      }
+      if (!isNaN(val) && val !== "" && !val.toString().includes('분') && !val.toString().includes('cycle')) val = Math.round(parseFloat(val) * 100) + "%";
       html += `<div style="display:flex; justify-content:space-between; margin-top:5px; font-size:14px;"><span style="color:#aaa;">${row.part}</span><span style="color:${val==="100%"?"#39ff14":"#fff"}; font-weight:bold;">${val}</span></div>`;
     });
     card.innerHTML = html; container.appendChild(card);
@@ -438,7 +399,7 @@ function renderResultsCards(data) {
 }
 
 // ----------------------
-// 10. 공통 기능 (저장, 폭죽, 반복듣기)
+// 10. 유틸리티 (저장, 폭죽, 반복듣기)
 // ----------------------
 function updateProgress() {
   if (!currentData.length) return;
@@ -475,7 +436,7 @@ window.startRepeatMode = async function() {
       div.innerHTML = `<div>${item.en}</div><div style="font-size:13px; color:#888;">${item.ko}</div>`;
       list.appendChild(div);
     });
-  } catch (e) { showCustomModal("반복 학습 데이터를 불러오지 못했습니다."); }
+  } catch (e) { showCustomModal("데이터를 불러오지 못했습니다."); }
 };
 
 window.runRepeatAudio = async function() {
@@ -496,5 +457,4 @@ window.runRepeatAudio = async function() {
   }
   isRepeating = false;
 };
-
 function stopRepeatAudio() { isRepeating = false; player.pause(); }
