@@ -153,7 +153,7 @@ function renderASPage() {
   container.innerHTML = `
     <h2 style="margin-bottom:20px; color:#39ff14;">AS Correction</h2>
     <div style="text-align:left; margin-bottom:15px; border-bottom:1px solid #333; padding-bottom:10px;">
-      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">[Teacher's Question]</p>
+      <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">[Question]</p>
       <p style="font-size:18px; line-height:1.4;">${formatText(asData.question)}</p>
     </div>
     <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;">
