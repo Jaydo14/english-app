@@ -4,7 +4,7 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwHSVufW9blfLGQ7i6eiNrTsXapnYPPA4MzgOeG8nRvROJJBH3nkM6IMI25H1QoXysq/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Z_vzBdgso9bDc59x4thUB00KMWHNOeW_Piw4vCnLvimfPi7aym0M_XMhrsQGN07A/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
