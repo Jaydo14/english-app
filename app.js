@@ -184,15 +184,16 @@ recognizer.onresult = (event) => {
     sText.style.color = "#39ff14";
     setTimeout(nextStep, 700);
   } else {
-    failSound.play(); 
-    sText.innerText = "Try again"; 
+    failSound.play();
+    sText.innerText = "Try again";
     sText.style.color = "#ff4b4b";
-    
-    // [복원] 흔들림 효과 (reflow trigger)
-    sText.classList.remove("shake");
-    void sText.offsetWidth; // 강제 리플로우
-    sText.classList.add("shake");
-    
+
+    // ▼▼▼ [여기서부터 복사해서 덮어쓰세요] ▼▼▼
+    sText.classList.remove("shake"); // 1. 혹시 흔들리고 있었다면 멈춰!
+    void sText.offsetWidth;          // 2. 잠깐 숨을 고르고 (리셋)
+    sText.classList.add("shake");    // 3. 다시 흔들어!
+    // ▲▲▲ [여기까지만 복사하세요] ▲▲▲
+
     setTimeout(playSentence, 800);
   }
 };
