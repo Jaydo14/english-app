@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // ⭐ 반드시 '새 배포' 후 받은 최신 URL로 업데이트하세요!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTyiuFagEcy4Z7ELBfD-gVmKczdk6B23AX0ccQ3ydLnU52dpcp2XTirXf96Uw66qBb/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydlQ44yzcz2vhySn1lpSqcJTDtKrDr7xIuHfWzyIMgxhrgRG7qYntgensiBCPxq0pz/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
