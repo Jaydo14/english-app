@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // ⭐ [주의] 아래 URL이 최신 배포 URL인지 다시 한번 확인해 주세요.
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx99O8g0fGI4SGJD-oQN1y2yfQW0ufIQPnGy1RjfsnJxIa0_NClOABhLhYxm_7M8aFK/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxui-bQFOPzjTk9Tfcva2acI43x9YeNBgXqNV1l21IgKjvC_f1CX-v9leQS1Xt74bYR/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -199,63 +199,36 @@ window.finishASStudy = function() {
 // ----------------------
 // 6. Accurate Speaking (녹음 및 학생 제출)
 // ----------------------
+// [app.js 수정본]
+
 window.startAccurateSpeakingMode = async function() {
   const phone = document.getElementById("phone-input").value.trim();
   showBox('dev-box');
-  const url = `${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`;
   try {
-    const res = await fetch(url); asData = await res.json();
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
+    asData = await res.json();
+    
+    // [수정 2] 다른 유닛의 텍스트가 남지 않도록 입력창 초기화
+    const textInput = document.getElementById('student-text-input');
+    if(textInput) textInput.value = "";
+
+    // [수정 3] 이미 제출한 데이터가 있으면 문구만 표시
+    if (asData && asData.isSubmitted) {
+      document.getElementById('as-q-text').innerText = "이 유닛의 과제는 이미 정상적으로 전송되었습니다. ✔";
+      showBox('as-record-box');
+      document.getElementById('as-listen-btn').style.display = 'none';
+      document.getElementById('recording-ui').style.display = 'none';
+      document.getElementById('submit-ui').style.display = 'none';
+      return; // UI 표시 후 중단
+    }
+
     document.getElementById('as-q-text').innerText = asData.question || "질문 정보가 없습니다.";
     showBox('as-record-box');
     document.getElementById('as-listen-btn').style.display = 'block';
     document.getElementById('recording-ui').style.display = 'none';
     document.getElementById('submit-ui').style.display = 'none';
-  } catch (e) { showCustomModal("질문을 불러오지 못했습니다."); showMenu(); }
+  } catch (e) { showCustomModal("데이터 로드 실패"); showMenu(); }
 };
-
-window.listenQuestion = function() {
-  player.src = BASE_URL + currentType + "u/" + asData.audio;
-  player.play();
-  player.onended = () => { startRecording(); }; 
-};
-
-async function startRecording() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream); audioChunks = [];
-    document.getElementById('as-listen-btn').style.display = 'none';
-    document.getElementById('recording-ui').style.display = 'block';
-    
-    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
-    mediaRecorder.onstop = () => { processRecording(); };
-    mediaRecorder.start();
-
-    recSeconds = 0;
-    recordingTimer = setInterval(() => {
-      recSeconds++;
-      const m = Math.floor(recSeconds/60).toString().padStart(2,'0');
-      const s = (recSeconds%60).toString().padStart(2,'0');
-      document.getElementById('rec-timer').innerText = `${m}:${s}`;
-      if (recSeconds >= 60) stopRecording(); 
-    }, 1000);
-  } catch (e) { showCustomModal("마이크 권한이 필요합니다."); }
-}
-
-window.stopRecording = function() {
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
-    clearInterval(recordingTimer);
-    document.getElementById('recording-ui').style.display = 'none';
-    document.getElementById('submit-ui').style.display = 'block';
-  }
-};
-
-async function processRecording() {
-  const blob = new Blob(audioChunks, { type: 'audio/webm' });
-  const reader = new FileReader();
-  reader.readAsDataURL(blob);
-  reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; };
-}
 
 window.submitAccurateSpeaking = async function() {
   const text = document.getElementById('student-text-input').value.trim();
@@ -271,25 +244,18 @@ window.submitAccurateSpeaking = async function() {
   };
   
   try {
-    // URL 끝에 타임스탬프를 붙여 캐시 방지
-    const url = `${GOOGLE_SCRIPT_URL}?t=${Date.now()}`;
-    const res = await fetch(url, { 
-      method: "POST", 
-      body: JSON.stringify(payload) 
-    });
-    
-    const data = await res.json(); // createJsonResponse를 통해 항상 JSON으로 응답함
+    const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const data = await res.json();
     
     if (data.result === "success") {
-      triggerFireworkConfetti();
-      showCustomModal("성공적으로 제출되었습니다! 🎉", () => showMenu());
+      // [수정 4] AS 제출 시 폭죽 효과(triggerFireworkConfetti) 제거
+      showCustomModal("성공적으로 제출되었습니다! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
     } else {
       showCustomModal("제출 실패: " + data.message);
       showBox('as-record-box');
     }
   } catch (e) {
-    // 네트워크 오류 시 메시지
-    showCustomModal("서버 연결에 실패했습니다. 배포 설정을 다시 확인해 주세요.");
+    showCustomModal("전송 대기 중... 드라이브 용량이나 네트워크를 확인하세요.");
     showBox('as-record-box');
   }
 };
