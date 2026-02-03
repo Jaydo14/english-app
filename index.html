@@ -22,6 +22,18 @@
       font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%;
     }
     .security-warning { margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px; text-align: center; }
+
+    /* 흔들림 효과 춤 동작 정의 */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
   </style>
 </head>
 <body>
@@ -110,3 +122,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+
