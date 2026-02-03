@@ -25,6 +25,10 @@ let currentData = [];
 let index = 0;
 let cycle = 1;
 let isRepeating = false;
+// [수정: 반복듣기 이어듣기를 위한 변수 추가]
+let repeatIndex = 0; 
+let repeatCycleCount = 0;
+
 const player = new Audio();
 let wakeLock = null;
 let asTimer = null;
@@ -111,7 +115,16 @@ function renderUnitButtons() {
   }
 }
 
-window.showMenu = () => { stopRepeatAudio(); if (asTimer) clearInterval(asTimer); showBox('menu-box'); };
+// [수정: 뒤로가기 버튼 기능 추가] - 유닛 선택 화면으로 이동
+window.goBackToUnits = function() {
+  showBox('unit-selector');
+};
+
+window.showMenu = () => { 
+    stopRepeatAudio(); 
+    if (asTimer) clearInterval(asTimer); 
+    showBox('menu-box'); 
+};
 
 // ----------------------
 // 5. AS Correction (선생님 피드백 및 저장)
@@ -192,11 +205,11 @@ window.startAccurateSpeakingMode = async function() {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
     asData = await res.json();
     
-    // [수정 2] 유닛 이동 시 텍스트 입력칸 초기화
+    // 유닛 이동 시 텍스트 입력칸 초기화
     const textInput = document.getElementById('student-text-input');
     if(textInput) textInput.value = "";
 
-    // [수정 3] 이미 제출한 경우 안내 문구 표시
+    // 이미 제출한 경우 안내 문구 표시
     if (asData && asData.isSubmitted) {
       document.getElementById('as-q-text').innerText = "이 유닛의 과제는 이미 정상적으로 전송되었습니다. ✔";
       showBox('as-record-box');
@@ -216,7 +229,7 @@ window.startAccurateSpeakingMode = async function() {
 
 window.listenQuestion = function() {
   if (!asData || !asData.audio) return showCustomModal("오디오 정보가 없습니다.");
-  // [수정 1] 오디오 경로 수정
+  // 오디오 경로 수정
   player.src = BASE_URL + currentType + "u/" + asData.audio;
   player.play().catch(() => showCustomModal("오디오 재생 실패"));
   player.onended = () => { startRecording(); }; 
@@ -249,19 +262,25 @@ window.submitAccurateSpeaking = async function() {
     const res = await fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
     const data = await res.json();
     if (data.result === "success") {
-      // [수정 4] 폭죽 효과 제거
+      // 폭죽 효과 제거
       showCustomModal("성공적으로 제출되었습니다! 🎉\n선생님의 첨삭을 기다려주세요.", () => showMenu());
     } else { showCustomModal("제출 실패: " + data.message); showBox('as-record-box'); }
   } catch (e) { showCustomModal("서버 연결 실패"); showBox('as-record-box'); }
 };
 
 // ----------------------
-// 7. 반복듣기 (UI 및 사이클 복구)
+// 7. 반복듣기 (UI 및 사이클 복구, 이어듣기 수정)
 // ----------------------
 window.startRepeatMode = async function() {
   try {
     const res = await fetch(BASE_URL + currentType + "u/" + `${currentType}u${currentUnit}.json`);
     currentData = await res.json();
+    
+    // [수정] 반복듣기 상태 초기화
+    repeatIndex = 0;
+    repeatCycleCount = 0;
+    isRepeating = false;
+
     showBox('repeat-box');
     const container = document.getElementById('repeat-box');
     container.innerHTML = `
@@ -287,26 +306,62 @@ window.startRepeatMode = async function() {
   } catch (e) { showCustomModal("데이터 로드 실패"); }
 };
 
+// [수정: 이어듣기 로직 적용]
 window.runRepeatAudio = async function() {
-  const count = parseInt(document.getElementById('repeat-count').value) || 3;
+  const countInput = document.getElementById('repeat-count');
+  const targetCycle = parseInt(countInput.value) || 3;
   const btn = document.getElementById('repeat-start-btn');
-  isRepeating = true; btn.disabled = true; btn.innerText = "Playing...";
-  for (let c = 0; c < count; c++) {
-    if (!isRepeating) break;
-    for (let i = 0; i < currentData.length; i++) {
-      if (!isRepeating) break;
+  
+  // 이미 실행 중이면 중복 실행 방지
+  if (isRepeating) return;
+  
+  isRepeating = true; 
+  btn.disabled = true; 
+  btn.innerText = "Playing...";
+
+  // 멈춘 시점(repeatCycleCount, repeatIndex)부터 시작
+  for (let c = repeatCycleCount; c < targetCycle; c++) {
+    repeatCycleCount = c; // 현재 사이클 저장
+    
+    // 이전 사이클에서 멈췄다면 repeatIndex는 0이 아닐 수 있음.
+    // 새 사이클 시작 시(c가 증가했을 때) repeatIndex는 0부터 시작해야 하지만,
+    // for문 로직상 아래 내부 루프에서 처리됨.
+    
+    for (let i = repeatIndex; i < currentData.length; i++) {
+      if (!isRepeating) {
+         // 멈춤 버튼 눌렀을 때 현재 위치 저장
+         repeatIndex = i; 
+         btn.disabled = false; 
+         btn.innerText = "Start";
+         return; 
+      }
+      
       await new Promise((resolve) => {
         document.querySelectorAll('.repeat-item').forEach(r => r.style.background = "transparent");
         const el = document.getElementById(`repeat-${i}`);
         if(el) { el.style.background = "#1a3a1a"; el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; player.play();
+        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; 
+        player.play();
         player.onended = () => resolve();
       });
     }
+    // 한 사이클이 끝나면 인덱스 초기화
+    repeatIndex = 0; 
   }
-  isRepeating = false; btn.disabled = false; btn.innerText = "Start";
+  
+  // 모든 반복 종료
+  isRepeating = false; 
+  repeatCycleCount = 0; // 초기화
+  repeatIndex = 0;      // 초기화
+  btn.disabled = false; 
+  btn.innerText = "Start";
 };
-window.stopRepeatAudio = () => { isRepeating = false; player.pause(); };
+
+window.stopRepeatAudio = () => { 
+    isRepeating = false; 
+    player.pause(); 
+    // UI 업데이트는 runRepeatAudio 루프 탈출 시 처리됨
+};
 
 // ----------------------
 // 8. 학습 모드 (Script / Voca)
@@ -320,15 +375,73 @@ async function loadStudyData(fileName, suffix) {
     const res = await fetch(BASE_URL + currentType + "u/" + fileName);
     currentData = await res.json();
     index = 0; cycle = 1;
+
+    // [수정: 스킵 버튼 UI 표시]
+    const startBtn = document.getElementById("start-btn");
+    if(startBtn) startBtn.innerText = "Start";
+    
+    // 스킵 버튼이 html에 있다면 보이게 처리 (없으면 생성 필요할 수도 있으나, 보통 html에 숨겨져 있음)
+    // 여기서는 html 구조를 건드리지 않고 스크립트로 제어한다고 가정
+    // 만약 html에 버튼이 없다면 동적으로 추가하는 코드가 필요할 수 있음.
+    // 기존 요청사항에 "스킵 버튼 다시 생성해줘"라고 했으므로 study-box HTML 갱신이 필요할 수 있음.
+    // 하지만 showBox('study-box')로 보여지는 영역 안의 버튼을 제어함.
+    
+    // study-box 내부 HTML을 재설정하여 스킵 버튼 확실히 추가
+    const studyBox = document.getElementById('study-box');
+    if (studyBox && !document.getElementById('skip-btn')) {
+         // study-box의 기본 구조가 유지된다고 가정하고 버튼 제어만 함. 
+         // 혹시 버튼이 아예 없다면 아래 startStudy에서 버튼 텍스트 변경시 에러날 수 있음.
+         // 안전하게 study-box 내용을 덮어쓰거나, 기존 html에 버튼이 있다고 가정.
+         // 여기서는 기존 코드 흐름상 버튼 ID가 있다고 가정하고 display 제어.
+         const btnsDiv = studyBox.querySelector('.study-controls') || studyBox; // 버튼들이 있는 컨테이너 찾기 시도
+         if (!document.getElementById('skip-btn')) {
+             const skipBtn = document.createElement('button');
+             skipBtn.id = 'skip-btn';
+             skipBtn.innerText = 'Skip';
+             skipBtn.onclick = () => window.skipSentence();
+             skipBtn.style.display = 'none'; // 초기엔 숨김
+             skipBtn.style.marginLeft = '10px';
+             skipBtn.style.background = '#555';
+             // start-btn 뒤에 추가
+             const startB = document.getElementById('start-btn');
+             if(startB) startB.parentNode.insertBefore(skipBtn, startB.nextSibling);
+         }
+    }
+    
+    const skipBtn = document.getElementById("skip-btn"); 
+    if(skipBtn) skipBtn.style.display = "none";
+
     updateProgress(); showBox('study-box');
   } catch (e) { showCustomModal("학습 파일을 불러오지 못했습니다."); }
 }
 
-window.startStudy = function () { requestWakeLock(); playSentence(); };
+window.startStudy = function () { 
+    requestWakeLock(); 
+    
+    // [수정: Start 누르면 스킵 버튼 보이기]
+    const startBtn = document.getElementById("start-btn");
+    if(startBtn) startBtn.innerText = "Listen again";
+    const skipBtn = document.getElementById("skip-btn");
+    if(skipBtn) skipBtn.style.display = "inline-block";
+
+    playSentence(); 
+};
+
+// [수정: 스킵 기능 추가]
+window.skipSentence = function() {
+    // 음성인식 중단
+    try { recognizer.abort(); } catch(e) {}
+    // 다음 단계로 바로 이동
+    nextStep();
+};
 
 function playSentence() {
   const sText = document.getElementById("sentence");
   const item = currentData[index];
+  
+  // [수정: 흔들림 효과 초기화]
+  sText.classList.remove("shake");
+  
   sText.innerText = item.en; sText.style.color = "#fff";
   document.getElementById("sentence-kor").innerText = item.ko;
   updateProgress();
@@ -343,12 +456,22 @@ recognizer.lang = "en-US";
 recognizer.onresult = (event) => {
   const spoken = event.results[0][0].transcript.toLowerCase();
   const target = currentData[index].en.toLowerCase().replace(/[.,?!'"]/g, "");
+  const sText = document.getElementById("sentence"); // 요소 참조
+
   if (spoken.includes(target) || target.includes(spoken)) {
-    successSound.play(); document.getElementById("sentence").style.color = "#39ff14";
+    successSound.play(); 
+    sText.style.color = "#39ff14";
     setTimeout(nextStep, 700);
   } else {
-    failSound.play(); document.getElementById("sentence").style.color = "#ff4b4b";
-    setTimeout(playSentence, 800);
+    failSound.play(); 
+    sText.style.color = "#ff4b4b";
+    
+    // [수정: 흔들림 효과 추가] - Try again 시각적 피드백
+    sText.classList.add("shake");
+    
+    setTimeout(() => {
+        playSentence();
+    }, 800);
   }
 };
 
