@@ -239,6 +239,7 @@ window.startStudy = function () {
     
     // Start 버튼을 눌렀으므로 복원 모드 해제 및 재생 시작
     if (isRestoring) isRestoring = false;
+    requestWakeLock(); // [추가] 공부 시작할 때 화면 켜짐 유지!
     playSentence(); 
 };
 
@@ -370,6 +371,66 @@ window.startAccurateSpeakingMode = async function() {
   } catch (e) { showCustomModal("로드 실패"); }
 };
 
+// [복구] Accurate Speaking: 질문 듣기
+window.listenQuestion = function() {
+  if (!asData || !asData.audio) return showCustomModal("오디오 정보가 없습니다.");
+  
+  // 화면 꺼짐 방지 요청
+  requestWakeLock();
+  
+  player.src = BASE_URL + currentType + "u/" + asData.audio;
+  player.play().catch(() => showCustomModal("오디오 재생 실패"));
+  
+  // 오디오가 끝나면 자동으로 녹음 준비
+  player.onended = () => { startRecording(); }; 
+};
+
+// [복구] 녹음 시작
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream); 
+    audioChunks = [];
+    
+    document.getElementById('as-listen-btn').style.display = 'none';
+    document.getElementById('recording-ui').style.display = 'block';
+    
+    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => { processRecording(); };
+    mediaRecorder.start();
+    
+    recSeconds = 0;
+    // 60초 제한 타이머
+    if (recordingTimer) clearInterval(recordingTimer);
+    recordingTimer = setInterval(() => { 
+        recSeconds++; 
+        document.getElementById('rec-timer').innerText = `00:${recSeconds.toString().padStart(2,'0')}`; 
+        if (recSeconds >= 60) stopRecording(); 
+    }, 1000);
+    
+  } catch (e) { showCustomModal("마이크 권한이 필요합니다."); }
+}
+
+// [복구] 녹음 중지
+window.stopRecording = function() { 
+    if (mediaRecorder && mediaRecorder.state !== "inactive") { 
+        mediaRecorder.stop(); 
+        clearInterval(recordingTimer); 
+        document.getElementById('recording-ui').style.display = 'none'; 
+        document.getElementById('submit-ui').style.display = 'block'; 
+    } 
+};
+
+// [복구] 녹음 데이터 처리 (Base64 변환)
+async function processRecording() { 
+    const blob = new Blob(audioChunks, { type: 'audio/webm' }); 
+    const reader = new FileReader(); 
+    reader.readAsDataURL(blob); 
+    reader.onloadend = () => { 
+        window.lastAudioBase64 = reader.result.split(',')[1]; 
+    }; 
+}
+
 window.submitAccurateSpeaking = async function() {
   const text = document.getElementById('student-text-input').value.trim(); if(!text) return showCustomModal("내용 입력 필수");
   showBox('dev-box');
@@ -489,4 +550,71 @@ function triggerFireworkConfetti() {
     if (timeLeft <= 0) return clearInterval(interval);
     confetti({ particleCount: 50, startVelocity: 30, spread: 360, origin: { x: Math.random(), y: Math.random() - 0.2 } });
   }, 250);
+}
+
+// [추가] 화면 꺼짐 방지 (Wake Lock)
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch (err) {
+    console.log("Wake Lock Error:", err);
+  }
+}
+
+// [복구] 결과 리포트 페이지 보기
+window.showResultsPage = async function() {
+  const phone = document.getElementById("phone-input").value.trim(); 
+  showBox('dev-box');
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const data = await res.json(); 
+    renderResultsCards(data); 
+    showBox('results-box');
+  } catch (e) { showCustomModal("데이터 로드 실패"); }
+};
+
+// [복구] 리포트 카드 디자인 렌더링
+function renderResultsCards(data) {
+  const container = document.getElementById('results-content'); 
+  container.innerHTML = "";
+  
+  // 중복된 파트 제거 (최신순 정렬 등 필요 시 로직 추가 가능)
+  const uniqueParts = [];
+  const filteredData = data.filter(row => { 
+      if (row.part && !uniqueParts.includes(row.part)) { 
+          uniqueParts.push(row.part); 
+          return true; 
+      } 
+      return false; 
+  });
+  
+  // 유닛 1~8까지 카드 생성
+  for (let u = 0; u < 8; u++) {
+    const card = document.createElement('div'); 
+    card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
+    
+    let html = `<h3 style="color:#39ff14; border-bottom:1px solid #333; padding-bottom:5px;">Unit ${u+1}</h3>`;
+    
+    filteredData.forEach(row => {
+      let val = row.units[u] || "-";
+      // 숫자인 경우 % 붙이기, 텍스트(시간/횟수)는 그대로 출력
+      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1) {
+          val = Math.round(parseFloat(val) * 100) + "%";
+      }
+      
+      // 100%이거나 완료된 항목은 초록색 표시
+      const isDone = (val === "100%" || String(val).includes("완료"));
+      const color = isDone ? "#39ff14" : "#fff";
+      
+      html += `<div style="display:flex; justify-content:space-between; margin-top:5px; font-size:14px;">
+                 <span style="color:#aaa;">${row.part}</span>
+                 <span style="color:${color}; font-weight:bold;">${val}</span>
+               </div>`;
+    });
+    
+    card.innerHTML = html; 
+    container.appendChild(card);
+  }
 }
