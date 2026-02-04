@@ -73,15 +73,31 @@ function closeCustomModal() {
 window.goBackToUnits = () => showBox('unit-selector');
 window.showMenu = () => { stopRepeatAudio(); if (asTimer) clearInterval(asTimer); showBox('menu-box'); };
 
-// 학습 상태 저장
+// [수정] 학습 상태 저장 (파트별 개별 저장 + 마지막 위치 기억)
 function saveStatus() {
-  const status = {
-    type: currentType, unit: currentUnit, part: currentPart,
+  // 기존 데이터 불러오기 (없으면 빈 깡통)
+  let allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+  
+  // 1. "history" 방이 없으면 만들기
+  if (!allStatus.history) allStatus.history = {};
+  
+  // 2. 현재 유닛과 파트 이름으로 '고유 열쇠' 만들기 (예: "1_Script")
+  const key = `${currentUnit}_${currentPart}`;
+  
+  // 3. 해당 칸에만 점수 기록 (다른 파트 건드리지 않음!)
+  allStatus.history[key] = {
     index: index, cycle: cycle,
     repeatIndex: repeatIndex, repeatCycle: repeatCycleCount,
-    timer: asSeconds, userName: userName
+    timer: asSeconds
   };
-  localStorage.setItem("myEnglishAppStatus", JSON.stringify(status));
+  
+  // 4. "마지막에 뭐 했는지"는 따로 적어두기 (로그인 시 납치용)
+  allStatus.lastActive = { 
+    type: currentType, unit: currentUnit, part: currentPart, name: userName 
+  };
+  
+  // 저장!
+  localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
 }
 
 // 학습 상태 불러오기
@@ -93,8 +109,16 @@ function loadStatus() {
 
 // 이어하기 체크 (모드 진입 시)
 function checkResumeStatus(partName) {
-    const saved = loadStatus();
-    if (saved && saved.type === currentType && saved.unit === currentUnit && saved.part === partName) {
+    const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+    
+    // 내 열쇠 만들기 (예: "1_Script")
+    const key = `${currentUnit}_${partName}`;
+    
+    // 기록 찾기
+    const saved = allStatus.history ? allStatus.history[key] : null;
+    
+    // 기록이 있고, 교재 타입이 맞으면 복원
+    if (saved && allStatus.lastActive && allStatus.lastActive.type === currentType) {
         index = saved.index || 0;
         cycle = saved.cycle || 1;
         repeatIndex = saved.repeatIndex || 0;
@@ -102,6 +126,7 @@ function checkResumeStatus(partName) {
         asSeconds = saved.timer || 0;
         isRestoring = true; 
     } else {
+        // 기록 없으면 초기화
         index = 0; cycle = 1; repeatIndex = 0; repeatCycleCount = 0; asSeconds = 0;
         isRestoring = false;
     }
@@ -110,6 +135,7 @@ function checkResumeStatus(partName) {
 // ======================================================
 // 3. 로그인
 // ======================================================
+// [수정] 로그인 (마지막 학습 위치 자동 감지)
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
   const inputVal = phoneInput.value.trim();
@@ -123,9 +149,31 @@ window.login = function () {
     .then(data => {
       if (data.result === "success") {
         currentType = data.type; userName = data.name;
+        
+        // 저장된 기록 확인
+        const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+        const last = allStatus.lastActive;
+
+        // 버튼 먼저 그리기
         renderUnitButtons();
-        showBox('unit-selector'); // 무조건 선택 화면으로 이동
-        showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
+        
+        // 마지막 기록이 있고, 교재 타입이 같으면 -> 바로 이동!
+        if (last && last.type === currentType) {
+            currentUnit = last.unit; // 유닛 설정
+            currentPart = last.part; // 파트 설정
+            
+            // 해당 파트 시작 함수 호출 (내부에서 checkResumeStatus가 기록을 불러옴)
+            if (currentPart === "Script") startScriptMode();
+            else if (currentPart === "Vocab") startVocaMode();
+            else if (currentPart === "AS Correction") startASMode();
+            else if (currentPart === "반복듣기") startRepeatMode();
+            else showBox('unit-selector'); // 예외 시 목록으로
+            
+        } else {
+            // 기록 없으면 목록 보여주기
+            showBox('unit-selector');
+            showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
+        }
       } else {
         showCustomModal("등록되지 않은 번호입니다.");
         loginBtn.disabled = false; loginBtn.innerText = "Login";
