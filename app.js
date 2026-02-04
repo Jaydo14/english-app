@@ -135,7 +135,7 @@ function checkResumeStatus(partName) {
 // ======================================================
 // 3. 로그인
 // ======================================================
-// [수정] 로그인 (마지막 학습 위치 자동 감지)
+// [수정] 로그인 (자동 이동 기능 삭제 -> 무조건 목록 화면)
 window.login = function () {
   const phoneInput = document.getElementById("phone-input");
   const inputVal = phoneInput.value.trim();
@@ -150,30 +150,14 @@ window.login = function () {
       if (data.result === "success") {
         currentType = data.type; userName = data.name;
         
-        // 저장된 기록 확인
-        const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
-        const last = allStatus.lastActive;
-
         // 버튼 먼저 그리기
         renderUnitButtons();
         
-        // 마지막 기록이 있고, 교재 타입이 같으면 -> 바로 이동!
-        if (last && last.type === currentType) {
-            currentUnit = last.unit; // 유닛 설정
-            currentPart = last.part; // 파트 설정
-            
-            // 해당 파트 시작 함수 호출 (내부에서 checkResumeStatus가 기록을 불러옴)
-            if (currentPart === "Script") startScriptMode();
-            else if (currentPart === "Vocab") startVocaMode();
-            else if (currentPart === "AS Correction") startASMode();
-            else if (currentPart === "반복듣기") startRepeatMode();
-            else showBox('unit-selector'); // 예외 시 목록으로
-            
-        } else {
-            // 기록 없으면 목록 보여주기
-            showBox('unit-selector');
-            showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
-        }
+        // [수정] 마지막 위치로 자동 이동하는 코드 삭제함!
+        // 무조건 유닛 선택 화면 보여주기
+        showBox('unit-selector');
+        showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
+        
       } else {
         showCustomModal("등록되지 않은 번호입니다.");
         loginBtn.disabled = false; loginBtn.innerText = "Login";
