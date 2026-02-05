@@ -174,7 +174,7 @@
 
 <script src="app.js"></script>
 <script>
-    // 로그인/앱 화면 전환 시 하단바 처리
+    // 로그인/앱 화면 전환 시 하단바 처리 스크립트
     const originalShowBox = window.showBox;
     window.showBox = function(boxId) {
         const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
@@ -188,25 +188,31 @@
         document.getElementById("app").style.display = isLogin ? 'none' : 'flex';
         document.getElementById('login-box').style.display = isLogin ? 'flex' : 'none';
         
-        // 내비게이션 바 상태 업데이트 (활성화 아이콘 색상 변경 등)
+        // [수정 완료] 하단 바 ID를 'bottom-nav'로 통일했습니다!
+        const navBar = document.getElementById('bottom-nav');
+        if(navBar) {
+            navBar.style.display = isLogin ? 'none' : 'flex';
+        }
+
+        // 내비게이션 바 상태 업데이트
         updateNavState(boxId);
     }
 
     function updateNavState(currentBox) {
-        // 간단한 시각적 피드백 로직 (필요시 확장)
-        const icons = document.querySelectorAll('#bottom-nav .material-icons');
-        // Unit 탭 활성화 상태 복구
-        if(currentBox === 'unit-selector') {
-            icons[0].parentElement.classList.add('text-primary');
-            icons[0].parentElement.classList.remove('text-neutral-500');
-        } else {
-            icons[0].parentElement.classList.remove('text-primary');
-            icons[0].parentElement.classList.add('text-neutral-500');
+        // 아이콘 색상 활성화/비활성화 처리
+        const icons = document.querySelectorAll('#bottom-nav .material-icons-round');
+        if(icons.length > 0) {
+            if(currentBox === 'unit-selector') {
+                icons[0].style.color = '#39FF14'; // Home 아이콘 초록색
+            } else {
+                icons[0].style.color = '#737373'; // Home 아이콘 회색
+            }
         }
     }
 </script>
 </body>
 </html>
+
 
 
 
