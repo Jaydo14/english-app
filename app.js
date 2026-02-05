@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (화면 분할: 리스트는 스크롤, 버튼은 하단 고정)
+// [수정] 반복듣기 (높이 계산 calc 적용: 전체 스크롤 방지 + 버튼 고정)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,21 +553,22 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. 전체 레이아웃: 화면 전체 높이 사용 (h-full) + 세로 정렬 (flex-col)
-    // overflow-hidden: 전체 화면 스크롤을 막고, 내부 요소만 스크롤 되게 함
-    container.className = "h-full flex flex-col overflow-hidden relative";
+    // [핵심 수정] h-[calc(100vh-160px)]: 전체 높이에서 상단 헤더와 하단 탭바 높이를 뺀 만큼만 사용
+    // 이렇게 해야 버튼이 화면 밖으로 밀려나지 않습니다.
+    container.className = "px-4 pt-2 flex flex-col overflow-hidden relative";
+    container.style.height = "calc(100vh - 160px)"; 
 
     container.innerHTML = `
-      <div class="w-full px-4 pt-2 shrink-0 mb-3">
+      <div class="w-full shrink-0 mb-3">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="flex-1 w-full px-4 overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4">
+      <div id="repeat-list" class="flex-1 w-full overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4 border-b border-neutral-900/50">
          </div>
 
-      <div class="w-full px-4 shrink-0 z-20 bg-black border-t border-neutral-900 pt-4 pb-[100px]">
+      <div class="w-full shrink-0 pt-4 bg-black z-10">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-3">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-3 shadow-lg">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -635,21 +636,17 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
       
       await new Promise(resolve => {
-        // 스타일 초기화
         document.querySelectorAll('.repeat-item').forEach(el => {
             el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
             el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors';
             el.querySelector('.ko-text').className = 'ko-text text-neutral-400 text-xs font-medium';
         });
         
-        // 현재 아이템 강조
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            // 강조 스타일
             el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
             const enDiv = el.querySelector('.en-text');
             if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-0.5 transition-colors';
-            
             el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
         }
 
