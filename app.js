@@ -254,14 +254,28 @@ async function loadStudyData(fileName) {
     // 스킵 버튼 생성
     const studyBox = document.getElementById('study-box');
     if (studyBox && !document.getElementById('skip-btn')) {
-         const startB = document.getElementById('start-btn');
-         const skipBtn = document.createElement('button');
-         skipBtn.id = 'skip-btn'; skipBtn.innerText = 'Skip';
-         skipBtn.onclick = () => window.skipSentence();
-         skipBtn.className = 'sub-action-btn'; 
-         skipBtn.style.display = 'none'; skipBtn.style.marginLeft = '10px'; skipBtn.style.background = '#555';
-         if(startB) startB.parentNode.insertBefore(skipBtn, startB.nextSibling);
+         // [app.js 수정] loadStudyData 함수 내부의 스킵 버튼 관련 코드 교체
+    
+    // ... (앞부분 생략) ...
+
+    // [수정] 버튼 레이아웃 제어
+    const skipBtn = document.getElementById("skip-btn");
+    const backBtn = document.getElementById("back-btn"); // index.html에 ID 추가함
+    const startBtn = document.getElementById("start-btn");
+
+    // 이어하기 상태에 따라 텍스트 변경
+    startBtn.innerText = isRestoring ? "Resume" : "Start";
+    
+    // Skip 버튼 보임/숨김에 따른 Back 버튼 크기 조절
+    if (isRestoring) {
+        skipBtn.style.display = "block";
+        if(backBtn) backBtn.classList.remove("col-span-2"); // 반반 차지
+    } else {
+        skipBtn.style.display = "none";
+        if(backBtn) backBtn.classList.add("col-span-2"); // 혼자서 꽉 차게
     }
+    
+    // ... (뒷부분 생략) ...
     
     // [수정] 무조건 Start로 표시 (이어하기여도 자동재생 안 함)
     document.getElementById("start-btn").innerText = "Start";
@@ -279,13 +293,19 @@ async function loadStudyData(fileName) {
   } catch (e) { showCustomModal("파일 로드 실패"); }
 }
 
+// [app.js 수정] startStudy 함수 내부
 window.startStudy = function () { 
     document.getElementById("start-btn").innerText = "Listen again";
-    document.getElementById("skip-btn").style.display = "inline-block";
     
-    // Start 버튼을 눌렀으므로 복원 모드 해제 및 재생 시작
+    // [수정] Skip 버튼이 나타나면서 Back 버튼과 나란히 배치됨
+    const skipBtn = document.getElementById("skip-btn");
+    const backBtn = document.getElementById("back-btn");
+    
+    skipBtn.style.display = "block";
+    if(backBtn) backBtn.classList.remove("col-span-2"); // 반반 모드
+    
     if (isRestoring) isRestoring = false;
-    requestWakeLock(); // [추가] 공부 시작할 때 화면 켜짐 유지!
+    requestWakeLock();
     playSentence(); 
 };
 
