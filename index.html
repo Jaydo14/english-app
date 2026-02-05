@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
     <title>English App V2</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
@@ -15,179 +15,189 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: "#39FF14", // 네온 그린 포인트 컬러
-                        "background-dark": "#0A0A0A", // 어두운 배경색
-                        "card-dark": "#171717", // 카드 배경색
+                        primary: "#39FF14", 
+                        "background-dark": "#050505",
+                        "card-dark": "#121212",
                     },
                     fontFamily: {
                         display: ["Inter", "sans-serif"],
                         mono: ["JetBrains Mono", "monospace"],
                     },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(57, 255, 20, 0.4)',
+                        'neon-strong': '0 0 30px rgba(57, 255, 20, 0.6)',
+                    }
                 },
             },
         };
     </script>
     <style>
-        /* 커스텀 스타일 */
-        .neon-glow { box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); }
-        .neon-border { border: 1px solid rgba(57, 255, 20, 0.3); }
-        .neon-text { text-shadow: 0 0 5px rgba(57, 255, 20, 0.5); }
-        .glass-panel { background: rgba(23, 23, 23, 0.90); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        /* 흔들림 애니메이션 (틀렸을 때) */
+        body { background-color: #000; color: white; }
+        .glass-panel { background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(12px); border-top: 1px solid rgba(255, 255, 255, 0.05); }
         .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         /* 스크롤바 숨김 */
         ::-webkit-scrollbar { width: 0px; background: transparent; }
-        
-        /* 입력창 포커스 스타일 */
-        input:focus { outline: none; border-color: #39FF14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.4); }
+        /* 입력창 플레이스홀더 색상 조정 */
+        ::placeholder { color: #555; opacity: 1; }
+        /* 텍스트 글로우 효과 */
+        .text-glow { text-shadow: 0 0 10px rgba(57, 255, 20, 0.5); }
     </style>
 </head>
-<body class="bg-[#050505] font-display text-slate-100 min-h-screen flex justify-center selection:bg-primary/30 selection:text-white">
+<body class="bg-black font-display min-h-screen flex justify-center items-center">
 
-<main class="w-full max-w-md h-screen flex flex-col relative overflow-hidden bg-[#0A0A0A] border-x border-neutral-800 sm:shadow-2xl sm:shadow-black">
+<main class="w-full max-w-md h-screen flex flex-col relative overflow-hidden bg-black border-x border-neutral-900 shadow-2xl">
     
-    <header class="pt-8 pb-4 px-8 sticky top-0 z-20 bg-[#0A0A0A]/90 backdrop-blur-md">
-        <div class="flex justify-between items-center mb-3">
-            <span class="text-xs font-mono uppercase tracking-[0.2em] text-primary neon-text">System Online</span>
-            <span class="text-xs font-mono text-neutral-500">v2.5.0</span>
-        </div>
-    </header>
-
-    <div class="flex-1 overflow-y-auto px-8 pb-32 space-y-6 relative scroll-smooth" id="main-container">
+    <div id="login-box" class="flex flex-col h-full relative z-10 px-8">
         
-        <div id="login-box" class="flex flex-col justify-center h-full space-y-10 py-12">
-            <div class="text-center space-y-6">
-                <div class="w-24 h-24 mx-auto rounded-3xl bg-primary/10 flex items-center justify-center text-primary neon-glow transition-transform hover:scale-105 duration-300">
-                    <span class="material-icons-round text-6xl">lock_open</span>
-                </div>
-                <div class="space-y-2">
-                    <h2 class="text-sm font-mono text-primary tracking-[0.2em] uppercase">바르고 빠른 영어</h2>
-                    <h1 class="text-4xl font-extrabold tracking-tight text-white">
-                        BUILD A <span class="text-primary italic neon-text">MONSTER</span>
-                    </h1>
-                </div>
+        <div class="flex justify-between items-end pt-12 pb-4">
+            <span class="font-mono text-primary text-xs font-bold tracking-widest" style="letter-spacing: 0.2em;">SYSTEM ONLINE</span>
+            <span class="font-mono text-neutral-600 text-xs tracking-widest">v2.5.0</span>
+        </div>
+
+        <div class="flex-1 flex flex-col justify-center items-center -mt-10 space-y-8">
+            
+            <div class="relative mb-4">
+                <div class="absolute inset-0 bg-primary/20 blur-[40px] rounded-full"></div>
+                <span class="material-icons-round text-7xl text-primary relative z-10 drop-shadow-[0_0_10px_rgba(57,255,20,0.8)]">lock_open</span>
             </div>
 
-            <div class="space-y-6">
-                <div class="relative group">
-                    <input type="tel" id="phone-input" placeholder="Enter the code" 
-                        class="w-full p-5 bg-[#171717] border border-neutral-800 rounded-2xl text-center text-2xl text-primary font-mono placeholder-neutral-600 focus:outline-none focus:border-primary neon-border transition-all duration-300 group-hover:border-primary/50">
-                    <div class="absolute inset-0 rounded-2xl bg-primary/5 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"></div>
-                </div>
-                <button onclick="login()" class="w-full p-5 bg-primary text-[#0A0A0A] font-black text-lg rounded-2xl uppercase tracking-widest hover:bg-primary/90 transition-all duration-300 active:scale-[0.98] shadow-lg shadow-primary/20 hover:shadow-primary/40">
+            <div class="text-center space-y-2">
+                <h2 class="text-primary text-sm font-bold tracking-widest">바르고 빠른 영어</h2>
+                <h1 class="text-4xl font-black text-white italic tracking-tighter">
+                    BUILD A <span class="text-primary text-glow">MONSTER</span>
+                </h1>
+            </div>
+
+            <div class="w-full space-y-5 mt-4">
+                <input type="tel" id="phone-input" placeholder="Enter the code" 
+                    class="w-full h-14 bg-[#111] rounded-xl text-center text-xl text-white placeholder-neutral-600 font-mono border border-neutral-800 focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all outline-none">
+                
+                <button onclick="login()" class="w-full h-14 bg-primary text-black font-black text-lg rounded-xl shadow-neon hover:shadow-neon-strong transition-all active:scale-[0.98] tracking-widest">
                     LOGIN SYSTEM
                 </button>
             </div>
 
-            <div class="text-center space-y-3 mt-auto pt-8 opacity-60 hover:opacity-100 transition-opacity duration-300">
-                <p class="text-[10px] text-neutral-500 leading-relaxed font-mono">
-                    Copyright © Babbayoung. Jay. All rights reserved.<br>
-                    이 앱의 모든 콘텐츠는 주식회자 바바영의 지적 재산입니다.
-                </p>
-                <p class="text-[10px] text-neutral-600 leading-relaxed px-2">
-                    "본 어플리케이션에 포함된 모든 자료(이미지, 텍스트, 코드, 그래픽, 영상 등)는 저작권법의 보호를 받습니다. 허가 없이 복제, 배포, 전송, 전시, 상업적 이용을 할 경우, 저작권법 제136조 등에 따라 법적 책임을 물을 수 있습니다."
-                </p>
-            </div>
         </div>
 
-        <div id="app" style="display:none;" class="space-y-6">
+        <div class="pb-8 text-center space-y-3 opacity-50">
+            <p class="text-[10px] text-neutral-500 leading-tight">
+                Copyright © Babbayoung. Jay. All rights reserved.<br>
+                이 앱의 모든 콘텐츠는 주식회자 바바영의 지적 재산입니다.
+            </p>
+            <p class="text-[9px] text-neutral-600 leading-tight px-4 text-justify break-all">
+                "본 어플리케이션에 포함된 모든 자료는 저작권법의 보호를 받습니다. 허가 없이 복제, 배포, 전송, 전시, 상업적 이용을 할 경우 법적 책임을 물을 수 있습니다."
+            </p>
+        </div>
+    </div>
+
+    <div id="app" style="display:none;" class="h-full flex flex-col relative z-20 bg-black">
+        
+        <header class="pt-10 pb-4 px-6 bg-black/90 backdrop-blur-md border-b border-neutral-900 sticky top-0 z-30">
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                BUILD A <span class="text-primary italic">MONSTER</span>
+            </h1>
+        </header>
+
+        <div class="flex-1 overflow-y-auto px-6 pb-32 space-y-6 pt-6" id="main-scroll">
             
             <div id="unit-selector">
-                <h2 class="text-3xl font-extrabold tracking-tight text-white mb-8 flex items-center gap-2">
-                    Unit <span class="text-primary italic neon-text">선택</span>
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    Unit <span class="text-primary italic">Selection</span>
                 </h2>
-                <div id="unit-buttons" class="grid grid-cols-1 gap-4">
+                <div id="unit-buttons" class="grid grid-cols-1 gap-3">
                     </div>
             </div>
 
-            <div id="menu-box" style="display:none;" class="space-y-6">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                    <span class="text-primary">Select</span> Mode
-                </h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="startScriptMode()" class="p-6 bg-[#171717] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all group relative overflow-hidden"><span class="relative z-10 font-bold text-lg">Script</span><div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div></button>
-                    <button onclick="startVocaMode()" class="p-6 bg-[#171717] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all group relative overflow-hidden"><span class="relative z-10 font-bold text-lg">Vocab</span><div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div></button>
-                    <button onclick="startAccurateSpeakingMode()" class="col-span-2 p-6 bg-primary/10 text-primary border border-primary/30 rounded-2xl font-bold text-lg hover:bg-primary/20 transition-all neon-border">Accurate Speaking</button>
-                    <button onclick="startASMode()" class="p-6 bg-[#171717] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all group relative overflow-hidden"><span class="relative z-10 font-bold text-lg">AS Correction</span><div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div></button>
-                    <button onclick="startRepeatMode()" class="p-6 bg-[#171717] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all group relative overflow-hidden"><span class="relative z-10 font-bold text-lg">반복듣기</span><div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div></button>
+            <div id="menu-box" style="display:none;" class="space-y-4">
+                <h2 class="text-xl font-bold text-white mb-4"><span class="text-primary">Select</span> Mode</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="startScriptMode()" class="p-5 bg-[#121212] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all font-bold">Script</button>
+                    <button onclick="startVocaMode()" class="p-5 bg-[#121212] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all font-bold">Vocab</button>
+                    <button onclick="startAccurateSpeakingMode()" class="col-span-2 p-5 bg-primary/10 text-primary border border-primary/30 rounded-2xl font-bold hover:bg-primary/20 transition-all">Accurate Speaking</button>
+                    <button onclick="startASMode()" class="p-5 bg-[#121212] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all font-bold">AS Correction</button>
+                    <button onclick="startRepeatMode()" class="p-5 bg-[#121212] rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all font-bold">반복듣기</button>
                 </div>
-                <button onclick="goBackToUnits()" class="w-full mt-8 py-4 text-neutral-500 text-sm font-mono hover:text-white transition-colors flex items-center justify-center gap-2">
-                    <span class="material-icons-round text-lg">arrow_back</span> Back to Units
+                <button onclick="goBackToUnits()" class="w-full mt-6 py-4 text-neutral-500 text-sm hover:text-white flex items-center justify-center gap-2">
+                    <span class="material-icons-round text-base">arrow_back</span> Back to Units
                 </button>
             </div>
 
             <div id="study-box" style="display:none;" class="text-center space-y-8 pt-4">
-                <div class="w-full bg-[#171717] rounded-full h-3 mb-2 overflow-hidden border border-neutral-800">
-                    <div id="progress" class="bg-primary h-full rounded-full transition-all duration-500 ease-out neon-glow" style="width: 0%"></div>
+                <div class="w-full bg-[#121212] rounded-full h-2 mb-2 overflow-hidden">
+                    <div id="progress" class="bg-primary h-full rounded-full transition-all duration-300 shadow-[0_0_10px_#39FF14]" style="width: 0%"></div>
                 </div>
-                <div id="progress-percent" class="text-right text-sm text-primary font-mono">0%</div>
+                <div id="progress-percent" class="text-right text-xs text-primary font-mono">0%</div>
 
-                <div class="py-12 px-4 relative">
-                    <div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full pointer-events-none opacity-20"></div>
-                    <p id="sentence" class="text-3xl font-bold text-white leading-relaxed min-h-[120px] flex items-center justify-center relative z-10 drop-shadow-lg">Ready?</p>
-                    <p id="sentence-kor" class="text-base text-neutral-500 mt-6 h-10 font-medium relative z-10"></p>
+                <div class="py-10 min-h-[200px] flex flex-col justify-center items-center">
+                    <p id="sentence" class="text-2xl font-bold text-white leading-relaxed mb-4">Ready?</p>
+                    <p id="sentence-kor" class="text-sm text-neutral-500 font-medium"></p>
                 </div>
 
-                <div class="flex gap-4 justify-center">
-                    <button id="start-btn" onclick="startStudy()" class="flex-1 bg-primary text-[#0A0A0A] font-bold py-5 rounded-2xl text-lg uppercase tracking-widest hover:bg-primary/90 transition-all active:scale-[0.98] shadow-lg shadow-primary/20">Start</button>
-                    <button id="skip-btn" onclick="skipSentence()" class="px-8 bg-[#171717] text-white rounded-2xl border border-neutral-800 hover:border-primary hover:text-primary transition-all font-bold uppercase tracking-widest" style="display:none;">Skip</button>
+                <div class="flex gap-3 justify-center px-4">
+                    <button id="start-btn" onclick="startStudy()" class="flex-1 bg-primary text-black font-bold py-4 rounded-xl shadow-neon active:scale-95 transition-transform">Start</button>
+                    <button id="skip-btn" onclick="skipSentence()" class="px-6 bg-[#222] text-white rounded-xl border border-neutral-700 hover:border-white transition-all" style="display:none;">Skip</button>
                 </div>
-                <button onclick="showMenu()" class="text-neutral-500 text-sm mt-6 hover:text-white transition-colors font-mono flex items-center justify-center gap-2 mx-auto py-2">
-                    <span class="material-icons-round">close</span> Exit
-                </button>
+                <button onclick="showMenu()" class="text-neutral-600 text-sm mt-4 hover:text-white">Exit Study</button>
             </div>
 
             <div id="repeat-box" style="display:none;"></div>
             <div id="as-box" style="display:none;"></div>
             <div id="as-record-box" style="display:none;"></div>
             <div id="results-box" style="display:none;">
-                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2"><span class="text-primary">Progress</span> Report</h2>
-                <div id="results-content" class="space-y-4 pb-24"></div>
-                <button onclick="showBox('unit-selector')" class="w-full py-5 mt-6 bg-[#171717] text-white rounded-2xl border border-neutral-800 hover:border-white transition-all font-bold uppercase tracking-widest">Close</button>
+                <h2 class="text-primary font-bold text-xl mb-4">Progress Report</h2>
+                <div id="results-content" class="space-y-3 pb-20"></div>
+                <button onclick="showBox('unit-selector')" class="w-full py-4 mt-4 bg-[#222] text-white rounded-xl">Close</button>
             </div>
             
-            <div id="dev-box" style="display:none;" class="flex flex-col items-center justify-center h-[50vh] space-y-6">
-                <div class="relative w-20 h-20">
-                    <div class="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
-                    <div class="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin neon-glow"></div>
-                </div>
-                <p class="text-primary font-mono animate-pulse text-lg tracking-widest">PROCESSING DATA...</p>
+            <div id="dev-box" style="display:none;" class="flex flex-col items-center justify-center h-[50vh]">
+                <div class="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                <p class="text-primary font-mono text-sm mt-4 animate-pulse">LOADING...</p>
             </div>
-
         </div>
-    </div>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 glass-panel z-30 transition-transform duration-300 translate-y-full" id="bottom-bar" style="display: none;">
-        <button onclick="showResultsPage()" class="w-full bg-[#171717]/80 hover:bg-[#171717] text-white border border-neutral-700 hover:border-primary font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] backdrop-blur-md group">
-            <span class="material-icons-round text-primary group-hover:neon-text transition-all">bar_chart</span>
-            <span class="uppercase tracking-widest text-sm group-hover:text-primary transition-all">Progress Report</span>
-        </button>
-    </div>
-
-    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md transition-opacity duration-300" style="display:none;">
-        <div class="bg-[#171717] border border-primary/50 rounded-3xl p-8 max-w-sm w-[90%] text-center shadow-[0_0_40px_rgba(57,255,20,0.2)] neon-border transform transition-all duration-300 scale-100">
-            <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center text-primary neon-glow">
-                <span class="material-icons-round text-3xl">info</span>
-            </div>
-            <p id="modal-msg" class="text-white text-lg mb-8 leading-relaxed whitespace-pre-wrap font-medium"></p>
-            <button onclick="closeCustomModal()" class="w-full p-4 bg-primary text-[#0A0A0A] font-black rounded-2xl uppercase tracking-widest hover:bg-primary/90 transition-all duration-300 active:scale-[0.98] shadow-lg shadow-primary/20">
-                CONFIRM
+        <div class="absolute bottom-0 left-0 right-0 p-6 glass-panel z-30" id="bottom-bar" style="display:none;"> <button onclick="showResultsPage()" class="w-full bg-[#121212] hover:bg-[#1a1a1a] text-white border border-neutral-800 font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-transform active:scale-95 group">
+                <span class="material-icons-round text-primary group-hover:drop-shadow-[0_0_5px_#39FF14]">bar_chart</span>
+                <span class="text-sm tracking-widest text-neutral-300 group-hover:text-white">PROGRESS REPORT</span>
             </button>
         </div>
     </div>
 
-    <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
-    <div class="absolute bottom-20 -left-40 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm px-6" style="display:none;">
+        <div class="bg-[#111] border border-primary/30 rounded-2xl p-6 w-full max-w-sm text-center shadow-neon-strong">
+            <p id="modal-msg" class="text-white text-lg mb-6 leading-relaxed font-medium"></p>
+            <button onclick="closeCustomModal()" class="w-full bg-primary text-black font-bold py-3 rounded-xl hover:bg-primary/90">OK</button>
+        </div>
+    </div>
+
+    <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] pointer-events-none"></div>
 
 </main>
 
 <script src="app.js"></script>
+<script>
+    // 로그인 화면일 때는 하단 바 숨기고, 로그인 성공 후 유닛 선택 화면일 때 보이게 처리하는 로직 보조
+    const originalShowBox = window.showBox;
+    window.showBox = function(boxId) {
+        // 기존 showBox 실행
+        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
+        boxes.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.style.display = (id === boxId) ? 'block' : 'none';
+        });
+        document.getElementById("app").style.display = (boxId === 'login-box') ? 'none' : 'flex';
+        
+        // 로그인 화면이면 메인 컨테이너 숨김 해제 등 처리
+        if (boxId === 'login-box') {
+            document.getElementById('login-box').style.display = 'flex';
+            document.getElementById('bottom-bar').style.display = 'none';
+        } else {
+            document.getElementById('login-box').style.display = 'none';
+            // 하단 바는 유닛 선택 화면에서만 보이게 하거나 항상 보이게 설정 가능
+            document.getElementById('bottom-bar').style.display = 'block';
+        }
+    }
+</script>
 </body>
 </html>
