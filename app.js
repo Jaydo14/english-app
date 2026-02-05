@@ -542,6 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
+// [수정] 반복듣기 모드 (버튼 가림 해결 + 박스 축소 + 한국어 밝게)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -551,8 +552,9 @@ window.startRepeatMode = async function() {
     showBox('repeat-box');
     
     const container = document.getElementById('repeat-box');
-    // 전체 레이아웃 설정 (리스트는 스크롤, 컨트롤은 하단 고정)
-    container.className = "px-4 pt-2 h-full flex flex-col pb-24 relative";
+    
+    // 1. pb-40으로 수정: 하단 내비게이션 바에 가려지지 않도록 충분한 여백 확보
+    container.className = "px-4 pt-2 h-full flex flex-col pb-40 relative";
 
     container.innerHTML = `
       <div class="mb-4 shrink-0">
@@ -597,10 +599,11 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      div.className = 'repeat-item p-4 mb-2 rounded-xl border border-transparent transition-all duration-300';
+      // 2. p-3으로 수정 (박스 높이 줄임)
+      div.className = 'repeat-item p-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
         <div class="en-text text-white text-base font-bold leading-snug mb-1 transition-colors">${item.en}</div>
-        <div class="ko-text text-neutral-600 text-xs font-medium">${item.ko}</div>
+        <div class="ko-text text-neutral-400 text-xs font-medium">${item.ko}</div>
       `;
       list.appendChild(div);
     });
@@ -608,24 +611,14 @@ window.startRepeatMode = async function() {
   } catch (e) { console.error(e); showCustomModal("로드 실패"); }
 };
 
-// [추가] 횟수 조절 함수 (+/- 버튼용)
-window.adjustRepeatCount = function(diff) {
-    repeatCountVal += diff;
-    if(repeatCountVal < 1) repeatCountVal = 1; // 최소 1회
-    if(repeatCountVal > 99) repeatCountVal = 99; // 최대 99회
-    const display = document.getElementById('repeat-count-display');
-    if(display) display.innerText = repeatCountVal;
-};
-
-// [수정] 반복 재생 실행 함수 (하이라이트 스타일 적용)
+// [수정] 반복 재생 실행 함수 (스타일 변경 사항 적용)
 window.runRepeatAudio = async function() {
-  const totalCycles = repeatCountVal; // 변수에서 값 가져옴
+  const totalCycles = repeatCountVal;
   const btn = document.getElementById('repeat-start-btn');
   
   if (isRepeating) return; 
   isRepeating = true; 
   
-  // 버튼 상태 변경
   if(btn) {
       btn.disabled = true; 
       btn.innerHTML = `<div class="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>`;
@@ -642,23 +635,21 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
       
       await new Promise(resolve => {
-        // 1. 모든 아이템 스타일 초기화
+        // 스타일 초기화 (p-3, text-neutral-400 적용)
         document.querySelectorAll('.repeat-item').forEach(el => {
-            el.className = 'repeat-item p-4 mb-2 rounded-xl border border-transparent transition-all duration-300'; // 기본
+            el.className = 'repeat-item p-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
             el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-1 transition-colors';
+            el.querySelector('.ko-text').className = 'ko-text text-neutral-400 text-xs font-medium';
         });
         
-        // 2. 현재 아이템 강조 (이미지처럼 진한 초록 배경)
+        // 현재 아이템 강조
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            // 배경: 진한 초록(#1a3a1a), 테두리: 형광초록 미세하게
-            el.className = 'repeat-item p-4 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
-            
-            // 텍스트: 형광 초록색
+            // 배경 강조 (p-3 유지)
+            el.className = 'repeat-item p-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
             const enDiv = el.querySelector('.en-text');
             if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-1 transition-colors';
             
-            // 스크롤 이동
             el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
         }
 
@@ -671,11 +662,9 @@ window.runRepeatAudio = async function() {
     repeatIndex = 0; 
     sendDataToGoogle("반복듣기", `${c + 1}회 완료`); 
     
-    // 사이클 간 잠시 대기
     if (c < totalCycles - 1 && isRepeating) { await new Promise(resolve => setTimeout(resolve, 1500)); }
   }
   
-  // 종료 처리
   stopRepeatAudio();
   repeatIndex = 0; repeatCycleCount = 0;
   saveStatus(); 
