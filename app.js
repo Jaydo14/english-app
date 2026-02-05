@@ -503,11 +503,12 @@ window.startAccurateSpeakingMode = async function() {
 // ======================================================
 // [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
 // ======================================================
+// [수정] Accurate Speaking 화면 렌더링 (버튼 잘림 해결: 스크롤 영역 내부로 이동)
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
     // 컨테이너 설정
-    container.className = "px-6 pt-4 h-full flex flex-col relative";
+    container.className = "px-6 pt-4 h-full flex flex-col relative overflow-hidden";
     
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
@@ -517,7 +518,7 @@ function renderAccurateSpeakingPage() {
             <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
         </div>
 
-        <div class="flex-1 flex flex-col items-center w-full overflow-y-auto no-scrollbar pb-4">
+        <div class="flex-1 w-full overflow-y-auto no-scrollbar pb-[180px] flex flex-col items-center">
             
             <div class="w-full mb-8 text-center shrink-0">
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
@@ -527,12 +528,12 @@ function renderAccurateSpeakingPage() {
             </div>
 
             <button id="as-listen-btn" onclick="listenQuestion()" style="${isSubmitted ? 'display:none' : 'display:flex'}" 
-                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] shrink-0">
+                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] shrink-0 mb-8">
                 <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
                 <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
             </button>
 
-            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up">
+            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up mb-8">
                 <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)] shrink-0">
                     <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
                 </div>
@@ -541,7 +542,7 @@ function renderAccurateSpeakingPage() {
                 </button>
             </div>
 
-            <div id="submit-ui" style="display:none;" class="w-full space-y-4 animate-fade-in-up">
+            <div id="submit-ui" style="display:none;" class="w-full space-y-6 animate-fade-in-up mb-8">
                 <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800">
                     <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
                     <textarea id="student-text-input" rows="8" placeholder="녹음한 내용을 영어로 적어주세요..." 
@@ -553,12 +554,12 @@ function renderAccurateSpeakingPage() {
                 </button>
             </div>
 
-        </div>
+            <div class="w-full mt-auto">
+                <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                    Back to Menu
+                </button>
+            </div>
 
-        <div class="shrink-0 pb-20 mt-4">
-            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
-                Back to Menu
-            </button>
         </div>
     `;
 }
