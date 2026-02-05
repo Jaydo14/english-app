@@ -503,22 +503,25 @@ window.startAccurateSpeakingMode = async function() {
 // ======================================================
 // [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
 // ======================================================
-// [수정] Accurate Speaking 화면 렌더링 (버튼 잘림 해결: 스크롤 영역 내부로 이동)
+// [수정] Accurate Speaking 화면 (Fixed 포지션 적용으로 버튼 잘림 원천 차단)
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
-    // 컨테이너 설정
-    container.className = "px-6 pt-4 h-full flex flex-col relative overflow-hidden";
+    // 1. 컨테이너를 화면 중간에 '고정(Fixed)'시킵니다.
+    // top-[80px]: 상단 헤더 아래 시작
+    // bottom-[90px]: 하단 내비게이션 바 위에서 끝남 (이 설정 덕분에 절대 안 가려짐)
+    // z-30: 다른 요소들보다 위에 표시
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 px-6 flex flex-col bg-black z-30";
     
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
 
     container.innerHTML = `
-        <div class="mb-6 shrink-0">
+        <div class="mt-4 mb-6 shrink-0">
             <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
         </div>
 
-        <div class="flex-1 w-full overflow-y-auto no-scrollbar pb-[180px] flex flex-col items-center">
+        <div class="flex-1 w-full overflow-y-auto no-scrollbar pb-10 flex flex-col items-center">
             
             <div class="w-full mb-8 text-center shrink-0">
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
@@ -554,7 +557,7 @@ function renderAccurateSpeakingPage() {
                 </button>
             </div>
 
-            <div class="w-full mt-auto">
+            <div class="w-full mt-auto pt-4 pb-4">
                 <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
                     Back to Menu
                 </button>
