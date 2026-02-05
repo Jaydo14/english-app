@@ -540,9 +540,21 @@ window.submitAccurateSpeaking = async function() {
 };
 
 // ======================================================
-// 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
+// 6. 반복듣기 (최종 수정: 버튼 위치 상향 + 횟수 조절 기능 복구)
 // ======================================================
-// [수정] 반복듣기 (버튼 독립 고정: 부모 요소 무시하고 화면 좌표에 직접 배치)
+
+// [중요] 횟수 조절 함수 (이게 있어야 +, - 버튼이 작동합니다!)
+window.adjustRepeatCount = function(diff) {
+    repeatCountVal += diff;
+    if(repeatCountVal < 1) repeatCountVal = 1; // 최소 1회
+    if(repeatCountVal > 99) repeatCountVal = 99; // 최대 99회
+    
+    // 화면에 숫자 업데이트
+    const display = document.getElementById('repeat-count-display');
+    if(display) display.innerText = repeatCountVal;
+};
+
+// [수정] 반복듣기 모드 시작
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,8 +565,7 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. 컨테이너는 단순히 리스트를 담는 그릇 역할만 합니다.
-    // min-h-screen을 줘서 스크롤이 자연스럽게 생기도록 합니다.
+    // 컨테이너 설정
     container.className = "px-4 pt-2 min-h-screen relative";
 
     container.innerHTML = `
@@ -562,10 +573,10 @@ window.startRepeatMode = async function() {
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="space-y-2 pb-[250px]">
+      <div id="repeat-list" class="space-y-2 pb-[260px]">
          </div>
 
-      <div class="fixed bottom-[85px] left-0 right-0 px-4 bg-gradient-to-t from-black via-black to-transparent pt-10 pb-2 z-50">
+      <div class="fixed bottom-[100px] left-0 right-0 px-4 bg-gradient-to-t from-black via-black to-transparent pt-10 pb-2 z-50">
           
           <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-2 shadow-2xl">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
