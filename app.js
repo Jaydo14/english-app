@@ -374,23 +374,59 @@ window.startASMode = async function() {
   } catch (e) { showCustomModal("첨삭 데이터 없음", () => showMenu()); }
 };
 
+// [수정] AS Correction 화면 렌더링 (이미지 디자인 적용: 박스형 레이아웃 + 버튼 배치)
 function renderASPage() {
   const container = document.getElementById('as-box');
+  // 컨테이너 스타일 설정 (전체 레이아웃)
+  container.className = "px-4 pt-2 h-full flex flex-col text-left";
+  
   const format = (t) => t ? String(t).replace(/\n/g, '<br>').replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>') : "";
+  
   container.innerHTML = `
-    <h2 style="color:#39ff14;">AS Correction</h2>
-    <div style="text-align:left; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:15px;"><p style="color:#39ff14; font-size:12px;">[Question]</p><p style="font-size:18px;">${format(asData.question)}</p></div>
-    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:10px;"><p style="color:#888; font-size:12px;">My Answer</p><p style="color:#aaa;">${format(asData.original)}</p></div>
-    <div style="text-align:left; background:#222; padding:15px; border-radius:12px; margin-bottom:20px;"><p style="color:#39ff14; font-size:12px;">Feedback</p><p style="font-size:17px;">${format(asData.corrected)}</p></div>
-    <div id="as-timer" style="font-size:28px; margin-bottom:20px; color:#39ff14; font-weight:bold;">
+    <div class="mb-6">
+        <h2 class="text-[#39FF14] text-lg font-bold mb-1">AS Correction</h2>
+        <p class="text-[#39FF14] text-xs font-bold mb-1">[Question]</p>
+        <p class="text-white text-xl font-bold leading-snug">${format(asData.question)}</p>
+    </div>
+
+    <div class="space-y-4 mb-6">
+        <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
+            <p class="text-neutral-500 text-xs font-bold mb-2">My Answer</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">${format(asData.original)}</p>
+        </div>
+
+        <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
+            <p class="text-[#39FF14] text-xs font-bold mb-2">Feedback</p>
+            <p class="text-white text-sm leading-relaxed">${format(asData.corrected)}</p>
+        </div>
+    </div>
+
+    <div id="as-timer" class="text-[#39FF14] text-5xl font-black font-mono mb-6 tracking-tighter">
         ${Math.floor(asSeconds/60).toString().padStart(2,'0')}:${(asSeconds%60).toString().padStart(2,'0')}
     </div>
-    <button id="as-start-btn" onclick="startASStudy()">Start</button>
-    <div id="as-controls" style="display:none; flex-direction:column; gap:10px;"><button onclick="playASAudio()" style="background:#555;">질문 다시듣기</button><button onclick="finishASStudy()" style="background:#39ff14; color:#000;">학습 완료</button></div>
-    <button onclick="showMenu()" class="sub-action-btn" style="margin-top:15px;">Back</button>`;
-    
-    // [수정] 이어하기여도 "Resume"이 아닌 "Start" 버튼 표시 (자동 재생 X)
-    document.getElementById('as-start-btn').innerText = "Start";
+
+    <div class="mt-auto pb-6 w-full flex gap-3 h-14">
+        <button id="as-start-btn" onclick="startASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform hover:bg-[#32e012]">
+            Start
+        </button>
+
+        <div id="as-controls" style="display:none;" class="flex-1 flex gap-2">
+             <button onclick="playASAudio()" class="flex-1 bg-[#222] text-white font-bold rounded-xl border border-neutral-700 active:border-[#39FF14] transition-all text-sm">
+                Listen
+             </button>
+             <button onclick="finishASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_10px_#39FF14] transition-all text-sm">
+                Finish
+             </button>
+        </div>
+
+        <button onclick="showMenu()" class="w-24 bg-[#1c1c1c] text-white font-bold rounded-xl border border-neutral-800 active:border-[#39FF14] active:text-[#39FF14] transition-all hover:bg-[#252525]">
+            Back
+        </button>
+    </div>`;
+
+    // 초기화: Start 버튼 보이고 컨트롤 숨김
+    document.getElementById('as-start-btn').style.display = 'block';
+    document.getElementById('as-controls').style.display = 'none';
 }
 
 window.startASStudy = function() {
