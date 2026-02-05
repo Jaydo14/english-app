@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (높이 계산 calc 적용: 전체 스크롤 방지 + 버튼 고정)
+// [수정] 반복듣기 (화면 고정 레이아웃: 헤더/네비바 제외한 영역만 사용)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,22 +553,27 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // [핵심 수정] h-[calc(100vh-160px)]: 전체 높이에서 상단 헤더와 하단 탭바 높이를 뺀 만큼만 사용
-    // 이렇게 해야 버튼이 화면 밖으로 밀려나지 않습니다.
-    container.className = "px-4 pt-2 flex flex-col overflow-hidden relative";
-    container.style.height = "calc(100vh - 160px)"; 
+    // [핵심 변경] fixed positioning 사용
+    // top-[80px]: 상단 'Build A Monster' 헤더 높이만큼 띄움
+    // bottom-[90px]: 하단 네비게이션 바 높이만큼 띄움
+    // left-0 right-0: 가로 꽉 채움
+    // z-40: 다른 요소들보다 위에 표시
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 px-4 bg-black z-40 flex flex-col";
+    
+    // 기존의 height 스타일이 남아있다면 제거
+    container.style.height = ""; 
 
     container.innerHTML = `
-      <div class="w-full shrink-0 mb-3">
+      <div class="w-full shrink-0 mb-2 pt-2">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="flex-1 w-full overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4 border-b border-neutral-900/50">
+      <div id="repeat-list" class="flex-1 w-full overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4 border-b border-neutral-800">
          </div>
 
-      <div class="w-full shrink-0 pt-4 bg-black z-10">
+      <div class="w-full shrink-0 pt-3 bg-black">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-3 shadow-lg">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-2 shadow-lg">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -582,7 +587,7 @@ window.startRepeatMode = async function() {
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">CYCLES</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-3 mb-3">
+          <div class="grid grid-cols-2 gap-3 mb-2">
               <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-12 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
                   <span class="material-icons-round">play_arrow</span> START
               </button>
