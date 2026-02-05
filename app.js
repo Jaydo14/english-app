@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (버튼 위치 강제 고정 + 박스 슬림화 유지)
+// [수정] 반복듣기 (버튼을 'absolute'로 공중에 띄워서 강제 고정)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,20 +553,21 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. h-full flex flex-col: 화면 전체 높이 사용
-    container.className = "px-4 pt-2 h-full flex flex-col overflow-hidden";
+    // 1. relative: 내부 요소(버튼)들이 이 박스를 기준으로 위치를 잡게 함
+    // overflow-hidden: 박스 밖으로 나가는 내용 숨김
+    container.className = "px-4 pt-2 h-full relative overflow-hidden";
 
     container.innerHTML = `
-      <div class="mb-3 shrink-0">
+      <div class="mb-3">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="flex-1 overflow-y-auto bg-[#111] rounded-2xl border border-neutral-800 p-2 mb-3 relative scroll-smooth no-scrollbar min-h-0">
+      <div id="repeat-list" class="h-full overflow-y-auto pb-[300px] scroll-smooth no-scrollbar">
          </div>
 
-      <div class="w-full shrink-0 space-y-3 pb-40">
+      <div class="absolute bottom-[85px] left-0 w-full px-4 space-y-3 z-20 bg-gradient-to-t from-black via-black to-transparent pt-6 pb-2">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 shadow-xl">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -589,7 +590,7 @@ window.startRepeatMode = async function() {
               </button>
           </div>
 
-          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider shadow-lg">
               Back to Menu
           </button>
       </div>`;
@@ -599,7 +600,7 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      // py-1.5: 박스 슬림화 유지
+      // 박스 슬림화 (py-1.5)
       div.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
         <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
@@ -611,7 +612,7 @@ window.startRepeatMode = async function() {
   } catch (e) { console.error(e); showCustomModal("로드 실패"); }
 };
 
-// [수정] 반복 재생 실행 함수 (스타일 동기화)
+// [수정] 반복 재생 실행 함수 (스타일 유지)
 window.runRepeatAudio = async function() {
   const totalCycles = repeatCountVal;
   const btn = document.getElementById('repeat-start-btn');
