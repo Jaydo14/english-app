@@ -374,11 +374,12 @@ window.startASMode = async function() {
   } catch (e) { showCustomModal("첨삭 데이터 없음", () => showMenu()); }
 };
 
-// [수정] AS Correction 화면 렌더링 (이미지 디자인 적용: 박스형 레이아웃 + 버튼 배치)
+// [수정] AS Correction 화면 렌더링 (버튼 사라짐 해결: 자연스러운 배치로 변경)
 function renderASPage() {
   const container = document.getElementById('as-box');
-  // 컨테이너 스타일 설정 (전체 레이아웃)
-  container.className = "px-4 pt-2 h-full flex flex-col text-left";
+  
+  // 1. 컨테이너 스타일 수정: h-full 제거 (내용이 길어도 잘리지 않게)
+  container.className = "px-4 pt-2 flex flex-col text-left pb-10";
   
   const format = (t) => t ? String(t).replace(/\n/g, '<br>').replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>') : "";
   
@@ -401,11 +402,11 @@ function renderASPage() {
         </div>
     </div>
 
-    <div id="as-timer" class="text-[#39FF14] text-5xl font-black font-mono mb-6 tracking-tighter">
+    <div id="as-timer" class="text-[#39FF14] text-3xl font-black font-mono mb-4 tracking-tighter">
         ${Math.floor(asSeconds/60).toString().padStart(2,'0')}:${(asSeconds%60).toString().padStart(2,'0')}
     </div>
 
-    <div class="mt-auto pb-6 w-full flex gap-3 h-14">
+    <div class="mt-4 w-full flex gap-3 h-14">
         <button id="as-start-btn" onclick="startASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform hover:bg-[#32e012]">
             Start
         </button>
@@ -424,9 +425,10 @@ function renderASPage() {
         </button>
     </div>`;
 
-    // 초기화: Start 버튼 보이고 컨트롤 숨김
+    // 초기화
     document.getElementById('as-start-btn').style.display = 'block';
     document.getElementById('as-controls').style.display = 'none';
+}
 }
 
 window.startASStudy = function() {
