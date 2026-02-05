@@ -165,38 +165,14 @@ window.login = function () {
     }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
 };
 
-// [수정] 유닛 버튼 렌더링 (카드 디자인 적용)
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
-  
-  // 디자인을 위한 아이콘 리스트 (순서대로 적용)
-  const icons = ["music_note", "explore", "local_cafe", "movie", "restaurant", "flight_takeoff", "celebration", "school"];
-
   for (let i = 1; i <= 8; i++) {
-    const title = currentTitles[i] || "Unknown";
-    const icon = icons[i-1] || "star"; // 아이콘 매칭
-
     const btn = document.createElement("button");
-    // 디자인 클래스 적용 (Tailwind)
-    btn.className = "group relative w-full p-5 rounded-2xl transition-all duration-300 bg-[#171717] border border-neutral-800 hover:border-[#39FF14] flex items-center justify-between overflow-hidden active:scale-[0.98]";
-    
-    btn.innerHTML = `
-      <div class="flex items-center gap-4 z-10">
-        <div class="w-12 h-12 rounded-xl bg-[#39FF14]/10 flex items-center justify-center text-[#39FF14]">
-          <span class="material-icons-round text-2xl">${icon}</span>
-        </div>
-        <div class="text-left">
-          <p class="text-[10px] font-mono uppercase tracking-widest text-[#39FF14] mb-0.5">Unit ${String(i).padStart(2, '0')}</p>
-          <h3 class="text-lg font-bold text-white group-hover:text-[#39FF14] transition-colors">${title}</h3>
-        </div>
-      </div>
-      <span class="material-icons-round text-neutral-600 group-hover:text-[#39FF14] transition-colors z-10">arrow_forward_ios</span>
-      
-      <div class="absolute inset-0 bg-[#39FF14]/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-    `;
-    
+    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` : "";
+    btn.innerHTML = `Unit ${i}${titleText}`;
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
   }
