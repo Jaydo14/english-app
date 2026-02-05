@@ -20,6 +20,8 @@ let isRepeating = false;
 // 반복듣기 상태
 let repeatIndex = 0; 
 let repeatCycleCount = 0; 
+// [추가] 반복 횟수 저장 변수 (기본값 3)
+let repeatCountVal = 3;
 
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
@@ -538,7 +540,7 @@ window.submitAccurateSpeaking = async function() {
 };
 
 // ======================================================
-// 6. 반복듣기 (누적 저장 + 2초 대기 + 하이라이트 + 버튼 대기)
+// 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
@@ -549,38 +551,88 @@ window.startRepeatMode = async function() {
     showBox('repeat-box');
     
     const container = document.getElementById('repeat-box');
+    // 전체 레이아웃 설정 (리스트는 스크롤, 컨트롤은 하단 고정)
+    container.className = "px-4 pt-2 h-full flex flex-col pb-24 relative";
+
     container.innerHTML = `
-      <h2 style="color:#39ff14;">Listen & Repeat</h2>
-      <div style="margin-bottom:15px; color:#fff;">
-        반복 횟수: <input type="number" id="repeat-count" value="3" min="1" style="width:50px; background:#222; color:#39ff14; border:1px solid #333; text-align:center;"> 사이클
+      <div class="mb-4 shrink-0">
+          <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
-      <div id="repeat-list" style="height:350px; overflow-y:auto; border:1px solid #333; padding:10px; border-radius:10px; margin-bottom:15px;"></div>
-      <div style="display:flex; gap:10px; justify-content:center;">
-        <button id="repeat-start-btn" onclick="runRepeatAudio()" style="background:#39ff14; color:#000; width:120px;">Start</button>
-        <button onclick="stopRepeatAudio()" style="background:#ff4b4b; color:#fff; width:120px;">Stop</button>
-      </div>
-      <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:15px;">Back to Menu</button>`;
+
+      <div id="repeat-list" class="flex-1 overflow-y-auto bg-[#111] rounded-2xl border border-neutral-800 p-2 mb-4 relative scroll-smooth no-scrollbar">
+         </div>
+
+      <div class="w-full shrink-0 space-y-3">
+          
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-3 border border-neutral-800">
+              <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
+              <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
+                  <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
+                      <span class="material-icons-round text-sm">remove</span>
+                  </button>
+                  <span id="repeat-count-display" class="text-[#39FF14] font-bold font-mono text-lg w-6 text-center">${repeatCountVal}</span>
+                  <button onclick="adjustRepeatCount(1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
+                      <span class="material-icons-round text-sm">add</span>
+                  </button>
+              </div>
+              <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">CYCLES</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+              <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-14 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
+                  <span class="material-icons-round">play_arrow</span> START
+              </button>
+              <button onclick="stopRepeatAudio()" class="h-14 bg-[#ff4757] text-white font-black rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#ff6b81]">
+                  <span class="material-icons-round">stop</span> STOP
+              </button>
+          </div>
+
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+              Back to Menu
+          </button>
+      </div>`;
     
+    // 리스트 아이템 생성
     const list = document.getElementById('repeat-list');
     currentData.forEach((item, idx) => {
-      const div = document.createElement('div'); div.id = `repeat-${idx}`; div.className = 'repeat-item';
-      div.style.padding = "10px"; div.style.borderBottom = "1px solid #222"; div.style.textAlign = "left";
-      div.innerHTML = `<div class="en-text" style="color:#fff; font-size:15px;">${item.en}</div><div style="color:#666; font-size:12px;">${item.ko}</div>`;
+      const div = document.createElement('div'); 
+      div.id = `repeat-${idx}`; 
+      div.className = 'repeat-item p-4 mb-2 rounded-xl border border-transparent transition-all duration-300';
+      div.innerHTML = `
+        <div class="en-text text-white text-base font-bold leading-snug mb-1 transition-colors">${item.en}</div>
+        <div class="ko-text text-neutral-600 text-xs font-medium">${item.ko}</div>
+      `;
       list.appendChild(div);
     });
-    
-    // [수정] 이어하기여도 "Start"로 표시
-    document.getElementById('repeat-start-btn').innerText = "Start";
-  } catch (e) { showCustomModal("로드 실패"); }
+
+  } catch (e) { console.error(e); showCustomModal("로드 실패"); }
 };
 
+// [추가] 횟수 조절 함수 (+/- 버튼용)
+window.adjustRepeatCount = function(diff) {
+    repeatCountVal += diff;
+    if(repeatCountVal < 1) repeatCountVal = 1; // 최소 1회
+    if(repeatCountVal > 99) repeatCountVal = 99; // 최대 99회
+    const display = document.getElementById('repeat-count-display');
+    if(display) display.innerText = repeatCountVal;
+};
+
+// [수정] 반복 재생 실행 함수 (하이라이트 스타일 적용)
 window.runRepeatAudio = async function() {
-  const countInput = document.getElementById('repeat-count');
-  const totalCycles = parseInt(countInput.value) || 3;
+  const totalCycles = repeatCountVal; // 변수에서 값 가져옴
   const btn = document.getElementById('repeat-start-btn');
-  if (isRepeating) return; isRepeating = true; btn.disabled = true; btn.innerText = "Playing...";
+  
+  if (isRepeating) return; 
+  isRepeating = true; 
+  
+  // 버튼 상태 변경
+  if(btn) {
+      btn.disabled = true; 
+      btn.innerHTML = `<div class="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>`;
+  }
 
   if (isRestoring) isRestoring = false; 
+  requestWakeLock();
 
   for (let c = repeatCycleCount; c < totalCycles; c++) {
     repeatCycleCount = c;
@@ -590,38 +642,54 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
       
       await new Promise(resolve => {
-        document.querySelectorAll('.repeat-item .en-text').forEach(el => el.style.color = "#fff");
-        document.querySelectorAll('.repeat-item').forEach(el => el.style.background = "transparent");
+        // 1. 모든 아이템 스타일 초기화
+        document.querySelectorAll('.repeat-item').forEach(el => {
+            el.className = 'repeat-item p-4 mb-2 rounded-xl border border-transparent transition-all duration-300'; // 기본
+            el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-1 transition-colors';
+        });
         
+        // 2. 현재 아이템 강조 (이미지처럼 진한 초록 배경)
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            el.style.background = "#1a3a1a"; 
+            // 배경: 진한 초록(#1a3a1a), 테두리: 형광초록 미세하게
+            el.className = 'repeat-item p-4 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
+            
+            // 텍스트: 형광 초록색
             const enDiv = el.querySelector('.en-text');
-            if(enDiv) enDiv.style.color = "#39ff14"; 
+            if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-1 transition-colors';
+            
+            // 스크롤 이동
             el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
         }
-        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; player.play();
+
+        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; 
+        player.play();
         player.onended = resolve;
       });
       repeatIndex = i; saveStatus();
     }
-    
     repeatIndex = 0; 
-    // [수정] 사이클 완료 시 무조건 "+1회" 추가 요청
-    sendDataToGoogle("반복듣기", "1회 완료"); 
-
-    if (c < totalCycles - 1 && isRepeating) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    }
+    sendDataToGoogle("반복듣기", `${c + 1}회 완료`); 
+    
+    // 사이클 간 잠시 대기
+    if (c < totalCycles - 1 && isRepeating) { await new Promise(resolve => setTimeout(resolve, 1500)); }
   }
-  isRepeating = false; btn.disabled = false; btn.innerText = "Start"; repeatIndex = 0; repeatCycleCount = 0;
+  
+  // 종료 처리
+  stopRepeatAudio();
+  repeatIndex = 0; repeatCycleCount = 0;
   saveStatus(); 
 };
 
+// [수정] 정지 함수
 window.stopRepeatAudio = () => { 
-  isRepeating = false; player.pause(); 
+  isRepeating = false; 
+  player.pause(); 
   const btn = document.getElementById('repeat-start-btn');
-  if(btn) { btn.disabled = false; btn.innerText = "Start"; }
+  if(btn) { 
+      btn.disabled = false; 
+      btn.innerHTML = `<span class="material-icons-round">play_arrow</span> START`; 
+  }
   saveStatus(); 
 };
 
