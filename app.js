@@ -48,14 +48,15 @@ const bookDatabase = {
 // ======================================================
 // 2. UI 및 유틸리티
 // ======================================================
+// [수정] 화면 전환 함수
 function showBox(boxId) {
-  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
-  boxes.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.style.display = (id === boxId) ? 'block' : 'none';
-  });
-  document.getElementById("app").style.display = "block";
-  window.scrollTo(0, 0); 
+  // index.html 파일 하단에 있는 스크립트를 우선 실행합니다.
+  // (거기에 로그인 화면, 하단 바, 앱 화면을 켜고 끄는 최신 로직이 들어있습니다.)
+  if(window.showBox) {
+      window.showBox(boxId);
+  } else {
+      console.warn("HTML의 showBox 함수를 찾을 수 없습니다.");
+  }
 }
 
 function showCustomModal(msg, callback = null) {
