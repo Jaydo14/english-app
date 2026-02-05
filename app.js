@@ -456,135 +456,194 @@ window.finishASStudy = function() {
   showCustomModal(`학습 완료! ✔`, () => showMenu());
 };
 
-// [수정] Accurate Speaking 모드 (로딩 화면 호출 제거로 에러 방지)
-window.startAccurateSpeakingMode = async function() {
-  // 1. 현재 선택된 유닛이 없으면 1과로 설정
-  if (!currentUnit) currentUnit = 1;
+// ======================================================
+// 5. ACCURATE SPEAKING (화면 렌더링 추가로 검은 화면 해결)
+// ======================================================
 
-  // 2. 전화번호 가져오기
+// [수정] 모드 시작: 데이터를 가져오고 화면을 그립니다.
+window.startAccurateSpeakingMode = async function() {
   const phoneInput = document.getElementById("phone-input");
   const phone = phoneInput ? phoneInput.value.trim() : "";
+  
+  if (!phone) return showCustomModal("로그인 정보가 없습니다.");
 
-  if (!phone) {
-      showCustomModal("로그인 정보가 없습니다.");
-      return;
-  }
-
-  // 3. 로딩 중 메시지 표시 (dev-box 대신 모달 사용)
-  showCustomModal("데이터를 불러오는 중입니다...");
+  showCustomModal("데이터를 불러오는 중입니다..."); // 로딩 표시
 
   try {
-    // 4. 데이터 요청
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
     asData = await res.json();
     
-    // 5. 모달 닫기
-    closeCustomModal();
-
-    // 6. 입력창 초기화
-    const textInput = document.getElementById('student-text-input');
-    if(textInput) textInput.value = "";
+    closeCustomModal(); // 로딩 닫기
     
-    // 7. 데이터 상태에 따른 화면 처리
-    if (asData && asData.isSubmitted) {
-      // 이미 제출된 경우
-      const qText = document.getElementById('as-q-text');
-      if(qText) qText.innerText = "이미 정상적으로 전송되었습니다. ✔";
-      
-      showBox('as-record-box'); 
-      
-      // UI 숨김 처리
-      const listenBtn = document.getElementById('as-listen-btn');
-      const recordUI = document.getElementById('recording-ui');
-      const submitUI = document.getElementById('submit-ui');
-      
-      if(listenBtn) listenBtn.style.display = 'none'; 
-      if(recordUI) recordUI.style.display = 'none'; 
-      if(submitUI) submitUI.style.display = 'none'; 
-      return;
-    }
-
-    // 제출 안 된 경우: 질문 표시
-    const qText = document.getElementById('as-q-text');
-    if(qText) qText.innerText = asData.question || "질문 없음";
-    
+    // [핵심] 데이터를 가져온 후 화면을 직접 그립니다.
+    renderAccurateSpeakingPage(); 
     showBox('as-record-box'); 
-    
-    const listenBtn = document.getElementById('as-listen-btn');
-    if(listenBtn) listenBtn.style.display = 'block';
 
   } catch (e) { 
-      console.error(e); // 콘솔에 에러 출력
+      console.error(e);
       showCustomModal("로드 실패\n(데이터를 가져오지 못했습니다)"); 
   }
 };
 
-// [복구] Accurate Speaking: 질문 듣기
+// [추가] 화면 렌더링 함수 (검은 화면 방지용)
+function renderAccurateSpeakingPage() {
+    const container = document.getElementById('as-record-box');
+    
+    // 1. 컨테이너 스타일 설정
+    container.className = "px-6 pt-4 h-full flex flex-col relative";
+    
+    // 2. 이미 제출했는지 확인
+    const isSubmitted = asData && asData.isSubmitted;
+    const questionText = asData ? asData.question : "질문 데이터 없음";
+
+    // 3. HTML 생성
+    container.innerHTML = `
+        <div class="mb-10">
+            <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center w-full">
+            
+            <div class="w-full mb-12 text-center">
+                <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
+                <p id="as-q-text" class="text-white text-2xl font-bold leading-relaxed break-keep drop-shadow-md">
+                    ${isSubmitted ? "이미 제출 완료되었습니다. ✔" : questionText}
+                </p>
+            </div>
+
+            <button id="as-listen-btn" onclick="listenQuestion()" style="${isSubmitted ? 'display:none' : 'display:flex'}" 
+                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525]">
+                <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
+                <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
+            </button>
+
+            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up">
+                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
+                    <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
+                </div>
+                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
+                    STOP RECORDING
+                </button>
+            </div>
+
+            <div id="submit-ui" style="display:none;" class="w-full space-y-4 animate-fade-in-up">
+                <div class="bg-[#1c1c1c] p-4 rounded-xl border border-neutral-800">
+                    <p class="text-neutral-500 text-xs font-bold mb-2">DICTATION</p>
+                    <textarea id="student-text-input" rows="3" placeholder="녹음한 내용을 영어로 적어주세요..." 
+                        class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none"></textarea>
+                </div>
+                <button onclick="submitAccurateSpeaking()" class="w-full bg-[#39FF14] text-black font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.4)] active:scale-95 transition-transform hover:bg-[#32e012] uppercase tracking-widest">
+                    SUBMIT ANSWER
+                </button>
+            </div>
+
+        </div>
+
+        <div class="shrink-0 pb-8 mt-4">
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                Back to Menu
+            </button>
+        </div>
+    `;
+}
+
+// [기능] 질문 듣기 -> 끝나면 녹음 시작
 window.listenQuestion = function() {
   if (!asData || !asData.audio) return showCustomModal("오디오 정보가 없습니다.");
   
-  // 화면 꺼짐 방지 요청
-  requestWakeLock();
+  const btn = document.getElementById('as-listen-btn');
+  btn.style.opacity = "0.5"; // 재생 중 표시
   
+  requestWakeLock();
   player.src = BASE_URL + currentType + "u/" + asData.audio;
   player.play().catch(() => showCustomModal("오디오 재생 실패"));
   
-  // 오디오가 끝나면 자동으로 녹음 준비
-  player.onended = () => { startRecording(); }; 
+  player.onended = () => { 
+      btn.style.opacity = "1";
+      startRecording(); 
+  }; 
 };
 
-// [복구] 녹음 시작
+// [기능] 녹음 시작
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder = new MediaRecorder(stream); 
     audioChunks = [];
     
+    // UI 전환
     document.getElementById('as-listen-btn').style.display = 'none';
-    document.getElementById('recording-ui').style.display = 'block';
+    document.getElementById('recording-ui').style.display = 'flex';
     
     mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
     mediaRecorder.onstop = () => { processRecording(); };
     mediaRecorder.start();
     
+    // 타이머 시작
     recSeconds = 0;
-    // 60초 제한 타이머
     if (recordingTimer) clearInterval(recordingTimer);
     recordingTimer = setInterval(() => { 
         recSeconds++; 
         document.getElementById('rec-timer').innerText = `00:${recSeconds.toString().padStart(2,'0')}`; 
-        if (recSeconds >= 60) stopRecording(); 
+        if (recSeconds >= 60) stopRecording(); // 최대 60초
     }, 1000);
     
-  } catch (e) { showCustomModal("마이크 권한이 필요합니다."); }
+  } catch (e) { 
+      showCustomModal("마이크 권한이 필요합니다.\n설정에서 허용해주세요."); 
+      document.getElementById('as-listen-btn').style.display = 'flex'; // 실패 시 원상복구
+  }
 }
 
-// [복구] 녹음 중지
+// [기능] 녹음 중지
 window.stopRecording = function() { 
     if (mediaRecorder && mediaRecorder.state !== "inactive") { 
         mediaRecorder.stop(); 
         clearInterval(recordingTimer); 
+        
+        // UI 전환
         document.getElementById('recording-ui').style.display = 'none'; 
         document.getElementById('submit-ui').style.display = 'block'; 
+        
+        // 입력창에 포커스
+        setTimeout(() => document.getElementById('student-text-input').focus(), 100);
     } 
 };
 
-// [복구] 녹음 데이터 처리 (Base64 변환)
+// [기능] 오디오 데이터 처리
 async function processRecording() { 
     const blob = new Blob(audioChunks, { type: 'audio/webm' }); 
     const reader = new FileReader(); 
     reader.readAsDataURL(blob); 
-    reader.onloadend = () => { 
-        window.lastAudioBase64 = reader.result.split(',')[1]; 
-    }; 
+    reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; }; 
 }
 
+// [기능] 최종 제출
 window.submitAccurateSpeaking = async function() {
-  const text = document.getElementById('student-text-input').value.trim(); if(!text) return showCustomModal("내용 입력 필수");
-  showBox('dev-box');
-  const payload = { action: "uploadAS", phone: document.getElementById("phone-input").value.trim(), unit: "Unit " + currentUnit, studentText: text, audioData: window.lastAudioBase64 };
+  const textInput = document.getElementById('student-text-input');
+  const text = textInput.value.trim();
+  
+  if(!text) return showCustomModal("받아적은 내용을 입력해주세요!");
+  
+  showCustomModal("제출 중입니다..."); // 로딩 표시
+  
+  const payload = { 
+      action: "uploadAS", 
+      phone: document.getElementById("phone-input").value.trim(), 
+      unit: "Unit " + currentUnit, 
+      studentText: text, 
+      audioData: window.lastAudioBase64 
+  };
+  
   fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-    .then(res => res.json()).then(data => { if(data.result === "success") showCustomModal("제출 성공!", () => showMenu()); });
+    .then(res => res.json())
+    .then(data => { 
+        if(data.result === "success") {
+            showCustomModal("제출 성공!", () => showMenu());
+        } else {
+            showCustomModal("제출 실패\n다시 시도해주세요.");
+        }
+    })
+    .catch(() => showCustomModal("네트워크 오류 발생"));
 };
 
 // ======================================================
