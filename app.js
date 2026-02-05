@@ -82,15 +82,29 @@ function showBox(boxId) {
   }
 }
 
-function showCustomModal(msg, callback = null) {
+// ======================================================
+// [수정 1] 커스텀 모달 (버튼 숨김 옵션 추가)
+// ======================================================
+function showCustomModal(msg, callback = null, showButton = true) {
   player.pause(); 
   document.getElementById('modal-msg').innerText = msg;
-  document.getElementById('custom-modal').style.display = 'flex';
+  const modal = document.getElementById('custom-modal');
+  modal.style.display = 'flex';
+  
+  // 모달 내부의 버튼을 찾아서 표시 여부 결정
+  const btn = modal.querySelector('button'); 
+  if(btn) btn.style.display = showButton ? 'block' : 'none';
+
   modalCallback = callback; 
 }
 
 function closeCustomModal() {
-  document.getElementById('custom-modal').style.display = 'none';
+  const modal = document.getElementById('custom-modal');
+  modal.style.display = 'none';
+  // 닫을 때 버튼 다시 보이게 초기화
+  const btn = modal.querySelector('button'); 
+  if(btn) btn.style.display = 'block';
+
   if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
@@ -460,22 +474,23 @@ window.finishASStudy = function() {
 // 5. ACCURATE SPEAKING (화면 렌더링 추가로 검은 화면 해결)
 // ======================================================
 
-// [수정] 모드 시작: 데이터를 가져오고 화면을 그립니다.
+// ======================================================
+// [수정 2] Accurate Speaking 시작 (로딩 시 버튼 숨김 적용)
+// ======================================================
 window.startAccurateSpeakingMode = async function() {
   const phoneInput = document.getElementById("phone-input");
   const phone = phoneInput ? phoneInput.value.trim() : "";
   
   if (!phone) return showCustomModal("로그인 정보가 없습니다.");
 
-  showCustomModal("데이터를 불러오는 중입니다..."); // 로딩 표시
+  // [핵심] 3번째 인자로 false를 넘겨서 OK 버튼을 숨김
+  showCustomModal("데이터를 불러오는 중입니다...", null, false);
 
   try {
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
     asData = await res.json();
     
-    closeCustomModal(); // 로딩 닫기
-    
-    // [핵심] 데이터를 가져온 후 화면을 직접 그립니다.
+    closeCustomModal(); 
     renderAccurateSpeakingPage(); 
     showBox('as-record-box'); 
 
@@ -485,53 +500,54 @@ window.startAccurateSpeakingMode = async function() {
   }
 };
 
-// [추가] 화면 렌더링 함수 (검은 화면 방지용)
+// ======================================================
+// [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
+// ======================================================
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
-    // 1. 컨테이너 스타일 설정
+    // 컨테이너 설정
     container.className = "px-6 pt-4 h-full flex flex-col relative";
     
-    // 2. 이미 제출했는지 확인
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
 
-    // 3. HTML 생성
     container.innerHTML = `
-        <div class="mb-10">
+        <div class="mb-6 shrink-0">
             <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
         </div>
 
-        <div class="flex-1 flex flex-col items-center w-full">
+        <div class="flex-1 flex flex-col items-center w-full overflow-y-auto no-scrollbar pb-4">
             
-            <div class="w-full mb-12 text-center">
+            <div class="w-full mb-8 text-center shrink-0">
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
-                <p id="as-q-text" class="text-white text-2xl font-bold leading-relaxed break-keep drop-shadow-md">
+                <p id="as-q-text" class="text-white text-lg font-bold leading-relaxed break-keep drop-shadow-md">
                     ${isSubmitted ? "이미 제출 완료되었습니다. ✔" : questionText}
                 </p>
             </div>
 
             <button id="as-listen-btn" onclick="listenQuestion()" style="${isSubmitted ? 'display:none' : 'display:flex'}" 
-                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525]">
+                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] shrink-0">
                 <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
                 <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
             </button>
 
             <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up">
-                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
+                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)] shrink-0">
                     <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
                 </div>
-                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
+                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest shrink-0">
                     STOP RECORDING
                 </button>
             </div>
 
             <div id="submit-ui" style="display:none;" class="w-full space-y-4 animate-fade-in-up">
-                <div class="bg-[#1c1c1c] p-4 rounded-xl border border-neutral-800">
-                    <p class="text-neutral-500 text-xs font-bold mb-2">DICTATION</p>
-                    <textarea id="student-text-input" rows="3" placeholder="녹음한 내용을 영어로 적어주세요..." 
-                        class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none"></textarea>
+                <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800">
+                    <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
+                    <textarea id="student-text-input" rows="8" placeholder="녹음한 내용을 영어로 적어주세요..." 
+                        class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none leading-relaxed"></textarea>
                 </div>
+                
                 <button onclick="submitAccurateSpeaking()" class="w-full bg-[#39FF14] text-black font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.4)] active:scale-95 transition-transform hover:bg-[#32e012] uppercase tracking-widest">
                     SUBMIT ANSWER
                 </button>
@@ -539,7 +555,7 @@ function renderAccurateSpeakingPage() {
 
         </div>
 
-        <div class="shrink-0 pb-8 mt-4">
+        <div class="shrink-0 pb-20 mt-4">
             <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
                 Back to Menu
             </button>
