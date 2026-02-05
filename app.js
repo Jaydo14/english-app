@@ -503,27 +503,27 @@ window.startAccurateSpeakingMode = async function() {
 // ======================================================
 // [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
 // ======================================================
-// [수정] Accurate Speaking 화면 (Fixed 포지션 적용으로 버튼 잘림 원천 차단)
+// [수정] Accurate Speaking (스크롤 방식: 하단 여백을 크게 주어 버튼 노출 보장)
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
-    // 1. 컨테이너를 화면 중간에 '고정(Fixed)'시킵니다.
-    // top-[80px]: 상단 헤더 아래 시작
-    // bottom-[90px]: 하단 내비게이션 바 위에서 끝남 (이 설정 덕분에 절대 안 가려짐)
-    // z-30: 다른 요소들보다 위에 표시
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 px-6 flex flex-col bg-black z-30";
+    // 1. 컨테이너 설정
+    // fixed top-[80px] bottom-[90px]: 상단 헤더와 하단 탭바 사이 공간을 차지
+    // overflow-y-auto: 내용이 길면 스크롤 가능
+    // pb-[300px]: [핵심] 스크롤을 내렸을 때 빈 공간을 300px이나 줘서 버튼을 강제로 위로 올림
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-[300px]";
     
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
 
     container.innerHTML = `
-        <div class="mt-4 mb-6 shrink-0">
+        <div class="mt-4 mb-6 text-center">
             <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
         </div>
 
-        <div class="flex-1 w-full overflow-y-auto no-scrollbar pb-10 flex flex-col items-center">
+        <div class="flex flex-col items-center w-full">
             
-            <div class="w-full mb-8 text-center shrink-0">
+            <div class="w-full mb-8 text-center">
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
                 <p id="as-q-text" class="text-white text-lg font-bold leading-relaxed break-keep drop-shadow-md">
                     ${isSubmitted ? "이미 제출 완료되었습니다. ✔" : questionText}
@@ -531,21 +531,21 @@ function renderAccurateSpeakingPage() {
             </div>
 
             <button id="as-listen-btn" onclick="listenQuestion()" style="${isSubmitted ? 'display:none' : 'display:flex'}" 
-                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] shrink-0 mb-8">
+                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] mb-10">
                 <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
                 <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
             </button>
 
-            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up mb-8">
-                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)] shrink-0">
+            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up mb-10">
+                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
                     <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
                 </div>
-                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest shrink-0">
+                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
                     STOP RECORDING
                 </button>
             </div>
 
-            <div id="submit-ui" style="display:none;" class="w-full space-y-6 animate-fade-in-up mb-8">
+            <div id="submit-ui" style="display:none;" class="w-full space-y-6 animate-fade-in-up mb-10">
                 <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800">
                     <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
                     <textarea id="student-text-input" rows="8" placeholder="녹음한 내용을 영어로 적어주세요..." 
@@ -557,11 +557,9 @@ function renderAccurateSpeakingPage() {
                 </button>
             </div>
 
-            <div class="w-full mt-auto pt-4 pb-4">
-                <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
-                    Back to Menu
-                </button>
-            </div>
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                Back to Menu
+            </button>
 
         </div>
     `;
