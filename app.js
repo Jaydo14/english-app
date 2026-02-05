@@ -165,30 +165,45 @@ window.login = function () {
     }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
 };
 
-// [수정] 유닛 버튼 렌더링 (주제별 맞춤 아이콘 적용)
+// [수정] 유닛 버튼 렌더링 (교재별 아이콘 자동 변경 기능 추가)
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
   
-  // 유닛 제목에 딱 맞는 아이콘 매핑
-  const icons = [
-    "music_note",       // Unit 1: Music (음표)
-    "explore",          // Unit 2: Directions (나침반/길찾기)
-    "local_cafe",       // Unit 3: Favorite beverage (커피잔)
-    "movie",            // Unit 4: Movies (영화 슬레이트)
-    "restaurant",       // Unit 5: Lunch (포크와 나이프)
-    "flight_takeoff",   // Unit 6: Vacation (비행기 이륙)
-    "celebration",      // Unit 7: New years (파티 폭죽)
-    "switch_account"    // Unit 8: Switch lives (사람 교체/전환)
-  ];
+  // 1. 교재별 아이콘 데이터베이스 정의
+  const iconDatabase = {
+    "hc12": [ // 첫 번째 교재 (Music, Directions...)
+      "music_note",       // Unit 1
+      "explore",          // Unit 2
+      "local_cafe",       // Unit 3
+      "movie",            // Unit 4
+      "restaurant",       // Unit 5
+      "flight_takeoff",   // Unit 6
+      "celebration",      // Unit 7
+      "switch_account"    // Unit 8
+    ],
+    "fc21": [ // 두 번째 교재 (Restaurant, Birthday...)
+      "restaurant_menu",  // Unit 1: Restaurant
+      "cake",             // Unit 2: Birthday
+      "payments",         // Unit 3: Expenses
+      "work",             // Unit 4: Dream job
+      "theaters",         // Unit 5: Movies
+      "eco",              // Unit 6: Eating healthy (건강/자연)
+      "backpack",         // Unit 7: Traveling alone (배낭여행)
+      "school"            // Unit 8: Education
+    ]
+  };
+
+  // 2. 현재 교재에 맞는 아이콘 리스트 가져오기 (없으면 기본값 hc12)
+  const currentIcons = iconDatabase[currentType] || iconDatabase["hc12"];
 
   for (let i = 1; i <= 8; i++) {
     const title = currentTitles[i] || "Locked";
-    const icon = icons[i-1] || "lock"; // 아이콘이 없으면 자물쇠 표시
+    // 해당 유닛 번호에 맞는 아이콘 매칭
+    const icon = currentIcons[i-1] || "lock"; 
 
     const btn = document.createElement("button");
-    // 카드 스타일: 다크 테마 + 초록색 포인트
     btn.className = "w-full bg-[#1c1c1c] rounded-2xl p-4 flex items-center justify-between mb-1 active:scale-[0.98] transition-transform border border-transparent hover:border-neutral-800";
     
     btn.innerHTML = `
