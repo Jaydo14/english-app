@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (화면 고정 레이아웃: 헤더/네비바 제외한 영역만 사용)
+// [수정] 반복듣기 (버튼 독립 고정: 부모 요소 무시하고 화면 좌표에 직접 배치)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,27 +553,21 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // [핵심 변경] fixed positioning 사용
-    // top-[80px]: 상단 'Build A Monster' 헤더 높이만큼 띄움
-    // bottom-[90px]: 하단 네비게이션 바 높이만큼 띄움
-    // left-0 right-0: 가로 꽉 채움
-    // z-40: 다른 요소들보다 위에 표시
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 px-4 bg-black z-40 flex flex-col";
-    
-    // 기존의 height 스타일이 남아있다면 제거
-    container.style.height = ""; 
+    // 1. 컨테이너는 단순히 리스트를 담는 그릇 역할만 합니다.
+    // min-h-screen을 줘서 스크롤이 자연스럽게 생기도록 합니다.
+    container.className = "px-4 pt-2 min-h-screen relative";
 
     container.innerHTML = `
-      <div class="w-full shrink-0 mb-2 pt-2">
+      <div class="mb-4">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="flex-1 w-full overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4 border-b border-neutral-800">
+      <div id="repeat-list" class="space-y-2 pb-[250px]">
          </div>
 
-      <div class="w-full shrink-0 pt-3 bg-black">
+      <div class="fixed bottom-[85px] left-0 right-0 px-4 bg-gradient-to-t from-black via-black to-transparent pt-10 pb-2 z-50">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-2 shadow-lg">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-2 shadow-2xl">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -596,7 +590,7 @@ window.startRepeatMode = async function() {
               </button>
           </div>
 
-          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider shadow-lg">
               Back to Menu
           </button>
       </div>`;
@@ -606,7 +600,7 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      div.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
+      div.className = 'repeat-item py-1.5 px-3 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
         <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
         <div class="ko-text text-neutral-400 text-xs font-medium">${item.ko}</div>
@@ -642,14 +636,14 @@ window.runRepeatAudio = async function() {
       
       await new Promise(resolve => {
         document.querySelectorAll('.repeat-item').forEach(el => {
-            el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
+            el.className = 'repeat-item py-1.5 px-3 rounded-xl border border-transparent transition-all duration-300'; 
             el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors';
             el.querySelector('.ko-text').className = 'ko-text text-neutral-400 text-xs font-medium';
         });
         
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
+            el.className = 'repeat-item py-1.5 px-3 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
             const enDiv = el.querySelector('.en-text');
             if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-0.5 transition-colors';
             el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
