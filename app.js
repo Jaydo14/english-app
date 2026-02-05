@@ -165,14 +165,36 @@ window.login = function () {
     }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
 };
 
+// [수정] 유닛 버튼 렌더링 (이미지 디자인 적용: 다크 카드 + 아이콘)
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
+  
+  // 이미지에 나온 아이콘과 유사하게 매칭
+  const icons = ["music_note", "explore", "local_cafe", "movie", "restaurant", "flight_takeoff", "celebration", "school"];
+
   for (let i = 1; i <= 8; i++) {
+    const title = currentTitles[i] || "Locked";
+    const icon = icons[i-1] || "lock";
+
     const btn = document.createElement("button");
-    const titleText = currentTitles[i] ? `<br><span class="unit-title" style="font-size:12px; font-weight:normal; color:#000;">${currentTitles[i]}</span>` : "";
-    btn.innerHTML = `Unit ${i}${titleText}`;
+    // 카드 스타일: 아주 어두운 회색(#1c1c1c), 둥근 모서리, 내부 패딩
+    btn.className = "w-full bg-[#1c1c1c] rounded-2xl p-4 flex items-center justify-between mb-1 active:scale-[0.98] transition-transform border border-transparent hover:border-neutral-800";
+    
+    btn.innerHTML = `
+      <div class="flex items-center gap-5">
+        <div class="w-12 h-12 rounded-xl bg-[#1a2e1a] flex items-center justify-center text-[#39FF14]">
+          <span class="material-icons-round text-2xl">${icon}</span>
+        </div>
+        <div class="text-left">
+          <p class="text-[10px] font-mono font-bold text-[#39FF14] uppercase tracking-wider mb-1">UNIT ${String(i).padStart(2, '0')}</p>
+          <h3 class="text-lg font-bold text-white leading-none">${title}</h3>
+        </div>
+      </div>
+      <span class="material-icons-round text-neutral-600 text-3xl">chevron_right</span>
+    `;
+    
     btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
     container.appendChild(btn);
   }
