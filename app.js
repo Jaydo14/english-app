@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (버튼 하단 고정 + 리스트 내부 스크롤 + 박스 슬림화)
+// [수정] 반복듣기 (버튼 위치 강제 고정 + 박스 슬림화 유지)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,8 +553,7 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. h-full flex flex-col: 화면 전체 높이를 사용하고, 내부 요소를 세로로 배치
-    // overflow-hidden: 전체 화면 스크롤 방지
+    // 1. h-full flex flex-col: 화면 전체 높이 사용
     container.className = "px-4 pt-2 h-full flex flex-col overflow-hidden";
 
     container.innerHTML = `
@@ -565,7 +564,7 @@ window.startRepeatMode = async function() {
       <div id="repeat-list" class="flex-1 overflow-y-auto bg-[#111] rounded-2xl border border-neutral-800 p-2 mb-3 relative scroll-smooth no-scrollbar min-h-0">
          </div>
 
-      <div class="w-full shrink-0 space-y-3 pb-2">
+      <div class="w-full shrink-0 space-y-3 pb-40">
           
           <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
@@ -600,7 +599,7 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      // [수정] py-1.5: 세로 여백을 줄여 박스를 더 얇게 만듦
+      // py-1.5: 박스 슬림화 유지
       div.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
         <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
@@ -636,7 +635,7 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
       
       await new Promise(resolve => {
-        // 스타일 초기화 (py-1.5 적용)
+        // 스타일 초기화
         document.querySelectorAll('.repeat-item').forEach(el => {
             el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
             el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors';
@@ -646,7 +645,7 @@ window.runRepeatAudio = async function() {
         // 현재 아이템 강조
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            // 강조 스타일 (py-1.5 유지)
+            // 강조 스타일
             el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
             const enDiv = el.querySelector('.en-text');
             if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-0.5 transition-colors';
