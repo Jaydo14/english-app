@@ -1,155 +1,124 @@
 <!DOCTYPE html>
-<html class="dark" lang="ko">
+<html lang="ko">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>English App V2</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#39FF14", // 네온 그린
-                        "background-dark": "#0A0A0A",
-                        "card-dark": "#171717",
-                    },
-                    fontFamily: {
-                        display: ["Inter", "sans-serif"],
-                        mono: ["JetBrains Mono", "monospace"],
-                    },
-                },
-            },
-        };
-    </script>
-    <style>
-        .neon-border { border: 1px solid rgba(57, 255, 20, 0.3); }
-        .glass-panel { background: rgba(23, 23, 23, 0.95); backdrop-filter: blur(12px); }
-        .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-        /* 입력창 스타일 */
-        input:focus { outline: none; border-color: #39FF14; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
-        
-        /* 커스텀 모달 */
-        #custom-modal { display: none; }
-        
-        /* 스크롤바 숨김 (깔끔하게) */
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Build A Monster</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* ⭐ 커스텀 팝업 스타일 (크기 더 축소 반영) */
+    #custom-modal {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center;
+    }
+    .modal-content {
+      background: #111; border: 2px solid #39ff14; border-radius: 15px; 
+      padding: 15px; text-align: center; width: 65%; max-width: 280px; box-shadow: 0 0 15px #39ff14;
+    }
+    .modal-content p { color: #fff; font-size: 14px; line-height: 1.5; margin-bottom: 15px; white-space: pre-wrap; }
+    .modal-content button {
+      background: #39ff14; color: #000; border: none; padding: 10px 0;
+      font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%;
+    }
+    .security-warning { margin-top: 20px; font-size: 10px; color: #555; line-height: 1.4; padding: 0 20px; text-align: center; }
+
+    /* 흔들림 효과 춤 동작 정의 */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
+  </style>
 </head>
-<body class="bg-[#050505] font-display text-slate-100 min-h-screen flex justify-center">
-
-<main class="w-full max-w-md h-screen flex flex-col relative overflow-hidden bg-[#0A0A0A] border-x border-neutral-800">
-    
-    <header class="pt-8 pb-4 px-6 sticky top-0 z-20 bg-[#0A0A0A]/90 backdrop-blur-md">
-        <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-mono uppercase tracking-[0.2em] text-primary">System Online</span>
-            <span class="text-xs font-mono text-slate-400">v2.4.0</span>
-        </div>
-        <h1 id="page-title" class="text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-            Build A <span class="text-primary italic">Monster</span>
-        </h1>
-    </header>
-
-    <div class="flex-1 overflow-y-auto px-6 pb-32 space-y-6 relative" id="main-container">
-        
-        <div id="login-box" class="flex flex-col justify-center h-[60vh] space-y-6">
-            <div class="text-center space-y-2">
-                <span class="material-icons-round text-6xl text-primary mb-4">lock_open</span>
-                <p class="text-slate-400">Access Restricted</p>
-                <h2 class="text-2xl font-bold text-white">Identity Verification</h2>
-            </div>
-            <input type="tel" id="phone-input" placeholder="01012345678" 
-                class="w-full bg-[#111] border border-neutral-700 rounded-xl p-4 text-center text-xl text-primary font-mono placeholder-neutral-600 focus:ring-0">
-            <button onclick="login()" class="w-full bg-primary text-black font-bold py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.3)] active:scale-95 transition-transform">
-                LOGIN SYSTEM
-            </button>
-        </div>
-
-        <div id="app" style="display:none;" class="space-y-6">
-            
-            <div id="unit-selector">
-                <div id="unit-buttons" class="grid grid-cols-1 gap-4">
-                    </div>
-            </div>
-
-            <div id="menu-box" style="display:none;" class="space-y-4">
-                <h2 class="text-xl text-primary font-mono mb-4 border-b border-neutral-800 pb-2">Select Mode</h2>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="startScriptMode()" class="p-4 bg-[#171717] rounded-xl border border-neutral-800 hover:border-primary hover:text-primary transition-all">Script</button>
-                    <button onclick="startVocaMode()" class="p-4 bg-[#171717] rounded-xl border border-neutral-800 hover:border-primary hover:text-primary transition-all">Vocab</button>
-                    <button onclick="startAccurateSpeakingMode()" class="col-span-2 p-4 bg-primary/10 text-primary border border-primary/30 rounded-xl font-bold">Accurate Speaking</button>
-                    <button onclick="startASMode()" class="p-4 bg-[#171717] rounded-xl border border-neutral-800 hover:border-primary hover:text-primary transition-all">AS Correction</button>
-                    <button onclick="startRepeatMode()" class="p-4 bg-[#171717] rounded-xl border border-neutral-800 hover:border-primary hover:text-primary transition-all">반복듣기</button>
-                </div>
-                <button onclick="goBackToUnits()" class="w-full mt-8 text-slate-500 text-sm hover:text-white">← Back to Units</button>
-            </div>
-
-            <div id="study-box" style="display:none;" class="text-center space-y-6 pt-4">
-                <div class="w-full bg-neutral-800 rounded-full h-2 mb-2 overflow-hidden">
-                    <div id="progress" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-                <div id="progress-percent" class="text-right text-xs text-primary font-mono">0%</div>
-
-                <div class="py-10">
-                    <p id="sentence" class="text-2xl font-bold text-white leading-relaxed min-h-[80px] flex items-center justify-center">Ready?</p>
-                    <p id="sentence-kor" class="text-sm text-slate-500 mt-4 h-10"></p>
-                </div>
-
-                <div class="flex gap-3 justify-center">
-                    <button id="start-btn" onclick="startStudy()" class="flex-1 bg-primary text-black font-bold py-4 rounded-xl">Start</button>
-                    <button id="skip-btn" onclick="skipSentence()" class="px-6 bg-neutral-800 text-white rounded-xl border border-neutral-700" style="display:none;">Skip</button>
-                </div>
-                <button onclick="showMenu()" class="text-slate-500 text-sm mt-4">Exit</button>
-            </div>
-
-            <div id="repeat-box" style="display:none;">
-                </div>
-
-            <div id="as-box" style="display:none;"></div>
-            <div id="as-record-box" style="display:none;"></div>
-            <div id="results-box" style="display:none;">
-                <h2 class="text-primary font-mono mb-4">Progress Report</h2>
-                <div id="results-content" class="space-y-3 pb-20"></div>
-                <button onclick="showBox('unit-selector')" class="w-full py-4 mt-4 bg-neutral-800 rounded-xl">Close</button>
-            </div>
-            
-            <div id="dev-box" style="display:none;" class="flex flex-col items-center justify-center h-[50vh]">
-                <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-primary font-mono animate-pulse">Processing Data...</p>
-            </div>
-
-        </div>
+<body>
+  <div class="container">
+    <div id="login-box" class="box">
+      <h1>Build A Monster</h1>
+      <p>핸드폰 번호를 입력하세요</p>
+      <input type="text" id="phone-input" placeholder="예: 01012345678" style="text-align:center;">
+      <button onclick="login()">Login</button>
     </div>
 
-    <div class="absolute bottom-0 left-0 right-0 p-6 glass-panel border-t border-neutral-800 z-30" id="bottom-bar">
-        <button onclick="showResultsPage()" class="w-full bg-[#171717] hover:bg-[#222] text-white border border-neutral-700 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-95">
-            <span class="material-icons-round text-primary">bar_chart</span>
-            <span class="uppercase tracking-widest text-sm">Progress Report</span>
-        </button>
-    </div>
+    <div id="app" style="display:none;">
+      <div id="unit-selector" class="box">
+        <h2 id="welcome-msg">Unit 선택</h2>
+        <div id="unit-buttons"></div>
+        <button onclick="showResultsPage()" style="background:#444; color:#39ff14; margin-top:20px; font-size:16px;">📊 Progress Report</button>
+      </div>
 
-    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" style="display:none;">
-        <div class="bg-[#171717] border border-primary rounded-2xl p-6 max-w-xs w-[80%] text-center shadow-[0_0_30px_rgba(57,255,20,0.15)]">
-            <p id="modal-msg" class="text-white text-lg mb-6 leading-relaxed whitespace-pre-wrap"></p>
-            <button onclick="closeCustomModal()" class="w-full bg-primary text-black font-bold py-3 rounded-xl">CONFIRM</button>
+      <div id="menu-box" class="box" style="display:none;">
+        <h2 id="menu-title">Select Mode</h2>
+        <button onclick="startScriptMode()">Script</button>
+        <button onclick="startVocaMode()">Vocab</button>
+        <button onclick="startAccurateSpeakingMode()" style="background:#39ff14; color:#000;">Accurate Speaking</button> 
+        <button onclick="startASMode()">AS Correction</button>
+        <button onclick="startRepeatMode()">반복듣기</button>
+        <button onclick="goBackToUnits()" style="background:#666; color:#fff; margin-top:20px;">Back to Menu</button>
+      </div>
+
+      <div id="as-record-box" class="box" style="display:none;">
+        <h2 style="color:#39ff14;">Accurate Speaking</h2> <div style="text-align:left; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:15px;">
+          <p style="color:#39ff14; font-size:12px; margin-bottom:5px;">[Teacher's Question]</p>
+          <p id="as-q-text" style="font-size:16px; line-height:1.4;"></p>
         </div>
+        <button id="as-listen-btn" onclick="listenQuestion()">Listen Question</button>
+        <div id="recording-ui" style="display:none; margin-top:20px;">
+          <div id="rec-timer" style="font-size:32px; color:#ff4b4b; font-weight:bold; margin-bottom:10px;">00:00</div>
+          <div style="color:#ff4b4b; margin-bottom:15px; font-weight:bold;">🔴 Recording...</div>
+          <button onclick="stopRecording()" style="background:#ff4b4b; color:#fff;">Stop Recording</button>
+        </div>
+        <div id="submit-ui" style="display:none; margin-top:20px;">
+          <textarea id="student-text-input" rows="4" placeholder="Your Answer (원문)" style="width:90%; background:#222; color:#fff; border:1px solid #39ff14; border-radius:10px; padding:10px; font-size:15px;"></textarea>
+          <button onclick="submitAccurateSpeaking()" style="margin-top:15px;">선생님에게 제출</button>
+        </div>
+        <button onclick="showMenu()" class="sub-action-btn" style="margin-top:20px;">Back</button>
+      </div>
+
+      <div id="study-box" class="box" style="display:none;">
+        <div id="progress-wrap"><div id="progress"></div></div>
+        <div id="progress-percent">0%</div>
+        <p id="sentence" style="font-size:18px; font-weight:bold;">Ready?</p>
+        <p id="sentence-kor" style="font-size:15px; color:#aaa;"> </p>
+        <div id="control-area" style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px;">
+          <button id="start-btn" onclick="startStudy()" style="width: 95%;">Start</button>
+          <button id="skip-btn" onclick="nextStep()" class="sub-action-btn" style="display:none;">Skip</button>
+          <button onclick="showMenu()" class="sub-action-btn">Back</button>
+        </div>
+      </div>
+      <div id="as-box" class="box" style="display:none;"></div>
+      <div id="results-box" class="box" style="display:none; max-height: 90vh; overflow-y: auto;">
+        <h2 style="color:#39ff14;">Progress Report</h2>
+        <div id="results-content" style="padding: 0 5px;"></div>
+        <button onclick="showBox('unit-selector')" class="sub-action-btn" style="margin-top:20px;">Back to Menu</button>
+      </div>
+      <div id="repeat-box" class="box" style="display:none;">
+        <div id="repeat-list" style="text-align:left; max-height:350px; overflow-y:auto; padding-top:10px;"></div>
+        <button onclick="stopRepeatAudio(); showMenu();" class="sub-action-btn" style="margin-top:20px;">Back to Menu</button>
+      </div>
+      <div id="dev-box" class="box" style="display:none;">
+        <h2 id="dev-title">Loading...</h2>
+        <p id="dev-msg" style="padding:50px 0;">데이터를 전송 중입니다. ⏳</p>
+      </div>
     </div>
 
-    <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
-    <div class="absolute bottom-40 -left-20 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+    <div id="custom-modal">
+      <div class="modal-content">
+        <p id="modal-msg"></p>
+        <button onclick="closeCustomModal()">확인</button>
+      </div>
+    </div>
 
-</main>
-
-<script src="app.js"></script>
+    <footer>
+      <div class="security-warning">경고: 본 시스템은 인가된 사용자만 접근 가능합니다. 모든 접속 로그는 실시간으로 기록됩니다.</div>
+      <p style="color: #888; font-size: 11px; font-weight: bold; text-align: center; margin-top: 10px;">Copyright © 2026 English App. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
