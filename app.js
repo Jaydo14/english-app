@@ -456,19 +456,67 @@ window.finishASStudy = function() {
   showCustomModal(`학습 완료! ✔`, () => showMenu());
 };
 
+// [수정] Accurate Speaking 모드 (로딩 화면 호출 제거로 에러 방지)
 window.startAccurateSpeakingMode = async function() {
-  const phone = document.getElementById("phone-input").value.trim(); showBox('dev-box');
+  // 1. 현재 선택된 유닛이 없으면 1과로 설정
+  if (!currentUnit) currentUnit = 1;
+
+  // 2. 전화번호 가져오기
+  const phoneInput = document.getElementById("phone-input");
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+
+  if (!phone) {
+      showCustomModal("로그인 정보가 없습니다.");
+      return;
+  }
+
+  // 3. 로딩 중 메시지 표시 (dev-box 대신 모달 사용)
+  showCustomModal("데이터를 불러오는 중입니다...");
+
   try {
+    // 4. 데이터 요청
     const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
     asData = await res.json();
-    document.getElementById('student-text-input').value = "";
+    
+    // 5. 모달 닫기
+    closeCustomModal();
+
+    // 6. 입력창 초기화
+    const textInput = document.getElementById('student-text-input');
+    if(textInput) textInput.value = "";
+    
+    // 7. 데이터 상태에 따른 화면 처리
     if (asData && asData.isSubmitted) {
-      document.getElementById('as-q-text').innerText = "이미 정상적으로 전송되었습니다. ✔";
-      showBox('as-record-box'); document.getElementById('as-listen-btn').style.display = 'none'; document.getElementById('recording-ui').style.display = 'none'; document.getElementById('submit-ui').style.display = 'none'; return;
+      // 이미 제출된 경우
+      const qText = document.getElementById('as-q-text');
+      if(qText) qText.innerText = "이미 정상적으로 전송되었습니다. ✔";
+      
+      showBox('as-record-box'); 
+      
+      // UI 숨김 처리
+      const listenBtn = document.getElementById('as-listen-btn');
+      const recordUI = document.getElementById('recording-ui');
+      const submitUI = document.getElementById('submit-ui');
+      
+      if(listenBtn) listenBtn.style.display = 'none'; 
+      if(recordUI) recordUI.style.display = 'none'; 
+      if(submitUI) submitUI.style.display = 'none'; 
+      return;
     }
-    document.getElementById('as-q-text').innerText = asData.question || "질문 없음";
-    showBox('as-record-box'); document.getElementById('as-listen-btn').style.display = 'block';
-  } catch (e) { showCustomModal("로드 실패"); }
+
+    // 제출 안 된 경우: 질문 표시
+    const qText = document.getElementById('as-q-text');
+    if(qText) qText.innerText = asData.question || "질문 없음";
+    
+    showBox('as-record-box'); 
+    
+    const listenBtn = document.getElementById('as-listen-btn');
+    if(listenBtn) listenBtn.style.display = 'block';
+
+  } catch (e) { 
+      console.error(e); // 콘솔에 에러 출력
+      showCustomModal("로드 실패\n(데이터를 가져오지 못했습니다)"); 
+  }
 };
 
 // [복구] Accurate Speaking: 질문 듣기
