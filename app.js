@@ -166,7 +166,7 @@ window.login = function () {
   if (inputVal.length < 1) return showCustomModal("번호를 입력해주세요.");
   
   const loginBtn = document.querySelector("#login-box button");
-  loginBtn.disabled = true; loginBtn.innerText = "Checking...";
+  loginBtn.disabled = true; loginBtn.innerText = "CHECKING...";
 
   fetch(GOOGLE_SCRIPT_URL + "?phone=" + inputVal)
     .then(res => res.json())
@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (버튼 노출 보장 + 박스 슬림화 + 한국어 밝게)
+// [수정] 반복듣기 (버튼 하단 고정 + 리스트 내부 스크롤 + 박스 슬림화)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,21 +553,21 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. h-full 제거 -> 화면 높이에 맞춰 유동적으로 변하도록 수정
-    // 2. pb-10 추가: 기본 여백 확보
-    container.className = "px-4 pt-2 flex flex-col pb-10 relative";
+    // 1. h-full flex flex-col: 화면 전체 높이를 사용하고, 내부 요소를 세로로 배치
+    // overflow-hidden: 전체 화면 스크롤 방지
+    container.className = "px-4 pt-2 h-full flex flex-col overflow-hidden";
 
     container.innerHTML = `
-      <div class="mb-4 shrink-0">
+      <div class="mb-3 shrink-0">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="h-[50vh] overflow-y-auto bg-[#111] rounded-2xl border border-neutral-800 p-2 mb-4 relative scroll-smooth no-scrollbar">
+      <div id="repeat-list" class="flex-1 overflow-y-auto bg-[#111] rounded-2xl border border-neutral-800 p-2 mb-3 relative scroll-smooth no-scrollbar min-h-0">
          </div>
 
-      <div class="w-full shrink-0 space-y-3 pb-24">
+      <div class="w-full shrink-0 space-y-3 pb-2">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-3 border border-neutral-800">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -582,15 +582,15 @@ window.startRepeatMode = async function() {
           </div>
 
           <div class="grid grid-cols-2 gap-3">
-              <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-14 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
+              <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-12 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
                   <span class="material-icons-round">play_arrow</span> START
               </button>
-              <button onclick="stopRepeatAudio()" class="h-14 bg-[#ff4757] text-white font-black rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#ff6b81]">
+              <button onclick="stopRepeatAudio()" class="h-12 bg-[#ff4757] text-white font-black rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#ff6b81]">
                   <span class="material-icons-round">stop</span> STOP
               </button>
           </div>
 
-          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
               Back to Menu
           </button>
       </div>`;
@@ -600,10 +600,10 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      // 3. py-2 px-3: 세로(py)를 줄여서 박스를 더 슬림하게 만듦
-      div.className = 'repeat-item py-2 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
+      // [수정] py-1.5: 세로 여백을 줄여 박스를 더 얇게 만듦
+      div.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
-        <div class="en-text text-white text-base font-bold leading-snug mb-1 transition-colors">${item.en}</div>
+        <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
         <div class="ko-text text-neutral-400 text-xs font-medium">${item.ko}</div>
       `;
       list.appendChild(div);
@@ -636,20 +636,20 @@ window.runRepeatAudio = async function() {
       if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
       
       await new Promise(resolve => {
-        // 스타일 초기화 (py-2 px-3 유지)
+        // 스타일 초기화 (py-1.5 적용)
         document.querySelectorAll('.repeat-item').forEach(el => {
-            el.className = 'repeat-item py-2 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
-            el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-1 transition-colors';
+            el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300'; 
+            el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors';
             el.querySelector('.ko-text').className = 'ko-text text-neutral-400 text-xs font-medium';
         });
         
         // 현재 아이템 강조
         const el = document.getElementById(`repeat-${i}`);
         if(el) { 
-            // 배경 강조 (py-2 px-3 유지 + 진한 초록 배경)
-            el.className = 'repeat-item py-2 px-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
+            // 강조 스타일 (py-1.5 유지)
+            el.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
             const enDiv = el.querySelector('.en-text');
-            if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-1 transition-colors';
+            if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-0.5 transition-colors';
             
             el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
         }
