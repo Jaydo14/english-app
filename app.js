@@ -165,21 +165,30 @@ window.login = function () {
     }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
 };
 
-// [수정] 유닛 버튼 렌더링 (이미지 디자인 적용: 다크 카드 + 아이콘)
+// [수정] 유닛 버튼 렌더링 (주제별 맞춤 아이콘 적용)
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
   
-  // 이미지에 나온 아이콘과 유사하게 매칭
-  const icons = ["music_note", "explore", "local_cafe", "movie", "restaurant", "flight_takeoff", "celebration", "school"];
+  // 유닛 제목에 딱 맞는 아이콘 매핑
+  const icons = [
+    "music_note",       // Unit 1: Music (음표)
+    "explore",          // Unit 2: Directions (나침반/길찾기)
+    "local_cafe",       // Unit 3: Favorite beverage (커피잔)
+    "movie",            // Unit 4: Movies (영화 슬레이트)
+    "restaurant",       // Unit 5: Lunch (포크와 나이프)
+    "flight_takeoff",   // Unit 6: Vacation (비행기 이륙)
+    "celebration",      // Unit 7: New years (파티 폭죽)
+    "switch_account"    // Unit 8: Switch lives (사람 교체/전환)
+  ];
 
   for (let i = 1; i <= 8; i++) {
     const title = currentTitles[i] || "Locked";
-    const icon = icons[i-1] || "lock";
+    const icon = icons[i-1] || "lock"; // 아이콘이 없으면 자물쇠 표시
 
     const btn = document.createElement("button");
-    // 카드 스타일: 아주 어두운 회색(#1c1c1c), 둥근 모서리, 내부 패딩
+    // 카드 스타일: 다크 테마 + 초록색 포인트
     btn.className = "w-full bg-[#1c1c1c] rounded-2xl p-4 flex items-center justify-between mb-1 active:scale-[0.98] transition-transform border border-transparent hover:border-neutral-800";
     
     btn.innerHTML = `
