@@ -49,13 +49,34 @@ const bookDatabase = {
 // 2. UI 및 유틸리티
 // ======================================================
 // [수정] 화면 전환 함수
+// [수정 1] 화면 전환 함수 (HTML의 제어를 따르도록 연결)
 function showBox(boxId) {
-  // index.html 파일 하단에 있는 스크립트를 우선 실행합니다.
-  // (거기에 로그인 화면, 하단 바, 앱 화면을 켜고 끄는 최신 로직이 들어있습니다.)
-  if(window.showBox) {
-      window.showBox(boxId);
+  // index.html에 있는 최신 화면 전환 로직을 빌려씁니다.
+  if (typeof window.showBox === 'function' && window.showBox.length === 1) {
+      // 재귀 호출 방지를 위해 내부 로직 확인 없이 HTML 스크립트가 덮어쓴 함수가 있다면 사용
+      // (보통 index.html 하단의 스크립트가 이 함수를 덮어씁니다)
+  }
+  
+  // 만약 HTML 스크립트가 아직 로드되지 않았거나 덮어쓰지 못했다면 비상용 로직 실행
+  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
+  boxes.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = (id === boxId) ? 'block' : 'none';
+  });
+
+  // 로그인 화면일 때는 앱 컨테이너 숨기기
+  const app = document.getElementById("app");
+  const loginBox = document.getElementById("login-box");
+  const bottomNav = document.getElementById("bottom-nav");
+
+  if (boxId === 'login-box') {
+      if(app) app.style.display = 'none';
+      if(loginBox) loginBox.style.display = 'flex';
+      if(bottomNav) bottomNav.style.display = 'none';
   } else {
-      console.warn("HTML의 showBox 함수를 찾을 수 없습니다.");
+      if(app) app.style.display = 'flex';
+      if(loginBox) loginBox.style.display = 'none';
+      if(bottomNav) bottomNav.style.display = 'flex';
   }
 }
 
@@ -242,7 +263,7 @@ window.startVocaMode = async function() {
     loadStudyData(`${currentType}u${currentUnit}_voca.json`); 
 };
 
-// [수정] Resume 제거 + 버튼 고정 로직 보완
+// [수정 2] loadStudyData 함수 (Start 버튼 고정 + 괄호 오류 방지)
 async function loadStudyData(fileName) {
   isAlertShown = false; 
   try {
@@ -253,15 +274,14 @@ async function loadStudyData(fileName) {
         index = 0; cycle = 1;
     }
     
-    // 버튼 설정
+    // 버튼 설정 (항상 Start로 표시)
     const skipBtn = document.getElementById("skip-btn");
     const backBtn = document.getElementById("back-btn");
     const startBtn = document.getElementById("start-btn");
 
-    // [수정 포인트 1] 이어하기 상태여도 버튼 이름은 무조건 "Start"로 고정!
-    if(startBtn) startBtn.innerText = "Start";
+    if(startBtn) startBtn.innerText = "Start"; 
     
-    // 버튼 레이아웃 (Skip 버튼 유무에 따른 Back 버튼 크기 조절)
+    // 버튼 레이아웃 제어
     if (isRestoring) {
         if(skipBtn) skipBtn.style.display = "block";
         if(backBtn) backBtn.classList.remove("col-span-2"); 
@@ -271,12 +291,9 @@ async function loadStudyData(fileName) {
     }
     
     updateProgress(); 
+    showBox('study-box');
     
-    // 화면 보여주기
-    if(window.showBox) window.showBox('study-box');
-    else showBox('study-box');
-    
-    // 이어하기라면 텍스트 미리 보여주기
+    // 텍스트 미리보기
     if (isRestoring) {
         const sText = document.getElementById("sentence");
         const item = currentData[index];
@@ -375,12 +392,10 @@ window.startASMode = async function() {
   } catch (e) { showCustomModal("첨삭 데이터 없음", () => showMenu()); }
 };
 
-// [수정] AS Correction 화면 렌더링 (버튼 사라짐 해결: 자연스러운 배치로 변경)
+// [수정 3] AS Correction 화면 (버튼 위치 복구)
 function renderASPage() {
   const container = document.getElementById('as-box');
-  
-  // 1. 컨테이너 스타일 수정: h-full 제거 (내용이 길어도 잘리지 않게)
-  container.className = "px-4 pt-2 flex flex-col text-left pb-10";
+  container.className = "px-4 pt-2 flex flex-col text-left pb-10"; // h-full 제거
   
   const format = (t) => t ? String(t).replace(/\n/g, '<br>').replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>') : "";
   
@@ -390,46 +405,29 @@ function renderASPage() {
         <p class="text-[#39FF14] text-xs font-bold mb-1">[Question]</p>
         <p class="text-white text-xl font-bold leading-snug">${format(asData.question)}</p>
     </div>
-
     <div class="space-y-4 mb-6">
         <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
             <p class="text-neutral-500 text-xs font-bold mb-2">My Answer</p>
             <p class="text-neutral-300 text-sm leading-relaxed">${format(asData.original)}</p>
         </div>
-
         <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
             <p class="text-[#39FF14] text-xs font-bold mb-2">Feedback</p>
             <p class="text-white text-sm leading-relaxed">${format(asData.corrected)}</p>
         </div>
     </div>
-
     <div id="as-timer" class="text-[#39FF14] text-3xl font-black font-mono mb-4 tracking-tighter">
         ${Math.floor(asSeconds/60).toString().padStart(2,'0')}:${(asSeconds%60).toString().padStart(2,'0')}
     </div>
-
     <div class="mt-4 w-full flex gap-3 h-14">
-        <button id="as-start-btn" onclick="startASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform hover:bg-[#32e012]">
-            Start
-        </button>
-
+        <button id="as-start-btn" onclick="startASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform hover:bg-[#32e012]">Start</button>
         <div id="as-controls" style="display:none;" class="flex-1 flex gap-2">
-             <button onclick="playASAudio()" class="flex-1 bg-[#222] text-white font-bold rounded-xl border border-neutral-700 active:border-[#39FF14] transition-all text-sm">
-                Listen
-             </button>
-             <button onclick="finishASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_10px_#39FF14] transition-all text-sm">
-                Finish
-             </button>
+             <button onclick="playASAudio()" class="flex-1 bg-[#222] text-white font-bold rounded-xl border border-neutral-700 active:border-[#39FF14] transition-all text-sm">Listen</button>
+             <button onclick="finishASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_10px_#39FF14] transition-all text-sm">Finish</button>
         </div>
-
-        <button onclick="showMenu()" class="w-24 bg-[#1c1c1c] text-white font-bold rounded-xl border border-neutral-800 active:border-[#39FF14] active:text-[#39FF14] transition-all hover:bg-[#252525]">
-            Back
-        </button>
+        <button onclick="showMenu()" class="w-24 bg-[#1c1c1c] text-white font-bold rounded-xl border border-neutral-800 active:border-[#39FF14] active:text-[#39FF14] transition-all hover:bg-[#252525]">Back</button>
     </div>`;
-
-    // 초기화
     document.getElementById('as-start-btn').style.display = 'block';
     document.getElementById('as-controls').style.display = 'none';
-}
 }
 
 window.startASStudy = function() {
