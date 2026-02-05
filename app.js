@@ -241,6 +241,7 @@ window.startVocaMode = async function() {
     loadStudyData(`${currentType}u${currentUnit}_voca.json`); 
 };
 
+// [수정] 괄호 오류 해결된 loadStudyData 함수
 async function loadStudyData(fileName) {
   isAlertShown = false; 
   try {
@@ -251,46 +252,38 @@ async function loadStudyData(fileName) {
         index = 0; cycle = 1;
     }
     
-    // 스킵 버튼 생성
-    const studyBox = document.getElementById('study-box');
-    if (studyBox && !document.getElementById('skip-btn')) {
-         // [app.js 수정] loadStudyData 함수 내부의 스킵 버튼 관련 코드 교체
-    
-    // ... (앞부분 생략) ...
-
-    // [수정] 버튼 레이아웃 제어
+    // 버튼 설정 (Start / Resume 텍스트 및 Skip/Back 버튼 크기 조절)
     const skipBtn = document.getElementById("skip-btn");
-    const backBtn = document.getElementById("back-btn"); // index.html에 ID 추가함
+    const backBtn = document.getElementById("back-btn");
     const startBtn = document.getElementById("start-btn");
 
-    // 이어하기 상태에 따라 텍스트 변경
-    startBtn.innerText = isRestoring ? "Resume" : "Start";
+    if(startBtn) startBtn.innerText = isRestoring ? "Resume" : "Start";
     
-    // Skip 버튼 보임/숨김에 따른 Back 버튼 크기 조절
     if (isRestoring) {
-        skipBtn.style.display = "block";
-        if(backBtn) backBtn.classList.remove("col-span-2"); // 반반 차지
+        if(skipBtn) skipBtn.style.display = "block";
+        if(backBtn) backBtn.classList.remove("col-span-2"); 
     } else {
-        skipBtn.style.display = "none";
-        if(backBtn) backBtn.classList.add("col-span-2"); // 혼자서 꽉 차게
+        if(skipBtn) skipBtn.style.display = "none";
+        if(backBtn) backBtn.classList.add("col-span-2"); 
     }
     
-    // ... (뒷부분 생략) ...
+    updateProgress(); 
     
-    // [수정] 무조건 Start로 표시 (이어하기여도 자동재생 안 함)
-    document.getElementById("start-btn").innerText = "Start";
-    document.getElementById("skip-btn").style.display = isRestoring ? "inline-block" : "none";
-
-    updateProgress(); showBox('study-box');
+    // 화면 전환 (HTML에 정의된 showBox 사용)
+    if(window.showBox) window.showBox('study-box');
+    else showBox('study-box');
     
-    // [수정] 이어하기면 텍스트만 보여주고 대기
+    // 이어하기 상태면 텍스트 미리 보여주기
     if (isRestoring) {
         const sText = document.getElementById("sentence");
         const item = currentData[index];
         sText.innerText = item.en; sText.style.color = "#fff";
         document.getElementById("sentence-kor").innerText = item.ko;
     }
-  } catch (e) { showCustomModal("파일 로드 실패"); }
+  } catch (e) { // <--- [중요] 여기에 닫는 괄호 '}'가 꼭 있어야 합니다!
+      console.error(e);
+      showCustomModal("파일 로드 실패"); 
+  }
 }
 
 // [app.js 수정] startStudy 함수 내부
