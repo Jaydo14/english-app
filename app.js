@@ -241,7 +241,7 @@ window.startVocaMode = async function() {
     loadStudyData(`${currentType}u${currentUnit}_voca.json`); 
 };
 
-// [수정] 괄호 오류 해결된 loadStudyData 함수
+// [수정] Resume 제거 + 버튼 고정 로직 보완
 async function loadStudyData(fileName) {
   isAlertShown = false; 
   try {
@@ -252,13 +252,15 @@ async function loadStudyData(fileName) {
         index = 0; cycle = 1;
     }
     
-    // 버튼 설정 (Start / Resume 텍스트 및 Skip/Back 버튼 크기 조절)
+    // 버튼 설정
     const skipBtn = document.getElementById("skip-btn");
     const backBtn = document.getElementById("back-btn");
     const startBtn = document.getElementById("start-btn");
 
-    if(startBtn) startBtn.innerText = isRestoring ? "Resume" : "Start";
+    // [수정 포인트 1] 이어하기 상태여도 버튼 이름은 무조건 "Start"로 고정!
+    if(startBtn) startBtn.innerText = "Start";
     
+    // 버튼 레이아웃 (Skip 버튼 유무에 따른 Back 버튼 크기 조절)
     if (isRestoring) {
         if(skipBtn) skipBtn.style.display = "block";
         if(backBtn) backBtn.classList.remove("col-span-2"); 
@@ -269,18 +271,18 @@ async function loadStudyData(fileName) {
     
     updateProgress(); 
     
-    // 화면 전환 (HTML에 정의된 showBox 사용)
+    // 화면 보여주기
     if(window.showBox) window.showBox('study-box');
     else showBox('study-box');
     
-    // 이어하기 상태면 텍스트 미리 보여주기
+    // 이어하기라면 텍스트 미리 보여주기
     if (isRestoring) {
         const sText = document.getElementById("sentence");
         const item = currentData[index];
         sText.innerText = item.en; sText.style.color = "#fff";
         document.getElementById("sentence-kor").innerText = item.ko;
     }
-  } catch (e) { // <--- [중요] 여기에 닫는 괄호 '}'가 꼭 있어야 합니다!
+  } catch (e) { 
       console.error(e);
       showCustomModal("파일 로드 실패"); 
   }
