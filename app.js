@@ -542,7 +542,7 @@ window.submitAccurateSpeaking = async function() {
 // ======================================================
 // 6. 반복듣기 (디자인 수정: 리스트 강조 + 컨트롤 패널)
 // ======================================================
-// [수정] 반복듣기 (버튼을 'absolute'로 공중에 띄워서 강제 고정)
+// [수정] 반복듣기 (화면 분할: 리스트는 스크롤, 버튼은 하단 고정)
 window.startRepeatMode = async function() {
   currentPart = "반복듣기";
   try {
@@ -553,21 +553,21 @@ window.startRepeatMode = async function() {
     
     const container = document.getElementById('repeat-box');
     
-    // 1. relative: 내부 요소(버튼)들이 이 박스를 기준으로 위치를 잡게 함
-    // overflow-hidden: 박스 밖으로 나가는 내용 숨김
-    container.className = "px-4 pt-2 h-full relative overflow-hidden";
+    // 1. 전체 레이아웃: 화면 전체 높이 사용 (h-full) + 세로 정렬 (flex-col)
+    // overflow-hidden: 전체 화면 스크롤을 막고, 내부 요소만 스크롤 되게 함
+    container.className = "h-full flex flex-col overflow-hidden relative";
 
     container.innerHTML = `
-      <div class="mb-3">
+      <div class="w-full px-4 pt-2 shrink-0 mb-3">
           <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
       </div>
 
-      <div id="repeat-list" class="h-full overflow-y-auto pb-[300px] scroll-smooth no-scrollbar">
+      <div id="repeat-list" class="flex-1 w-full px-4 overflow-y-auto min-h-0 scroll-smooth no-scrollbar pb-4">
          </div>
 
-      <div class="absolute bottom-[85px] left-0 w-full px-4 space-y-3 z-20 bg-gradient-to-t from-black via-black to-transparent pt-6 pb-2">
+      <div class="w-full px-4 shrink-0 z-20 bg-black border-t border-neutral-900 pt-4 pb-[100px]">
           
-          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 shadow-xl">
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-3">
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
               <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
                   <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
@@ -581,7 +581,7 @@ window.startRepeatMode = async function() {
               <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">CYCLES</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-3 mb-3">
               <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-12 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
                   <span class="material-icons-round">play_arrow</span> START
               </button>
@@ -590,7 +590,7 @@ window.startRepeatMode = async function() {
               </button>
           </div>
 
-          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider shadow-lg">
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
               Back to Menu
           </button>
       </div>`;
@@ -600,7 +600,6 @@ window.startRepeatMode = async function() {
     currentData.forEach((item, idx) => {
       const div = document.createElement('div'); 
       div.id = `repeat-${idx}`; 
-      // 박스 슬림화 (py-1.5)
       div.className = 'repeat-item py-1.5 px-3 mb-2 rounded-xl border border-transparent transition-all duration-300';
       div.innerHTML = `
         <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
