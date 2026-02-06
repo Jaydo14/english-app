@@ -1129,7 +1129,7 @@ window.showProfile = async function() {
     }
 };
 
-// [수정] 프로필 화면 그리기 (디자인 업그레이드: 겹침 해결 + 사이버펑크 스타일)
+// [수정] 프로필 화면 그리기 (로고 겹침 해결: 상단 여백 증가)
 function renderProfilePage(data) {
     let container = document.getElementById('profile-box');
     
@@ -1139,8 +1139,8 @@ function renderProfilePage(data) {
         document.body.appendChild(container);
     }
 
-    // [수정 1] 상단 여백(pt-4) 추가 및 배경색 확실하게 지정
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
+    // [수정 포인트] pt-4 -> pt-12로 변경하여 상단 여백을 넉넉하게 확보
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-12";
 
     // 날짜 계산
     const date = new Date();
@@ -1153,7 +1153,7 @@ function renderProfilePage(data) {
     let calendarHtml = generateCalendarHTML(curYear, curMonth, data.attendance || []);
 
     container.innerHTML = `
-        <div class="w-full bg-[#0a0a0a] border border-[#333] border-l-4 border-l-[#39FF14] rounded-xl p-6 shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8 relative overflow-hidden mt-2">
+        <div class="w-full bg-[#0a0a0a] border border-[#333] border-l-4 border-l-[#39FF14] rounded-xl p-6 shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8 relative overflow-hidden">
             
             <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#39FF14]/10 to-transparent"></div>
             
@@ -1191,10 +1191,6 @@ function renderProfilePage(data) {
                 <div class="flex items-center gap-2">
                     <span class="material-icons-round text-[#39FF14] text-base">date_range</span>
                     <h3 class="text-white font-bold text-lg tracking-wider font-mono">${currentMonthName} <span class="text-neutral-500 text-sm">${curYear}</span></h3>
-                </div>
-                <div class="flex gap-1">
-                     <div class="w-8 h-8 rounded bg-[#1c1c1c] flex items-center justify-center border border-neutral-800"><span class="material-icons-round text-neutral-500 text-sm">chevron_left</span></div>
-                     <div class="w-8 h-8 rounded bg-[#1c1c1c] flex items-center justify-center border border-neutral-800"><span class="material-icons-round text-neutral-500 text-sm">chevron_right</span></div>
                 </div>
             </div>
 
