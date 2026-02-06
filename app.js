@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // ⭐ [필수] Apps Script '새 배포' URL을 여기에 넣어주세요!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5UIAerLGa4Auop89FPiiKEgrCXoSJoYMvFcdT95xII8iSBra89LRBglsMndXTQs_l/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz8Gv3BZZPNIrIqirADDBL9EOMdc4YIg7uqSGAjM9trgOc7SxjIamQHfWETdJS7G_OB/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -1093,11 +1093,158 @@ function renderResultsCards(data) {
   container.innerHTML = htmlContent;
 }
 
-// [3] 나머지 버튼 (준비중)
-window.showProfile = function() {
-    showCustomModal("🚧점검중입니다.\n(Profile Coming Soon)");
-};
-
 window.showRanking = function() {
     showCustomModal("🏆기능 준비중입니다.\n(Ranking Coming Soon)");
+};
+
+// ======================================================
+// 8. 프로필 (달력 & 정보)
+// ======================================================
+
+// [추가] 프로필 데이터 불러오기
+window.showProfile = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("프로필 정보를 불러오는 중...", null, false);
+
+    try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getProfile&phone=${phone}`);
+        const data = await res.json();
+        
+        closeCustomModal();
+        
+        if (data.result === "success") {
+            renderProfilePage(data);
+            showBox('profile-box'); // 화면 전환
+        } else {
+            showCustomModal("학생 정보를 찾을 수 없습니다.");
+        }
+
+    } catch (e) {
+        console.error(e);
+        showCustomModal("프로필 로드 실패");
+    }
+};
+
+// [추가] 프로필 화면 그리기 (달력 포함)
+function renderProfilePage(data) {
+    let container = document.getElementById('profile-box');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'profile-box';
+        document.body.appendChild(container);
+    }
+
+    // 스타일: 화면 꽉 채움 + 스크롤
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center";
+
+    // 오늘 날짜 기준 달력 정보 계산
+    const date = new Date();
+    const curYear = date.getFullYear();
+    const curMonth = date.getMonth(); // 0~11
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const currentMonthName = monthNames[curMonth];
+
+    // 달력 HTML 생성
+    let calendarHtml = generateCalendarHTML(curYear, curMonth, data.attendance || []);
+
+    container.innerHTML = `
+        <div class="w-full mt-4 mb-8">
+            <p class="text-[#39FF14] text-xs font-bold mb-1 tracking-widest">BaBBaYoung</p>
+            <div class="flex justify-between items-end border-b border-neutral-800 pb-4">
+                <div>
+                    <h1 class="text-white text-4xl font-black mb-1">${data.name}</h1>
+                    <p class="text-neutral-500 text-xs font-bold tracking-widest">NAME</p>
+                </div>
+                <div class="text-right">
+                    <h1 class="text-white text-3xl font-bold mb-1">${data.level}</h1>
+                    <p class="text-neutral-500 text-xs font-bold tracking-widest">LEVEL</p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h2 class="text-white text-xl font-bold mb-1">${data.classInfo}</h2>
+                <p class="text-neutral-500 text-xs font-bold tracking-widest uppercase">Class</p>
+            </div>
+        </div>
+
+        <div class="w-full bg-[#1c1c1c] rounded-2xl p-4 border border-neutral-800 shadow-lg relative overflow-hidden">
+            <div class="flex justify-between items-center mb-4 px-2">
+                <h3 class="text-white font-bold text-lg">${currentMonthName} ${curYear}</h3>
+                <div class="flex gap-2">
+                    <span class="material-icons-round text-neutral-600">chevron_left</span>
+                    <span class="material-icons-round text-neutral-600">chevron_right</span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-7 text-center mb-2">
+                <span class="text-neutral-500 text-[10px] font-bold">SUN</span>
+                <span class="text-neutral-500 text-[10px] font-bold">MON</span>
+                <span class="text-neutral-500 text-[10px] font-bold">TUE</span>
+                <span class="text-neutral-500 text-[10px] font-bold">WED</span>
+                <span class="text-neutral-500 text-[10px] font-bold">THU</span>
+                <span class="text-neutral-500 text-[10px] font-bold">FRI</span>
+                <span class="text-neutral-500 text-[10px] font-bold">SAT</span>
+            </div>
+
+            <div class="grid grid-cols-7 gap-1 text-center">
+                ${calendarHtml}
+            </div>
+        </div>
+
+        <div class="mt-auto w-full py-8">
+            <button onclick="logout()" class="w-full py-4 rounded-full border border-neutral-800 text-neutral-400 font-bold tracking-widest text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase">
+                Logout
+            </button>
+        </div>
+    `;
+}
+
+// [헬퍼] 달력 HTML 생성 함수
+function generateCalendarHTML(year, month, attendedDays) {
+    const firstDay = new Date(year, month, 1).getDay(); // 이 달 1일의 요일 (0~6)
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 이 달의 마지막 날짜
+    
+    let html = "";
+    
+    // 1. 빈 칸 채우기 (1일 시작 전까지)
+    for (let i = 0; i < firstDay; i++) {
+        html += `<div class="h-10"></div>`;
+    }
+    
+    // 2. 날짜 채우기
+    for (let day = 1; day <= daysInMonth; day++) {
+        // 출석 여부 확인 (숫자 배열에 포함되어 있는지)
+        const isAttended = attendedDays.includes(day);
+        
+        let content = `<span class="text-neutral-400 text-sm font-medium">${day}</span>`;
+        let bgClass = "bg-[#111]"; // 기본 배경
+        let borderClass = "border border-neutral-800"; // 기본 테두리
+
+        if (isAttended) {
+            // 출석한 날: 초록색 체크 아이콘 + 테두리 강조
+            content = `<span class="material-icons-round text-[#39FF14] text-lg">check_circle</span>`;
+            bgClass = "bg-[#1a3a1a]"; // 약간 초록빛 배경
+            borderClass = "border border-[#39FF14]/50 shadow-[0_0_10px_rgba(57,255,20,0.2)]";
+        }
+        
+        html += `
+            <div class="h-10 rounded-lg ${bgClass} ${borderClass} flex items-center justify-center relative group">
+                 ${content}
+                 <span class="absolute text-[8px] top-0.5 right-1 text-neutral-600 opacity-0 group-hover:opacity-100">${day}</span>
+            </div>
+        `;
+    }
+    
+    return html;
+}
+
+// [추가] 로그아웃 함수
+window.logout = function() {
+    showCustomModal("로그아웃 하시겠습니까?", () => {
+        location.reload(); // 가장 간단한 방법: 새로고침
+    });
 };
