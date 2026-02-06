@@ -186,7 +186,7 @@
             </div>
         </div>
 
-        <nav class="fixed bottom-0 w-full bg-[#111] h-[90px] border-t border-neutral-900 flex justify-around items-center pb-4 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.8)]">
+        <nav id="bottom-nav" class="fixed bottom-0 w-full bg-[#111] h-[90px] border-t border-neutral-900 flex justify-around items-center pb-4 z-50 shadow-[0_-5px_20px_rgba(0,0,0,0.8)]">
             
             <button onclick="goBackToUnits()" class="flex flex-col items-center justify-center w-16 group">
                 <span class="material-icons-round text-2xl mb-1 text-[#39FF14] group-hover:drop-shadow-[0_0_8px_rgba(57,255,20,0.6)] transition-all">home</span>
@@ -233,8 +233,8 @@
     // 로그인/앱 화면 전환 시 하단바 처리 스크립트
     const originalShowBox = window.showBox;
     window.showBox = function(boxId) {
-        // [수정 중요!] 'report-box'를 리스트에 추가해야 리포트 화면 전환 시 다른 화면이 꺼집니다.
-        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box', 'report-box'];
+        // [수정] 'results-box'를 리스트에 포함시켜야 리포트 화면이 정상적으로 관리됩니다.
+        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
         
         boxes.forEach(id => {
             const el = document.getElementById(id);
@@ -256,46 +256,43 @@
         updateNavState(boxId);
     }
 
-    // [수정] 네비게이션 버튼 색상 제어 (유닛 목록 화면에서만 켜짐)
+    // [수정] 네비게이션 버튼 색상 제어 (정확한 ID 매칭)
     function updateNavState(currentBox) {
-        // 1. 하단 버튼 4개를 모두 가져옵니다.
+        // 1. 하단 버튼 4개 가져오기
         const navBtns = document.querySelectorAll('#bottom-nav button');
         
-        // 2. 일단 4개 버튼을 모두 '회색(비활성)'으로 초기화합니다.
+        // 2. 일단 모두 끄기 (회색)
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
             const text = btn.querySelector('span:last-child');
-            
-            if(icon) icon.style.color = '#737373'; // 어두운 회색
+            if(icon) icon.style.color = '#737373'; 
             if(text) text.style.color = '#737373';
         });
 
-        // 3. 현재 화면(currentBox)에 따라 켤 버튼을 정합니다.
-        let activeIndex = -1; // 기본값: -1 (아무것도 안 킴)
+        // 3. 켜야 할 버튼 번호 찾기
+        let activeIndex = -1; 
 
         if (currentBox === 'unit-selector') {
-            activeIndex = 0; // 유닛 목록 화면일 때만 -> 0번(UNIT) 켜기
-        } else if (currentBox === 'report-box') {
-            activeIndex = 1; // 리포트 화면일 때만 -> 1번(REPORT) 켜기
+            activeIndex = 0; // 유닛 목록 -> UNIT 켜기
+        } else if (currentBox === 'results-box') { 
+            activeIndex = 1; // [중요] 리포트 화면(results-box) -> REPORT 켜기
         } 
-        // 프로필, 랭킹 화면 등이 추가되면 아래 주석을 풀어서 쓰세요
         // else if (currentBox === 'profile-box') activeIndex = 2;
         // else if (currentBox === 'ranking-box') activeIndex = 3;
 
-        // 4. 해당하는 버튼이 있을 때만 '형광 녹색'으로 켭니다.
+        // 4. 해당 버튼만 켜기 (형광 녹색)
         if (activeIndex >= 0 && navBtns[activeIndex]) {
             const activeBtn = navBtns[activeIndex];
             const icon = activeBtn.querySelector('.material-icons-round');
             const text = activeBtn.querySelector('span:last-child');
-            
             if(icon) icon.style.color = '#39FF14';
             if(text) text.style.color = '#39FF14';
         }
     }
- }
 </script>
 </body>
 </html>
+
 
 
 
