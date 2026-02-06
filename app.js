@@ -1129,7 +1129,7 @@ window.showProfile = async function() {
     }
 };
 
-// [추가] 프로필 화면 그리기 (달력 포함)
+// [수정] 프로필 화면 그리기 (디자인 업그레이드: 겹침 해결 + 사이버펑크 스타일)
 function renderProfilePage(data) {
     let container = document.getElementById('profile-box');
     
@@ -1139,102 +1139,124 @@ function renderProfilePage(data) {
         document.body.appendChild(container);
     }
 
-    // 스타일: 화면 꽉 채움 + 스크롤
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center";
+    // [수정 1] 상단 여백(pt-4) 추가 및 배경색 확실하게 지정
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
-    // 오늘 날짜 기준 달력 정보 계산
+    // 날짜 계산
     const date = new Date();
     const curYear = date.getFullYear();
-    const curMonth = date.getMonth(); // 0~11
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const curMonth = date.getMonth(); 
+    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
     const currentMonthName = monthNames[curMonth];
 
     // 달력 HTML 생성
     let calendarHtml = generateCalendarHTML(curYear, curMonth, data.attendance || []);
 
     container.innerHTML = `
-        <div class="w-full mt-4 mb-8">
-            <p class="text-[#39FF14] text-xs font-bold mb-1 tracking-widest">BaBBaYoung</p>
-            <div class="flex justify-between items-end border-b border-neutral-800 pb-4">
-                <div>
-                    <h1 class="text-white text-4xl font-black mb-1">${data.name}</h1>
-                    <p class="text-neutral-500 text-xs font-bold tracking-widest">NAME</p>
+        <div class="w-full bg-[#0a0a0a] border border-[#333] border-l-4 border-l-[#39FF14] rounded-xl p-6 shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8 relative overflow-hidden mt-2">
+            
+            <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#39FF14]/10 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <p class="text-[#39FF14] font-mono text-[10px] font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-[#39FF14] rounded-full animate-pulse"></span>
+                    STUDENT IDENTITY
+                </p>
+
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h1 class="text-white text-4xl font-black tracking-tight leading-none mb-1 drop-shadow-md">${data.name}</h1>
+                        <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-widest">Agent Name</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="inline-block border border-[#39FF14] px-3 py-1 rounded bg-[#39FF14]/10">
+                            <h1 class="text-[#39FF14] text-xl font-black tracking-tighter leading-none">${data.level}</h1>
+                        </div>
+                        <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-widest mt-1">Level</p>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <h1 class="text-white text-3xl font-bold mb-1">${data.level}</h1>
-                    <p class="text-neutral-500 text-xs font-bold tracking-widest">LEVEL</p>
+
+                <div class="bg-[#1c1c1c] rounded-lg p-3 border border-neutral-800 flex items-center gap-3">
+                    <span class="material-icons-round text-neutral-400 text-lg">schedule</span>
+                    <div>
+                        <h2 class="text-white text-sm font-bold tracking-wide">${data.classInfo}</h2>
+                        <p class="text-neutral-600 text-[10px] font-bold uppercase tracking-widest">Assigned Class</p>
+                    </div>
                 </div>
-            </div>
-            <div class="mt-4">
-                <h2 class="text-white text-xl font-bold mb-1">${data.classInfo}</h2>
-                <p class="text-neutral-500 text-xs font-bold tracking-widest uppercase">Class</p>
             </div>
         </div>
 
-        <div class="w-full bg-[#1c1c1c] rounded-2xl p-4 border border-neutral-800 shadow-lg relative overflow-hidden">
-            <div class="flex justify-between items-center mb-4 px-2">
-                <h3 class="text-white font-bold text-lg">${currentMonthName} ${curYear}</h3>
-                <div class="flex gap-2">
-                    <span class="material-icons-round text-neutral-600">chevron_left</span>
-                    <span class="material-icons-round text-neutral-600">chevron_right</span>
+        <div class="w-full mb-8">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-round text-[#39FF14] text-base">date_range</span>
+                    <h3 class="text-white font-bold text-lg tracking-wider font-mono">${currentMonthName} <span class="text-neutral-500 text-sm">${curYear}</span></h3>
+                </div>
+                <div class="flex gap-1">
+                     <div class="w-8 h-8 rounded bg-[#1c1c1c] flex items-center justify-center border border-neutral-800"><span class="material-icons-round text-neutral-500 text-sm">chevron_left</span></div>
+                     <div class="w-8 h-8 rounded bg-[#1c1c1c] flex items-center justify-center border border-neutral-800"><span class="material-icons-round text-neutral-500 text-sm">chevron_right</span></div>
                 </div>
             </div>
-            
-            <div class="grid grid-cols-7 text-center mb-2">
-                <span class="text-neutral-500 text-[10px] font-bold">SUN</span>
-                <span class="text-neutral-500 text-[10px] font-bold">MON</span>
-                <span class="text-neutral-500 text-[10px] font-bold">TUE</span>
-                <span class="text-neutral-500 text-[10px] font-bold">WED</span>
-                <span class="text-neutral-500 text-[10px] font-bold">THU</span>
-                <span class="text-neutral-500 text-[10px] font-bold">FRI</span>
-                <span class="text-neutral-500 text-[10px] font-bold">SAT</span>
-            </div>
 
-            <div class="grid grid-cols-7 gap-1 text-center">
-                ${calendarHtml}
+            <div class="bg-[#111] rounded-2xl p-4 border border-neutral-800 shadow-lg">
+                <div class="grid grid-cols-7 text-center mb-3 border-b border-neutral-800 pb-2">
+                    <span class="text-[#ff4757] text-[10px] font-black font-mono">SUN</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">MON</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">TUE</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">WED</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">THU</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">FRI</span>
+                    <span class="text-[#39FF14] text-[10px] font-black font-mono">SAT</span>
+                </div>
+
+                <div class="grid grid-cols-7 gap-2 text-center">
+                    ${calendarHtml}
+                </div>
             </div>
         </div>
 
         <div class="mt-auto w-full py-8">
-            <button onclick="logout()" class="w-full py-4 rounded-full border border-neutral-800 text-neutral-400 font-bold tracking-widest text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase">
-                Logout
+            <button onclick="logout()" class="w-full py-4 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#39FF14]/10 hover:text-[#39FF14] hover:border-[#39FF14] active:scale-95 transition-all uppercase flex items-center justify-center gap-2 group">
+                <span class="material-icons-round text-sm group-hover:text-[#39FF14] transition-colors">power_settings_new</span>
+                System Logout
             </button>
         </div>
     `;
 }
 
-// [헬퍼] 달력 HTML 생성 함수
+// [수정] 달력 HTML 생성 함수 (디자인 디테일 수정)
 function generateCalendarHTML(year, month, attendedDays) {
-    const firstDay = new Date(year, month, 1).getDay(); // 이 달 1일의 요일 (0~6)
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 이 달의 마지막 날짜
+    const firstDay = new Date(year, month, 1).getDay(); 
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); 
     
     let html = "";
     
-    // 1. 빈 칸 채우기 (1일 시작 전까지)
+    // 빈 칸
     for (let i = 0; i < firstDay; i++) {
         html += `<div class="h-10"></div>`;
     }
     
-    // 2. 날짜 채우기
+    // 날짜
     for (let day = 1; day <= daysInMonth; day++) {
-        // 출석 여부 확인 (숫자 배열에 포함되어 있는지)
         const isAttended = attendedDays.includes(day);
         
-        let content = `<span class="text-neutral-400 text-sm font-medium">${day}</span>`;
-        let bgClass = "bg-[#111]"; // 기본 배경
-        let borderClass = "border border-neutral-800"; // 기본 테두리
+        let content = `<span class="text-neutral-500 text-sm font-medium font-mono">${day}</span>`;
+        let bgClass = "bg-transparent"; 
+        let borderClass = "border border-transparent"; 
 
         if (isAttended) {
-            // 출석한 날: 초록색 체크 아이콘 + 테두리 강조
-            content = `<span class="material-icons-round text-[#39FF14] text-lg">check_circle</span>`;
-            bgClass = "bg-[#1a3a1a]"; // 약간 초록빛 배경
-            borderClass = "border border-[#39FF14]/50 shadow-[0_0_10px_rgba(57,255,20,0.2)]";
+            // [수정] 출석한 날: 네온 글로우 효과 강화
+            content = `<span class="text-[#111] text-sm font-black font-mono relative z-10">${day}</span>`;
+            bgClass = "bg-[#39FF14]"; 
+            borderClass = "border border-[#39FF14] shadow-[0_0_10px_#39FF14]";
+        } else {
+            // 미출석: 마우스 올리면 살짝 표시
+            borderClass = "border border-neutral-900";
         }
         
         html += `
-            <div class="h-10 rounded-lg ${bgClass} ${borderClass} flex items-center justify-center relative group">
+            <div class="h-10 rounded-lg ${bgClass} ${borderClass} flex items-center justify-center relative transition-all">
                  ${content}
-                 <span class="absolute text-[8px] top-0.5 right-1 text-neutral-600 opacity-0 group-hover:opacity-100">${day}</span>
             </div>
         `;
     }
