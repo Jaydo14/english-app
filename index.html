@@ -266,21 +266,106 @@
         }
     }
 
-    // ======================================================
-// 7. 하단 네비게이션 버튼 기능 (준비중 알림)
+// ======================================================
+// 7. 하단 네비게이션 기능 (리포트 구현 + 나머지 준비중)
 // ======================================================
 
-// [추가] Profile 버튼
-window.showProfile = function() {
-    showCustomModal("기능 준비중입니다.\n(Profile Coming Soon)");
+// [수정] Progress Report: 실제 데이터 로드 및 화면 표시
+window.showReport = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("리포트를 불러오는 중...", null, false); // 로딩 중 버튼 숨김
+
+    try {
+        // 리포트 데이터 요청
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getReport&phone=${phone}`);
+        const data = await res.json();
+        
+        closeCustomModal();
+        renderReportPage(data); // 화면 그리기
+        showBox('report-box');  // 화면 전환
+
+    } catch (e) {
+        console.error(e);
+        showCustomModal("리포트 로드 실패\n(데이터 확인 불가)");
+    }
 };
 
-// [추가] Ranking 버튼
+// [추가] 리포트 화면 렌더링 함수
+function renderReportPage(data) {
+    let container = document.getElementById('report-box');
+    if (!container) {
+        // 박스가 없으면 새로 생성
+        container = document.createElement('div');
+        container.id = 'report-box';
+        document.body.appendChild(container); // 위치는 body 직계로 잡거나 적절한 wrapper 안으로
+    }
+
+    // 스타일: AS모드와 동일하게 화면 고정 (네비게이션 바 위까지)
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
+
+    // 데이터 안전 처리
+    const name = data.name || "Unknown";
+    const totalTime = data.totalTime || "0분";
+    const loginCount = data.loginCount || 0;
+    const lastUnit = data.lastUnit || "-";
+
+    container.innerHTML = `
+        <div class="mt-4 mb-8 text-center shrink-0">
+            <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
+            <p class="text-neutral-500 text-xs mt-1">학습 현황 분석</p>
+        </div>
+
+        <div class="w-full bg-[#1c1c1c] rounded-2xl p-6 border border-neutral-800 mb-6 shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-white font-bold text-lg">${name}님</span>
+                <span class="px-2 py-1 bg-[#39FF14] text-black text-[10px] font-bold rounded">Active</span>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-neutral-500 text-xs">총 학습 시간</span>
+                    <span class="text-white font-mono font-bold text-xl">${totalTime}</span>
+                </div>
+                <div class="w-full h-1 bg-neutral-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-[#39FF14] w-[60%]"></div> </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 w-full mb-6">
+            <div class="bg-[#1c1c1c] p-4 rounded-xl border border-neutral-800 flex flex-col items-center justify-center">
+                <span class="material-icons-round text-[#39FF14] mb-2">calendar_today</span>
+                <span class="text-white font-black text-2xl mb-1">${loginCount}</span>
+                <span class="text-neutral-500 text-[10px] uppercase">Total Logins</span>
+            </div>
+            <div class="bg-[#1c1c1c] p-4 rounded-xl border border-neutral-800 flex flex-col items-center justify-center">
+                <span class="material-icons-round text-[#ff4757] mb-2">flag</span>
+                <span class="text-white font-black text-2xl mb-1">${lastUnit}</span>
+                <span class="text-neutral-500 text-[10px] uppercase">Last Unit</span>
+            </div>
+        </div>
+
+        <div class="mt-auto pt-4">
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                Back to Menu
+            </button>
+        </div>
+    `;
+}
+
+// [유지] Profile & Ranking은 준비중 알림
+window.showProfile = function() {
+    showCustomModal("🚧점검중입니다.\n(Profile Coming Soon)");
+};
+
 window.showRanking = function() {
-    showCustomModal("기능 준비중입니다.\n(Ranking Coming Soon)");
+    showCustomModal("🏆기능 준비중입니다.\n(Ranking Coming Soon)");
 };
     
 </script>
 </body>
 </html>
+
 
