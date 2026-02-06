@@ -1266,3 +1266,94 @@ window.logout = function() {
         location.reload(); // 가장 간단한 방법: 새로고침
     });
 };
+
+// ======================================================
+// 9. 공지사항 (NOTICE - 사이버펑크 스타일)
+// ======================================================
+
+window.showNotice = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("데이터 수신 중...", null, false);
+
+    try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getNotice&phone=${phone}`);
+        const data = await res.json();
+        
+        closeCustomModal();
+        renderNoticePage(data.notice);
+        showBox('notice-box');
+
+    } catch (e) {
+        console.error(e);
+        showCustomModal("통신 오류: 데이터 접근 불가");
+    }
+};
+
+function renderNoticePage(noticeText) {
+    let container = document.getElementById('notice-box');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notice-box';
+        document.body.appendChild(container);
+    }
+
+    // 프로필과 동일한 상단 여백 설정
+    container.className = "fixed top-[140px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
+
+    container.innerHTML = `
+        <div class="w-full bg-[#0a0a0a] border border-[#333] border-l-4 border-l-[#39FF14] rounded-xl p-6 shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#39FF14]/5 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <p class="text-[#39FF14] font-mono text-[10px] font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-[#39FF14] rounded-full animate-pulse"></span>
+                    INCOMING TRANSMISSION
+                </p>
+
+                <div class="flex items-center gap-4 mb-2">
+                    <span class="material-icons-round text-[#39FF14] text-4xl">campaign</span>
+                    <div>
+                        <h1 class="text-white text-3xl font-black tracking-tighter leading-none mb-1 uppercase">Mission Notice</h1>
+                        <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-widest">System Broadcast</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full bg-[#111] rounded-2xl p-8 border border-neutral-800 shadow-lg relative min-h-[300px]">
+            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#39FF14]/30"></div>
+            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#39FF14]/30"></div>
+
+            <div class="relative z-10">
+                <p class="text-neutral-500 font-mono text-[10px] mb-6 uppercase tracking-widest flex justify-between">
+                    <span>Message Body</span>
+                    <span>v2.6.0</span>
+                </p>
+                
+                <div class="text-white text-lg font-medium leading-relaxed break-keep whitespace-pre-wrap font-display">
+                    ${noticeText}
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-6 border-t border-neutral-800 flex justify-between items-center">
+                <div class="flex gap-1">
+                    <div class="w-1 h-1 bg-[#39FF14]"></div>
+                    <div class="w-4 h-1 bg-[#39FF14]/30"></div>
+                </div>
+                <p class="text-neutral-600 font-mono text-[9px] tracking-widest italic">ENCRYPTED DATA STREAM</p>
+            </div>
+        </div>
+
+        <div class="mt-12 w-full pb-8">
+            <button onclick="goBackToUnits()" class="w-full py-4 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#39FF14]/10 hover:text-[#39FF14] hover:border-[#39FF14] active:scale-95 transition-all uppercase flex items-center justify-center gap-2 group">
+                <span class="material-icons-round text-sm group-hover:text-[#39FF14] transition-colors">arrow_back</span>
+                Return to Unit List
+            </button>
+        </div>
+    `;
+}
