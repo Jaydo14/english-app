@@ -5,7 +5,7 @@ const REPO_USER = "jaydo14";
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
 // ⭐ [필수] Apps Script '새 배포' URL을 여기에 넣어주세요!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBg0e4apmJOH1-CW1jnoc1je0aodVzFUZ-ea0RRtRahWFvTwSm0IjRC4Ntb0J97w0Y/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzuJojVBFIxnVERyjgvxAsHL1xY-kUGN443Jrk6ZmkVeuI08CPL_egK0h0Q-RugdnE/exec"; 
 
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
@@ -1129,7 +1129,7 @@ window.showProfile = async function() {
     }
 };
 
-// [수정] 프로필 화면 그리기 (로고 겹침 해결: 상단 여백 증가)
+// [수정] top-[80px]를 top-[140px]로 변경하여 로고 공간 확보
 function renderProfilePage(data) {
     let container = document.getElementById('profile-box');
     
@@ -1139,8 +1139,8 @@ function renderProfilePage(data) {
         document.body.appendChild(container);
     }
 
-    // [수정 포인트] pt-4 -> pt-12로 변경하여 상단 여백을 넉넉하게 확보
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-12";
+    // top-[80px] -> top-[140px]로 변경, pt-12 -> pt-4로 조정
+    container.className = "fixed top-[140px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     // 날짜 계산
     const date = new Date();
