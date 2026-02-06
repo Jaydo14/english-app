@@ -510,19 +510,39 @@ window.startAccurateSpeakingMode = async function() {
 // ======================================================
 // [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
 // ======================================================
-// [수정] Accurate Speaking (스크롤 방식: 하단 여백을 크게 주어 버튼 노출 보장)
+// [수정] Accurate Speaking 화면 렌더링 (제출 완료 시 UI 개선 + 백버튼 보장)
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
-    // 1. 컨테이너 설정
-    // fixed top-[80px] bottom-[90px]: 상단 헤더와 하단 탭바 사이 공간을 차지
-    // overflow-y-auto: 내용이 길면 스크롤 가능
-    // pb-[300px]: [핵심] 스크롤을 내렸을 때 빈 공간을 300px이나 줘서 버튼을 강제로 위로 올림
+    // 화면 고정 설정
     container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-[300px]";
     
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
 
+    // 1. [제출 완료된 상태]의 화면 UI (단순화하여 오류 방지)
+    if (isSubmitted) {
+        container.innerHTML = `
+            <div class="mt-4 mb-6 text-center">
+                <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
+            </div>
+
+            <div class="flex flex-col items-center w-full justify-center h-[50vh]">
+                <div class="text-center mb-8">
+                    <span class="material-icons-round text-[#39FF14] text-6xl mb-4">check_circle</span>
+                    <p class="text-white text-xl font-bold">이미 제출 완료되었습니다.</p>
+                    <p class="text-neutral-500 text-sm mt-2">첨삭 결과를 기다려주세요!</p>
+                </div>
+
+                <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                    Back to Menu
+                </button>
+            </div>
+        `;
+        return; // 제출 완료 시 여기서 함수 종료
+    }
+
+    // 2. [학습 진행 중 상태]의 화면 UI
     container.innerHTML = `
         <div class="mt-4 mb-6 text-center">
             <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
@@ -533,12 +553,11 @@ function renderAccurateSpeakingPage() {
             <div class="w-full mb-8 text-center">
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
                 <p id="as-q-text" class="text-white text-lg font-bold leading-relaxed break-keep drop-shadow-md">
-                    ${isSubmitted ? "이미 제출 완료되었습니다. ✔" : questionText}
+                    ${questionText}
                 </p>
             </div>
 
-            <button id="as-listen-btn" onclick="listenQuestion()" style="${isSubmitted ? 'display:none' : 'display:flex'}" 
-                class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] mb-10">
+            <button id="as-listen-btn" onclick="listenQuestion()" class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] mb-10">
                 <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
                 <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
             </button>
@@ -642,33 +661,41 @@ async function processRecording() {
     reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; }; 
 }
 
-// [기능] 최종 제출
+// [수정] 최종 제출 함수 (로딩 버튼 숨김 + 성공 시 메뉴 이동)
 window.submitAccurateSpeaking = async function() {
-  const textInput = document.getElementById('student-text-input');
-  const text = textInput.value.trim();
-  
-  if(!text) return showCustomModal("받아적은 내용을 입력해주세요!");
-  
-  showCustomModal("제출 중입니다..."); // 로딩 표시
-  
-  const payload = { 
-      action: "uploadAS", 
-      phone: document.getElementById("phone-input").value.trim(), 
-      unit: "Unit " + currentUnit, 
-      studentText: text, 
-      audioData: window.lastAudioBase64 
-  };
-  
-  fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
-    .then(res => res.json())
-    .then(data => { 
-        if(data.result === "success") {
-            showCustomModal("제출 성공!", () => showMenu());
-        } else {
-            showCustomModal("제출 실패\n다시 시도해주세요.");
-        }
-    })
-    .catch(() => showCustomModal("네트워크 오류 발생"));
+    const textInput = document.getElementById('student-text-input');
+    const text = textInput.value.trim();
+    
+    if(!text) return showCustomModal("받아적은 내용을 입력해주세요!");
+    
+    // 1. [수정] 세 번째 인자로 false를 넣어 'OK 버튼'을 숨깁니다.
+    showCustomModal("제출 중입니다...", null, false); 
+    
+    const payload = { 
+        action: "uploadAS", 
+        phone: document.getElementById("phone-input").value.trim(), 
+        unit: "Unit " + currentUnit, 
+        studentText: text, 
+        audioData: window.lastAudioBase64 
+    };
+    
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+      .then(res => res.json())
+      .then(data => { 
+          // 로딩 모달 닫기
+          closeCustomModal();
+
+          if(data.result === "success") {
+              // 2. [수정] 성공 알림의 OK 버튼을 누르면 'showMenu()'가 실행되어 목록으로 돌아갑니다.
+              showCustomModal("제출 성공! ✔", () => showMenu());
+          } else {
+              showCustomModal("제출 실패\n다시 시도해주세요.");
+          }
+      })
+      .catch(() => {
+          closeCustomModal();
+          showCustomModal("네트워크 오류 발생");
+      });
 };
 
 // ======================================================
