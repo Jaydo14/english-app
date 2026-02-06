@@ -233,7 +233,9 @@
     // 로그인/앱 화면 전환 시 하단바 처리 스크립트
     const originalShowBox = window.showBox;
     window.showBox = function(boxId) {
-        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
+        // [수정 중요!] 'report-box'를 리스트에 추가해야 리포트 화면 전환 시 다른 화면이 꺼집니다.
+        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box', 'report-box'];
+        
         boxes.forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = (id === boxId) ? 'block' : 'none';
@@ -244,7 +246,7 @@
         document.getElementById("app").style.display = isLogin ? 'none' : 'flex';
         document.getElementById('login-box').style.display = isLogin ? 'flex' : 'none';
         
-        // [수정 완료] 하단 바 ID를 'bottom-nav'로 통일했습니다!
+        // 하단 바 처리
         const navBar = document.getElementById('bottom-nav');
         if(navBar) {
             navBar.style.display = isLogin ? 'none' : 'flex';
@@ -265,11 +267,10 @@
             }
         }
     }
-}
-    
 </script>
 </body>
 </html>
+
 
 
 
