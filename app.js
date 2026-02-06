@@ -118,6 +118,37 @@ window.goBackToUnits = function() {
     showBox('unit-selector');
 };
 
+// [수정/추가] 모드 선택 화면으로 이동 (AS 모드 정리 기능 포함)
+window.showMenu = function() {
+    // 1. 재생 중인 오디오 정지
+    if (typeof player !== 'undefined') player.pause();
+    if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
+
+    // 2. AS 모드 타이머 및 녹음 정지 (오류 방지)
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    if (typeof recordingTimer !== 'undefined' && recordingTimer) clearInterval(recordingTimer);
+    
+    // 녹음 중이었다면 녹음도 중지
+    if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+
+    // 3. UI 정리 (녹음 UI 숨기고 듣기 버튼 다시 표시)
+    const recUI = document.getElementById('recording-ui');
+    const listenBtn = document.getElementById('as-listen-btn');
+    const submitUI = document.getElementById('submit-ui');
+    
+    if(recUI) recUI.style.display = 'none';
+    if(submitUI) submitUI.style.display = 'none';
+    if(listenBtn) {
+        listenBtn.style.display = 'flex';
+        listenBtn.style.opacity = '1';
+    }
+
+    // 4. 모드 선택 화면('menu-box')으로 이동
+    showBox('menu-box');
+};
+
 // [수정] 학습 상태 저장 (파트별 개별 저장 + 마지막 위치 기억)
 function saveStatus() {
   // 기존 데이터 불러오기 (없으면 빈 깡통)
