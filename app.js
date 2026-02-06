@@ -108,8 +108,15 @@ function closeCustomModal() {
   if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
-window.goBackToUnits = () => showBox('unit-selector');
-window.showMenu = () => { stopRepeatAudio(); if (asTimer) clearInterval(asTimer); showBox('menu-box'); };
+// [추가/수정] UNIT 버튼 클릭 시 실행될 함수
+window.goBackToUnits = function() {
+    // 1. 재생 중인 오디오나 타이머가 있다면 정지
+    stopRepeatAudio(); 
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    
+    // 2. 유닛 목록 화면('unit-selector')으로 이동
+    showBox('unit-selector');
+};
 
 // [수정] 학습 상태 저장 (파트별 개별 저장 + 마지막 위치 기억)
 function saveStatus() {
