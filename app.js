@@ -905,3 +905,120 @@ function renderResultsCards(data) {
     container.appendChild(card);
   }
 }
+
+// ======================================================
+// 7. 하단 네비게이션 기능 (최종: 유닛별 카드 리포트 + 준비중 알림)
+// ======================================================
+
+// [1] Progress Report: 유닛별 성과 리스트 보여주기 (샘플 데이터)
+window.showReport = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("학습 기록을 불러오는 중...", null, false); 
+
+    // [샘플 데이터] 서버 연결 전 디자인 확인용
+    setTimeout(() => {
+        closeCustomModal();
+
+        const unitData = [
+            { unit: 1, title: "Basic Conversation", stars: 3, status: "completed", date: "2023.10.01" },
+            { unit: 2, title: "Role Play & Acting", stars: 2, status: "completed", date: "2023.10.05" },
+            { unit: 3, title: "Expression Drill", stars: 1, status: "completed", date: "2023.10.12" },
+            { unit: 4, title: "Free Talking", stars: 0, status: "current", date: "진행 중" },
+            { unit: 5, title: "Business English", stars: 0, status: "locked", date: "-" },
+            { unit: 6, title: "Advanced Topic", stars: 0, status: "locked", date: "-" },
+        ];
+
+        renderReportPage(unitData); 
+        showBox('report-box');
+    }, 800); 
+};
+
+// [2] 리포트 화면 그리는 함수 (카드 디자인)
+function renderReportPage(data) {
+    let container = document.getElementById('report-box');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'report-box';
+        document.body.appendChild(container);
+    }
+
+    // 스타일 설정
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
+
+    // 헤더
+    let htmlContent = `
+        <div class="mt-4 mb-6 text-center shrink-0">
+            <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
+            <p class="text-neutral-500 text-xs mt-1">유닛별 학습 성취도</p>
+        </div>
+        <div class="space-y-4 w-full flex-1">
+    `;
+
+    // 카드 리스트 생성
+    data.forEach(item => {
+        let starsHtml = '';
+        for(let i=0; i<3; i++) {
+            if(i < item.stars) starsHtml += '<span class="material-icons-round text-[#39FF14] text-lg">star</span>';
+            else starsHtml += '<span class="material-icons-round text-neutral-700 text-lg">star</span>';
+        }
+
+        let borderColor = 'border-neutral-800';
+        let opacity = 'opacity-100';
+        let icon = 'check_circle';
+        let iconColor = 'text-[#39FF14]';
+
+        if (item.status === 'current') {
+            borderColor = 'border-[#39FF14]';
+            icon = 'play_circle';
+            iconColor = 'text-white';
+        } else if (item.status === 'locked') {
+            opacity = 'opacity-50';
+            icon = 'lock';
+            iconColor = 'text-neutral-600';
+            starsHtml = '';
+        }
+
+        htmlContent += `
+            <div class="w-full bg-[#1c1c1c] rounded-2xl p-5 border ${borderColor} ${opacity} shadow-lg transition-transform active:scale-95 flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-[#39FF14] text-xs font-bold tracking-widest">UNIT ${item.unit}</span>
+                        <span class="text-neutral-500 text-[10px]">${item.date}</span>
+                    </div>
+                    <h3 class="text-white font-bold text-base mb-2">${item.title}</h3>
+                    <div class="flex gap-1">${starsHtml}</div>
+                </div>
+                <div class="flex flex-col items-center justify-center pl-4 border-l border-neutral-800">
+                    <span class="material-icons-round ${iconColor} text-3xl">${icon}</span>
+                </div>
+            </div>
+        `;
+    });
+
+    htmlContent += `</div>`;
+
+    // Back 버튼
+    htmlContent += `
+        <div class="mt-8 w-full shrink-0">
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                Back to Menu
+            </button>
+        </div>
+    `;
+
+    container.innerHTML = htmlContent;
+}
+
+// [3] 나머지 버튼 (준비중)
+window.showProfile = function() {
+    showCustomModal("🚧점검중입니다.\n(Profile Coming Soon)");
+};
+
+window.showRanking = function() {
+    showCustomModal("🏆기능 준비중입니다.\n(Ranking Coming Soon)");
+};
