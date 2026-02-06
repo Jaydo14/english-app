@@ -256,20 +256,46 @@
         updateNavState(boxId);
     }
 
+    // [수정] 네비게이션 바 상태 업데이트 함수 (버튼 색상 제어)
     function updateNavState(currentBox) {
-        // 아이콘 색상 활성화/비활성화 처리
-        const icons = document.querySelectorAll('#bottom-nav .material-icons-round');
-        if(icons.length > 0) {
-            if(currentBox === 'unit-selector') {
-                icons[0].style.color = '#39FF14'; // Home 아이콘 초록색
-            } else {
-                icons[0].style.color = '#737373'; // Home 아이콘 회색
-            }
+        // 1. 네비게이션 버튼 4개 모두 가져오기
+        const navBtns = document.querySelectorAll('#bottom-nav button');
+        
+        // 2. 일단 모든 버튼을 '회색(비활성)'으로 초기화
+        navBtns.forEach(btn => {
+            const icon = btn.querySelector('.material-icons-round');
+            const text = btn.querySelector('span:last-child'); // 텍스트 스팬
+            
+            if(icon) icon.style.color = '#737373'; // 회색 (neutral-500)
+            if(text) text.style.color = '#737373';
+        });
+
+        // 3. 현재 보고 있는 화면(currentBox)에 따라 '활성화할 버튼 번호' 결정
+        let activeIndex = 0; // 기본값은 0번 (UNIT)
+
+        if (currentBox === 'report-box') {
+            activeIndex = 1; // PROGRESS REPORT
+        } 
+        // (나중에 프로필, 랭킹 화면이 생기면 여기에 추가하면 됩니다)
+        // else if (currentBox === 'profile-box') activeIndex = 2;
+        // else if (currentBox === 'ranking-box') activeIndex = 3;
+
+
+        // 4. 결정된 버튼만 '형광 녹색(활성)'으로 변경
+        if (navBtns[activeIndex]) {
+            const activeBtn = navBtns[activeIndex];
+            const icon = activeBtn.querySelector('.material-icons-round');
+            const text = activeBtn.querySelector('span:last-child');
+            
+            if(icon) icon.style.color = '#39FF14';
+            if(text) text.style.color = '#39FF14';
         }
     }
+ }
 </script>
 </body>
 </html>
+
 
 
 
