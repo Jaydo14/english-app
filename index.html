@@ -256,33 +256,34 @@
         updateNavState(boxId);
     }
 
-    // [수정] 네비게이션 바 상태 업데이트 함수 (버튼 색상 제어)
+    // [수정] 네비게이션 버튼 색상 제어 (유닛 목록 화면에서만 켜짐)
     function updateNavState(currentBox) {
-        // 1. 네비게이션 버튼 4개 모두 가져오기
+        // 1. 하단 버튼 4개를 모두 가져옵니다.
         const navBtns = document.querySelectorAll('#bottom-nav button');
         
-        // 2. 일단 모든 버튼을 '회색(비활성)'으로 초기화
+        // 2. 일단 4개 버튼을 모두 '회색(비활성)'으로 초기화합니다.
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
-            const text = btn.querySelector('span:last-child'); // 텍스트 스팬
+            const text = btn.querySelector('span:last-child');
             
-            if(icon) icon.style.color = '#737373'; // 회색 (neutral-500)
+            if(icon) icon.style.color = '#737373'; // 어두운 회색
             if(text) text.style.color = '#737373';
         });
 
-        // 3. 현재 보고 있는 화면(currentBox)에 따라 '활성화할 버튼 번호' 결정
-        let activeIndex = 0; // 기본값은 0번 (UNIT)
+        // 3. 현재 화면(currentBox)에 따라 켤 버튼을 정합니다.
+        let activeIndex = -1; // 기본값: -1 (아무것도 안 킴)
 
-        if (currentBox === 'report-box') {
-            activeIndex = 1; // PROGRESS REPORT
+        if (currentBox === 'unit-selector') {
+            activeIndex = 0; // 유닛 목록 화면일 때만 -> 0번(UNIT) 켜기
+        } else if (currentBox === 'report-box') {
+            activeIndex = 1; // 리포트 화면일 때만 -> 1번(REPORT) 켜기
         } 
-        // (나중에 프로필, 랭킹 화면이 생기면 여기에 추가하면 됩니다)
+        // 프로필, 랭킹 화면 등이 추가되면 아래 주석을 풀어서 쓰세요
         // else if (currentBox === 'profile-box') activeIndex = 2;
         // else if (currentBox === 'ranking-box') activeIndex = 3;
 
-
-        // 4. 결정된 버튼만 '형광 녹색(활성)'으로 변경
-        if (navBtns[activeIndex]) {
+        // 4. 해당하는 버튼이 있을 때만 '형광 녹색'으로 켭니다.
+        if (activeIndex >= 0 && navBtns[activeIndex]) {
             const activeBtn = navBtns[activeIndex];
             const icon = activeBtn.querySelector('.material-icons-round');
             const text = activeBtn.querySelector('span:last-child');
@@ -295,6 +296,7 @@
 </script>
 </body>
 </html>
+
 
 
 
