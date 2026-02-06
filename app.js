@@ -510,81 +510,85 @@ window.startAccurateSpeakingMode = async function() {
 // ======================================================
 // [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
 // ======================================================
-// [수정] Accurate Speaking 화면 렌더링 (제출 완료 시 UI 개선 + 백버튼 보장)
+// [수정] Accurate Speaking 화면 (중앙 정렬 + BACK TO MODE + 위치 수정)
 function renderAccurateSpeakingPage() {
     const container = document.getElementById('as-record-box');
     
-    // 화면 고정 설정
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-[300px]";
+    // 1. 컨테이너 설정: 화면 꽉 채우기 + 중앙 정렬 준비
+    // flex-col, h-full: 높이를 꽉 채움
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col";
     
     const isSubmitted = asData && asData.isSubmitted;
     const questionText = asData ? asData.question : "질문 데이터 없음";
 
-    // 1. [제출 완료된 상태]의 화면 UI (단순화하여 오류 방지)
+    // ---------------------------------------------------------
+    // Case 1: 이미 제출 완료된 상태 (중앙 정렬)
+    // ---------------------------------------------------------
     if (isSubmitted) {
         container.innerHTML = `
-            <div class="mt-4 mb-6 text-center">
-                <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
-            </div>
-
-            <div class="flex flex-col items-center w-full justify-center h-[50vh]">
-                <div class="text-center mb-8">
+            <div class="w-full h-full flex flex-col items-center justify-center space-y-8">
+                
+                <div class="text-center">
+                    <h2 class="text-[#39FF14] text-lg font-bold mb-8">Accurate Speaking</h2>
                     <span class="material-icons-round text-[#39FF14] text-6xl mb-4">check_circle</span>
                     <p class="text-white text-xl font-bold">이미 제출 완료되었습니다.</p>
                     <p class="text-neutral-500 text-sm mt-2">첨삭 결과를 기다려주세요!</p>
                 </div>
 
                 <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
-                    Back to Menu
+                    BACK TO MODE
                 </button>
             </div>
         `;
-        return; // 제출 완료 시 여기서 함수 종료
+        return; 
     }
 
-    // 2. [학습 진행 중 상태]의 화면 UI
+    // ---------------------------------------------------------
+    // Case 2: 학습 진행 중 상태 (중앙 정렬 + 버튼 위치 조정)
+    // ---------------------------------------------------------
     container.innerHTML = `
-        <div class="mt-4 mb-6 text-center">
-            <h2 class="text-[#39FF14] text-lg font-bold">Accurate Speaking</h2>
-        </div>
-
-        <div class="flex flex-col items-center w-full">
+        <div class="w-full h-full flex flex-col items-center justify-center">
             
-            <div class="w-full mb-8 text-center">
+            <div class="w-full text-center mb-8">
+                <h2 class="text-[#39FF14] text-lg font-bold mb-6">Accurate Speaking</h2>
                 <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
-                <p id="as-q-text" class="text-white text-lg font-bold leading-relaxed break-keep drop-shadow-md">
+                <p id="as-q-text" class="text-white text-xl font-bold leading-relaxed break-keep drop-shadow-md">
                     ${questionText}
                 </p>
             </div>
 
-            <button id="as-listen-btn" onclick="listenQuestion()" class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525] mb-10">
-                <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
-                <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
-            </button>
+            <div class="w-full flex flex-col items-center mb-4">
 
-            <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up mb-10">
-                <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
-                    <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
-                </div>
-                <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
-                    STOP RECORDING
+                <button id="as-listen-btn" onclick="listenQuestion()" class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525]">
+                    <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
+                    <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
                 </button>
+
+                <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up">
+                    <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
+                        <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
+                    </div>
+                    <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
+                        STOP RECORDING
+                    </button>
+                </div>
+
+                <div id="submit-ui" style="display:none;" class="w-full animate-fade-in-up">
+                    <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800 mb-6">
+                        <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
+                        <textarea id="student-text-input" rows="6" placeholder="녹음한 내용을 영어로 적어주세요..." 
+                            class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none leading-relaxed"></textarea>
+                    </div>
+                    
+                    <button onclick="submitAccurateSpeaking()" class="w-full bg-[#39FF14] text-black font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.4)] active:scale-95 transition-transform hover:bg-[#32e012] uppercase tracking-widest">
+                        SUBMIT ANSWER
+                    </button>
+                </div>
+
             </div>
 
-            <div id="submit-ui" style="display:none;" class="w-full space-y-6 animate-fade-in-up mb-10">
-                <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800">
-                    <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
-                    <textarea id="student-text-input" rows="8" placeholder="녹음한 내용을 영어로 적어주세요..." 
-                        class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none leading-relaxed"></textarea>
-                </div>
-                
-                <button onclick="submitAccurateSpeaking()" class="w-full bg-[#39FF14] text-black font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.4)] active:scale-95 transition-transform hover:bg-[#32e012] uppercase tracking-widest">
-                    SUBMIT ANSWER
-                </button>
-            </div>
-
-            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
-                Back to Menu
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider mt-4">
+                BACK TO MODE
             </button>
 
         </div>
@@ -661,14 +665,14 @@ async function processRecording() {
     reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; }; 
 }
 
-// [수정] 최종 제출 함수 (로딩 버튼 숨김 + 성공 시 메뉴 이동)
+// [수정] 최종 제출 함수 (성공 시 모드 선택 화면으로 이동)
 window.submitAccurateSpeaking = async function() {
     const textInput = document.getElementById('student-text-input');
     const text = textInput.value.trim();
     
     if(!text) return showCustomModal("받아적은 내용을 입력해주세요!");
     
-    // 1. [수정] 세 번째 인자로 false를 넣어 'OK 버튼'을 숨깁니다.
+    // 로딩 알림 (OK 버튼 없음)
     showCustomModal("제출 중입니다...", null, false); 
     
     const payload = { 
@@ -682,11 +686,10 @@ window.submitAccurateSpeaking = async function() {
     fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
       .then(res => res.json())
       .then(data => { 
-          // 로딩 모달 닫기
-          closeCustomModal();
+          closeCustomModal(); // 로딩 닫기
 
           if(data.result === "success") {
-              // 2. [수정] 성공 알림의 OK 버튼을 누르면 'showMenu()'가 실행되어 목록으로 돌아갑니다.
+              // [수정] 성공 시 'showMenu()'를 호출하여 '모드 선택 화면'으로 이동
               showCustomModal("제출 성공! ✔", () => showMenu());
           } else {
               showCustomModal("제출 실패\n다시 시도해주세요.");
