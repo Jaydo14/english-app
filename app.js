@@ -934,15 +934,14 @@ window.showReport = async function() {
   }
 };
 
-// [2] 리포트 카드 디자인 렌더링 (로직 유지 + 디자인 개선)
+// [2] 리포트 카드 디자인 렌더링 (수정됨: AS Correction 15분 이상 시 초록색)
 function renderResultsCards(data) {
   const container = document.getElementById('results-box');
   
-  // [디자인 수정] 화면 고정 및 스크롤 설정 (버튼 잘림 방지)
-  // 기존 results-content 대신 results-box 자체를 스크롤 영역으로 만듭니다.
+  // 화면 고정 및 스크롤 설정
   container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
   
-  // 헤더 추가
+  // 헤더
   let htmlContent = `
       <div class="mt-4 mb-6 text-center shrink-0">
           <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
@@ -951,11 +950,7 @@ function renderResultsCards(data) {
       <div id="results-content" class="space-y-4 w-full flex-1">
   `;
 
-  // -----------------------------------------------------------
-  // [로직 복구] 사용자님의 원본 데이터 처리 로직 (100% 유지)
-  // -----------------------------------------------------------
-  
-  // 1. 중복된 파트 제거
+  // 중복 데이터 제거
   const uniqueParts = [];
   const filteredData = data.filter(row => { 
       if (row.part && !uniqueParts.includes(row.part)) { 
@@ -965,10 +960,8 @@ function renderResultsCards(data) {
       return false; 
   });
   
-  // 2. 유닛 1~8까지 카드 생성 루프
+  // Unit 1~8 카드 생성
   for (let u = 0; u < 8; u++) {
-    // [디자인] 카드 스타일 (Tailwind 적용)
-    // Unit 제목
     htmlContent += `
         <div class="w-full bg-[#1c1c1c] rounded-2xl p-5 border border-neutral-800 shadow-lg mb-4">
             <h3 class="text-[#39FF14] font-bold text-base border-b border-neutral-800 pb-2 mb-3 tracking-wider">
@@ -977,22 +970,33 @@ function renderResultsCards(data) {
             <div class="space-y-2">
     `;
     
-    // 내부 데이터 반복 (파트별 점수)
     filteredData.forEach(row => {
       let val = row.units[u] || "-";
       
-      // [로직] 숫자인 경우 % 붙이기 logic
-      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1) {
+      // % 변환 로직 (숫자만 있을 때)
+      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1 && String(val).indexOf('분') === -1) {
           val = Math.round(parseFloat(val) * 100) + "%";
       }
       
-      // [로직] 100%이거나 완료된 항목은 초록색 표시 logic
-      const isDone = (val === "100%" || String(val).includes("완료"));
+      // [기존 조건] 100%이거나 '완료' 글자가 있으면 통과
+      let isDone = (val === "100%" || String(val).includes("완료"));
+
+      // ⭐ [여기가 추가된 핵심 부분입니다!] ⭐
+      // 파트 이름이 "AS Correction"이고, 내용에 "분"이 들어있으면 시간을 확인합니다.
+      if (row.part === "AS Correction" && typeof val === 'string' && val.includes('분')) {
+          // "16분 30초" 같은 문자열에서 숫자(16)만 뽑아냅니다.
+          const minutes = parseInt(val); 
+          // 그 숫자가 15 이상이면 완료(초록색) 처리!
+          if (!isNaN(minutes) && minutes >= 15) {
+              isDone = true;
+          }
+      }
+
+      // 색상 적용
       const colorClass = isDone ? "text-[#39FF14] font-bold" : "text-white font-medium";
       const icon = isDone ? "check_circle" : "remove_circle_outline";
       const iconColor = isDone ? "text-[#39FF14]" : "text-neutral-700";
 
-      // [디자인] 행(Row) 출력
       htmlContent += `
           <div class="flex justify-between items-center text-sm">
               <span class="text-neutral-400 text-xs">${row.part}</span>
@@ -1004,13 +1008,12 @@ function renderResultsCards(data) {
       `;
     });
 
-    htmlContent += `</div></div>`; // 카드 닫기
+    htmlContent += `</div></div>`; 
   }
-  // -----------------------------------------------------------
 
-  htmlContent += `</div>`; // results-content 닫기
+  htmlContent += `</div>`; 
 
-  // [디자인] 하단 Back 버튼 추가 (스크롤 영역 내부)
+  // Back 버튼
   htmlContent += `
       <div class="mt-8 w-full shrink-0">
           <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
