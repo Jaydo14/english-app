@@ -229,12 +229,14 @@
 </main>
 
 <script src="app.js"></script>
+    
 <script>
+    
     // 로그인/앱 화면 전환 시 하단바 처리 스크립트
     const originalShowBox = window.showBox;
     window.showBox = function(boxId) {
-        // [수정] 'results-box'를 리스트에 포함시켜야 리포트 화면이 정상적으로 관리됩니다.
-        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
+        // [수정] 화면 목록에 'profile-box'를 추가했습니다!
+        const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box', 'report-box', 'profile-box'];
         
         boxes.forEach(id => {
             const el = document.getElementById(id);
@@ -246,17 +248,17 @@
         document.getElementById("app").style.display = isLogin ? 'none' : 'flex';
         document.getElementById('login-box').style.display = isLogin ? 'flex' : 'none';
         
-        // 하단 바 처리
+        // 하단 바 처리 (로그인 화면에선 숨김)
         const navBar = document.getElementById('bottom-nav');
         if(navBar) {
             navBar.style.display = isLogin ? 'none' : 'flex';
         }
 
-        // 내비게이션 바 상태 업데이트
+        // 네비게이션 바 버튼 색상 업데이트
         updateNavState(boxId);
     }
 
-    // [수정] 네비게이션 버튼 색상 제어 (정확한 ID 매칭)
+    // [수정] 네비게이션 버튼 색상 제어 (프로필 버튼 추가)
     function updateNavState(currentBox) {
         // 1. 하단 버튼 4개 가져오기
         const navBtns = document.querySelectorAll('#bottom-nav button');
@@ -274,10 +276,11 @@
 
         if (currentBox === 'unit-selector') {
             activeIndex = 0; // 유닛 목록 -> UNIT 켜기
-        } else if (currentBox === 'results-box') { 
-            activeIndex = 1; // [중요] 리포트 화면(results-box) -> REPORT 켜기
-        } 
-        // else if (currentBox === 'profile-box') activeIndex = 2;
+        } else if (currentBox === 'report-box' || currentBox === 'results-box') { 
+            activeIndex = 1; // 리포트 화면 -> REPORT 켜기
+        } else if (currentBox === 'profile-box') {
+            activeIndex = 2; // [NEW] 프로필 화면 -> PROFILE 켜기
+        }
         // else if (currentBox === 'ranking-box') activeIndex = 3;
 
         // 4. 해당 버튼만 켜기 (형광 녹색)
@@ -292,13 +295,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
