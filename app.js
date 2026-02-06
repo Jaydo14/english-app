@@ -907,111 +907,119 @@ function renderResultsCards(data) {
 }
 
 // ======================================================
-// 7. 하단 네비게이션 기능 (최종: 유닛별 카드 리포트 + 준비중 알림)
+// 7. 하단 네비게이션 및 리포트 (기능 완벽 복구)
 // ======================================================
 
-// [1] Progress Report: 유닛별 성과 리스트 보여주기 (샘플 데이터)
+// [1] 리포트 페이지 보기 (함수명을 showReport로 변경하여 버튼과 연결)
 window.showReport = async function() {
-    const phoneInput = document.getElementById("phone-input");
-    const phone = phoneInput ? phoneInput.value.trim() : "";
+  const phoneInput = document.getElementById("phone-input");
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+  
+  if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+  showCustomModal("데이터를 불러오는 중...", null, false); // 로딩 표시
+
+  try {
+    // [핵심] 사용자님이 주신 원본 로직 그대로 사용 (action=getResults)
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const data = await res.json();
     
-    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+    closeCustomModal();
+    renderResultsCards(data); // 데이터 렌더링
+    showBox('results-box');   // 화면 전환
 
-    showCustomModal("학습 기록을 불러오는 중...", null, false); 
-
-    // [샘플 데이터] 서버 연결 전 디자인 확인용
-    setTimeout(() => {
-        closeCustomModal();
-
-        const unitData = [
-            { unit: 1, title: "Basic Conversation", stars: 3, status: "completed", date: "2023.10.01" },
-            { unit: 2, title: "Role Play & Acting", stars: 2, status: "completed", date: "2023.10.05" },
-            { unit: 3, title: "Expression Drill", stars: 1, status: "completed", date: "2023.10.12" },
-            { unit: 4, title: "Free Talking", stars: 0, status: "current", date: "진행 중" },
-            { unit: 5, title: "Business English", stars: 0, status: "locked", date: "-" },
-            { unit: 6, title: "Advanced Topic", stars: 0, status: "locked", date: "-" },
-        ];
-
-        renderReportPage(unitData); 
-        showBox('report-box');
-    }, 800); 
+  } catch (e) { 
+      console.error(e);
+      showCustomModal("데이터 로드 실패"); 
+  }
 };
 
-// [2] 리포트 화면 그리는 함수 (카드 디자인)
-function renderReportPage(data) {
-    let container = document.getElementById('report-box');
-    
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'report-box';
-        document.body.appendChild(container);
-    }
+// [2] 리포트 카드 디자인 렌더링 (로직 유지 + 디자인 개선)
+function renderResultsCards(data) {
+  const container = document.getElementById('results-box');
+  
+  // [디자인 수정] 화면 고정 및 스크롤 설정 (버튼 잘림 방지)
+  // 기존 results-content 대신 results-box 자체를 스크롤 영역으로 만듭니다.
+  container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
+  
+  // 헤더 추가
+  let htmlContent = `
+      <div class="mt-4 mb-6 text-center shrink-0">
+          <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
+          <p class="text-neutral-500 text-xs mt-1">학습 현황 분석</p>
+      </div>
+      <div id="results-content" class="space-y-4 w-full flex-1">
+  `;
 
-    // 스타일 설정
-    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
-
-    // 헤더
-    let htmlContent = `
-        <div class="mt-4 mb-6 text-center shrink-0">
-            <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
-            <p class="text-neutral-500 text-xs mt-1">유닛별 학습 성취도</p>
-        </div>
-        <div class="space-y-4 w-full flex-1">
+  // -----------------------------------------------------------
+  // [로직 복구] 사용자님의 원본 데이터 처리 로직 (100% 유지)
+  // -----------------------------------------------------------
+  
+  // 1. 중복된 파트 제거
+  const uniqueParts = [];
+  const filteredData = data.filter(row => { 
+      if (row.part && !uniqueParts.includes(row.part)) { 
+          uniqueParts.push(row.part); 
+          return true; 
+      } 
+      return false; 
+  });
+  
+  // 2. 유닛 1~8까지 카드 생성 루프
+  for (let u = 0; u < 8; u++) {
+    // [디자인] 카드 스타일 (Tailwind 적용)
+    // Unit 제목
+    htmlContent += `
+        <div class="w-full bg-[#1c1c1c] rounded-2xl p-5 border border-neutral-800 shadow-lg mb-4">
+            <h3 class="text-[#39FF14] font-bold text-base border-b border-neutral-800 pb-2 mb-3 tracking-wider">
+                Unit ${u+1}
+            </h3>
+            <div class="space-y-2">
     `;
+    
+    // 내부 데이터 반복 (파트별 점수)
+    filteredData.forEach(row => {
+      let val = row.units[u] || "-";
+      
+      // [로직] 숫자인 경우 % 붙이기 logic
+      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1) {
+          val = Math.round(parseFloat(val) * 100) + "%";
+      }
+      
+      // [로직] 100%이거나 완료된 항목은 초록색 표시 logic
+      const isDone = (val === "100%" || String(val).includes("완료"));
+      const colorClass = isDone ? "text-[#39FF14] font-bold" : "text-white font-medium";
+      const icon = isDone ? "check_circle" : "remove_circle_outline";
+      const iconColor = isDone ? "text-[#39FF14]" : "text-neutral-700";
 
-    // 카드 리스트 생성
-    data.forEach(item => {
-        let starsHtml = '';
-        for(let i=0; i<3; i++) {
-            if(i < item.stars) starsHtml += '<span class="material-icons-round text-[#39FF14] text-lg">star</span>';
-            else starsHtml += '<span class="material-icons-round text-neutral-700 text-lg">star</span>';
-        }
-
-        let borderColor = 'border-neutral-800';
-        let opacity = 'opacity-100';
-        let icon = 'check_circle';
-        let iconColor = 'text-[#39FF14]';
-
-        if (item.status === 'current') {
-            borderColor = 'border-[#39FF14]';
-            icon = 'play_circle';
-            iconColor = 'text-white';
-        } else if (item.status === 'locked') {
-            opacity = 'opacity-50';
-            icon = 'lock';
-            iconColor = 'text-neutral-600';
-            starsHtml = '';
-        }
-
-        htmlContent += `
-            <div class="w-full bg-[#1c1c1c] rounded-2xl p-5 border ${borderColor} ${opacity} shadow-lg transition-transform active:scale-95 flex items-center justify-between">
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-[#39FF14] text-xs font-bold tracking-widest">UNIT ${item.unit}</span>
-                        <span class="text-neutral-500 text-[10px]">${item.date}</span>
-                    </div>
-                    <h3 class="text-white font-bold text-base mb-2">${item.title}</h3>
-                    <div class="flex gap-1">${starsHtml}</div>
-                </div>
-                <div class="flex flex-col items-center justify-center pl-4 border-l border-neutral-800">
-                    <span class="material-icons-round ${iconColor} text-3xl">${icon}</span>
-                </div>
-            </div>
-        `;
+      // [디자인] 행(Row) 출력
+      htmlContent += `
+          <div class="flex justify-between items-center text-sm">
+              <span class="text-neutral-400 text-xs">${row.part}</span>
+              <div class="flex items-center gap-2">
+                  <span class="${colorClass}">${val}</span>
+                  <span class="material-icons-round ${iconColor} text-sm">${icon}</span>
+              </div>
+          </div>
+      `;
     });
 
-    htmlContent += `</div>`;
+    htmlContent += `</div></div>`; // 카드 닫기
+  }
+  // -----------------------------------------------------------
 
-    // Back 버튼
-    htmlContent += `
-        <div class="mt-8 w-full shrink-0">
-            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
-                Back to Menu
-            </button>
-        </div>
-    `;
+  htmlContent += `</div>`; // results-content 닫기
 
-    container.innerHTML = htmlContent;
+  // [디자인] 하단 Back 버튼 추가 (스크롤 영역 내부)
+  htmlContent += `
+      <div class="mt-8 w-full shrink-0">
+          <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+              Back to Menu
+          </button>
+      </div>
+  `;
+
+  container.innerHTML = htmlContent;
 }
 
 // [3] 나머지 버튼 (준비중)
