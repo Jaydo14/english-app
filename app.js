@@ -428,23 +428,26 @@ function playSentence() {
 
   // 4. 오디오 재생
   if (item.audio) {
-    player.src = BASE_URL + currentType + "/" + item.audio;
+    // 🚨 [수정된 부분] currentType 뒤에 "u"를 붙여야 올바른 폴더(fc21u)를 찾습니다!
+    // 기존: BASE_URL + currentType + "/" + item.audio;
+    player.src = BASE_URL + currentType + "u/" + item.audio;
+    
     // 아이폰 오디오 정책 호환성 (Promise catch)
     player.play().catch(e => console.log("재생 오류", e));
   } else {
     alert("오디오 파일 정보가 없습니다.");
   }
 
-  // ⭐ [여기가 핵심 수정됨] 오디오가 끝났을 때의 행동
+  // 5. 오디오가 끝났을 때의 행동
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; // 글씨 노란색 변경
     
     // ⏳ 아이폰을 위해 0.3초(300ms) 기다렸다가 마이크 켜기
     setTimeout(() => {
       try { 
-        recognizer.start(); // 음성인식 시작!
+        if (typeof recognizer !== 'undefined') recognizer.start(); 
       } catch(e) {
-        // 이미 켜져 있거나 에러가 나도 무시하고 넘어감
+        // 이미 켜져 있거나 에러가 나도 무시
       }
     }, 300);
   };
