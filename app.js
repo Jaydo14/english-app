@@ -1345,3 +1345,8 @@ function renderNoticePage(noticeText) {
         </div>
     `;
 }
+
+// [추가] 공지사항에서 돌아가기 버튼 기능
+window.goBackToUnits = function() {
+    showBox('unit-selector');
+};
