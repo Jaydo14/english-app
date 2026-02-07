@@ -408,6 +408,8 @@ async function loadStudyData(fileName) {
 
 // [app.js 수정] startStudy 함수 내부
 window.startStudy = function () { 
+  // 👇 [추가] 아이폰에서 소리 나게 하려면 이게 필수입니다!
+    unlockIOSAudio();
     document.getElementById("start-btn").innerText = "Listen again";
     
     // [수정] Skip 버튼이 나타나면서 Back 버튼과 나란히 배치됨
@@ -425,45 +427,44 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시
+// 8. 재생 및 화면 표시 (아이폰 패치 적용)
 // ----------------------
 function playSentence() {
-  // 1. 기존 스타일 초기화
   sentenceText.classList.remove("success", "fail");
   sentenceText.style.color = "#fff"; 
   
-  // 2. 텍스트 화면에 뿌리기
   const item = currentData[index];
   sentenceText.innerText = item.en;
   sentenceKor.innerText = item.ko;
   
-  // 3. 진행바 업데이트
   updateProgress();
 
-  // 4. 오디오 재생
   if (item.audio) {
-    // 🚨 [수정된 부분] currentType 뒤에 "u"를 붙여야 올바른 폴더(fc21u)를 찾습니다!
-    // 기존: BASE_URL + currentType + "/" + item.audio;
     player.src = BASE_URL + currentType + "u/" + item.audio;
-    
-    // 아이폰 오디오 정책 호환성 (Promise catch)
     player.play().catch(e => console.log("재생 오류", e));
   } else {
     alert("오디오 파일 정보가 없습니다.");
   }
 
-  // 5. 오디오가 끝났을 때의 행동
+  // ⭐ [핵심 수정] 오디오가 끝난 후 아이폰 대응 로직
   player.onended = () => {
-    sentenceText.style.color = "#ffff00"; // 글씨 노란색 변경
+    sentenceText.style.color = "#ffff00"; 
     
-    // ⏳ 아이폰을 위해 0.3초(300ms) 기다렸다가 마이크 켜기
+    // 1. 혹시 켜져 있을 마이크를 확실히 끕니다.
+    if (typeof recognizer !== 'undefined') {
+        try { recognizer.abort(); } catch(e) {}
+    }
+
+    // 2. 아이폰은 0.8초 정도 넉넉히 기다려야 마이크 권한이 돌아옵니다.
     setTimeout(() => {
       try { 
-        if (typeof recognizer !== 'undefined') recognizer.start(); 
+        if (typeof recognizer !== 'undefined') {
+            recognizer.start(); 
+        }
       } catch(e) {
-        // 이미 켜져 있거나 에러가 나도 무시
+        console.log("마이크 시작 오류 (재시도 필요)", e);
       }
-    }, 300);
+    }, 800); // 300 -> 800으로 변경 (안전하게)
   };
 }
 
@@ -1456,3 +1457,15 @@ function renderNoticePage(noticeText) {
 window.goBackToUnits = function() {
     showBox('unit-selector');
 };
+
+// [아이폰 전용] 오디오 잠금 해제 함수
+function unlockIOSAudio() {
+    const audios = [successSound, failSound, player];
+    audios.forEach(audio => {
+        audio.volume = 0;      // 소리 안 나게
+        audio.play().catch(() => {}); // 강제 재생 시도
+        audio.pause();         // 바로 정지
+        audio.currentTime = 0; // 되감기
+        audio.volume = 1;      // 소리 다시 켜기
+    });
+}
