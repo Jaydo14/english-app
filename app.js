@@ -1293,17 +1293,21 @@ window.showNotice = async function() {
     }
 };
 
-// [최종 솔루션] 직접 수치 조절이 가능한 정중앙 정렬 코드
+// [최종 디자인 보정] NOTICE 페이지: 박스 크기 확대 + 공백 제거 + 완벽 정중앙 정렬
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
+    
     if (!container) {
         container = document.createElement('div');
         container.id = 'notice-box';
         document.body.appendChild(container);
     }
 
-    // 1. 전체 틀: flex-grow가 잘 작동하도록 h-full(전체높이)을 강제합니다.
-    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-hidden px-6 flex flex-col items-center pt-4";
+    // 1. 텍스트 앞뒤의 모든 공백(스페이스, 줄바꿈 등)을 제거하여 정렬 오류를 방지합니다.
+    const cleanNotice = (noticeText || "").trim();
+
+    // 전체 레이아웃 설정
+    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     container.innerHTML = `
         <div class="w-full mb-5 shrink-0">
@@ -1313,14 +1317,15 @@ function renderNoticePage(noticeText) {
             </div>
         </div>
 
-        <div class="w-full flex-grow relative mb-4">
-            <div class="w-full h-full bg-[#111] rounded-none border border-neutral-800 shadow-lg relative grid place-items-center overflow-hidden z-10">
+        <div class="w-full flex-grow min-h-[450px] relative flex flex-col mb-4">
+            
+            <div class="bg-[#111] rounded-none border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-12 overflow-hidden z-10">
                 
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
-                <div class="relative z-20 w-full px-10 pt-0 pb-0"> 
-                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center">
-                        ${noticeText}
+                <div class="relative z-20 w-full flex justify-center items-center">
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center w-full">
+                        ${cleanNotice}
                     </p>
                 </div>
             </div>
