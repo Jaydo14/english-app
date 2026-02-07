@@ -451,7 +451,7 @@ function playSentence() {
 }
 
 // ----------------------
-// 9. 음성 인식
+// 9. 음성 인식 (수정됨: 잘린 코드 복구)
 // ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
@@ -461,28 +461,54 @@ recognizer.maxAlternatives = 1;
 // 🚨 [수정] 아이폰은 false가 더 안정적입니다.
 recognizer.continuous = false;
 
+// 👇 [이 부분이 잘려 있었습니다. 복구 완료!]
+recognizer.onresult = (event) => {
+  const spoken = event.results[0][0].transcript;
+  const item = currentData[index];
+  const target = item.en;
+  const sText = document.getElementById("sentence"); // 텍스트 요소 가져오기
+
   if (checkSimilarity(spoken, target) >= 0.5) {
     successSound.play(); 
     const praise = praiseList[Math.floor(Math.random() * praiseList.length)];
-    sText.innerText = praise; sText.style.color = "#39ff14";
+    sText.innerText = praise; 
+    sText.style.color = "#39ff14";
+    
+    // 정답 시 흔들림 효과 제거
+    sText.classList.remove("shake");
+    
     setTimeout(nextStep, 700);
   } else {
     failSound.play(); 
-    sText.innerText = "Try again"; sText.style.color = "#ff4b4b";
-    sText.classList.remove("shake"); void sText.offsetWidth; sText.classList.add("shake");
+    sText.innerText = "Try again"; 
+    sText.style.color = "#ff4b4b";
+    
+    // 오답 시 흔들림 효과
+    sText.classList.remove("shake"); 
+    void sText.offsetWidth; // 리플로우 강제 (애니메이션 재시작용)
+    sText.classList.add("shake");
+    
     setTimeout(playSentence, 800);
   }
 };
 
+// 유사도 검사 함수
 function checkSimilarity(spoken, target) {
-  const sWords = spoken.split(' ');
-  const tWords = target.split(' ');
+  const clean = (str) => str.toLowerCase().replace(/[.,?!'"]/g, "").trim();
+  const sWords = clean(spoken).split(/\s+/);
+  const tWords = clean(target).split(/\s+/);
+  
   let cnt = 0;
-  tWords.forEach(w => { if(spoken.includes(w)) cnt++; });
+  tWords.forEach(w => { 
+    if(clean(spoken).includes(w)) cnt++; 
+  });
+  
   return cnt / tWords.length;
 }
 
-function startRecognition() { try { recognizer.start(); } catch(e) {} }
+function startRecognition() { 
+  try { recognizer.start(); } catch(e) {} 
+}
 
 window.nextStep = function() {
   index++; if (index >= currentData.length) { index = 0; cycle++; }
