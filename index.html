@@ -231,66 +231,45 @@
 <script src="app.js"></script>
     
 <script>
-    // ============================================================
-    // [1] 보안 기능: 우클릭 및 개발자 도구(F12) 방지
-    // ============================================================
+    // [1] 보안: 우클릭/F12 방지
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function(e) {
-        if(e.keyCode == 123) { return false; } // F12
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Ctrl+Shift+C
-        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
-        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U
+        if(e.keyCode == 123) return false; 
+        if(e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false; 
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; 
     }
 
-    // ============================================================
-    // [2] 화면 꺼짐 방지 (Wake Lock API)
-    // ============================================================
+    // [2] 화면 유지 (WakeLock)
     let wakeLock = null;
-
     async function toggleScreenKeepAwake(enable) {
         try {
             if ('wakeLock' in navigator) {
-                if (enable) {
-                    if (!wakeLock) {
-                        wakeLock = await navigator.wakeLock.request('screen');
-                        console.log('💡 Screen Wake Lock Active');
-                    }
-                } else {
-                    if (wakeLock) {
-                        await wakeLock.release();
-                        wakeLock = null;
-                        console.log('🌑 Screen Wake Lock Released');
-                    }
-                }
+                if (enable && !wakeLock) wakeLock = await navigator.wakeLock.request('screen');
+                else if (!enable && wakeLock) { await wakeLock.release(); wakeLock = null; }
             }
-        } catch (err) {
-            console.log(`Wake Lock Error: ${err.name}, ${err.message}`);
-        }
+        } catch (err) { console.log(err); }
     }
 
-    // ============================================================
-    // [3] 화면 전환 관리 함수 (이 부분이 핵심 수정됨!)
-    // ============================================================
+    // [3] 화면 전환 관리 (강력 초기화)
     window.showBox = function(boxId) {
-        // 관리할 모든 화면의 ID 리스트 (여기에 notice-box가 꼭 있어야 겹치지 않습니다)
-        const boxes = [
+        // 모든 화면 ID 목록
+        const allBoxes = [
             'login-box', 'unit-selector', 'menu-box', 'study-box', 
             'repeat-box', 'dev-box', 'as-box', 'results-box', 
             'as-record-box', 'report-box', 'profile-box', 'notice-box'
         ];
         
-        // 1. 모든 박스를 일단 다 숨김 (display: none)
-        boxes.forEach(id => {
+        // 1. 모든 박스를 강제로 숨김 (display: none !important)
+        allBoxes.forEach(id => {
             const el = document.getElementById(id);
-            if(el) el.style.display = 'none'; // 일단 다 끔
+            if(el) el.style.cssText = 'display: none !important';
         });
 
-        // 2. 선택된 박스만 켬
-        const targetEl = document.getElementById(boxId);
-        if(targetEl) targetEl.style.display = 'block';
-        
-        // 3. 로그인 화면 및 하단 바 제어
+        // 2. 선택한 박스만 켬
+        const target = document.getElementById(boxId);
+        if(target) target.style.cssText = 'display: block !important';
+
+        // 3. 레이아웃(Nav Bar 등) 정리
         const isLogin = (boxId === 'login-box');
         const appEl = document.getElementById("app");
         const loginEl = document.getElementById('login-box');
@@ -300,74 +279,60 @@
         if(loginEl) loginEl.style.display = isLogin ? 'flex' : 'none';
         if(navBar) navBar.style.display = isLogin ? 'none' : 'flex';
 
-        // 4. 학습 화면일 때만 화면 켜짐 유지
-        if (boxId === 'study-box' || boxId === 'repeat-box') {
-            toggleScreenKeepAwake(true);
-        } else {
-            toggleScreenKeepAwake(false);
-        }
+        // 4. 화면 유지 설정
+        if (boxId === 'study-box' || boxId === 'repeat-box') toggleScreenKeepAwake(true);
+        else toggleScreenKeepAwake(false);
 
-        // 5. 네비게이션 버튼 색상 업데이트 실행
+        // 5. 네비게이션 색상 업데이트
         updateNavState(boxId);
     }
 
-    // ============================================================
-    // [4] 네비게이션 버튼 색상 제어 함수
-    // ============================================================
+    // [4] 네비게이션 색상 제어 (녹색 고정 해결)
     function updateNavState(currentBox) {
         const navBtns = document.querySelectorAll('#bottom-nav button');
-        if (navBtns.length === 0) return;
+        if (!navBtns.length) return;
 
-        // [A] 초기화: 모든 버튼을 강제로 '회색(#737373)'으로 끔 (HTML 클래스 무시하고 덮어씌움)
+        // A. 모든 버튼 회색으로 초기화
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
             const text = btn.querySelector('span:last-child');
-            if(icon) icon.style.cssText = 'color: #737373 !important;'; 
-            if(text) text.style.cssText = 'color: #737373 !important;';
+            if(icon) icon.style.cssText = 'color: #737373 !important';
+            if(text) text.style.cssText = 'color: #737373 !important';
         });
 
-        // [B] 현재 화면에 맞는 버튼 번호(Index) 찾기
-        let activeIndex = -1; 
-        
-        // 1번 버튼: UNIT (유닛 목록, 메뉴, 학습 화면 등)
-        if (currentBox === 'unit-selector' || currentBox === 'menu-box' || currentBox === 'study-box' || currentBox === 'repeat-box' || currentBox === 'as-box') {
-            activeIndex = 0; 
-        } 
-        // 2번 버튼: PROGRESS REPORT (리포트 관련)
-        else if (currentBox === 'results-box' || currentBox === 'report-box') { 
-            activeIndex = 1; 
-        } 
-        // 3번 버튼: PROFILE (프로필)
-        else if (currentBox === 'profile-box') {
-            activeIndex = 2; 
-        } 
-        // 4번 버튼: NOTICE (공지사항)
-        else if (currentBox === 'notice-box') {
-            activeIndex = 3; 
-        }
+        // B. 켤 버튼 찾기
+        let idx = -1;
+        if (['unit-selector', 'menu-box', 'study-box', 'repeat-box', 'as-box'].includes(currentBox)) idx = 0;
+        else if (['results-box', 'report-box'].includes(currentBox)) idx = 1;
+        else if (currentBox === 'profile-box') idx = 2;
+        else if (currentBox === 'notice-box') idx = 3;
 
-        // [C] 해당 버튼만 '형광 녹색(#39FF14)'으로 켜기
-        if (activeIndex >= 0 && navBtns[activeIndex]) {
-            const activeBtn = navBtns[activeIndex];
-            const icon = activeBtn.querySelector('.material-icons-round');
-            const text = activeBtn.querySelector('span:last-child');
-            if(icon) icon.style.cssText = 'color: #39FF14 !important;';
-            if(text) text.style.cssText = 'color: #39FF14 !important;';
+        // C. 해당 버튼만 형광 녹색
+        if (idx >= 0 && navBtns[idx]) {
+            const active = navBtns[idx];
+            const icon = active.querySelector('.material-icons-round');
+            const text = active.querySelector('span:last-child');
+            if(icon) icon.style.cssText = 'color: #39FF14 !important';
+            if(text) text.style.cssText = 'color: #39FF14 !important';
         }
     }
 
-    // [5] 브라우저 탭 복귀 시 화면 켜짐 상태 재확인
-    document.addEventListener('visibilitychange', async () => {
+    // [5] 공지사항 뒤로가기 버튼 기능 (HTML 내장)
+    window.goBackToUnits = function() {
+        showBox('unit-selector');
+    };
+
+    // 탭 복귀 시 화면 유지 재확인
+    document.addEventListener('visibilitychange', () => {
         const studyBox = document.getElementById('study-box');
-        const repeatBox = document.getElementById('repeat-box');
-        if (document.visibilityState === 'visible' && 
-           (studyBox.style.display === 'block' || repeatBox.style.display === 'block')) {
-            await toggleScreenKeepAwake(true);
+        if (document.visibilityState === 'visible' && studyBox && studyBox.style.display !== 'none') {
+            toggleScreenKeepAwake(true);
         }
     });
 </script>
 </body>
 </html>
+
 
 
 
