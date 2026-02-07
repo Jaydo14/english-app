@@ -1293,8 +1293,7 @@ window.showNotice = async function() {
     }
 };
 
-// app.js의 renderNoticePage 함수를 아래 코드로 교체하세요.
-
+// [수정] 공지사항 화면 (상단 박스 크기 확대 + 텍스트 정중앙 정렬 + 영어 삭제)
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1304,47 +1303,42 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 상단 여백 설정 (로고와 겹치지 않게 고정)
+    // 상단 여백 설정 (로고 공간 확보)
     container.className = "fixed top-[140px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     container.innerHTML = `
-        <div class="w-full flex justify-center mb-6">
-            <div class="bg-[#0a0a0a] border border-neutral-800 px-8 py-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.05)] text-center">
-                <p class="text-neutral-500 text-[9px] font-mono tracking-[0.3em] uppercase mb-1">System Broadcast</p>
-                <h1 class="text-white text-3xl font-black tracking-tighter uppercase leading-none">NOTICE</h1>
+        <div class="w-full mb-6">
+            <div class="bg-[#0a0a0a] border border-neutral-800 py-5 rounded-2xl text-center shadow-[0_0_15px_rgba(255,255,255,0.03)]">
+                <p class="text-neutral-600 text-[10px] font-mono tracking-[0.4em] uppercase mb-1">System Broadcast</p>
+                <h1 class="text-white text-3xl font-black tracking-widest uppercase leading-none">NOTICE</h1>
             </div>
         </div>
 
-        <div class="w-full bg-[#111] rounded-3xl p-10 border border-neutral-800 shadow-lg relative min-h-[420px] flex flex-col items-center justify-center overflow-hidden group">
+        <div class="w-full bg-[#111] rounded-3xl border border-neutral-800 shadow-lg relative min-h-[400px] flex flex-col items-center justify-center p-10 overflow-hidden">
             
-            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
-            <div class="relative z-10 flex flex-col items-center text-center space-y-6">
-                <div class="bg-[#1c1c1c] p-5 rounded-full border border-[#39FF14]/20 shadow-[0_0_20px_rgba(57,255,20,0.1)]">
+            <div class="relative z-10 flex flex-col items-center text-center">
+                <div class="bg-[#1c1c1c] w-20 h-20 rounded-full border border-[#39FF14]/20 flex items-center justify-center shadow-[0_0_25px_rgba(57,255,20,0.1)] mb-10">
                     <span class="material-icons-round text-[#39FF14] text-5xl">info</span>
                 </div>
                 
-                <div class="space-y-3">
-                    <p class="text-white text-2xl font-bold leading-relaxed break-keep whitespace-pre-wrap font-display">
+                <div class="max-w-[280px]">
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap">
                         ${noticeText}
                     </p>
-                    <p class="text-neutral-600 text-sm font-mono tracking-wide">
-                        No notifications found.
-                    </p>
                 </div>
-            </div>
+                
+                </div>
             
-            <div class="absolute bottom-8 left-10 right-10 flex justify-between items-center opacity-40">
-                <div class="flex gap-1.5">
-                    <div class="w-6 h-1 bg-[#39FF14] rounded-full"></div>
-                    <div class="w-2 h-1 bg-[#39FF14]/50 rounded-full"></div>
-                </div>
-                <p class="text-neutral-700 font-mono text-[8px] tracking-[0.4em] italic uppercase">Encrypted Data Stream</p>
+            <div class="absolute bottom-8 flex gap-2">
+                <div class="w-2 h-1 bg-[#39FF14] rounded-full"></div>
+                <div class="w-6 h-1 bg-[#39FF14]/20 rounded-full"></div>
             </div>
         </div>
 
-        <div class="mt-8 w-full pb-10">
-            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-400 font-bold tracking-[0.2em] text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase flex items-center justify-center gap-3">
+        <div class="mt-10 w-full pb-10">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase flex items-center justify-center gap-3">
                 <span class="material-icons-round text-lg">arrow_back</span>
                 RETURN TO UNIT LIST
             </button>
