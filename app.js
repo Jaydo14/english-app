@@ -1,1 +1,1346 @@
-let vmV=typeof globalThis!=='undefined'?globalThis:typeof window!=='undefined'?window:global,vmM=Object['defineProperty'],vmI=Object['create'],vmO=Object['getOwnPropertyDescriptor'],vmP=Object['getOwnPropertyNames'],vmk=Object['getOwnPropertySymbols'],vmD=Object['setPrototypeOf'],vmU=Object['getPrototypeOf'],vmN_8b241f=vmV['vmN_8b241f']||(vmV['vmN_8b241f']={});const vml_fb5f1a=(function(){let v=[{'i':[0x8,0x0,0x4b,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x1,0x7,0x1,0x6,0x1,0x34,null,0x6,0x1,0x46,0x3,0x0,0x4,0x47,0x5,0x3,null],'c':['document','getElementById',0x1,'style','none','display'],'p':0x1,'l':0x1,'j':{0x8:0xe},'a':0x1,'sp':0x1},{'i':[0x5a,null,0x0,0x0,0x5b,null,0x0,0x1,0x5b,null,0x0,0x2,0x5b,null,0x0,0x3,0x5b,null,0x0,0x4,0x5b,null,0x0,0x5,0x5b,null,0x0,0x6,0x5b,null,0x0,0x7,0x5b,null,0x0,0x8,0x5b,null,0x0,0x9,0x5b,null,0x0,0xa,0x5b,null,0x0,0xb,0x5b,null,0x7,0x1,0x0,0xc,0x64,null,0x6,0x1,0x4,null,0x46,0xd,0x0,0xe,0x37,0x1,0x3,null,0x8,0x0,0x4b,0xf,0x4,null,0x46,0x10,0x0,0xe,0x37,0x1,0x7,0x2,0x6,0x2,0x34,null,0x6,0x2,0x46,0x11,0x0,0x12,0x47,0x13,0x3,null,0x0,0x14,0x4b,0xf,0x4,null,0x46,0x10,0x0,0xe,0x37,0x1,0x7,0x3,0x0,0x0,0x4b,0xf,0x4,null,0x46,0x10,0x0,0xe,0x37,0x1,0x7,0x4,0x0,0x15,0x4b,0xf,0x4,null,0x46,0x10,0x0,0xe,0x37,0x1,0x7,0x5,0x8,0x0,0x0,0x0,0x2a,null,0x34,null,0x6,0x3,0x34,null,0x6,0x3,0x46,0x11,0x0,0x16,0x47,0x13,0x3,null,0x6,0x4,0x34,null,0x6,0x4,0x46,0x11,0x0,0x17,0x47,0x13,0x3,null,0x6,0x5,0x34,null,0x6,0x5,0x46,0x11,0x0,0x16,0x47,0x13,0x3,null,0x32,null,0x6,0x3,0x34,null,0x6,0x3,0x46,0x11,0x0,0x17,0x47,0x13,0x3,null,0x6,0x4,0x34,null,0x6,0x4,0x46,0x11,0x0,0x16,0x47,0x13,0x3,null,0x6,0x5,0x34,null,0x6,0x5,0x46,0x11,0x0,0x17,0x47,0x13,0x3,null,0x8,0x0,0x0,0x3,0x2a,null,0x4,null,0x33,null,0x3,null,0x8,0x0,0x0,0x4,0x2a,null,0x34,null,0xd3,0x18,0x6e,null,0x0,0x19,0x2a,null,0x34,null,0xd3,0x18,0x0,0x1a,0x36,0x0,0x3,null,0x8,0x0,0xd3,0x1b,0x0,0xe,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['login-box','unit-selector','menu-box','study-box','repeat-box','dev-box','as-box','results-box','as-record-box','report-box','profile-box','notice-box',0x0,'forEach',0x1,'document','getElementById','style','block','display','app','bottom-nav','none','flex','requestWakeLock','function',0x0,'updateNavStateInApp'],'p':0x1,'l':0x5,'j':{0x2a:0x30,0x48:0x5f,0x4a:0x50,0x51:0x57,0x58:0x5e,0x5e:0x74,0x60:0x66,0x67:0x6d,0x6e:0x74,0x78:0x7d,0x7d:0x87,0x82:0x87},'sp':0x1},{'i':[0x0,0x0,0x8,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x1,0x7,0x1,0x0,0x3,0x8,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x1,0x7,0x2,0x6,0x1,0x34,null,0x6,0x1,0x46,0x4,0x0,0x5,0x47,0x6,0x3,null,0x6,0x2,0x34,null,0x6,0x2,0x46,0x4,0x0,0x5,0x47,0x6,0x3,null],'c':['.material-icons-round','querySelector',0x1,'span:last-child','style','color:\x20#737373\x20!important;','cssText'],'p':0x1,'l':0x2,'j':{0xf:0x15,0x16:0x1c},'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x1,0x6,0x1,0x46,0x4,0x0,0x5,0x2a,null,0x34,null,0x1,null,0x38,null,0x0,0x6,0x64,null,0x6,0x1,0x4,null,0x46,0x7,0x0,0x3,0x37,0x1,0x3,null,0x0,0x3,0xf,null,0x7,0x2,0x8,0x0,0x5a,null,0x0,0x8,0x5b,null,0x0,0x9,0x5b,null,0x0,0xa,0x5b,null,0x0,0xb,0x5b,null,0x0,0xc,0x5b,null,0x0,0xd,0x5b,null,0x0,0xe,0x5b,null,0x4,null,0x46,0xf,0x0,0x3,0x37,0x1,0x34,null,0x0,0x5,0x4,null,0x7,0x2,0x3,null,0x32,null,0x8,0x0,0x5a,null,0x0,0x10,0x5b,null,0x0,0x11,0x5b,null,0x4,null,0x46,0xf,0x0,0x3,0x37,0x1,0x34,null,0x0,0x3,0x4,null,0x7,0x2,0x3,null,0x32,null,0x8,0x0,0x0,0x12,0x2a,null,0x34,null,0x0,0x13,0x4,null,0x7,0x2,0x3,null,0x32,null,0x8,0x0,0x0,0x14,0x2a,null,0x34,null,0x0,0x15,0x4,null,0x7,0x2,0x3,null,0x6,0x2,0x0,0x5,0x2f,null,0x4,null,0x34,null,0x3,null,0x6,0x1,0x6,0x2,0x48,null,0x34,null,0x6,0x1,0x6,0x2,0x48,null,0x7,0x3,0x0,0x16,0x6,0x3,0x4,null,0x46,0x17,0x0,0x3,0x37,0x1,0x7,0x4,0x0,0x18,0x6,0x3,0x4,null,0x46,0x17,0x0,0x3,0x37,0x1,0x7,0x5,0x6,0x4,0x34,null,0x6,0x4,0x46,0x19,0x0,0x1a,0x47,0x1b,0x3,null,0x6,0x5,0x34,null,0x6,0x5,0x46,0x19,0x0,0x1a,0x47,0x1b,0x3,null,0x1,null,0x38,null],'c':['#bottom-nav\x20button','document','querySelectorAll',0x1,'length',0x0,0x2,'forEach','unit-selector','menu-box','study-box','repeat-box','as-box','as-record-box','dev-box','includes','results-box','report-box','profile-box',0x2,'notice-box',0x3,'.material-icons-round','querySelector','span:last-child','style','color:\x20#39FF14\x20!important;','cssText'],'p':0x1,'l':0x5,'j':{0xb:0xe,0x2d:0x33,0x32:0x54,0x3d:0x43,0x42:0x54,0x46:0x4c,0x4b:0x54,0x4f:0x54,0x58:0x5d,0x5d:0x7e,0x71:0x77,0x78:0x7e},'sp':0x1},{'i':[0x8,0x1,0x4,null,0x1,null,0x2a,null,0x34,null,0x3,null,0x2,null,0x9,0x1,0x32,null,0x3,null,0x8,0x2,0x4,null,0x1,null,0x2a,null,0x34,null,0x3,null,0x0,0x0,0x9,0x2,0x32,null,0x3,null,0xd3,0x1,0x6e,null,0x0,0x2,0x2b,null,0x34,null,0xd3,0x1,0x4,null,0x46,0x3,0x0,0x4,0x37,0x0,0x3,null,0x0,0x5,0x4b,0x6,0x4,null,0x46,0x7,0x0,0x8,0x37,0x1,0x8,0x0,0x47,0x9,0x3,null,0x0,0xa,0x4b,0x6,0x4,null,0x46,0x7,0x0,0x8,0x37,0x1,0x7,0x3,0x6,0x3,0x46,0xb,0x0,0xc,0x47,0xd,0x3,null,0x0,0xe,0x6,0x3,0x4,null,0x46,0xf,0x0,0x8,0x37,0x1,0x7,0x4,0x6,0x4,0x34,null,0x6,0x4,0x46,0xb,0x8,0x2,0x34,null,0x0,0x10,0x32,null,0x0,0x11,0x47,0xd,0x3,null,0x8,0x1,0x4,null,0xd4,0x12,0x3,null,0x1,null,0x38,null],'c':[!![],'player','undefined','pause',0x0,'modal-msg','document','getElementById',0x1,'innerText','custom-modal','style','flex','display','button','querySelector','block','none','modalCallback'],'p':0x3,'l':0x2,'j':{0x4:0x9,0x8:0xa,0xe:0x13,0x12:0x14,0x18:0x1f,0x3c:0x46,0x40:0x43,0x42:0x44}},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x46,0x4,0x0,0x5,0x47,0x6,0x3,null,0x0,0x7,0x6,0x0,0x4,null,0x46,0x8,0x0,0x3,0x37,0x1,0x7,0x1,0x6,0x1,0x34,null,0x6,0x1,0x46,0x4,0x0,0x9,0x47,0x6,0x3,null,0xd3,0xa,0x34,null,0xd3,0xa,0x0,0xb,0x36,0x0,0x3,null,0x2,null,0x4,null,0xd4,0xa,0x3,null,0x1,null,0x38,null],'c':['custom-modal','document','getElementById',0x1,'style','none','display','button','querySelector','block','modalCallback',0x0],'p':0x0,'l':0x2,'j':{0x14:0x1a,0x1b:0x24},'sp':0x1},{'i':[0x70,0x0,0x0,0x1,0x2a,null,0x34,null,0x4b,0x0,0x0,0x2,0x36,0x0,0x3,null,0xd3,0x3,0x6e,null,0x0,0x4,0x2b,null,0x4,null,0x34,null,0x3,null,0xd3,0x3,0x34,null,0xd3,0x3,0x4b,0x5,0x0,0x6,0x36,0x1,0x3,null,0x0,0x7,0xd3,0x8,0x0,0x6,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['stopRepeatAudio','function',0x0,'asTimer','undefined','clearInterval',0x1,'unit-selector','showBox'],'p':0x0,'l':0x0,'j':{0x3:0x8,0xd:0x10,0x10:0x16},'sp':0x1},{'i':[0xd3,0x0,0x6e,null,0x0,0x1,0x2b,null,0x34,null,0xd3,0x0,0x4,null,0x46,0x2,0x0,0x3,0x37,0x0,0x3,null,0x70,0x4,0x0,0x5,0x2a,null,0x34,null,0x4b,0x4,0x0,0x3,0x36,0x0,0x3,null,0xd3,0x6,0x6e,null,0x0,0x1,0x2b,null,0x4,null,0x34,null,0x3,null,0xd3,0x6,0x34,null,0xd3,0x6,0x4b,0x7,0x0,0x8,0x36,0x1,0x3,null,0xd3,0x9,0x6e,null,0x0,0x1,0x2b,null,0x4,null,0x34,null,0x3,null,0xd3,0x9,0x34,null,0xd3,0x9,0x4b,0x7,0x0,0x8,0x36,0x1,0x3,null,0xd3,0xa,0x6e,null,0x0,0x1,0x2b,null,0x4,null,0x34,null,0x3,null,0xd3,0xa,0x4,null,0x34,null,0x3,null,0xd3,0xa,0x46,0xb,0x0,0xc,0x2b,null,0x34,null,0xd3,0xa,0x4,null,0x46,0xd,0x0,0x3,0x37,0x0,0x3,null,0x0,0xe,0x4b,0xf,0x4,null,0x46,0x10,0x0,0x8,0x37,0x1,0x7,0x0,0x0,0x11,0x4b,0xf,0x4,null,0x46,0x10,0x0,0x8,0x37,0x1,0x7,0x1,0x0,0x12,0x4b,0xf,0x4,null,0x46,0x10,0x0,0x8,0x37,0x1,0x7,0x2,0x6,0x0,0x34,null,0x6,0x0,0x46,0x13,0x0,0x14,0x47,0x15,0x3,null,0x6,0x2,0x34,null,0x6,0x2,0x46,0x13,0x0,0x14,0x47,0x15,0x3,null,0x6,0x1,0x34,null,0x6,0x1,0x46,0x13,0x0,0x16,0x47,0x15,0x3,null,0x6,0x1,0x46,0x13,0x0,0x17,0x47,0x18,0x3,null,0x0,0x19,0xd3,0x1a,0x0,0x8,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['player','undefined','pause',0x0,'stopRepeatAudio','function','asTimer','clearInterval',0x1,'recordingTimer','mediaRecorder','state','inactive','stop','recording-ui','document','getElementById','as-listen-btn','submit-ui','style','none','display','flex','1','opacity','menu-box','showBox'],'p':0x0,'l':0x3,'j':{0x4:0xb,0xe:0x13,0x18:0x1b,0x1b:0x21,0x26:0x29,0x29:0x2f,0x34:0x37,0x38:0x3e,0x3e:0x45,0x5b:0x61,0x62:0x68,0x69:0x74},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0xd3,0x1,0x0,0x2,0x36,0x1,0x3,null,0xd3,0x3,0x0,0x4,0x47,0x5,0x3,null],'c':['접속\x20오류','showCustomModal',0x1,'_0xf778b3',![],'disabled'],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0x0,0x1,0x2a,null,0x34,null,0x8,0x0,0x46,0x2,0x4,null,0xd4,0x3,0x3,null,0x8,0x0,0x46,0x4,0x4,null,0xd4,0x5,0x3,null,0xd3,0x6,0x0,0x7,0x36,0x0,0x3,null,0x0,0x8,0xd3,0x9,0x0,0xa,0x36,0x1,0x3,null,0x0,0xb,0xd3,0x5,0xa,null,0x0,0xc,0xa,null,0xd3,0xd,0x0,0xa,0x36,0x1,0x3,null,0x32,null,0x0,0xe,0xd3,0xd,0x0,0xa,0x36,0x1,0x3,null,0xd3,0xf,0x0,0x10,0x47,0x11,0x3,null,0xd3,0xf,0x0,0x12,0x47,0x13,0x3,null],'c':['result','success','type','currentType','name','userName','renderUnitButtons',0x0,'unit-selector','showBox',0x1,'','님,\x20🔥오늘도\x20화이팅\x20입니다!🔥','showCustomModal','등록되지\x20않은\x20번호입니다.','_0xf778b3',![],'disabled','Login','innerText'],'p':0x1,'l':0x0,'j':{0x6:0x24,0x23:0x31},'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x4,null,0x46,0x0,0x0,0x1,0x37,0x0,0x38,null],'c':['json',0x0],'p':0x1,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xda,0x0,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7,0x0,0x6,0x0,0x46,0x5,0x4,null,0x46,0x6,0x0,0x7,0x37,0x0,0x7,0x1,0x6,0x1,0x46,0x8,0x0,0x4,0x2c,null,0x34,null,0x0,0x9,0xd3,0xa,0x0,0x4,0x36,0x1,0x38,null,0x0,0xb,0x4b,0x2,0x4,null,0x46,0xc,0x0,0x4,0x37,0x1,0xd9,0x0,0xd3,0x0,0x0,0xd,0x47,0xe,0x3,null,0xd3,0x0,0x0,0xf,0x47,0x10,0x3,null,0x0,0x11,0x64,null,0x0,0x12,0x64,null,0x0,0x13,0x64,null,0xd3,0x14,0x0,0x15,0xa,null,0x6,0x1,0xa,null,0x4b,0x16,0x0,0x4,0x36,0x1,0x4,null,0x46,0x17,0x0,0x4,0x37,0x1,0x4,null,0x46,0x17,0x0,0x4,0x37,0x1,0x4,null,0x46,0x18,0x0,0x4,0x37,0x1,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0xf778b3','phone-input','document','getElementById',0x1,'value','trim',0x0,'length','번호를\x20입력해주세요.','showCustomModal','#login-box\x20button','querySelector',!![],'disabled','CHECKING...','innerText',0x8,0x9,0xa,'GOOGLE_SCRIPT_URL','?phone=','fetch','then','catch'],'p':0x0,'l':0x3,'j':{0x15:0x1b},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x4,null,0xd4,0x1,0x3,null,0x0,0x2,0xd3,0x3,0x0,0x4,0x36,0x1,0x3,null],'c':['_0x3ffdde','currentUnit','menu-box','showBox',0x1],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x0,0x4,0x47,0x5,0x3,null,0xd3,0x6,0xd3,0x7,0x48,null,0x4,null,0x33,null,0x3,null,0x4d,null,0x7,0x1,0x4d,null,0x4,null,0x5a,null,0x0,0x8,0x5b,null,0x0,0x9,0x5b,null,0x0,0xa,0x5b,null,0x0,0xb,0x5b,null,0x0,0xc,0x5b,null,0x0,0xd,0x5b,null,0x0,0xe,0x5b,null,0x0,0xf,0x5b,null,0x47,0x10,0x3,null,0x4,null,0x5a,null,0x0,0x11,0x5b,null,0x0,0x12,0x5b,null,0x0,0x13,0x5b,null,0x0,0x14,0x5b,null,0x0,0x15,0x5b,null,0x0,0x16,0x5b,null,0x0,0x17,0x5b,null,0x0,0x18,0x5b,null,0x47,0x19,0x3,null,0x7,0x2,0x6,0x2,0xd3,0x7,0x48,null,0x4,null,0x33,null,0x3,null,0x6,0x2,0x0,0x10,0x48,null,0x7,0x3,0x0,0x3,0xd7,0x1a,0xd5,0x0,0xd2,0x0,0xd3,0x1a,0xd7,0x1a,0xd3,0x1a,0x0,0x1b,0x2d,null,0x34,null,0xd5,0x0,0xd2,0x0,0xda,0x1c,0xda,0x1d,0xda,0x1e,0x6,0x1,0xd3,0x1a,0x48,null,0x4,null,0x33,null,0x3,null,0x0,0x1f,0xd9,0x1c,0x6,0x3,0xd3,0x1a,0x0,0x3,0xb,null,0x48,null,0x4,null,0x33,null,0x3,null,0x0,0x20,0xd9,0x1d,0x0,0x21,0x4b,0x1,0x4,null,0x46,0x22,0x0,0x3,0x37,0x1,0xd9,0x1e,0xd3,0x1e,0x0,0x23,0x47,0x24,0x3,null,0xd3,0x1e,0x0,0x25,0xd3,0x1d,0xa,null,0x0,0x26,0xa,null,0x0,0x27,0x0,0x28,0xd3,0x1a,0x4b,0x29,0x0,0x3,0x36,0x1,0x4,null,0x46,0x2a,0x0,0x27,0x37,0x2,0xa,null,0x0,0x2b,0xa,null,0xd3,0x1c,0xa,null,0x0,0x2c,0xa,null,0x47,0x5,0x3,null,0xd3,0x1e,0x0,0x2d,0x64,null,0x47,0x2e,0x3,null,0xd3,0x1e,0x6,0x0,0x4,null,0x46,0x2f,0x0,0x3,0x37,0x1,0x3,null,0xd6,0x0,0xd3,0x1a,0xd6,0x0,0xd5,0x0,0xd2,0x0,0xd7,0x1a,0xd3,0x1a,0x1c,null,0x4,null,0x10,null,0xd4,0x1a,0x3,null,0x32,null,0xd6,0x0,0xd6,0x0,0x1,null,0x38,null],'c':['unit-buttons','document','getElementById',0x1,'','innerHTML','bookDatabase','currentType','music_note','explore','local_cafe','movie','restaurant','flight_takeoff','celebration','switch_account','hc12','restaurant_menu','cake','payments','work','theaters','eco','backpack','school','fc21','_0x3ffdde',0x8,'_0x4599d0$$2','_0x399c7e$$2','_0x2c60cc$$2','Locked','lock','button','createElement','w-full\x20bg-[#1c1c1c]\x20rounded-2xl\x20p-4\x20flex\x20items-center\x20justify-between\x20mb-1\x20active:scale-[0.98]\x20transition-transform\x20border\x20border-transparent\x20hover:border-neutral-800','className','\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20gap-5\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-12\x20h-12\x20rounded-xl\x20bg-[#1a2e1a]\x20flex\x20items-center\x20justify-center\x20text-[#39FF14]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-2xl\x22>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22text-left\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-[10px]\x20font-mono\x20font-bold\x20text-[#39FF14]\x20uppercase\x20tracking-wider\x20mb-1\x22>UNIT\x20',0x2,'0','String','padStart','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h3\x20class=\x22text-lg\x20font-bold\x20text-white\x20leading-none\x22>','</h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-neutral-600\x20text-3xl\x22>chevron_right</span>\x0a\x20\x20\x20\x20',0xc,'onclick','appendChild'],'p':0x0,'l':0x8,'j':{0x11:0x14,0x43:0x48,0x52:0xa7,0x5c:0x5f,0x66:0x69,0xa6:0x4f},'sp':0x1},{'i':[0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0x0,0x0,0x4b,0x2,0x0,0x3,0x36,0x1,0x3,null,0x0,0x4,0x4,null,0xd4,0x5,0x3,null,0x0,0x6,0xd3,0x7,0xa,null,0x0,0x8,0xa,null,0xd3,0x9,0xa,null,0x0,0xa,0xa,null,0xd3,0xb,0x0,0x3,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['Script','currentPart','checkResumeStatus',0x1,0x12,'currentTotalCycles','','currentType','u','currentUnit','.json','loadStudyData'],'p':0x0,'l':0x0,'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0x0,0x0,0x4b,0x2,0x0,0x3,0x36,0x1,0x3,null,0x0,0x4,0x4,null,0xd4,0x5,0x3,null,0x0,0x6,0xd3,0x7,0xa,null,0x0,0x8,0xa,null,0xd3,0x9,0xa,null,0x0,0xa,0xa,null,0xd3,0xb,0x0,0x3,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['Vocab','currentPart','checkResumeStatus',0x1,0xa,'currentTotalCycles','','currentType','u','currentUnit','_voca.json','loadStudyData'],'p':0x0,'l':0x0,'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0x3a,null,0xd3,0x2,0xd3,0x3,0xa,null,0x0,0x4,0xa,null,0x8,0x0,0xa,null,0x4b,0x5,0x0,0x6,0x36,0x1,0x7a,null,0x7,0x1,0x6,0x1,0x4,null,0x46,0x7,0x0,0x8,0x37,0x0,0x7a,null,0x4,null,0xd4,0x9,0x3,null,0xd3,0xa,0x20,null,0x34,null,0x0,0x8,0x4,null,0xd4,0xb,0x3,null,0x0,0x6,0x4,null,0xd4,0xc,0x3,null,0x0,0xd,0x4b,0xe,0x4,null,0x46,0xf,0x0,0x6,0x37,0x1,0x7,0x2,0x0,0x10,0x4b,0xe,0x4,null,0x46,0xf,0x0,0x6,0x37,0x1,0x7,0x3,0x0,0x11,0x4b,0xe,0x4,null,0x46,0xf,0x0,0x6,0x37,0x1,0x7,0x4,0x6,0x4,0x34,null,0x6,0x4,0x0,0x12,0x47,0x13,0x3,null,0xd3,0xa,0x34,null,0x6,0x2,0x34,null,0x6,0x2,0x46,0x14,0x0,0x15,0x47,0x16,0x3,null,0x6,0x3,0x34,null,0x0,0x17,0x6,0x3,0x46,0x18,0x4,null,0x46,0x19,0x0,0x6,0x37,0x1,0x3,null,0x32,null,0x6,0x2,0x34,null,0x6,0x2,0x46,0x14,0x0,0x1a,0x47,0x16,0x3,null,0x6,0x3,0x34,null,0x0,0x17,0x6,0x3,0x46,0x18,0x4,null,0x46,0x1b,0x0,0x6,0x37,0x1,0x3,null,0xd3,0x1c,0x0,0x8,0x36,0x0,0x3,null,0x0,0x1d,0xd3,0x1e,0x0,0x6,0x36,0x1,0x3,null,0xd3,0xa,0x34,null,0x0,0x1f,0x4b,0xe,0x4,null,0x46,0xf,0x0,0x6,0x37,0x1,0x7,0x5,0xd3,0x9,0xd3,0xb,0x48,null,0x7,0x6,0x6,0x5,0x6,0x6,0x46,0x20,0x47,0x13,0x3,null,0x6,0x5,0x46,0x14,0x0,0x21,0x47,0x22,0x3,null,0x0,0x23,0x4b,0xe,0x4,null,0x46,0xf,0x0,0x6,0x37,0x1,0x6,0x6,0x46,0x24,0x47,0x13,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x25,0xd3,0x25,0x4b,0x26,0x4,null,0x46,0x27,0x0,0x6,0x37,0x1,0x3,null,0x0,0x28,0xd3,0x29,0x0,0x6,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':[![],'isAlertShown','BASE_URL','currentType','u/','fetch',0x1,'json',0x0,'currentData','isRestoring','index','cycle','skip-btn','document','getElementById','back-btn','start-btn','Start','innerText','style','block','display','col-span-2','classList','remove','none','add','updateProgress','study-box','showBox','sentence','en','#fff','color','sentence-kor','ko','_0x5a2884$$1','console','error','파일\x20로드\x20실패','showCustomModal'],'p':0x1,'l':0x6,'j':{0x1c:0x25,0x3b:0x40,0x41:0x54,0x43:0x49,0x4a:0x53,0x53:0x65,0x55:0x5b,0x5c:0x65,0x6f:0x8f,0x90:0xa2,0xa1:0xa2},'x':{0x4:[0x91,-0x1,0xa2]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x0,0x4,0x47,0x5,0x3,null,0x0,0x6,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x0,0x7,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x1,0x6,0x0,0x46,0x8,0x0,0x9,0x47,0xa,0x3,null,0x6,0x1,0x34,null,0x0,0xb,0x6,0x1,0x46,0xc,0x4,null,0x46,0xd,0x0,0x3,0x37,0x1,0x3,null,0xd3,0xe,0x34,null,0x0,0xf,0x4,null,0xd4,0xe,0x3,null,0xd3,0x10,0x0,0x11,0x36,0x0,0x3,null,0xd3,0x12,0x0,0x11,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':['start-btn','document','getElementById',0x1,'Listen\x20again','innerText','skip-btn','back-btn','style','block','display','col-span-2','classList','remove','isRestoring',![],'requestWakeLock',0x0,'playSentence'],'p':0x0,'l':0x2,'j':{0x1d:0x26,0x27:0x2c},'sp':0x1},{'i':[0x3a,null,0x4b,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x0,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x3,0xd6,0x0,0x32,null,0x4b,0x4,0x0,0x2,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':['recognizer','abort',0x0,'_0x3321b2$$1','nextStep'],'p':0x0,'l':0x0,'j':{0x8:0xe,0xd:0xe},'x':{0x0:[0x9,-0x1,0xe]},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x46,0x1,0x0,0x2,0x47,0x3,0x3,null,0x3a,null,0xd3,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x7,0xd6,0x0,0x32,null],'c':['_0x2e4cb1','style','#ffff00','color','recognizer','start',0x0,'_0x39d537$$1'],'p':0x0,'l':0x0,'j':{0xf:0x15,0x14:0x15},'x':{0x7:[0x10,-0x1,0x15]},'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xda,0x0,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0xd9,0x0,0xd3,0x5,0xd3,0x6,0x48,null,0x7,0x1,0x0,0x7,0xd3,0x0,0x46,0x8,0x4,null,0x46,0x9,0x0,0x4,0x37,0x1,0x3,null,0xd3,0x0,0x6,0x1,0x46,0xa,0x47,0xb,0x3,null,0xd3,0x0,0x46,0xc,0x0,0xd,0x47,0xe,0x3,null,0x0,0xf,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x6,0x1,0x46,0x10,0x47,0xb,0x3,null,0xd3,0x11,0x0,0x12,0x36,0x0,0x3,null,0xd3,0x13,0xd3,0x14,0xd3,0x15,0xa,null,0x0,0x16,0xa,null,0x6,0x1,0x46,0x17,0xa,null,0x47,0x18,0x3,null,0xd3,0x13,0x4,null,0x46,0x19,0x0,0x12,0x37,0x0,0x3,null,0xd3,0x13,0x0,0x1a,0x64,null,0x47,0x1b,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0x2e4cb1','sentence','document','getElementById',0x1,'currentData','index','shake','classList','remove','en','innerText','style','#fff','color','sentence-kor','ko','updateProgress',0x0,'player','BASE_URL','currentType','u/','audio','src','play',0x13,'onended'],'p':0x0,'l':0x2,'sp':0x1},{'i':[0x8,0x0,0x46,0x0,0x0,0x1,0x48,null,0x0,0x1,0x48,null,0x46,0x2,0x4,null,0x46,0x3,0x0,0x1,0x37,0x0,0x7,0x1,0xa2,0x50004,0x0,0x6,0xd3,0x7,0xd3,0x8,0x48,null,0x46,0x9,0x4,null,0x46,0x3,0x0,0x1,0x37,0x0,0x4,null,0x46,0xa,0x0,0xb,0x37,0x2,0x7,0x2,0x0,0xc,0x4b,0xd,0x4,null,0x46,0xe,0x0,0xf,0x37,0x1,0x7,0x3,0x6,0x1,0x6,0x2,0xd3,0x10,0x0,0xb,0x36,0x2,0x0,0x11,0x2f,null,0x34,null,0xd3,0x12,0x4,null,0x46,0x13,0x0,0x1,0x37,0x0,0x3,null,0xd3,0x14,0x4b,0x15,0x4,null,0x46,0x16,0x0,0x1,0x37,0x0,0xd3,0x14,0x46,0x17,0xc,null,0x4b,0x15,0x4,null,0x46,0x18,0x0,0xf,0x37,0x1,0x48,null,0x7,0x4,0x6,0x3,0x6,0x4,0x47,0x19,0x3,null,0x6,0x3,0x46,0x1a,0x0,0x1b,0x47,0x1c,0x3,null,0x4b,0x1d,0x0,0x1e,0x4b,0x1f,0x0,0xb,0x36,0x2,0x3,null,0x32,null,0xd3,0x20,0x4,null,0x46,0x13,0x0,0x1,0x37,0x0,0x3,null,0x6,0x3,0x0,0x21,0x47,0x19,0x3,null,0x6,0x3,0x46,0x1a,0x0,0x22,0x47,0x1c,0x3,null,0x0,0x23,0x6,0x3,0x46,0x24,0x4,null,0x46,0x25,0x0,0xf,0x37,0x1,0x3,null,0x6,0x3,0x46,0x26,0xa3,null,0x3,null,0x0,0x23,0x6,0x3,0x46,0x24,0x4,null,0x46,0x27,0x0,0xf,0x37,0x1,0x3,null,0xd3,0x28,0x0,0x29,0x4b,0x1f,0x0,0xb,0x36,0x2,0x3,null,0x1,null,0x38,null],'c':['results',0x0,'transcript','toLowerCase','[.,?!\x27\x22]','g','','currentData','index','en','replace',0x2,'sentence','document','getElementById',0x1,'checkSimilarity',0.5,'successSound','play','praiseList','Math','random','length','floor','innerText','style','#39ff14','color','nextStep',0x2bc,'setTimeout','failSound','Try\x20again','#ff4b4b','shake','classList','remove','offsetWidth','add','playSentence',0x320],'p':0x1,'l':0x4,'j':{0x29:0x50,0x4f:0x79},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0xd3,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x1,0x34,null,0xd3,0x3,0x1c,null,0x4,null,0x10,null,0xd4,0x3,0x3,null],'c':['_0x415ef2','includes',0x1,'_0x380c8b'],'p':0x1,'l':0x0,'j':{0x8:0xf},'a':0x1,'sp':0x1},{'i':[0xd2,0x0,0x8,0x0,0xd7,0x0,0x3,null,0xda,0x1,0x0,0x2,0xd3,0x0,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7,0x2,0x0,0x2,0x8,0x1,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7,0x3,0x0,0x5,0xd7,0x1,0x0,0x6,0x64,null,0x6,0x3,0x4,null,0x46,0x7,0x0,0x4,0x37,0x1,0x3,null,0xd3,0x1,0x6,0x3,0x46,0x8,0xd,null,0x38,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0x415ef2','_0x380c8b','\x20','split',0x1,0x0,0x16,'forEach','length'],'p':0x2,'l':0x3,'sp':0x1},{'i':[0x3a,null,0x4b,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x0,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x3,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['recognizer','start',0x0,'_0x3e8e0c$$1'],'p':0x0,'l':0x0,'j':{0x8:0xe,0xd:0xe},'x':{0x0:[0x9,-0x1,0xe]},'sp':0x1},{'i':[0xd3,0x0,0x0,0x1,0x36,0x0,0x38,null],'c':['playSentence',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd3,0x0,0x1c,null,0x4,null,0x10,null,0xd4,0x0,0x3,null,0xd3,0x0,0xd3,0x1,0x46,0x2,0x2f,null,0x34,null,0x0,0x3,0x4,null,0xd4,0x0,0x3,null,0xd3,0x4,0x1c,null,0x4,null,0x10,null,0xd4,0x4,0x3,null,0xd3,0x4,0x0,0x5,0xb,null,0xd3,0x1,0x46,0x2,0xc,null,0xd3,0x0,0xa,null,0xd3,0x6,0xd3,0x1,0x46,0x2,0xc,null,0xd,null,0x0,0x7,0xc,null,0x4b,0x8,0x4,null,0x46,0x9,0x0,0x5,0x37,0x1,0x7,0x0,0xd3,0xa,0x6,0x0,0x0,0xb,0xa,null,0xd3,0xc,0x0,0xd,0x36,0x2,0x3,null,0x6,0x0,0x0,0x7,0x2f,null,0x4,null,0x34,null,0x3,null,0xd3,0xe,0x20,null,0x34,null,0x0,0xf,0x4,null,0xd4,0xe,0x3,null,0xd3,0x10,0x0,0x3,0x36,0x0,0x3,null,0x0,0x11,0xd3,0xa,0xa,null,0x0,0x12,0xa,null,0x0,0x13,0x64,null,0xd3,0x14,0x0,0xd,0x36,0x2,0x3,null,0x1,null,0x38,null,0xd3,0x15,0x0,0x3,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':['index','currentData','length',0x0,'cycle',0x1,'currentTotalCycles',0x64,'Math','floor','currentPart','%','sendDataToGoogle',0x2,'isAlertShown',!![],'triggerFireworkConfetti','','\x20100%\x20달성!\x20🎉',0x19,'showCustomModal','playSentence'],'p':0x0,'l':0x1,'j':{0xa:0x15,0x36:0x3a,0x3a:0x50},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x4b,0x0,0x0,0x1,0x36,0x0,0x38,null],'c':['showMenu',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0x0,0x0,0x4b,0x2,0x0,0x3,0x36,0x1,0x3,null,0x0,0x4,0x4b,0x5,0x4,null,0x46,0x6,0x0,0x3,0x37,0x1,0x46,0x7,0x4,null,0x46,0x8,0x0,0x9,0x37,0x0,0x7,0x0,0x0,0xa,0xd3,0xb,0x0,0x3,0x36,0x1,0x3,null,0x3a,null,0x0,0xc,0xd3,0xd,0xa,null,0x0,0xe,0xa,null,0x6,0x0,0xa,null,0x0,0xf,0xa,null,0xd3,0x10,0xa,null,0x4b,0x11,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x1,0x6,0x1,0x4,null,0x46,0x12,0x0,0x9,0x37,0x0,0x7a,null,0x4,null,0xd4,0x13,0x3,null,0xd3,0x14,0x0,0x9,0x36,0x0,0x3,null,0x0,0x15,0xd3,0xb,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x16,0x0,0x17,0x0,0x18,0x64,null,0xd3,0x19,0x0,0x1a,0x36,0x2,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['AS\x20Correction','currentPart','checkResumeStatus',0x1,'phone-input','document','getElementById','value','trim',0x0,'dev-box','showBox','','GOOGLE_SCRIPT_URL','?action=getAS&phone=','&unit=Unit\x20','currentUnit','fetch','json','asData','renderASPage','as-box','_0x450620$$1','첨삭\x20데이터\x20없음',0x1b,'showCustomModal',0x2],'p':0x0,'l':0x2,'j':{0x3e:0x4b,0x4a:0x4b},'x':{0x1a:[0x3f,-0x1,0x4b]},'s':0x1,'sp':0x1},{'i':[0x8,0x0,0x34,null,0xa2,0x10000,0x0,0x2,0xa2,0x10003,0x0,0x4,0x8,0x0,0x4b,0x5,0x0,0x6,0x36,0x1,0x4,null,0x46,0x7,0x0,0x8,0x37,0x2,0x4,null,0x46,0x7,0x0,0x8,0x37,0x2,0x32,null,0x0,0x9,0x38,null],'c':['\x5c[(.*?)\x5c]','g','<span\x20style=\x22color:#ff4b4b;\x20font-weight:bold;\x22>$1</span>','\x5cn','<br>','String',0x1,'replace',0x2,''],'p':0x1,'l':0x0,'j':{0x1:0x13,0x12:0x14},'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x0,0x4,0x47,0x5,0x3,null,0x0,0x6,0x64,null,0x7,0x1,0x6,0x0,0x0,0x7,0xd3,0x8,0x46,0x9,0x6,0x1,0x0,0x3,0x36,0x1,0xa,null,0x0,0xa,0xa,null,0xd3,0x8,0x46,0xb,0x6,0x1,0x0,0x3,0x36,0x1,0xa,null,0x0,0xc,0xa,null,0xd3,0x8,0x46,0xd,0x6,0x1,0x0,0x3,0x36,0x1,0xa,null,0x0,0xe,0xa,null,0x0,0xf,0x0,0x10,0xd3,0x11,0x0,0x12,0xd,null,0x4b,0x13,0x4,null,0x46,0x14,0x0,0x3,0x37,0x1,0x4,null,0x46,0x15,0x0,0x16,0x37,0x0,0x4,null,0x46,0x17,0x0,0xf,0x37,0x2,0xa,null,0x0,0x18,0xa,null,0x0,0xf,0x0,0x10,0xd3,0x11,0x0,0x12,0xe,null,0x4,null,0x46,0x15,0x0,0x16,0x37,0x0,0x4,null,0x46,0x17,0x0,0xf,0x37,0x2,0xa,null,0x0,0x19,0xa,null,0x47,0x1a,0x3,null,0x0,0x1b,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x1c,0x0,0x1d,0x47,0x1e,0x3,null,0x0,0x1f,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x1c,0x0,0x20,0x47,0x1e,0x3,null,0x1,null,0x38,null],'c':['as-box','document','getElementById',0x1,'px-4\x20pt-2\x20flex\x20flex-col\x20text-left\x20pb-10','className',0x1d,'\x0a\x20\x20\x20\x20<div\x20class=\x22mb-6\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-[#39FF14]\x20text-lg\x20font-bold\x20mb-1\x22>AS\x20Correction</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-[#39FF14]\x20text-xs\x20font-bold\x20mb-1\x22>[Question]</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-white\x20text-xl\x20font-bold\x20leading-snug\x22>','asData','question','</p>\x0a\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20<div\x20class=\x22space-y-4\x20mb-6\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#1c1c1c]\x20rounded-xl\x20p-4\x20w-full\x20border\x20border-neutral-800\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-xs\x20font-bold\x20mb-2\x22>My\x20Answer</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-300\x20text-sm\x20leading-relaxed\x22>','original','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#1c1c1c]\x20rounded-xl\x20p-4\x20w-full\x20border\x20border-neutral-800\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-[#39FF14]\x20text-xs\x20font-bold\x20mb-2\x22>Feedback</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-white\x20text-sm\x20leading-relaxed\x22>','corrected','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20<div\x20id=\x22as-timer\x22\x20class=\x22text-[#39FF14]\x20text-3xl\x20font-black\x20font-mono\x20mb-4\x20tracking-tighter\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20',0x2,'0','asSeconds',0x3c,'Math','floor','toString',0x0,'padStart',':','\x0a\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20<div\x20class=\x22mt-4\x20w-full\x20flex\x20gap-3\x20h-14\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22as-start-btn\x22\x20onclick=\x22startASStudy()\x22\x20class=\x22flex-1\x20bg-[#39FF14]\x20text-black\x20font-bold\x20rounded-xl\x20shadow-[0_0_15px_rgba(57,255,20,0.3)]\x20active:scale-95\x20transition-transform\x20hover:bg-[#32e012]\x22>Start</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22as-controls\x22\x20style=\x22display:none;\x22\x20class=\x22flex-1\x20flex\x20gap-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22playASAudio()\x22\x20class=\x22flex-1\x20bg-[#222]\x20text-white\x20font-bold\x20rounded-xl\x20border\x20border-neutral-700\x20active:border-[#39FF14]\x20transition-all\x20text-sm\x22>Listen</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22finishASStudy()\x22\x20class=\x22flex-1\x20bg-[#39FF14]\x20text-black\x20font-bold\x20rounded-xl\x20shadow-[0_0_10px_#39FF14]\x20transition-all\x20text-sm\x22>Finish</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22showMenu()\x22\x20class=\x22w-24\x20bg-[#1c1c1c]\x20text-white\x20font-bold\x20rounded-xl\x20border\x20border-neutral-800\x20active:border-[#39FF14]\x20active:text-[#39FF14]\x20transition-all\x20hover:bg-[#252525]\x22>Back</button>\x0a\x20\x20\x20\x20</div>','innerHTML','as-start-btn','style','block','display','as-controls','none'],'p':0x0,'l':0x2,'sp':0x1},{'i':[0xd3,0x0,0x1c,null,0x4,null,0x10,null,0xd4,0x0,0x3,null,0x0,0x1,0x0,0x2,0xd3,0x0,0x0,0x3,0xd,null,0x4b,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x1,0x4,null,0x46,0x7,0x0,0x8,0x37,0x0,0x4,null,0x46,0x9,0x0,0x1,0x37,0x2,0x7,0x0,0x0,0x1,0x0,0x2,0xd3,0x0,0x0,0x3,0xe,null,0x4,null,0x46,0x7,0x0,0x8,0x37,0x0,0x4,null,0x46,0x9,0x0,0x1,0x37,0x2,0x7,0x1,0x0,0xa,0x4b,0xb,0x4,null,0x46,0xc,0x0,0x6,0x37,0x1,0x7,0x2,0x6,0x2,0x34,null,0x6,0x2,0x0,0xd,0x6,0x0,0xa,null,0x0,0xe,0xa,null,0x6,0x1,0xa,null,0x47,0xf,0x3,null,0x4b,0x10,0x0,0x8,0x36,0x0,0x3,null],'c':['asSeconds',0x2,'0',0x3c,'Math','floor',0x1,'toString',0x0,'padStart','as-timer','document','getElementById','',':','innerText','saveStatus'],'p':0x0,'l':0x3,'j':{0x2f:0x3a},'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x4,0x0,0x5,0x47,0x6,0x3,null,0x0,0x7,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x4,0x0,0x8,0x47,0x6,0x3,null,0xd3,0x9,0x20,null,0x34,null,0x0,0xa,0x4,null,0xd4,0xb,0x3,null,0x0,0xc,0x4,null,0xd4,0x9,0x3,null,0xd3,0xd,0x34,null,0xd3,0xd,0x4b,0xe,0x0,0x3,0x36,0x1,0x3,null,0x0,0xf,0x64,null,0x0,0x10,0x4b,0x11,0x0,0x12,0x36,0x2,0x4,null,0xd4,0xd,0x3,null,0x4b,0x13,0x0,0xa,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':['as-start-btn','document','getElementById',0x1,'style','none','display','as-controls','flex','isRestoring',0x0,'asSeconds',![],'asTimer','clearInterval',0x1f,0x3e8,'setInterval',0x2,'playASAudio'],'p':0x0,'l':0x0,'j':{0x16:0x1b,0x20:0x26},'sp':0x1},{'i':[0xd3,0x0,0xd3,0x1,0xd3,0x2,0xa,null,0x0,0x3,0xa,null,0xd3,0x4,0x46,0x5,0xa,null,0x47,0x6,0x3,null,0xd3,0x0,0x4,null,0x46,0x7,0x0,0x8,0x37,0x0,0x3,null,0x1,null,0x38,null],'c':['player','BASE_URL','currentType','u/','asData','audio','src','play',0x0],'p':0x0,'l':0x0,'sp':0x1},{'i':[0x4b,0x0,0x0,0x1,0x36,0x0,0x38,null],'c':['showMenu',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd3,0x0,0x4b,0x1,0x0,0x2,0x36,0x1,0x3,null,0xd3,0x3,0x0,0x4,0xd,null,0x4b,0x5,0x4,null,0x46,0x6,0x0,0x2,0x37,0x1,0x0,0x7,0xa,null,0xd3,0x3,0x0,0x4,0xe,null,0xa,null,0x0,0x8,0xa,null,0x7,0x0,0x0,0x9,0x6,0x0,0xd3,0xa,0x0,0xb,0x36,0x2,0x3,null,0x0,0xc,0x0,0xd,0x64,null,0xd3,0xe,0x0,0xb,0x36,0x2,0x3,null,0x1,null,0x38,null],'c':['asTimer','clearInterval',0x1,'asSeconds',0x3c,'Math','floor','분\x20','초','AS\x20Correction','sendDataToGoogle',0x2,'학습\x20완료!\x20✔',0x22,'showCustomModal'],'p':0x0,'l':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x34,null,0x6,0x0,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x32,null,0x0,0x7,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x8,0xd3,0x9,0x0,0x3,0x36,0x1,0x38,null,0x0,0xa,0x2,null,0x0,0xb,0xd3,0x9,0x0,0xc,0x36,0x3,0x3,null,0x3a,null,0x0,0x7,0xd3,0xd,0xa,null,0x0,0xe,0xa,null,0x6,0x1,0xa,null,0x0,0xf,0xa,null,0xd3,0x10,0xa,null,0x4b,0x11,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x2,0x6,0x2,0x4,null,0x46,0x12,0x0,0x6,0x37,0x0,0x7a,null,0x4,null,0xd4,0x13,0x3,null,0xd3,0x14,0x0,0x6,0x36,0x0,0x3,null,0xd3,0x15,0x0,0x6,0x36,0x0,0x3,null,0x0,0x16,0xd3,0x17,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x18,0xd3,0x18,0x4b,0x19,0x4,null,0x46,0x1a,0x0,0x3,0x37,0x1,0x3,null,0x0,0x1b,0xd3,0x9,0x0,0x3,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'','로그인\x20정보가\x20없습니다.','showCustomModal','데이터를\x20불러오는\x20중입니다...',![],0x3,'GOOGLE_SCRIPT_URL','?action=getAS&phone=','&unit=Unit\x20','currentUnit','fetch','json','asData','closeCustomModal','renderAccurateSpeakingPage','as-record-box','showBox','_0x2be331$$1','console','error','로드\x20실패\x0a(데이터를\x20가져오지\x20못했습니다)'],'p':0x0,'l':0x3,'j':{0x8:0x10,0xf:0x11,0x14:0x1a,0x49:0x5b,0x5a:0x5b},'x':{0x21:[0x4a,-0x1,0x5b]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x0,0x4,0x47,0x5,0x3,null,0xd3,0x6,0x4,null,0x34,null,0x3,null,0xd3,0x6,0x46,0x7,0x7,0x1,0xd3,0x6,0x34,null,0xd3,0x6,0x46,0x8,0x32,null,0x0,0x9,0x7,0x2,0x6,0x1,0x34,null,0x6,0x0,0x0,0xa,0x47,0xb,0x3,null,0x1,null,0x38,null,0x6,0x0,0x0,0xc,0x6,0x2,0xa,null,0x0,0xd,0xa,null,0x47,0xb,0x3,null,0x1,null,0x38,null],'c':['as-record-box','document','getElementById',0x1,'fixed\x20top-[80px]\x20bottom-[90px]\x20left-0\x20right-0\x20z-30\x20bg-black\x20overflow-y-auto\x20no-scrollbar\x20px-6\x20flex\x20flex-col','className','asData','isSubmitted','question','질문\x20데이터\x20없음','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20h-full\x20flex\x20flex-col\x20items-center\x20justify-center\x20space-y-8\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22text-center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-[#39FF14]\x20text-lg\x20font-bold\x20mb-8\x22>Accurate\x20Speaking</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-[#39FF14]\x20text-6xl\x20mb-4\x22>check_circle</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-white\x20text-xl\x20font-bold\x22>이미\x20제출\x20완료되었습니다.</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-sm\x20mt-2\x22>첨삭\x20결과를\x20기다려주세요!</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22showMenu()\x22\x20class=\x22w-full\x20py-4\x20bg-[#1c1c1c]\x20text-neutral-400\x20font-bold\x20rounded-xl\x20border\x20border-neutral-800\x20active:border-white\x20active:text-white\x20transition-all\x20text-sm\x20uppercase\x20tracking-wider\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20BACK\x20TO\x20MODE\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','innerHTML','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20h-full\x20flex\x20flex-col\x20items-center\x20justify-center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20text-center\x20mb-8\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-[#39FF14]\x20text-lg\x20font-bold\x20mb-6\x22>Accurate\x20Speaking</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-[#39FF14]\x20text-xs\x20font-bold\x20mb-3\x20tracking-widest\x20uppercase\x20opacity-80\x22>[\x20Question\x20]</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20id=\x22as-q-text\x22\x20class=\x22text-white\x20text-xl\x20font-bold\x20leading-relaxed\x20break-keep\x20drop-shadow-md\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20flex\x20flex-col\x20items-center\x20mb-4\x22>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22as-listen-btn\x22\x20onclick=\x22listenQuestion()\x22\x20class=\x22flex\x20flex-col\x20items-center\x20justify-center\x20w-40\x20h-40\x20rounded-full\x20bg-[#1c1c1c]\x20border-2\x20border-[#39FF14]\x20shadow-[0_0_20px_rgba(57,255,20,0.2)]\x20active:scale-95\x20transition-all\x20hover:bg-[#252525]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-5xl\x20text-[#39FF14]\x20mb-2\x22>headphones</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-white\x20text-sm\x20font-bold\x20tracking-wider\x22>LISTEN</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22recording-ui\x22\x20style=\x22display:none;\x22\x20class=\x22flex-col\x20items-center\x20w-full\x20animate-fade-in-up\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-40\x20h-40\x20rounded-full\x20bg-[#1c1c1c]\x20border-2\x20border-[#ff4757]\x20flex\x20items-center\x20justify-center\x20mb-6\x20shadow-[0_0_20px_rgba(255,71,87,0.3)]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22rec-timer\x22\x20class=\x22text-[#ff4757]\x20text-4xl\x20font-black\x20font-mono\x22>00:00</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22stopRecording()\x22\x20class=\x22w-full\x20bg-[#ff4757]\x20text-white\x20font-black\x20text-lg\x20py-4\x20rounded-xl\x20shadow-lg\x20active:scale-95\x20transition-transform\x20uppercase\x20tracking-widest\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20STOP\x20RECORDING\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22submit-ui\x22\x20style=\x22display:none;\x22\x20class=\x22w-full\x20animate-fade-in-up\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#1c1c1c]\x20-mx-6\x20px-6\x20py-6\x20border-y\x20border-neutral-800\x20mb-6\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-xs\x20font-bold\x20mb-3\x22>DICTATION</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<textarea\x20id=\x22student-text-input\x22\x20rows=\x226\x22\x20placeholder=\x22녹음한\x20내용을\x20영어로\x20적어주세요...\x22\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20class=\x22w-full\x20bg-transparent\x20text-white\x20text-lg\x20font-medium\x20focus:outline-none\x20placeholder-neutral-600\x20resize-none\x20leading-relaxed\x22></textarea>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22submitAccurateSpeaking()\x22\x20class=\x22w-full\x20bg-[#39FF14]\x20text-black\x20font-black\x20text-lg\x20py-4\x20rounded-xl\x20shadow-[0_0_20px_rgba(57,255,20,0.4)]\x20active:scale-95\x20transition-transform\x20hover:bg-[#32e012]\x20uppercase\x20tracking-widest\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20SUBMIT\x20ANSWER\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22showMenu()\x22\x20class=\x22w-full\x20py-4\x20bg-[#1c1c1c]\x20text-neutral-400\x20font-bold\x20rounded-xl\x20border\x20border-neutral-800\x20active:border-white\x20active:text-white\x20transition-all\x20text-sm\x20uppercase\x20tracking-wider\x20mt-4\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20BACK\x20TO\x20MODE\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20'],'p':0x0,'l':0x3,'j':{0xd:0x11,0x13:0x17,0x16:0x18,0x1a:0x21},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0xd3,0x1,0x0,0x2,0x36,0x1,0x38,null],'c':['오디오\x20재생\x20실패','showCustomModal',0x1],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x46,0x1,0x0,0x2,0x47,0x3,0x3,null,0xd3,0x4,0x0,0x5,0x36,0x0,0x3,null],'c':['_0x2e0716','style','1','opacity','startRecording',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xda,0x0,0xd3,0x1,0x20,null,0x4,null,0x33,null,0x3,null,0xd3,0x1,0x46,0x2,0x20,null,0x34,null,0x0,0x3,0xd3,0x4,0x0,0x5,0x36,0x1,0x38,null,0x0,0x6,0x4b,0x7,0x4,null,0x46,0x8,0x0,0x5,0x37,0x1,0xd9,0x0,0xd3,0x0,0x46,0x9,0x0,0xa,0x47,0xb,0x3,null,0xd3,0xc,0x0,0xd,0x36,0x0,0x3,null,0xd3,0xe,0xd3,0xf,0xd3,0x10,0xa,null,0x0,0x11,0xa,null,0xd3,0x1,0x46,0x2,0xa,null,0x47,0x12,0x3,null,0x0,0x13,0x64,null,0xd3,0xe,0x4,null,0x46,0x14,0x0,0xd,0x37,0x0,0x4,null,0x46,0x15,0x0,0x5,0x37,0x1,0x3,null,0xd3,0xe,0x0,0x16,0x64,null,0x47,0x17,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0x2e0716','asData','audio','오디오\x20정보가\x20없습니다.','showCustomModal',0x1,'as-listen-btn','document','getElementById','style','0.5','opacity','requestWakeLock',0x0,'player','BASE_URL','currentType','u/','src',0x26,'play','catch',0x27,'onended'],'p':0x0,'l':0x1,'j':{0x6:0xb,0xb:0x11},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0xd3,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x38,null],'c':['data','audioChunks','push',0x1],'p':0x1,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x0,0x1,0x36,0x0,0x3,null],'c':['processRecording',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x1c,null,0x4,null,0x10,null,0xd4,0x0,0x3,null,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x0,0x5,0x0,0x6,0x0,0x7,0xd3,0x0,0x4,null,0x46,0x8,0x0,0x9,0x37,0x0,0x4,null,0x46,0xa,0x0,0x6,0x37,0x2,0xa,null,0x47,0xb,0x3,null,0xd3,0x0,0x0,0xc,0x2f,null,0x34,null,0x4b,0xd,0x0,0x9,0x36,0x0,0x3,null],'c':['recSeconds','rec-timer','document','getElementById',0x1,'00:',0x2,'0','toString',0x0,'padStart','innerText',0x3c,'stopRecording'],'p':0x0,'l':0x0,'j':{0x20:0x25},'a':0x1,'sp':0x1},{'i':[0x3a,null,0xd5,0x0,0xd2,0x0,0xda,0x0,0x4d,null,0x4,null,0x0,0x1,0x47,0x2,0x3,null,0x4b,0x3,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x1,0x7a,null,0xd9,0x0,0x4b,0x7,0xd3,0x0,0x0,0x6,0x68,0x1,0x4,null,0xd4,0x8,0x3,null,0x5a,null,0x4,null,0xd4,0x9,0x3,null,0x0,0xa,0x4b,0xb,0x4,null,0x46,0xc,0x0,0x6,0x37,0x1,0x46,0xd,0x0,0xe,0x47,0xf,0x3,null,0x0,0x10,0x4b,0xb,0x4,null,0x46,0xc,0x0,0x6,0x37,0x1,0x46,0xd,0x0,0x11,0x47,0xf,0x3,null,0xd3,0x8,0x0,0x12,0x64,null,0x47,0x13,0x3,null,0xd3,0x8,0x0,0x14,0x64,null,0x47,0x15,0x3,null,0xd3,0x8,0x4,null,0x46,0x16,0x0,0x17,0x37,0x0,0x3,null,0x0,0x17,0x4,null,0xd4,0x18,0x3,null,0xd3,0x19,0x34,null,0xd3,0x19,0x4b,0x1a,0x0,0x6,0x36,0x1,0x3,null,0x0,0x1b,0x64,null,0x0,0x1c,0x4b,0x1d,0x0,0x1e,0x36,0x2,0x4,null,0xd4,0x19,0x3,null,0xd6,0x0,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x1f,0x0,0x20,0xd3,0x21,0x0,0x6,0x36,0x1,0x3,null,0x0,0xa,0x4b,0xb,0x4,null,0x46,0xc,0x0,0x6,0x37,0x1,0x46,0xd,0x0,0x11,0x47,0xf,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['_0x176973$$1',!![],'audio','navigator','mediaDevices','getUserMedia',0x1,'MediaRecorder','mediaRecorder','audioChunks','as-listen-btn','document','getElementById','style','none','display','recording-ui','flex',0x29,'ondataavailable',0x2a,'onstop','start',0x0,'recSeconds','recordingTimer','clearInterval',0x2b,0x3e8,'setInterval',0x2,'_0x5cf040$$1','마이크\x20권한이\x20필요합니다.\x0a설정에서\x20허용해주세요.','showCustomModal'],'p':0x0,'l':0x1,'j':{0x45:0x4b,0x56:0x6b,0x6a:0x6b},'x':{0x0:[0x57,-0x1,0x6b]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x4,null,0x46,0x4,0x0,0x5,0x37,0x0,0x38,null],'c':['student-text-input','document','getElementById',0x1,'focus',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd3,0x0,0x4,null,0x34,null,0x3,null,0xd3,0x0,0x46,0x1,0x0,0x2,0x2b,null,0x34,null,0xd3,0x0,0x4,null,0x46,0x3,0x0,0x4,0x37,0x0,0x3,null,0xd3,0x5,0x4b,0x6,0x0,0x7,0x36,0x1,0x3,null,0x0,0x8,0x4b,0x9,0x4,null,0x46,0xa,0x0,0x7,0x37,0x1,0x46,0xb,0x0,0xc,0x47,0xd,0x3,null,0x0,0xe,0x4b,0x9,0x4,null,0x46,0xa,0x0,0x7,0x37,0x1,0x46,0xb,0x0,0xf,0x47,0xd,0x3,null,0x0,0x10,0x64,null,0x0,0x11,0x4b,0x12,0x0,0x13,0x36,0x2,0x3,null,0x1,null,0x38,null],'c':['mediaRecorder','state','inactive','stop',0x0,'recordingTimer','clearInterval',0x1,'recording-ui','document','getElementById','style','none','display','submit-ui','block',0x2d,0x64,'setTimeout',0x2],'p':0x0,'l':0x0,'j':{0x2:0x8,0x8:0x2f},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x4b,0x0,0x0,0x1,0xd3,0x2,0x46,0x3,0x4,null,0x46,0x4,0x0,0x5,0x37,0x1,0x0,0x5,0x48,null,0x47,0x6,0x3,null],'c':['window',',','_0x34444e','result','split',0x1,'lastAudioBase64'],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xda,0x0,0x4b,0x1,0xd3,0x2,0x4d,null,0x4,null,0x0,0x3,0x47,0x4,0x3,null,0x0,0x5,0x68,0x2,0x7,0x0,0x4b,0x6,0x0,0x7,0x68,0x0,0xd9,0x0,0x6,0x0,0xd3,0x0,0x4,null,0x46,0x8,0x0,0x9,0x37,0x1,0x3,null,0xd3,0x0,0x0,0xa,0x64,null,0x47,0xb,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0x34444e','Blob','audioChunks','audio/webm','type',0x2,'FileReader',0x0,'readAsDataURL',0x1,0x2f,'onloadend'],'p':0x0,'l':0x2,'s':0x1,'sp':0x1},{'i':[0xd3,0x0,0x0,0x1,0x36,0x0,0x3,null,0x0,0x2,0xd3,0x3,0x0,0x4,0x36,0x1,0x3,null],'c':['closeCustomModal',0x0,'네트워크\x20오류\x20발생','showCustomModal',0x1],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0x4b,0x0,0x0,0x1,0x36,0x0,0x38,null],'c':['showMenu',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd3,0x0,0x0,0x1,0x36,0x0,0x3,null,0x8,0x0,0x46,0x2,0x0,0x3,0x2a,null,0x34,null,0x0,0x4,0x0,0x5,0x64,null,0xd3,0x6,0x0,0x7,0x36,0x2,0x3,null,0x32,null,0x0,0x8,0xd3,0x6,0x0,0x9,0x36,0x1,0x3,null],'c':['closeCustomModal',0x0,'result','success','제출\x20성공!\x20✔',0x32,'showCustomModal',0x2,'제출\x20실패\x0a다시\x20시도해주세요.',0x1],'p':0x1,'l':0x0,'j':{0x8:0x11,0x10:0x16},'a':0x1,'sp':0x1},{'i':[0x8,0x0,0x4,null,0x46,0x0,0x0,0x1,0x37,0x0,0x38,null],'c':['json',0x0],'p':0x1,'l':0x0,'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x7,0xd3,0x8,0x0,0x3,0x36,0x1,0x38,null,0x0,0x9,0x2,null,0x0,0xa,0xd3,0x8,0x0,0xb,0x36,0x3,0x3,null,0x4d,null,0x4,null,0x0,0xc,0x47,0xd,0x3,null,0x4,null,0x0,0xe,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x47,0xf,0x3,null,0x4,null,0x0,0x10,0xd3,0x11,0xa,null,0x47,0x12,0x3,null,0x4,null,0x6,0x1,0x47,0x13,0x3,null,0x4,null,0x4b,0x14,0x46,0x15,0x47,0x16,0x3,null,0x7,0x2,0x0,0x17,0x64,null,0x0,0x18,0x64,null,0x0,0x19,0x64,null,0xd3,0x1a,0x4d,null,0x4,null,0x0,0x1b,0x47,0x1c,0x3,null,0x4,null,0x6,0x2,0x4b,0x1d,0x4,null,0x46,0x1e,0x0,0x3,0x37,0x1,0x47,0x1f,0x3,null,0x4b,0x20,0x0,0x21,0x36,0x2,0x4,null,0x46,0x22,0x0,0x3,0x37,0x1,0x4,null,0x46,0x22,0x0,0x3,0x37,0x1,0x4,null,0x46,0x23,0x0,0x3,0x37,0x1,0x3,null,0x1,null,0x38,null],'c':['student-text-input','document','getElementById',0x1,'value','trim',0x0,'받아적은\x20내용을\x20입력해주세요!','showCustomModal','제출\x20중입니다...',![],0x3,'uploadAS','action','phone-input','phone','Unit\x20','currentUnit','unit','studentText','window','lastAudioBase64','audioData',0x31,0x33,0x34,'GOOGLE_SCRIPT_URL','POST','method','JSON','stringify','body','fetch',0x2,'then','catch'],'p':0x0,'l':0x3,'j':{0x10:0x16},'s':0x1,'sp':0x1},{'i':[0xd3,0x0,0x8,0x0,0xa,null,0x4,null,0xd4,0x0,0x3,null,0xd3,0x0,0x0,0x1,0x2c,null,0x34,null,0x0,0x1,0x4,null,0xd4,0x0,0x3,null,0xd3,0x0,0x0,0x2,0x2e,null,0x34,null,0x0,0x2,0x4,null,0xd4,0x0,0x3,null,0x0,0x3,0x4b,0x4,0x4,null,0x46,0x5,0x0,0x1,0x37,0x1,0x7,0x1,0x6,0x1,0x34,null,0x6,0x1,0xd3,0x0,0x47,0x6,0x3,null,0x1,null,0x38,null],'c':['repeatCountVal',0x1,0x63,'repeat-count-display','document','getElementById','innerText'],'p':0x1,'l':0x1,'j':{0x9:0xe,0x11:0x16,0x1e:0x23},'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x2,0x6,0x2,0x0,0x4,0x8,0x1,0xa,null,0x47,0x5,0x3,null,0x6,0x2,0x0,0x6,0x47,0x7,0x3,null,0x6,0x2,0x0,0x8,0x8,0x0,0x46,0x9,0xa,null,0x0,0xa,0xa,null,0x8,0x0,0x46,0xb,0xa,null,0x0,0xc,0xa,null,0x47,0xd,0x3,null,0x6,0x2,0xd3,0xe,0x4,null,0x46,0xf,0x0,0x3,0x37,0x1,0x3,null],'c':['div','document','createElement',0x1,'repeat-','id','repeat-item\x20py-1.5\x20px-3\x20rounded-xl\x20border\x20border-transparent\x20transition-all\x20duration-300','className','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22en-text\x20text-white\x20text-base\x20font-bold\x20leading-snug\x20mb-0.5\x20transition-colors\x22>','en','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22ko-text\x20text-neutral-400\x20text-xs\x20font-medium\x22>','ko','</div>\x0a\x20\x20\x20\x20\x20\x20','innerHTML','_0x327edd$$1','appendChild'],'p':0x2,'l':0x1,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0x3a,null,0xd5,0x0,0xd2,0x0,0xda,0x2,0xda,0x3,0xda,0x4,0x0,0x5,0xd3,0x6,0xa,null,0xd3,0x7,0xa,null,0x0,0x8,0xa,null,0xd3,0x7,0xa,null,0x0,0x9,0xa,null,0xd3,0xa,0xa,null,0x0,0xb,0xa,null,0x4b,0xc,0x0,0xd,0x36,0x1,0x7a,null,0xd9,0x2,0xd3,0x2,0x4,null,0x46,0xe,0x0,0xf,0x37,0x0,0x7a,null,0x4,null,0xd4,0x10,0x3,null,0x0,0x0,0x4b,0x11,0x0,0xd,0x36,0x1,0x3,null,0x0,0x12,0xd3,0x13,0x0,0xd,0x36,0x1,0x3,null,0x0,0x12,0x4b,0x14,0x4,null,0x46,0x15,0x0,0xd,0x37,0x1,0xd9,0x3,0xd3,0x3,0x0,0x16,0x47,0x17,0x3,null,0xd3,0x3,0x0,0x18,0xd3,0x19,0xa,null,0x0,0x1a,0xa,null,0x47,0x1b,0x3,null,0x0,0x1c,0x4b,0x14,0x4,null,0x46,0x15,0x0,0xd,0x37,0x1,0xd9,0x4,0x0,0x1d,0x64,null,0xd3,0x10,0x4,null,0x46,0x1e,0x0,0xd,0x37,0x1,0x3,null,0xd6,0x0,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x1f,0xd3,0x1f,0x4b,0x20,0x4,null,0x46,0x21,0x0,0xd,0x37,0x1,0x3,null,0x0,0x22,0xd3,0x23,0x0,0xd,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0xd6,0x0,0x1,null,0x38,null],'c':['반복듣기','currentPart','_0x26898d$$1','_0x24db66$$1','_0x327edd$$1','','BASE_URL','currentType','u/','u','currentUnit','.json','fetch',0x1,'json',0x0,'currentData','checkResumeStatus','repeat-box','showBox','document','getElementById','px-4\x20pt-2\x20min-h-screen\x20relative','className','\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22mb-4\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-[#39FF14]\x20text-lg\x20font-bold\x22>Listen\x20&\x20Repeat</h2>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20<div\x20id=\x22repeat-list\x22\x20class=\x22space-y-2\x20pb-[260px]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22fixed\x20bottom-[100px]\x20left-0\x20right-0\x20px-4\x20bg-gradient-to-t\x20from-black\x20via-black\x20to-transparent\x20pt-10\x20pb-2\x20z-50\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20justify-center\x20gap-4\x20bg-[#1c1c1c]\x20rounded-xl\x20p-2\x20border\x20border-neutral-800\x20mb-2\x20shadow-2xl\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-[10px]\x20font-bold\x20text-neutral-500\x20uppercase\x20tracking-wider\x22>REPEATS</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20gap-2\x20bg-[#111]\x20rounded-lg\x20p-1\x20border\x20border-neutral-800\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22adjustRepeatCount(-1)\x22\x20class=\x22w-8\x20h-8\x20flex\x20items-center\x20justify-center\x20text-neutral-400\x20hover:text-white\x20active:bg-neutral-800\x20rounded-md\x20transition-colors\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-sm\x22>remove</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20id=\x22repeat-count-display\x22\x20class=\x22text-[#39FF14]\x20font-bold\x20font-mono\x20text-lg\x20w-6\x20text-center\x22>','repeatCountVal','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22adjustRepeatCount(1)\x22\x20class=\x22w-8\x20h-8\x20flex\x20items-center\x20justify-center\x20text-neutral-400\x20hover:text-white\x20active:bg-neutral-800\x20rounded-md\x20transition-colors\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-sm\x22>add</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-[10px]\x20font-bold\x20text-neutral-500\x20uppercase\x20tracking-wider\x22>CYCLES</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22grid\x20grid-cols-2\x20gap-3\x20mb-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22repeat-start-btn\x22\x20onclick=\x22runRepeatAudio()\x22\x20class=\x22h-12\x20bg-[#39FF14]\x20text-black\x20font-black\x20rounded-xl\x20shadow-[0_0_15px_rgba(57,255,20,0.3)]\x20active:scale-95\x20transition-transform\x20flex\x20items-center\x20justify-center\x20gap-2\x20hover:bg-[#32e012]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x22>play_arrow</span>\x20START\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22stopRepeatAudio()\x22\x20class=\x22h-12\x20bg-[#ff4757]\x20text-white\x20font-black\x20rounded-xl\x20shadow-lg\x20active:scale-95\x20transition-transform\x20flex\x20items-center\x20justify-center\x20gap-2\x20hover:bg-[#ff6b81]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x22>stop</span>\x20STOP\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22stopRepeatAudio();\x20showMenu();\x22\x20class=\x22w-full\x20py-3\x20bg-[#1c1c1c]\x20text-neutral-400\x20font-bold\x20rounded-xl\x20border\x20border-neutral-800\x20active:border-white\x20active:text-white\x20transition-all\x20text-sm\x20uppercase\x20tracking-wider\x20shadow-lg\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Back\x20to\x20Menu\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20</div>','innerHTML','repeat-list',0x37,'forEach','_0x29840a$$1','console','error','로드\x20실패','showCustomModal'],'p':0x0,'l':0x3,'j':{0x57:0x69,0x68:0x69},'x':{0x6:[0x58,-0x1,0x69]},'s':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x0,0x0,0x47,0x1,0x3,null,0x0,0x2,0x8,0x0,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x0,0x5,0x47,0x1,0x3,null,0x0,0x6,0x8,0x0,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x0,0x7,0x47,0x1,0x3,null],'c':['repeat-item\x20py-1.5\x20px-3\x20rounded-xl\x20border\x20border-transparent\x20transition-all\x20duration-300','className','.en-text','querySelector',0x1,'en-text\x20text-white\x20text-base\x20font-bold\x20leading-snug\x20mb-0.5\x20transition-colors','.ko-text','ko-text\x20text-neutral-400\x20text-xs\x20font-medium'],'p':0x1,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x0,0x0,0x64,null,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x4,null,0x46,0x5,0x0,0x4,0x37,0x1,0x3,null,0x0,0x6,0xd3,0x7,0xa,null,0x4b,0x2,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x7,0x1,0x6,0x1,0x34,null,0x6,0x1,0x0,0x9,0x47,0xa,0x3,null,0x0,0xb,0x6,0x1,0x4,null,0x46,0xc,0x0,0x4,0x37,0x1,0x7,0x2,0x6,0x2,0x34,null,0x6,0x2,0x0,0xd,0x47,0xa,0x3,null,0x4d,null,0x4,null,0x0,0xe,0x47,0xf,0x3,null,0x4,null,0x0,0x10,0x47,0x11,0x3,null,0x6,0x1,0x4,null,0x46,0x12,0x0,0x4,0x37,0x1,0x3,null,0xd3,0x13,0x0,0x14,0xd3,0x15,0xa,null,0xd3,0x16,0xa,null,0x0,0x17,0xa,null,0xd3,0x18,0xd3,0x7,0x48,null,0x46,0x19,0xa,null,0x47,0x1a,0x3,null,0xd3,0x13,0x4,null,0x46,0x1b,0x0,0x1c,0x37,0x0,0x3,null,0xd3,0x13,0x8,0x0,0x47,0x1d,0x3,null],'c':[0x39,'.repeat-item','document','querySelectorAll',0x1,'forEach','repeat-','_0x9d59e0','getElementById','repeat-item\x20py-1.5\x20px-3\x20rounded-xl\x20bg-[#1a3a1a]\x20border\x20border-[#39FF14]/30\x20shadow-[0_0_15px_rgba(57,255,20,0.1)]\x20transition-all\x20duration-300','className','.en-text','querySelector','en-text\x20text-[#39FF14]\x20text-base\x20font-bold\x20leading-snug\x20mb-0.5\x20transition-colors','smooth','behavior','center','block','scrollIntoView','player','','BASE_URL','currentType','u/','currentData','audio','src','play',0x0,'onended'],'p':0x1,'l':0x2,'j':{0x19:0x3a,0x26:0x2b},'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x0,0x0,0x4b,0x1,0x0,0x2,0x36,0x2,0x38,null],'c':[0x5dc,'setTimeout',0x2],'p':0x1,'l':0x0,'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x7,0x0,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7,0x1,0xd3,0x5,0x34,null,0x1,null,0x38,null,0x0,0x6,0x4,null,0xd4,0x5,0x3,null,0x6,0x1,0x34,null,0x6,0x1,0x0,0x6,0x47,0x7,0x3,null,0x6,0x1,0x0,0x8,0x47,0x9,0x3,null,0xd3,0xa,0x34,null,0x0,0xb,0x4,null,0xd4,0xa,0x3,null,0xd3,0xc,0x0,0xd,0x36,0x0,0x3,null,0xd3,0xe,0xd7,0xf,0xd5,0x0,0xd2,0x0,0xd3,0xf,0xd7,0xf,0xd3,0xf,0x6,0x0,0x2c,null,0x34,null,0xd5,0x0,0xd2,0x0,0xda,0x10,0xd3,0xf,0x4,null,0xd4,0xe,0x3,null,0xd3,0xf,0xd3,0xe,0x2a,null,0x34,null,0xd3,0x11,0x32,null,0x0,0xd,0xd7,0x10,0xd3,0x10,0xd7,0x12,0xd5,0x0,0xd2,0x0,0xd3,0x12,0xd7,0x12,0xd3,0x12,0xd3,0x13,0x46,0x14,0x2c,null,0x34,null,0xd3,0x5,0x20,null,0x34,null,0xd3,0x12,0x4,null,0xd4,0x11,0x3,null,0x4b,0x15,0x0,0xd,0x36,0x0,0x3,null,0x1,null,0x38,null,0x4b,0x16,0x0,0x17,0x64,null,0x0,0x4,0x68,0x1,0x7a,null,0x3,null,0xd3,0x12,0x4,null,0xd4,0x11,0x3,null,0x4b,0x15,0x0,0xd,0x36,0x0,0x3,null,0xd3,0x12,0xd6,0x0,0xd5,0x0,0xd2,0x0,0xd7,0x12,0xd3,0x12,0x1c,null,0x4,null,0x10,null,0xd4,0x12,0x3,null,0x32,null,0xd6,0x0,0x0,0xd,0x4,null,0xd4,0x11,0x3,null,0x0,0x18,0x0,0x19,0xd3,0xf,0x0,0x4,0xa,null,0xa,null,0x0,0x1a,0xa,null,0xd3,0x1b,0x0,0x1c,0x36,0x2,0x3,null,0xd3,0xf,0x6,0x0,0x0,0x4,0xb,null,0x2c,null,0x4,null,0x34,null,0x3,null,0xd3,0x5,0x34,null,0x4b,0x16,0x0,0x1d,0x64,null,0x0,0x4,0x68,0x1,0x7a,null,0x3,null,0xd6,0x0,0xd3,0xf,0xd6,0x0,0xd5,0x0,0xd2,0x0,0xd7,0xf,0xd3,0xf,0x1c,null,0x4,null,0x10,null,0xd4,0xf,0x3,null,0x32,null,0xd6,0x0,0x4b,0x1e,0x0,0xd,0x36,0x0,0x3,null,0x0,0xd,0x4,null,0xd4,0x11,0x3,null,0x0,0xd,0x4,null,0xd4,0xe,0x3,null,0x4b,0x15,0x0,0xd,0x36,0x0,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['repeatCountVal','repeat-start-btn','document','getElementById',0x1,'isRepeating',!![],'disabled','<div\x20class=\x22w-5\x20h-5\x20border-2\x20border-black\x20border-t-transparent\x20rounded-full\x20animate-spin\x22></div>','innerHTML','isRestoring',![],'requestWakeLock',0x0,'repeatCycleCount','_0x1fe881','_0x23abe9$$2','repeatIndex','_0x9d59e0','currentData','length','saveStatus','Promise',0x3a,'반복듣기','','회\x20완료','sendDataToGoogle',0x2,0x3b,'stopRepeatAudio'],'p':0x0,'l':0x5,'j':{0xc:0xf,0x14:0x1d,0x1e:0x23,0x30:0xa2,0x3b:0x3e,0x3d:0x3f,0x4a:0x73,0x4d:0x58,0x72:0x46,0x8a:0x8d,0x8d:0x95,0xa1:0x2d},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4,null,0xd4,0x1,0x3,null,0xd3,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x0,0x3,null,0x0,0x5,0x4b,0x6,0x4,null,0x46,0x7,0x0,0x8,0x37,0x1,0x7,0x0,0x6,0x0,0x34,null,0x6,0x0,0x0,0x0,0x47,0x9,0x3,null,0x6,0x0,0x0,0xa,0x47,0xb,0x3,null,0x4b,0xc,0x0,0x4,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':[![],'isRepeating','player','pause',0x0,'repeat-start-btn','document','getElementById',0x1,'disabled','<span\x20class=\x22material-icons-round\x22>play_arrow</span>\x20START','innerHTML','saveStatus'],'p':0x0,'l':0x1,'j':{0x12:0x1b},'sp':0x1},{'i':[0xd3,0x0,0x0,0x1,0xb,null,0xd3,0x2,0x46,0x3,0xc,null,0xd3,0x4,0xa,null,0x7,0x0,0x6,0x0,0xd3,0x5,0xd3,0x2,0x46,0x3,0xc,null,0xd,null,0x0,0x6,0xc,null,0x4b,0x7,0x4,null,0x46,0x8,0x0,0x1,0x37,0x1,0x7,0x1,0x0,0x9,0x4b,0xa,0x4,null,0x46,0xb,0x0,0x1,0x37,0x1,0x6,0x1,0x0,0xc,0xa,null,0x47,0xd,0x3,null,0x0,0xe,0x4b,0xa,0x4,null,0x46,0xb,0x0,0x1,0x37,0x1,0x46,0xf,0x6,0x1,0x0,0x6,0x4b,0x7,0x4,null,0x46,0x10,0x0,0x11,0x37,0x2,0x0,0xc,0xa,null,0x47,0x12,0x3,null,0x4b,0x13,0x0,0x14,0x36,0x0,0x3,null,0x1,null,0x38,null],'c':['cycle',0x1,'currentData','length','index','currentTotalCycles',0x64,'Math','floor','progress-percent','document','getElementById','%','innerText','progress','style','min',0x2,'width','saveStatus',0x0],'p':0x0,'l':0x2,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x7,0x2,0xd3,0x7,0x4d,null,0x4,null,0x0,0x8,0x47,0x9,0x3,null,0x4,null,0x0,0xa,0x47,0xb,0x3,null,0x4,null,0x4d,null,0x4,null,0x0,0xc,0x47,0xd,0x3,null,0x4,null,0x6,0x2,0x47,0xe,0x3,null,0x4,null,0x0,0xf,0xd3,0x10,0xa,null,0x47,0x11,0x3,null,0x4,null,0x8,0x1,0x47,0x12,0x3,null,0x4,null,0x8,0x0,0x47,0x13,0x3,null,0x4b,0x14,0x4,null,0x46,0x15,0x0,0x3,0x37,0x1,0x47,0x16,0x3,null,0x4b,0x17,0x0,0x18,0x36,0x2,0x3,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'GOOGLE_SCRIPT_URL','POST','method','no-cors','mode','save','action','phone','Unit\x20','currentUnit','unit','percent','part','JSON','stringify','body','fetch',0x2],'p':0x2,'l':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0xd3,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x0,0xb,null,0x7,0x0,0x6,0x0,0x0,0x3,0x2d,null,0x34,null,0xd3,0x4,0x4b,0x5,0x0,0x6,0x36,0x1,0x38,null,0x4d,null,0x4,null,0x0,0x7,0x47,0x8,0x3,null,0x4,null,0x0,0x9,0x47,0xa,0x3,null,0x4,null,0x0,0xb,0x47,0xc,0x3,null,0x4,null,0x4d,null,0x4,null,0x4b,0xd,0x4,null,0x46,0xe,0x0,0x3,0x37,0x0,0x47,0xf,0x3,null,0x4,null,0x4b,0xd,0x4,null,0x46,0xe,0x0,0x3,0x37,0x0,0x0,0x10,0xb,null,0x47,0x11,0x3,null,0x47,0x12,0x3,null,0x4b,0x13,0x0,0x6,0x36,0x1,0x3,null],'c':['_0x4faee5','Date','now',0x0,'_0x21c230','clearInterval',0x1,0x32,'particleCount',0x1e,'startVelocity',0x168,'spread','Math','random','x',0.2,'y','origin','confetti'],'p':0x0,'l':0x1,'j':{0xd:0x13},'sp':0x1},{'i':[0xd2,0x0,0x1,null,0xd7,0x0,0x3,null,0x1,null,0xd7,0x1,0x3,null,0x0,0x2,0x0,0x3,0xc,null,0x7,0x0,0x4b,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x6,0x0,0xa,null,0xd4,0x0,0x0,0x7,0x64,null,0x0,0x8,0x4b,0x9,0x0,0xa,0x36,0x2,0xd4,0x1,0xd6,0x0,0x1,null,0x38,null],'c':['_0x4faee5','_0x21c230',0x4,0x3e8,'Date','now',0x0,0x40,0xfa,'setInterval',0x2],'p':0x0,'l':0x3,'sp':0x1},{'i':[0x3a,null,0x0,0x0,0x4b,0x1,0x4f,null,0x34,null,0x0,0x2,0x4b,0x1,0x46,0x0,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7a,null,0x4,null,0xd4,0x0,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x5,0x0,0x6,0xd3,0x5,0x4b,0x7,0x4,null,0x46,0x8,0x0,0x9,0x37,0x2,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['wakeLock','navigator','screen','request',0x1,'_0x49a553$$1','Wake\x20Lock\x20Error:','console','log',0x2],'p':0x0,'l':0x0,'j':{0x4:0x10,0x11:0x1f,0x1e:0x1f},'x':{0x0:[0x12,-0x1,0x1f]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x7,0x0,0x0,0x7,0xd3,0x8,0x0,0x3,0x36,0x1,0x3,null,0x3a,null,0x0,0x9,0xd3,0xa,0xa,null,0x0,0xb,0xa,null,0x6,0x0,0xa,null,0x4b,0xc,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x1,0x6,0x1,0x4,null,0x46,0xd,0x0,0x6,0x37,0x0,0x7a,null,0x7,0x2,0x6,0x2,0xd3,0xe,0x0,0x3,0x36,0x1,0x3,null,0x0,0xf,0xd3,0x8,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x10,0x0,0x11,0xd3,0x12,0x0,0x3,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'dev-box','showBox','','GOOGLE_SCRIPT_URL','?action=getResults&phone=','fetch','json','renderResultsCards','results-box','_0x3e08dc$$1','데이터\x20로드\x20실패','showCustomModal'],'p':0x0,'l':0x3,'j':{0x30:0x3b,0x3a:0x3b},'x':{0x11:[0x31,-0x1,0x3b]},'s':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0x4,null,0x34,null,0x3,null,0x8,0x0,0x46,0x0,0xd3,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x20,null,0x34,null,0x8,0x0,0x46,0x0,0xd3,0x1,0x4,null,0x46,0x4,0x0,0x3,0x37,0x1,0x3,null,0x0,0x5,0x38,null,0x0,0x6,0x38,null],'c':['part','_0x28451e','includes',0x1,'push',!![],![]],'p':0x1,'l':0x0,'j':{0x5:0xf,0xf:0x1a},'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0xd3,0x1,0x48,null,0x4,null,0x33,null,0x3,null,0x0,0x2,0x7,0x1,0x6,0x1,0x4b,0x3,0x0,0x4,0x36,0x1,0x20,null,0x4,null,0x34,null,0x3,null,0x6,0x1,0x0,0x5,0x2b,null,0x4,null,0x34,null,0x3,null,0x0,0x6,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x0,0x4,0xf,null,0x2a,null,0x4,null,0x34,null,0x3,null,0x0,0x9,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x0,0x4,0xf,null,0x2a,null,0x34,null,0x6,0x1,0x4b,0xa,0x0,0x4,0x36,0x1,0x0,0xb,0xc,null,0x4b,0xc,0x4,null,0x46,0xd,0x0,0x4,0x37,0x1,0x0,0xe,0xa,null,0x4,null,0x7,0x1,0x3,null,0x6,0x1,0x0,0xf,0x2a,null,0x4,null,0x33,null,0x3,null,0x0,0x10,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x11,0x0,0x4,0x37,0x1,0x7,0x2,0x6,0x2,0x34,null,0x0,0x12,0x32,null,0x0,0x13,0x7,0x3,0xd3,0x14,0x0,0x15,0x8,0x0,0x46,0x16,0xa,null,0x0,0x17,0xa,null,0x6,0x3,0xa,null,0x0,0x18,0xa,null,0x6,0x1,0xa,null,0x0,0x19,0xa,null,0xa,null,0x4,null,0xd4,0x14,0x3,null],'c':['units','_0x150aee','-','isNaN',0x1,'',':','String','indexOf','회','parseFloat',0x64,'Math','round','%','100%','완료','includes','#39ff14','#fff','_0x352a33$$2','<div\x20style=\x22display:flex;\x20justify-content:space-between;\x20margin-top:5px;\x20font-size:14px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20style=\x22color:#aaa;\x22>','part','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20style=\x22color:',';\x20font-weight:bold;\x22>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>'],'p':0x1,'l':0x3,'j':{0x7:0xa,0x11:0x16,0x17:0x25,0x26:0x34,0x34:0x45,0x49:0x54,0x56:0x59,0x58:0x5a},'a':0x1,'sp':0x1},{'i':[0xd2,0x0,0xda,0x0,0x0,0x1,0x4b,0x2,0x4,null,0x46,0x3,0x0,0x4,0x37,0x1,0x7,0x1,0x6,0x1,0x0,0x5,0x47,0x6,0x3,null,0x5a,null,0xd9,0x0,0x0,0x7,0x64,null,0x8,0x0,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x7,0x3,0x0,0x9,0xd7,0xa,0xd5,0x0,0xd2,0x0,0xd3,0xa,0xd7,0xa,0xd3,0xa,0x0,0xb,0x2c,null,0x34,null,0xd5,0x0,0xd2,0x0,0xda,0xc,0xda,0xd,0x0,0xe,0x4b,0x2,0x4,null,0x46,0xf,0x0,0x4,0x37,0x1,0xd9,0xc,0xd3,0xc,0x46,0x10,0x0,0x11,0x47,0x12,0x3,null,0x0,0x13,0xd3,0xa,0x0,0x4,0xa,null,0xa,null,0x0,0x14,0xa,null,0xd7,0xd,0x0,0x15,0x64,null,0x6,0x3,0x4,null,0x46,0x16,0x0,0x4,0x37,0x1,0x3,null,0xd3,0xc,0xd3,0xd,0x47,0x6,0x3,null,0xd3,0xc,0x6,0x1,0x4,null,0x46,0x17,0x0,0x4,0x37,0x1,0x3,null,0xd6,0x0,0xd3,0xa,0xd6,0x0,0xd5,0x0,0xd2,0x0,0xd7,0xa,0xd3,0xa,0x1c,null,0x4,null,0x10,null,0xd4,0xa,0x3,null,0x32,null,0xd6,0x0,0xd6,0x0,0x1,null,0x38,null],'c':['_0x28451e','results-content','document','getElementById',0x1,'','innerHTML',0x44,'filter',0x0,'_0x150aee',0x8,'_0x2cec99$$2','_0x352a33$$2','div','createElement','style','background:#222;\x20border:1px\x20solid\x20#333;\x20border-radius:15px;\x20padding:15px;\x20margin-bottom:15px;\x20text-align:left;','cssText','<h3\x20style=\x22color:#39ff14;\x20border-bottom:1px\x20solid\x20#333;\x20padding-bottom:5px;\x22>Unit\x20','</h3>',0x45,'forEach','appendChild'],'p':0x1,'l':0x6,'j':{0x20:0x59,0x58:0x1d},'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x34,null,0x6,0x0,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x32,null,0x0,0x7,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x8,0xd3,0x9,0x0,0x3,0x36,0x1,0x38,null,0x0,0xa,0x2,null,0x0,0xb,0xd3,0x9,0x0,0xc,0x36,0x3,0x3,null,0x3a,null,0x0,0x7,0xd3,0xd,0xa,null,0x0,0xe,0xa,null,0x6,0x1,0xa,null,0x4b,0xf,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x2,0x6,0x2,0x4,null,0x46,0x10,0x0,0x6,0x37,0x0,0x7a,null,0x7,0x3,0xd3,0x11,0x0,0x6,0x36,0x0,0x3,null,0x6,0x3,0xd3,0x12,0x0,0x3,0x36,0x1,0x3,null,0x0,0x13,0xd3,0x14,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x15,0xd3,0x15,0x4b,0x16,0x4,null,0x46,0x17,0x0,0x3,0x37,0x1,0x3,null,0x0,0x18,0xd3,0x9,0x0,0x3,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'','로그인\x20정보가\x20없습니다.','showCustomModal','데이터를\x20불러오는\x20중...',![],0x3,'GOOGLE_SCRIPT_URL','?action=getResults&phone=','fetch','json','closeCustomModal','renderResultsCards','results-box','showBox','_0x5b313c$$1','console','error','데이터\x20로드\x20실패'],'p':0x0,'l':0x4,'j':{0x8:0x10,0xf:0x11,0x14:0x1a,0x44:0x56,0x55:0x56},'x':{0x21:[0x45,-0x1,0x56]},'s':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0x4,null,0x34,null,0x3,null,0x8,0x0,0x46,0x0,0xd3,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x20,null,0x34,null,0x8,0x0,0x46,0x0,0xd3,0x1,0x4,null,0x46,0x4,0x0,0x3,0x37,0x1,0x3,null,0x0,0x5,0x38,null,0x0,0x6,0x38,null],'c':['part','_0x4630d0','includes',0x1,'push',!![],![]],'p':0x1,'l':0x0,'j':{0x5:0xf,0xf:0x1a},'a':0x1,'sp':0x1},{'i':[0xd5,0x0,0xd2,0x0,0x8,0x0,0x46,0x0,0xd3,0x1,0x48,null,0x4,null,0x33,null,0x3,null,0x0,0x2,0x7,0x1,0x6,0x1,0x4b,0x3,0x0,0x4,0x36,0x1,0x20,null,0x4,null,0x34,null,0x3,null,0x6,0x1,0x0,0x5,0x2b,null,0x4,null,0x34,null,0x3,null,0x0,0x6,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x0,0x4,0xf,null,0x2a,null,0x4,null,0x34,null,0x3,null,0x0,0x9,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x0,0x4,0xf,null,0x2a,null,0x4,null,0x34,null,0x3,null,0x0,0xa,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x8,0x0,0x4,0x37,0x1,0x0,0x4,0xf,null,0x2a,null,0x34,null,0x6,0x1,0x4b,0xb,0x0,0x4,0x36,0x1,0x0,0xc,0xc,null,0x4b,0xd,0x4,null,0x46,0xe,0x0,0x4,0x37,0x1,0x0,0xf,0xa,null,0x4,null,0x7,0x1,0x3,null,0x6,0x1,0x0,0x10,0x2a,null,0x4,null,0x33,null,0x3,null,0x0,0x11,0x6,0x1,0x4b,0x7,0x0,0x4,0x36,0x1,0x4,null,0x46,0x12,0x0,0x4,0x37,0x1,0x7,0x2,0x8,0x0,0x46,0x13,0x0,0x14,0x2a,null,0x4,null,0x34,null,0x3,null,0x6,0x1,0x6e,null,0x0,0x15,0x2a,null,0x4,null,0x34,null,0x3,null,0x0,0xa,0x6,0x1,0x4,null,0x46,0x12,0x0,0x4,0x37,0x1,0x34,null,0x6,0x1,0x4b,0x16,0x0,0x4,0x36,0x1,0x7,0x3,0x6,0x3,0x4b,0x3,0x0,0x4,0x36,0x1,0x20,null,0x4,null,0x34,null,0x3,null,0x6,0x3,0x0,0x17,0x2f,null,0x34,null,0x0,0x18,0x4,null,0x7,0x2,0x3,null,0x6,0x2,0x34,null,0x0,0x19,0x32,null,0x0,0x1a,0x7,0x4,0x6,0x2,0x34,null,0x0,0x1b,0x32,null,0x0,0x1c,0x7,0x5,0x6,0x2,0x34,null,0x0,0x1d,0x32,null,0x0,0x1e,0x7,0x6,0xd3,0x1f,0x0,0x20,0x8,0x0,0x46,0x13,0xa,null,0x0,0x21,0xa,null,0x6,0x4,0xa,null,0x0,0x22,0xa,null,0x6,0x1,0xa,null,0x0,0x23,0xa,null,0x6,0x6,0xa,null,0x0,0x24,0xa,null,0x6,0x5,0xa,null,0x0,0x25,0xa,null,0xa,null,0x4,null,0xd4,0x1f,0x3,null],'c':['units','_0xcb228b','-','isNaN',0x1,'',':','String','indexOf','회','분','parseFloat',0x64,'Math','round','%','100%','완료','includes','part','AS\x20Correction','string','parseInt',0xf,!![],'text-[#39FF14]\x20font-bold','text-white\x20font-medium','check_circle','remove_circle_outline','text-[#39FF14]','text-neutral-700','_0x5d7c99','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20justify-between\x20items-center\x20text-sm\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-400\x20text-xs\x22>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20gap-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22','\x22>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20','\x20text-sm\x22>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20'],'p':0x1,'l':0x6,'j':{0x7:0xa,0x11:0x16,0x17:0x25,0x26:0x34,0x35:0x43,0x43:0x54,0x58:0x63,0x69:0x6f,0x70:0x78,0x78:0x8e,0x84:0x89,0x89:0x8e,0x8f:0x92,0x91:0x93,0x95:0x98,0x97:0x99,0x9b:0x9e,0x9d:0x9f},'a':0x1,'sp':0x1},{'i':[0xd2,0x0,0xda,0x0,0xda,0x1,0x0,0x2,0x4b,0x3,0x4,null,0x46,0x4,0x0,0x5,0x37,0x1,0x7,0x1,0x6,0x1,0x0,0x6,0x47,0x7,0x3,null,0x0,0x8,0xd7,0x0,0x5a,null,0xd9,0x1,0x0,0x9,0x64,null,0x8,0x0,0x4,null,0x46,0xa,0x0,0x5,0x37,0x1,0x7,0x4,0x0,0xb,0xd7,0xc,0xd5,0x0,0xd2,0x0,0xd3,0xc,0xd7,0xc,0xd3,0xc,0x0,0xd,0x2c,null,0x34,null,0xd3,0x0,0x0,0xe,0xd3,0xc,0x0,0x5,0xa,null,0xa,null,0x0,0xf,0xa,null,0xa,null,0x4,null,0xd4,0x0,0x3,null,0x0,0x10,0x64,null,0x6,0x4,0x4,null,0x46,0x11,0x0,0x5,0x37,0x1,0x3,null,0xd3,0x0,0x0,0x12,0xa,null,0x4,null,0xd4,0x0,0x3,null,0xd3,0xc,0xd6,0x0,0xd5,0x0,0xd2,0x0,0xd7,0xc,0xd3,0xc,0x1c,null,0x4,null,0x10,null,0xd4,0xc,0x3,null,0x32,null,0xd6,0x0,0xd3,0x0,0x0,0x13,0xa,null,0x4,null,0xd4,0x0,0x3,null,0xd3,0x0,0x0,0x14,0xa,null,0x4,null,0xd4,0x0,0x3,null,0x6,0x1,0xd3,0x0,0x47,0x15,0x3,null,0xd6,0x0,0x1,null,0x38,null],'c':['_0x5d7c99','_0x4630d0','results-box','document','getElementById',0x1,'fixed\x20top-[80px]\x20bottom-[90px]\x20left-0\x20right-0\x20z-30\x20bg-black\x20overflow-y-auto\x20no-scrollbar\x20px-6\x20pb-10\x20flex\x20flex-col','className','\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22mt-4\x20mb-6\x20text-center\x20shrink-0\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-[#39FF14]\x20text-lg\x20font-bold\x22>Progress\x20Report</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-xs\x20mt-1\x22>학습\x20현황\x20분석</p>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20<div\x20id=\x22results-content\x22\x20class=\x22space-y-4\x20w-full\x20flex-1\x22>\x0a\x20\x20',0x48,'filter',0x0,'_0xcb228b',0x8,'\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20bg-[#1c1c1c]\x20rounded-2xl\x20p-5\x20border\x20border-neutral-800\x20shadow-lg\x20mb-4\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h3\x20class=\x22text-[#39FF14]\x20font-bold\x20text-base\x20border-b\x20border-neutral-800\x20pb-2\x20mb-3\x20tracking-wider\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Unit\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22space-y-2\x22>\x0a\x20\x20\x20\x20',0x49,'forEach','</div></div>','</div>','\x0a\x20\x20\x20\x20\x20\x20<div\x20class=\x22mt-8\x20w-full\x20shrink-0\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22showMenu()\x22\x20class=\x22w-full\x20py-4\x20bg-[#1c1c1c]\x20text-neutral-400\x20font-bold\x20rounded-xl\x20border\x20border-neutral-800\x20active:border-white\x20active:text-white\x20transition-all\x20text-sm\x20uppercase\x20tracking-wider\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Back\x20to\x20Menu\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20','innerHTML'],'p':0x1,'l':0x5,'j':{0x23:0x4a,0x49:0x20},'sp':0x1},{'i':[0x0,0x0,0xd3,0x1,0x0,0x2,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['🏆기능\x20준비중입니다.\x0a(Ranking\x20Coming\x20Soon)','showCustomModal',0x1],'p':0x0,'l':0x0,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x34,null,0x6,0x0,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x32,null,0x0,0x7,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x8,0xd3,0x9,0x0,0x3,0x36,0x1,0x38,null,0x0,0xa,0x2,null,0x0,0xb,0xd3,0x9,0x0,0xc,0x36,0x3,0x3,null,0x3a,null,0x0,0x7,0xd3,0xd,0xa,null,0x0,0xe,0xa,null,0x6,0x1,0xa,null,0x4b,0xf,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x2,0x6,0x2,0x4,null,0x46,0x10,0x0,0x6,0x37,0x0,0x7a,null,0x7,0x3,0xd3,0x11,0x0,0x6,0x36,0x0,0x3,null,0x6,0x3,0x46,0x12,0x0,0x13,0x2a,null,0x34,null,0x6,0x3,0xd3,0x14,0x0,0x3,0x36,0x1,0x3,null,0x0,0x15,0xd3,0x16,0x0,0x3,0x36,0x1,0x3,null,0x32,null,0x0,0x17,0xd3,0x9,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x18,0xd3,0x18,0x4b,0x19,0x4,null,0x46,0x1a,0x0,0x3,0x37,0x1,0x3,null,0x0,0x1b,0xd3,0x9,0x0,0x3,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'','로그인\x20정보가\x20없습니다.','showCustomModal','프로필\x20정보를\x20불러오는\x20중...',![],0x3,'GOOGLE_SCRIPT_URL','?action=getProfile&phone=','fetch','json','closeCustomModal','result','success','renderProfilePage','profile-box','showBox','학생\x20정보를\x20찾을\x20수\x20없습니다.','_0x228ba7$$1','console','error','프로필\x20로드\x20실패'],'p':0x0,'l':0x4,'j':{0x8:0x10,0xf:0x11,0x14:0x1a,0x3d:0x49,0x48:0x4e,0x4f:0x61,0x60:0x61},'x':{0x21:[0x50,-0x1,0x61]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x4,0x4b,0x1,0x4,null,0x46,0x5,0x0,0x3,0x37,0x1,0x4,null,0x7,0x1,0x3,null,0x6,0x1,0x0,0x0,0x47,0x6,0x3,null,0x6,0x1,0x4b,0x1,0x46,0x7,0x4,null,0x46,0x8,0x0,0x3,0x37,0x1,0x3,null,0x6,0x1,0x0,0x9,0x47,0xa,0x3,null,0x4b,0xb,0x0,0xc,0x68,0x0,0x7,0x2,0x6,0x2,0x4,null,0x46,0xd,0x0,0xc,0x37,0x0,0x7,0x3,0x6,0x2,0x4,null,0x46,0xe,0x0,0xc,0x37,0x0,0x7,0x4,0x5a,null,0x0,0xf,0x5b,null,0x0,0x10,0x5b,null,0x0,0x11,0x5b,null,0x0,0x12,0x5b,null,0x0,0x13,0x5b,null,0x0,0x14,0x5b,null,0x0,0x15,0x5b,null,0x0,0x16,0x5b,null,0x0,0x17,0x5b,null,0x0,0x18,0x5b,null,0x0,0x19,0x5b,null,0x0,0x1a,0x5b,null,0x7,0x5,0x6,0x5,0x6,0x4,0x48,null,0x7,0x6,0x6,0x3,0x6,0x4,0x8,0x0,0x46,0x1b,0x4,null,0x33,null,0x3,null,0x5a,null,0xd3,0x1c,0x0,0x1d,0x36,0x3,0x7,0x7,0x6,0x1,0x0,0x1e,0x8,0x0,0x46,0x1f,0xa,null,0x0,0x20,0xa,null,0x8,0x0,0x46,0x21,0xa,null,0x0,0x22,0xa,null,0x8,0x0,0x46,0x23,0xa,null,0x0,0x24,0xa,null,0x6,0x6,0xa,null,0x0,0x25,0xa,null,0x6,0x3,0xa,null,0x0,0x26,0xa,null,0x6,0x7,0xa,null,0x0,0x27,0xa,null,0x47,0x28,0x3,null,0x1,null,0x38,null],'c':['profile-box','document','getElementById',0x1,'div','createElement','id','body','appendChild','fixed\x20top-[140px]\x20bottom-[90px]\x20left-0\x20right-0\x20z-30\x20bg-black\x20overflow-y-auto\x20no-scrollbar\x20px-6\x20flex\x20flex-col\x20items-center\x20pt-4','className','Date',0x0,'getFullYear','getMonth','JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER','attendance','generateCalendarHTML',0x3,'\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20bg-[#0a0a0a]\x20border\x20border-[#333]\x20border-l-4\x20border-l-[#39FF14]\x20rounded-xl\x20p-6\x20shadow-[0_0_20px_rgba(57,255,20,0.1)]\x20mb-8\x20relative\x20overflow-hidden\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20top-0\x20right-0\x20w-20\x20h-20\x20bg-gradient-to-bl\x20from-[#39FF14]/10\x20to-transparent\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22relative\x20z-10\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-[#39FF14]\x20font-mono\x20text-[10px]\x20font-bold\x20tracking-[0.2em]\x20mb-4\x20flex\x20items-center\x20gap-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22w-2\x20h-2\x20bg-[#39FF14]\x20rounded-full\x20animate-pulse\x22></span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20STUDENT\x20IDENTITY\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</p>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20justify-between\x20items-start\x20mb-6\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h1\x20class=\x22text-white\x20text-4xl\x20font-black\x20tracking-tight\x20leading-none\x20mb-1\x20drop-shadow-md\x22>','name','</h1>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-[10px]\x20font-mono\x20uppercase\x20tracking-widest\x22>Agent\x20Name</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22text-right\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22inline-block\x20border\x20border-[#39FF14]\x20px-3\x20py-1\x20rounded\x20bg-[#39FF14]/10\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h1\x20class=\x22text-[#39FF14]\x20text-xl\x20font-black\x20tracking-tighter\x20leading-none\x22>','level','</h1>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-500\x20text-[10px]\x20font-mono\x20uppercase\x20tracking-widest\x20mt-1\x22>Level</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#1c1c1c]\x20rounded-lg\x20p-3\x20border\x20border-neutral-800\x20flex\x20items-center\x20gap-3\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-neutral-400\x20text-lg\x22>schedule</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22text-white\x20text-sm\x20font-bold\x20tracking-wide\x22>','classInfo','</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-600\x20text-[10px]\x20font-bold\x20uppercase\x20tracking-widest\x22>Assigned\x20Class</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20mb-8\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20justify-between\x20mb-4\x20px-1\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22flex\x20items-center\x20gap-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-[#39FF14]\x20text-base\x22>date_range</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h3\x20class=\x22text-white\x20font-bold\x20text-lg\x20tracking-wider\x20font-mono\x22>','\x20<span\x20class=\x22text-neutral-500\x20text-sm\x22>','</span></h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#111]\x20rounded-2xl\x20p-4\x20border\x20border-neutral-800\x20shadow-lg\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22grid\x20grid-cols-7\x20text-center\x20mb-3\x20border-b\x20border-neutral-800\x20pb-2\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-[#ff4757]\x20text-[10px]\x20font-black\x20font-mono\x22>SUN</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-500\x20text-[10px]\x20font-bold\x20font-mono\x22>MON</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-500\x20text-[10px]\x20font-bold\x20font-mono\x22>TUE</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-500\x20text-[10px]\x20font-bold\x20font-mono\x22>WED</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-500\x20text-[10px]\x20font-bold\x20font-mono\x22>THU</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-neutral-500\x20text-[10px]\x20font-bold\x20font-mono\x22>FRI</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22text-[#39FF14]\x20text-[10px]\x20font-black\x20font-mono\x22>SAT</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22grid\x20grid-cols-7\x20gap-2\x20text-center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22mt-auto\x20w-full\x20py-8\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22logout()\x22\x20class=\x22w-full\x20py-4\x20rounded-xl\x20border\x20border-neutral-800\x20text-neutral-500\x20font-bold\x20tracking-[0.2em]\x20text-xs\x20hover:bg-[#39FF14]/10\x20hover:text-[#39FF14]\x20hover:border-[#39FF14]\x20active:scale-95\x20transition-all\x20uppercase\x20flex\x20items-center\x20justify-center\x20gap-2\x20group\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-sm\x20group-hover:text-[#39FF14]\x20transition-colors\x22>power_settings_new</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20System\x20Logout\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20','innerHTML'],'p':0x1,'l':0x7,'j':{0x9:0x1f,0x56:0x59},'sp':0x1},{'i':[0x4b,0x0,0x8,0x0,0x8,0x1,0x0,0x1,0x0,0x2,0x68,0x3,0x4,null,0x46,0x3,0x0,0x4,0x37,0x0,0x7,0x3,0x4b,0x0,0x8,0x0,0x8,0x1,0x0,0x1,0xa,null,0x0,0x4,0x0,0x2,0x68,0x3,0x4,null,0x46,0x5,0x0,0x4,0x37,0x0,0x7,0x4,0x0,0x6,0x7,0x5,0x0,0x4,0x7,0x6,0x6,0x6,0x6,0x3,0x2c,null,0x34,null,0x6,0x5,0x0,0x7,0xa,null,0x4,null,0x7,0x5,0x3,null,0x6,0x6,0x1c,null,0x4,null,0x10,null,0x7,0x6,0x3,null,0x32,null,0x0,0x1,0x7,0x7,0x6,0x7,0x6,0x4,0x2d,null,0x34,null,0x6,0x7,0x8,0x2,0x4,null,0x46,0x8,0x0,0x1,0x37,0x1,0x7,0x8,0x0,0x9,0x6,0x7,0xa,null,0x0,0xa,0xa,null,0x7,0x9,0x0,0xb,0x7,0xa,0x0,0xc,0x7,0xb,0x6,0x8,0x34,null,0x0,0xd,0x6,0x7,0xa,null,0x0,0xa,0xa,null,0x4,null,0x7,0x9,0x3,null,0x0,0xe,0x4,null,0x7,0xa,0x3,null,0x0,0xf,0x4,null,0x7,0xb,0x3,null,0x32,null,0x0,0x10,0x4,null,0x7,0xb,0x3,null,0x6,0x5,0x0,0x11,0x6,0xa,0xa,null,0x0,0x12,0xa,null,0x6,0xb,0xa,null,0x0,0x13,0xa,null,0x6,0x9,0xa,null,0x0,0x14,0xa,null,0xa,null,0x4,null,0x7,0x5,0x3,null,0x6,0x7,0x1c,null,0x4,null,0x10,null,0x7,0x7,0x3,null,0x32,null,0x6,0x5,0x38,null],'c':['Date',0x1,0x3,'getDay',0x0,'getDate','','<div\x20class=\x22h-10\x22></div>','includes','<span\x20class=\x22text-neutral-500\x20text-sm\x20font-medium\x20font-mono\x22>','</span>','bg-transparent','border\x20border-transparent','<span\x20class=\x22text-[#111]\x20text-sm\x20font-black\x20font-mono\x20relative\x20z-10\x22>','bg-[#39FF14]','border\x20border-[#39FF14]\x20shadow-[0_0_10px_#39FF14]','border\x20border-neutral-900','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22h-10\x20rounded-lg\x20','\x20','\x20flex\x20items-center\x20justify-center\x20relative\x20transition-all\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20'],'p':0x3,'l':0x9,'j':{0x1f:0x2d,0x2c:0x1c,0x32:0x74,0x45:0x57,0x56:0x5b,0x73:0x2f},'sp':0x1},{'i':[0x4b,0x0,0x4,null,0x46,0x1,0x0,0x2,0x37,0x0,0x3,null],'c':['location','reload',0x0],'p':0x0,'l':0x0,'a':0x1,'sp':0x1},{'i':[0x0,0x0,0x0,0x1,0x64,null,0xd3,0x2,0x0,0x3,0x36,0x2,0x3,null,0x1,null,0x38,null],'c':['로그아웃\x20하시겠습니까?',0x4f,'showCustomModal',0x2],'p':0x0,'l':0x0,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x0,0x6,0x0,0x34,null,0x6,0x0,0x46,0x4,0x4,null,0x46,0x5,0x0,0x6,0x37,0x0,0x32,null,0x0,0x7,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x8,0xd3,0x9,0x0,0x3,0x36,0x1,0x38,null,0x0,0xa,0x2,null,0x0,0xb,0xd3,0x9,0x0,0xc,0x36,0x3,0x3,null,0x3a,null,0x0,0x7,0xd3,0xd,0xa,null,0x0,0xe,0xa,null,0x6,0x1,0xa,null,0x4b,0xf,0x0,0x3,0x36,0x1,0x7a,null,0x7,0x2,0x6,0x2,0x4,null,0x46,0x10,0x0,0x6,0x37,0x0,0x7a,null,0x7,0x3,0xd3,0x11,0x0,0x6,0x36,0x0,0x3,null,0x6,0x3,0x46,0x12,0xd3,0x13,0x0,0x3,0x36,0x1,0x3,null,0x0,0x14,0xd3,0x15,0x0,0x3,0x36,0x1,0x3,null,0x3b,null,0x32,null,0xd5,0x0,0xd2,0x0,0x3c,0x16,0xd3,0x16,0x4b,0x17,0x4,null,0x46,0x18,0x0,0x3,0x37,0x1,0x3,null,0x0,0x19,0xd3,0x9,0x0,0x3,0x36,0x1,0x3,null,0xd6,0x0,0x32,null,0x1,null,0x38,null],'c':['phone-input','document','getElementById',0x1,'value','trim',0x0,'','로그인\x20정보가\x20없습니다.','showCustomModal','데이터\x20수신\x20중...',![],0x3,'GOOGLE_SCRIPT_URL','?action=getNotice&phone=','fetch','json','closeCustomModal','notice','renderNoticePage','notice-box','showBox','_0x147725$$1','console','error','통신\x20오류:\x20데이터\x20접근\x20불가'],'p':0x0,'l':0x4,'j':{0x8:0x10,0xf:0x11,0x14:0x1a,0x45:0x57,0x56:0x57},'x':{0x21:[0x46,-0x1,0x57]},'s':0x1,'sp':0x1},{'i':[0x0,0x0,0x4b,0x1,0x4,null,0x46,0x2,0x0,0x3,0x37,0x1,0x7,0x1,0x6,0x1,0x20,null,0x34,null,0x0,0x4,0x4b,0x1,0x4,null,0x46,0x5,0x0,0x3,0x37,0x1,0x4,null,0x7,0x1,0x3,null,0x6,0x1,0x0,0x0,0x47,0x6,0x3,null,0x6,0x1,0x4b,0x1,0x46,0x7,0x4,null,0x46,0x8,0x0,0x3,0x37,0x1,0x3,null,0x8,0x0,0x4,null,0x33,null,0x3,null,0x0,0x9,0x4,null,0x46,0xa,0x0,0xb,0x37,0x0,0x7,0x2,0x6,0x2,0x0,0x9,0x2a,null,0x4,null,0x33,null,0x3,null,0x6,0x2,0x0,0xc,0x2a,null,0x4,null,0x33,null,0x3,null,0x6,0x2,0x0,0xd,0x2a,null,0x34,null,0x0,0xe,0x4,null,0x7,0x2,0x3,null,0x6,0x1,0x0,0xf,0x47,0x10,0x3,null,0x6,0x1,0x0,0x11,0x6,0x2,0xa,null,0x0,0x12,0xa,null,0x47,0x13,0x3,null,0x1,null,0x38,null],'c':['notice-box','document','getElementById',0x1,'div','createElement','id','body','appendChild','','trim',0x0,'undefined','null','현재\x20등록된\x20공지사항이\x20없습니다.','fixed\x20top-[120px]\x20bottom-[100px]\x20left-0\x20right-0\x20z-30\x20bg-black\x20overflow-y-auto\x20no-scrollbar\x20px-6\x20flex\x20flex-col\x20items-center\x20pt-4','className','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20mb-5\x20shrink-0\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#0a0a0a]\x20border\x20border-neutral-800\x20py-5\x20rounded-2xl\x20text-center\x20shadow-[0_0_15px_rgba(255,255,255,0.03)]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-neutral-600\x20text-[10px]\x20font-mono\x20tracking-[0.4em]\x20uppercase\x20mb-1\x22>System\x20Broadcast</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h1\x20class=\x22text-white\x20text-3xl\x20font-black\x20tracking-widest\x20uppercase\x20leading-none\x22>NOTICE</h1>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20flex-grow\x20min-h-[450px]\x20relative\x20flex\x20flex-col\x20mb-4\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22bg-[#111]\x20rounded-none\x20border\x20border-neutral-800\x20shadow-lg\x20relative\x20flex-grow\x20flex\x20flex-col\x20items-center\x20justify-center\x20p-6\x20overflow-hidden\x20z-10\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20inset-0\x20bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)]\x20pointer-events-none\x22></div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22relative\x20z-20\x20w-full\x20flex\x20justify-center\x20items-center\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p\x20class=\x22text-white\x20text-xl\x20font-bold\x20leading-relaxed\x20break-keep\x20whitespace-pre-wrap\x20text-center\x20w-full\x20m-0\x20p-0\x22>','</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20-top-1\x20-left-1\x20w-6\x20h-6\x20border-t-2\x20border-l-2\x20border-[#39FF14]\x20shadow-[0_0_10px_rgba(57,255,20,0.5)]\x20z-20\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20-top-1\x20-right-1\x20w-6\x20h-6\x20border-t-2\x20border-r-2\x20border-[#39FF14]\x20shadow-[0_0_10px_rgba(57,255,20,0.5)]\x20z-20\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20-bottom-1\x20-left-1\x20w-6\x20h-6\x20border-b-2\x20border-l-2\x20border-[#39FF14]\x20shadow-[0_0_10px_rgba(57,255,20,0.5)]\x20z-20\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22absolute\x20-bottom-1\x20-right-1\x20w-6\x20h-6\x20border-b-2\x20border-r-2\x20border-[#39FF14]\x20shadow-[0_0_10px_rgba(57,255,20,0.5)]\x20z-20\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22w-full\x20shrink-0\x20pb-10\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20onclick=\x22goBackToUnits()\x22\x20class=\x22w-full\x20py-5\x20rounded-xl\x20border\x20border-neutral-800\x20text-neutral-500\x20font-bold\x20tracking-[0.2em]\x20text-xs\x20hover:bg-[#1c1c1c]\x20hover:text-[#39FF14]\x20hover:border-[#39FF14]/50\x20active:scale-95\x20transition-all\x20uppercase\x20flex\x20items-center\x20justify-center\x20gap-3\x20bg-[#0a0a0a]\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22material-icons-round\x20text-lg\x22>arrow_back</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20RETURN\x20TO\x20UNIT\x20LIST\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20','innerHTML'],'p':0x1,'l':0x2,'j':{0x9:0x1f,0x21:0x24,0x2d:0x32,0x33:0x38,0x38:0x3d},'sp':0x1},{'i':[0x0,0x0,0xd3,0x1,0x0,0x2,0x36,0x1,0x3,null,0x1,null,0x38,null],'c':['unit-selector','showBox',0x1],'p':0x0,'l':0x0,'sp':0x1}];function g(p){return v[p];}for(let p=0x0;p<v['length'];p++){let X=v[p];if(X['c'])for(let E=0x0;E<X['c']['length'];E++){let q=X['c'][E];if(typeof q==='string'&&q['length']>0x1&&q[q['length']-0x1]==='n')try{X['c'][E]=BigInt(q['slice'](0x0,-0x1));}catch(o){}}}let L={0x0:0x18e,0x1:0xc,0x2:0xdf,0x3:0x19,0x4:0xb5,0x5:0x15e,0x6:0x138,0x7:0x153,0x8:0x11f,0x9:0x2f,0xa:0xfd,0xb:0x161,0xc:0x17,0xd:0x22,0xe:0x134,0xf:0x112,0x10:0x160,0x11:0x1b6,0x12:0x4e,0x13:0x36,0x14:0x10c,0x15:0x57,0x16:0x63,0x17:0xbb,0x18:0xd3,0x19:0x176,0x1a:0xd5,0x1b:0xd0,0x1c:0x1de,0x20:0x91,0x28:0x139,0x29:0x58,0x2a:0x1bf,0x2b:0x16b,0x2c:0x2b,0x2d:0x141,0x2e:0x1be,0x2f:0x10a,0x32:0x107,0x33:0x14f,0x34:0x4d,0x35:0x1e9,0x36:0xc8,0x37:0xd8,0x38:0x1df,0x39:0x125,0x3a:0x172,0x3b:0x14b,0x3c:0x1b5,0x3d:0x1a5,0x3e:0x15b,0x3f:0x1bd,0x40:0x157,0x41:0xd7,0x46:0x1c5,0x47:0xb2,0x48:0x192,0x49:0xca,0x4a:0x1ce,0x4b:0x1b4,0x4c:0xda,0x4d:0x19a,0x4e:0x4b,0x4f:0x27,0x50:0xfc,0x51:0xa9,0x52:0x4a,0x53:0x185,0x54:0x146,0x5a:0xeb,0x5b:0x126,0x5c:0x24,0x5d:0x152,0x5e:0x1a2,0x5f:0x163,0x64:0x190,0x65:0x82,0x66:0x16f,0x67:0x9b,0x68:0x25,0x69:0x1b1,0x6a:0x129,0x6b:0x45,0x6e:0x103,0x6f:0x30,0x70:0x187,0x78:0xb1,0x79:0x6f,0x7a:0x1d8,0x7b:0x13d,0x7c:0x122,0x7d:0x147,0x7e:0x12a,0x7f:0x3f,0x80:0x78,0x81:0xe6,0x82:0x69,0x83:0x113,0x84:0x31,0x8c:0x110,0x8d:0x5f,0x8e:0x1a0,0x8f:0x1e7,0x90:0x1cf,0x91:0x6c,0x92:0x4c,0x93:0xbc,0x94:0x16d,0x95:0x72,0x96:0xf6,0x97:0x132,0x98:0x12e,0x99:0x7a,0x9a:0x29,0x9b:0x1c6,0x9c:0x193,0x9d:0x56,0x9e:0x5,0xa0:0x137,0xa1:0xe7,0xa2:0x1e1,0xa3:0x8d,0xa4:0x8b,0xa5:0xc1,0xa6:0x34,0xa7:0x175,0xa8:0x11b,0xa9:0x1b8,0xb4:0xaf,0xb5:0x7f,0xb6:0x117,0xb7:0x5e,0xb8:0x8f,0xb9:0x1c9,0xc8:0x6b,0xc9:0x1f1,0xca:0x14d,0xd2:0xc3,0xd3:0x1d7,0xd4:0x14,0xd5:0x96,0xd6:0x32,0xd7:0x43,0xd8:0x1a9,0xd9:0x7d,0xda:0x11d,0xdb:0x1d,0xdc:0x1ee,0xfa:0x1fc,0xfb:0x178,0xfc:0x170,0xfd:0x159,0xfe:0x149,0xff:0x115,0x100:0x50,0x101:0x16c,0x102:0x102,0x103:0x59,0x104:0x15,0x105:0x1fa};const Q={},l=0x1,W=0x2,H=0x3,T=0x4,N=0x78,S=0x79,x=0x7a;let V=new WeakSet(),w=new WeakSet();function r(s,t,F){try{vmM(s,t,F);}catch(c){}}function M(s,t){let F=[];for(let c=0x0;c<t;c++){let G=s();if(G&&typeof G==='object'&&V['has'](G)){let v0=G['value'];if(Array['isArray'](v0))for(let v1=v0['length']-0x1;v1>=0x0;v1--){F['push'](v0[v1]);}}else F['push'](G);}return F['reverse'](),F;}function I(s){let t=[];for(let F in s){t['push'](F);}return t;}function O(s){let t=[];for(let F=0x0;F<s['length'];F++){t['push'](s[F]);}return t;}function P(s){return typeof s==='function'&&s['prototype']?s['prototype']:s;}function k(s){if(typeof s==='function')return vmU(s);let t=vmU(s),F=t&&t['constructor']&&t['constructor']['prototype']===t;if(F)return vmU(t);return t;}function D(s,t){let F=s;while(F!==null){let c=vmO(F,t);if(c)return{'desc':c,'proto':F};F=vmU(F);}return{'desc':null,'proto':s};}function U(s,t){if(!s['_$Lpy0pj'])return;t in s['_$Lpy0pj']&&delete s['_$Lpy0pj'][t];let F=t['split']('$$')[0x0];F!==t&&F in s['_$Lpy0pj']&&delete s['_$Lpy0pj'][F];}function z(s,t){let F=s;while(F){U(F,t),F=F['_$hGYhcW'];}}function n(s,t,F,c){if(c){let G=Reflect['set'](s,t,F);if(!G)throw new TypeError('Cannot\x20assign\x20to\x20read\x20only\x20property\x20\x27'+String(t)+'\x27\x20of\x20object');}else Reflect['set'](s,t,F);}function h(){return!vmN_8b241f['_$36Q4Mt']&&(vmN_8b241f['_$36Q4Mt']=new Map()),vmN_8b241f['_$36Q4Mt'];}function K(){return vmN_8b241f['_$36Q4Mt']||null;}function m(s,t,F){if(s['ni']===undefined||!F)return;let c=s['c'][s['ni']];t['_$gaWUQy'][c]=F;if(s['nfe']){if(!t['_$0TIvt5'])t['_$0TIvt5']={};t['_$0TIvt5'][c]=!![];}r(F,'name',{'value':c,'writable':![],'enumerable':![],'configurable':!![]});}function i(s){return'_$sLlRjH'+s['substring'](0x1)+'_$Kh8HmA';}function A(s){return'_$E9f43W'+s['substring'](0x1)+'_$RBlWWJ';}let B=![],R=0x0,b=0x0,Y=![],J=0x1388,d=0x3,a=[];function Z(){if(!B||Y)return;let s=Date['now']();if(R===0x0){R=s;return;}let t=s-R;R=s;if(t>J){b++;if(b>=d){Y=!![];for(let F=0x0;F<a['length'];F++){let c=a[F];for(let G=0x0;G<c['length'];G+=0x2){c[G]=c[G]+0x1&0x1ff;}}}}else b=0x0;}function y(s,t,F,c,G,v0){let v1=[],v2=0x0,v3=new Array((s['p']||0x0)+(s['l']||0x0)),v4=0x0,v5=s['c'],v6=s['i'],v7=s['j']||{},v8=s['x']||{},v9=v6['length']>>0x1,vv=vp=>vp<<0x1,vg=vp=>(vp<<0x1)+0x1,vL=[],vQ=null,vl={['_$YPMYO5']:![],['_$nbFAH0']:undefined},vW={['_$8u9kvO']:![],['_$awlg2g']:0x0},vH={['_$nODOJw']:![],['_$FMxJ6y']:0x0},vT=s['o']||L,vN=!!s['st'],vS=!!s['sp'],vx=!!s['dc'],vV=!!s['nte'],vw=v0,vr=!!s['a'];!vN&&!vr&&(v0===undefined||v0===null)&&(v0=vmV);var vM=0x0,vI=null,vO=null;let vP=s['seKey'],vk,vD,vU,vz,vn,vh;if(vP!==undefined){let vp=vX=>typeof vX==='number'&&Number['isFinite'](vX)&&Number['isInteger'](vX)&&vX>=-0x80000000&&vX<=0x7fffffff&&!Object['is'](vX,-0x0)?vX^vP|0x0:vX;vk=vX=>{v1[v2++]=vp(vX);},vD=()=>vp(v1[--v2]),vU=()=>vp(v1[v2-0x1]),vz=vX=>{v1[v2-0x1]=vp(vX);},vn=vX=>vp(v1[v2-vX]),vh=(vX,vE)=>{v1[v2-vX]=vp(vE);};}else vk=vX=>{v1[v2++]=vX;},vD=()=>v1[--v2],vU=()=>v1[v2-0x1],vz=vX=>{v1[v2-0x1]=vX;},vn=vX=>v1[v2-vX],vh=(vX,vE)=>{v1[v2-vX]=vE;};let vK=vX=>vX,vm={['_$hGYhcW']:F,['_$gaWUQy']:vmI(null)};if(t)for(let vX=0x0;vX<Math['min'](t['length'],s['p']||0x0);vX++){v3[vX]=t[vX];}let vi=vN&&t?O(t):null,vA=null,vB=![];vV&&(!vm['_$Lpy0pj']&&(vm['_$Lpy0pj']=vmI(null)),vm['_$Lpy0pj']['__this__']=!![]);m(s,vm,c);while(v4<v9){try{while(v4<v9){let vE=v6[vv(v4)],vq=vE,vo=vT[vq],vs=v6[vg(v4)],ve=vs===null?undefined:vs;if(typeof vC==='undefined')var vR=![],vb,vY=![],vJ=![],vd=![],va=![],vZ=![],vy=undefined,vu=null,vj=null,vf={0x0:0x82,0x1:0x3b,0x2:0x68,0x3:0x46,0x4:0x63,0x5:0x50,0x6:0x40,0x7:0x72,0x8:0x20,0x9:0x49,0xa:0x22,0xb:0x5c,0xc:0x37,0xd:0x25,0xe:0x57,0xf:0x7,0x10:0x80,0x11:0x58,0x12:0x81,0x13:0x90,0x14:0x29,0x15:0x1f,0x16:0x64,0x17:0xb,0x18:0x30,0x19:0x5e,0x1a:0x75,0x1b:0x55,0x1c:0x52,0x20:0x7a,0x28:0x74,0x29:0x28,0x2a:0x67,0x2b:0x70,0x2c:0x2f,0x2d:0x71,0x2e:0x5d,0x2f:0x7c,0x32:0x53,0x33:0x79,0x34:0x13,0x35:0x7d,0x36:0x2a,0x37:0x10,0x38:0x85,0x39:0x2d,0x3a:0x1c,0x3b:0xf,0x3c:0x36,0x3d:0x34,0x3e:0x1,0x3f:0x5f,0x40:0x43,0x46:0xc,0x47:0xa,0x48:0xd,0x49:0x6f,0x4a:0x3e,0x4b:0x11,0x4c:0x4f,0x4d:0x76,0x4e:0x4d,0x4f:0x8a,0x51:0x8e,0x52:0x4,0x53:0x2c,0x54:0x3f,0x5a:0x33,0x5b:0x83,0x5d:0x6c,0x5e:0x17,0x5f:0x26,0x64:0x4c,0x68:0x56,0x69:0x6b,0x6a:0x6a,0x6e:0x4b,0x6f:0x8f,0x70:0x1a,0x7b:0x5a,0x7c:0x38,0x7f:0x54,0x80:0x0,0x81:0x16,0x82:0x15,0x83:0x41,0x84:0x32,0x8c:0x5,0x8d:0x1e,0x8e:0x6,0x8f:0x59,0x90:0x89,0x91:0x4e,0x92:0xe,0x93:0x4a,0x94:0x42,0x95:0x93,0x96:0x47,0x97:0x44,0x98:0x3c,0x99:0x1d,0x9a:0x8b,0x9b:0x18,0x9c:0x12,0x9d:0x19,0x9e:0x45,0xa0:0x77,0xa1:0x2,0xa2:0x92,0xa3:0x2e,0xa4:0x7f,0xa5:0x5b,0xa6:0x65,0xa7:0x66,0xa8:0x3,0xa9:0x7b,0xb4:0x3d,0xb5:0x60,0xb6:0x9,0xb7:0x24,0xb8:0x86,0xb9:0x31,0xc8:0x1b,0xc9:0x69,0xca:0x35,0xd2:0x62,0xd3:0x14,0xd4:0x88,0xd5:0x21,0xd6:0x39,0xd7:0x91,0xd8:0x51,0xd9:0x61,0xda:0x6d,0xdb:0x6e,0xdc:0x23,0xfa:0x2b,0xfb:0x84,0xfc:0x73,0xfd:0x8d,0xfe:0x27,0xff:0x48,0x100:0x3a,0x101:0x78,0x102:0x8,0x103:0x7e,0x104:0x87,0x105:0x8c},vC=[function(vt){while(!![]){let vF=vD();vk(!!vF['done']),v4++;break;}},function(vt){while(!![]){if(vl['_$YPMYO5']){let vF=vl['_$nbFAH0'];vl['_$YPMYO5']=![],vl['_$nbFAH0']=undefined,vR=!![],vb=vF;return;}if(vW['_$8u9kvO']){let vc=vW['_$awlg2g'];vW['_$8u9kvO']=![],vW['_$awlg2g']=0x0,v4=vc;break;}if(vH['_$nODOJw']){let vG=vH['_$FMxJ6y'];vH['_$nODOJw']=![],vH['_$FMxJ6y']=0x0,v4=vG;break;}if(vQ!==null){let g0=vQ;vQ=null;throw g0;}v4++;break;}},function(vt){while(!![]){if(vA===null){if(vY||!vJ){vA=[];let vF=vu||t;if(vF)for(let vc=0x0;vc<vF['length'];vc++){vA[vc]=vF[vc];}if(vY){let vG=function(){throw new TypeError('\x27caller\x27,\x20\x27callee\x27,\x20and\x20\x27arguments\x27\x20properties\x20may\x20not\x20be\x20accessed\x20on\x20strict\x20mode\x20functions\x20or\x20the\x20arguments\x20objects\x20for\x20calls\x20to\x20them');};vmM(vA,'callee',{'get':vG,'set':vG,'enumerable':![],'configurable':![]});}else vmM(vA,'callee',{'value':c,'writable':!![],'enumerable':![],'configurable':!![]});}else{let g0=t?t['length']:0x0,g1={},g2=function(g6){return typeof g6==='string'?parseInt(g6,0xa):NaN;},g3=function(g6){return!isNaN(g6)&&g6>=0x0;},g4=function(g6){return g6<t['length']?t[g6]:g1[g6];},g5=function(g6){return g6<t['length']?g6 in t:g6 in g1;};vA=new Proxy([],{'get':function(g6,g7,g8){if(g7==='length')return g0;if(g7==='callee')return c;if(g7===Symbol['iterator'])return function(){let gg=0x0;return{'next':function(){if(gg<g0)return{'value':g4(gg++),'done':![]};return{'done':!![]};}};};let g9=g2(g7);if(g3(g9))return g4(g9);if(g7==='hasOwnProperty')return function(gg){if(gg==='length'||gg==='callee')return!![];let gL=g2(gg);return g3(gL)&&gL<g0&&g5(gL);};let gv=Array['prototype'][g7];if(typeof gv==='function')return function(){let gg=[];for(let gL=0x0;gL<g0;gL++)gg[gL]=g4(gL);return gv['apply'](gg,arguments);};return undefined;},'set':function(g6,g7,g8){if(g7==='length')return g0=g8,!![];let g9=g2(g7);if(g3(g9)){if(g9<t['length'])t[g9]=g8;else g1[g9]=g8;if(g9>=g0)g0=g9+0x1;return!![];}return!![];},'has':function(g6,g7){if(g7==='length'||g7==='callee')return!![];let g8=g2(g7);if(g3(g8)&&g8<g0)return g5(g8);return g7 in Array['prototype'];},'deleteProperty':function(g6,g7){let g8=g2(g7);if(g3(g8)){if(g8<t['length'])delete t[g8];else delete g1[g8];}return!![];},'getOwnPropertyDescriptor':function(g6,g7){if(g7==='callee')return{'value':c,'writable':!![],'enumerable':![],'configurable':!![]};if(g7==='length')return{'value':g0,'writable':!![],'enumerable':![],'configurable':!![]};let g8=g2(g7);if(g3(g8)&&g8<g0&&g5(g8))return{'value':g4(g8),'writable':!![],'enumerable':!![],'configurable':!![]};return undefined;},'ownKeys':function(g6){let g7=[];for(let g8=0x0;g8<g0;g8++)if(g5(g8))g7['push'](String(g8));return g7['push']('length','callee'),g7;}});}}vk(vA),v4++;break;}},function(vt){while(!![]){let vF=v5[vt];vk(Symbol['for'](vF)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vc===null||vc===undefined?vk(undefined):vk(vc[vF]);v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vt,g0=function(g1,g2){let g3=function(){if(g1){g2&&(vmN_8b241f['_$YEQ3E5']=g3);let g4='_$Ub6kQR'in vmN_8b241f;!g4&&(vmN_8b241f['_$Ub6kQR']=new.target);try{let g5=g1['apply'](this,O(arguments));if(g2&&g5!==undefined&&(typeof g5!=='object'||g5===null))throw new TypeError('Derived\x20constructors\x20may\x20only\x20return\x20object\x20or\x20undefined');return g5;}finally{g2&&delete vmN_8b241f['_$YEQ3E5'],!g4&&delete vmN_8b241f['_$Ub6kQR'];}}};return g3;}(vc,vG);vF&&vmM(g0,'name',{'value':vF,'configurable':!![]});vk(g0),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vmN_8b241f['_$JKwmbc'],g0=vG?vmU(vG):k(vc),g1=D(g0,vF),g2;if(g1['desc']&&g1['desc']['get'])g2=g1['desc']['get']['call'](vc),vk(g2);else{if(g1['desc']&&g1['desc']['set']&&!('value'in g1['desc']))vk(undefined);else{g2=g1['proto']?g1['proto'][vF]:g0[vF];if(typeof g2==='function'){let g3=g1['proto']||g0,g4=g2['bind'](vc),g5=g2['constructor']&&g2['constructor']['name'],g6=g5==='GeneratorFunction'||g5==='AsyncFunction'||g5==='AsyncGeneratorFunction';!g6&&(!vmN_8b241f['_$oCrrmd']&&(vmN_8b241f['_$oCrrmd']=new WeakMap()),vmN_8b241f['_$oCrrmd']['set'](g4,g3)),vk(g4);}else vk(g2);}}v4++;break;}},function(vt){while(!![]){vk(-vD()),v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10,vG=vD(),g0=M(vD,vG),g1=v3[vF],g2=v5[vc],g3=g1[g2];vk(g3['apply'](g1,g0)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU(),g0=P(vG);vmM(g0,vc,{'get':vF,'enumerable':g0===vG,'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt];if(vc===null||vc===undefined)throw new TypeError('Cannot\x20set\x20property\x20\x27'+String(vG)+'\x27\x20of\x20'+vc);n(vc,vG,vF,vY),vk(vF),v4++;break;}},function(vt){while(!![]){vk(~vD()),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt];if(vF===null||vF===undefined)throw new TypeError('Cannot\x20read\x20property\x20\x27'+String(vc)+'\x27\x20of\x20'+vF);vk(vF[vc]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();if(vc===null||vc===undefined)throw new TypeError('Cannot\x20read\x20property\x20\x27'+String(vF)+'\x27\x20of\x20'+vc);vk(vc[vF]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt],g0=P(vc);vmM(g0,vG,{'set':vF,'enumerable':g0===vc,'configurable':!![]}),v4++;break;}},function(vt){while(!![]){vL['pop'](),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vD();if(typeof vc!=='function')throw new TypeError(vc+'\x20is\x20not\x20a\x20function');let g0=vmN_8b241f['_$oCrrmd'],g1=g0&&g0['get'](vc),g2=vmN_8b241f['_$JKwmbc'];g1&&(vmN_8b241f['_$BpyoYr']=!![],vmN_8b241f['_$JKwmbc']=g1);try{let g3=vc['apply'](vG,M(vD,vF));vk(g3);}finally{g1&&(vmN_8b241f['_$BpyoYr']=![],vmN_8b241f['_$JKwmbc']=g2);}v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc;if(vmN_8b241f['_$Ptgw3I']&&vF in vmN_8b241f['_$Ptgw3I'])throw new ReferenceError('Cannot\x20access\x20\x27'+vF+'\x27\x20before\x20initialization');if(vF in vmN_8b241f)vc=vmN_8b241f[vF];else{if(vF in vmV)vc=vmV[vF];else throw new ReferenceError(vF+'\x20is\x20not\x20defined');}vk(vc),v4++;break;}},function(vt){while(!![]){let vF=vD();vD();let vc=vU(),vG=v5[vt],g0=h();!g0['has'](vG)&&g0['set'](vG,new WeakMap());let g1=g0['get'](vG);g1['set'](vc,vF),v4++;break;}},function(vt){while(!![]){!vD()?v4=vK(v7[v4]):v4++;break;}},function(vt){while(!![]){let vF=v5[vt];if(vF==='__this__'){let g3=vj;while(g3){if(g3['_$Lpy0pj']&&'__this__'in g3['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27__this__\x27\x20before\x20initialization');if(g3['_$gaWUQy']&&'__this__'in g3['_$gaWUQy'])break;g3=g3['_$hGYhcW'];}vk(v0),v4++;break;}let vc=vj,vG,g0=![],g1=vF['indexOf']('$$'),g2=g1!==-0x1?vF['substring'](0x0,g1):null;while(vc){if(vc['_$Lpy0pj']&&vF in vc['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27'+vF+'\x27\x20before\x20initialization');if(g2&&vc['_$Lpy0pj']&&g2 in vc['_$Lpy0pj']){if(!(vc['_$gaWUQy']&&vF in vc['_$gaWUQy']))throw new ReferenceError('Cannot\x20access\x20\x27'+g2+'\x27\x20before\x20initialization');}if(vc['_$gaWUQy']&&vF in vc['_$gaWUQy']){vG=vc['_$gaWUQy'][vF],g0=!![];break;}vc=vc['_$hGYhcW'];}!g0&&(vF in vmN_8b241f?vG=vmN_8b241f[vF]:vG=vmV[vF]);vk(vG),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vF['next']();vk(Promise['resolve'](vc)),v4++;break;}},function(vt){while(!![]){let vF=vD();if(vF==null)throw new TypeError('Cannot\x20iterate\x20over\x20'+vF);let vc=vF[Symbol['asyncIterator']];if(typeof vc==='function')vk(vc['call'](vF));else{let vG=vF[Symbol['iterator']];if(typeof vG!=='function')throw new TypeError('Object\x20is\x20not\x20async\x20iterable');vk(vG['call'](vF));}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU();if(Array['isArray'](vF))Array['prototype']['push']['apply'](vc,vF);else for(let vG of vF){vc['push'](vG);}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt];if(vF==null){vk(undefined),v4++;break;}let vG=h(),g0=vG['get'](vc);if(!g0||!g0['has'](vF))throw new TypeError('Cannot\x20read\x20private\x20member\x20'+vc+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');vk(g0['get'](vF)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt],vG=K();if(vG){let g2='get_'+vc,g3=vG['get'](g2);if(g3&&g3['has'](vF)){let g5=g3['get'](vF);vk(g5['call'](vF)),v4++;break;}let g4=vG['get'](vc);if(g4&&g4['has'](vF)){vk(g4['get'](vF)),v4++;break;}}let g0='_$E9f43W'+'get_'+vc['substring'](0x1)+'_$RBlWWJ';if(g0 in vF){let g6=vF[g0];vk(g6['call'](vF)),v4++;break;}let g1=i(vc);if(g1 in vF){vk(vF[g1]),v4++;break;}throw new TypeError('Cannot\x20read\x20private\x20member\x20'+vc+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(vt){while(!![]){let vF=v5[vt];vF in vmN_8b241f?vk(typeof vmN_8b241f[vF]):vk(typeof vmV[vF]);v4++;break;}},function(vt){while(!![]){debugger;v4++;break;}},function(vt){while(!![]){let vF=v8[v4];vL['push']({['_$29BGsU']:vF[0x0]>=0x0?vK(vF[0x0]):undefined,['_$fTvbOX']:vF[0x1]>=0x0?vK(vF[0x1]):undefined,['_$FW2c7u']:vF[0x2]>=0x0?vK(vF[0x2]):undefined,['_$VH0MMs']:v2}),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt],vG=![],g0=K();if(g0){let g1=g0['get'](vc);vG=g1&&g1['has'](vF);}vk(vG),v4++;break;}},function(vt){while(!![]){let vc=vD(),vG=vU();if(vc===null){vmD(vG['prototype'],null),vmD(vG,Function['prototype']),vG['_$WhKRJP']=null,v4++;break;}let g0=![];try{let g1=vmI(vc['prototype']),g2=vc['apply'](g1,[]);g2!==undefined&&g2!==g1&&(g0=!![]);}catch(g3){g3 instanceof TypeError&&(g3['message']['includes']('\x27new\x27')||g3['message']['includes']('constructor')||g3['message']['includes']('Illegal\x20constructor'))&&(g0=!![]);}if(g0){let g4=vG,g5=vmN_8b241f,g6='_$Ub6kQR',g7='_$YEQ3E5',g8='_$4qsoMd';function vF(...g9){let gv=vmI(vc['prototype']);g5[g8]={'parent':vc,'newTarget':new.target||vF},g5[g7]=new.target||vF;let gg=g6 in g5;if(!gg)g5[g6]=new.target;try{let gL=g4['apply'](gv,g9);gL!==undefined&&typeof gL==='object'&&(gv=gL);}finally{delete g5[g8],delete g5[g7];if(!gg)delete g5[g6];}return gv;}vF['prototype']=vmI(vc['prototype']),vF['prototype']['constructor']=vF,vmD(vF,vc),vmP(g4)['forEach'](function(g9){g9!=='prototype'&&g9!=='length'&&g9!=='name'&&r(vF,g9,vmO(g4,g9));});g4['prototype']&&(vmP(g4['prototype'])['forEach'](function(g9){g9!=='constructor'&&r(vF['prototype'],g9,vmO(g4['prototype'],g9));}),vmk(g4['prototype'])['forEach'](function(g9){r(vF['prototype'],g9,vmO(g4['prototype'],g9));}));vD(),vk(vF),vF['_$WhKRJP']=vc,v4++;break;}vmD(vG['prototype'],vc['prototype']),vmD(vG,vc),vG['_$WhKRJP']=vc,v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc|vF),v4++;break;}},function(vt){while(!![]){vk(t[vt]),v4++;break;}},function(vt){while(!![]){vk(vj),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc+vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt];if(vY&&!(vc in vmV)&&!(vc in vmN_8b241f))throw new ReferenceError(vc+'\x20is\x20not\x20defined');vmN_8b241f[vc]=vF,vmV[vc]=vF,vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU(),g0=P(vG);vmM(g0,vc,{'set':vF,'enumerable':g0===vG,'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc/vF),v4++;break;}},function(vt){while(!![]){let vF=vU();vF['length']++,v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10;vk(v3[vF]*v5[vc]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc!=vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc&vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vmN_8b241f['_$JKwmbc'];vmN_8b241f['_$JKwmbc']=undefined;try{let g0=vc['apply'](undefined,M(vD,vF));vk(g0);}finally{vmN_8b241f['_$JKwmbc']=vG;}v4++;break;}},function(vt){while(!![]){v3[vt]=v3[vt]+0x1,v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt];vmM(vc,vG,{'value':vF,'writable':!![],'enumerable':!![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){throw vD();break;}},function(vt){while(!![]){vD(),vk(undefined),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc<vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc<<vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU();vmM(vG,vc,{'set':vF,'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vD();vk(I(vF)),v4++;break;}},function(vt){while(!![]){vk([]),v4++;break;}},function(vt){while(!![]){if(vL['length']>0x0){let vF=vL[vL['length']-0x1];vF['_$fTvbOX']===v4&&(vF['_$k23sYO']!==undefined&&(vQ=vF['_$k23sYO']),vL['pop']());}v4++;break;}},function(vt){while(!![]){return v2>0x0?vD():undefined;break;}},function(vt){while(!![]){let vF=vD();if(vt>=0x0){let vc=v5[vt];vj['_$gaWUQy'][vc]=vF;}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc*vF),v4++;break;}},function(vt){while(!![]){let vF=vD();vF&&typeof vF['return']==='function'&&vF['return']();v4++;break;}},function(vt){while(!![]){vj&&vj['_$hGYhcW']&&(vj=vj['_$hGYhcW']);v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10;vk(v3[vF]<v5[vc]),v4++;break;}},function(vt){while(!![]){vk(undefined),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt],g0=h();!g0['has'](vG)&&g0['set'](vG,new WeakMap());let g1=g0['get'](vG);if(g1['has'](vc))throw new TypeError('Cannot\x20initialize\x20'+vG+'\x20twice\x20on\x20the\x20same\x20object');g1['set'](vc,vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU();vmM(vG['prototype'],vc,{'value':vF,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF,vc;vt!==undefined?(vc=vD(),vF=v5[vt]):(vF=vD(),vc=vD());let vG=delete vc[vF];if(vY&&!vG)throw new TypeError('Cannot\x20delete\x20property\x20\x27'+String(vF)+'\x27\x20of\x20object');vk(vG),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vD();vmM(vG,vc,{'value':vF,'writable':!![],'enumerable':!![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){vk(v3[vt]),v4++;break;}},function(vt){while(!![]){let vF=vD();vF&&typeof vF['return']==='function'?vk(Promise['resolve'](vF['return']())):vk(Promise['resolve']());v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt];vmM(vc,vG,{'get':vF,'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vK(v7[v4]);if(vL['length']>0x0){let vc=vL[vL['length']-0x1];if(vc['_$fTvbOX']!==undefined&&vF>=vc['_$FW2c7u']){vH['_$nODOJw']=!![],vH['_$FMxJ6y']=vF,v4=vc['_$fTvbOX'];break;}}v4=vF;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt],g0=h(),g1='set_'+vG,g2=g0['get'](g1);if(g2&&g2['has'](vc)){let g6=g2['get'](vc);g6['call'](vc,vF),vk(vF),v4++;break;}let g3='_$E9f43W'+'set_'+vG['substring'](0x1)+'_$RBlWWJ';if(vc['constructor']&&g3 in vc['constructor']){let g7=vc['constructor'][g3];g7['call'](vc,vF),vk(vF),v4++;break;}let g4=g0['get'](vG);if(g4&&g4['has'](vc)){g4['set'](vc,vF),vk(vF),v4++;break;}let g5=i(vG);if(g5 in vc){vc[g5]=vF,vk(vF),v4++;break;}throw new TypeError('Cannot\x20write\x20private\x20member\x20'+vG+'\x20to\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt],g0=K();if(g0){let g3='set_'+vG,g4=g0['get'](g3);if(g4&&g4['has'](vc)){let g6=g4['get'](vc);g6['call'](vc,vF),vk(vF),v4++;break;}let g5=g0['get'](vG);if(g5&&g5['has'](vc)){g5['set'](vc,vF),vk(vF),v4++;break;}}let g1='_$E9f43W'+'set_'+vG['substring'](0x1)+'_$RBlWWJ';if(g1 in vc){let g7=vc[g1];g7['call'](vc,vF),vk(vF),v4++;break;}let g2=i(vG);if(g2 in vc){vc[g2]=vF,vk(vF),v4++;break;}throw new TypeError('Cannot\x20write\x20private\x20member\x20'+vG+'\x20to\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(vt){while(!![]){vD(),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt],vG=h(),g0='get_'+vc,g1=vG['get'](g0);if(g1&&g1['has'](vF)){let g5=g1['get'](vF);vk(g5['call'](vF)),v4++;break;}let g2='_$E9f43W'+'get_'+vc['substring'](0x1)+'_$RBlWWJ';if(vF['constructor']&&g2 in vF['constructor']){let g6=vF['constructor'][g2];vk(g6['call'](vF)),v4++;break;}let g3=vG['get'](vc);if(g3&&g3['has'](vF)){vk(g3['get'](vF)),v4++;break;}let g4=i(vc);if(g4 in vF){vk(vF[g4]),v4++;break;}throw new TypeError('Cannot\x20read\x20private\x20member\x20'+vc+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10,vG=v3[vF],g0=v5[vc];vk(vG[g0]),v4++;break;}},function(vt){while(!![]){t[vt]=vD(),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt];vmM(vc,vG,{'value':vF,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){vk(typeof vD()),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=g(vF),vG=vc&&vc['a'],g0=vc&&vc['s'],g1=vc&&vc['g'],g2=vc&&vc['m'],g3=vj,g4=vc&&vc['ni']!==undefined?vc['c'][vc['ni']]:undefined,g5=vc&&vc['p']||0x0,g6=vc&&vc['st'],g7=vG?vy:undefined,g8,g9=g6?function(gv){return gv===vmV?[undefined,![]]:[Q,!![]];}:function(gv){return[Q,!![]];};if(g1)g8=function gv(){let gg=O(arguments),[gL,gQ]=g9(this);if(gQ)return C['call'](this,vF,gg,g3,g8,undefined,gL);return C(vF,gg,g3,g8,undefined,gL);},w['add'](g8);else{if(g0){if(vG)g8={'xOlUgU':async(...gg)=>{return await f(vF,gg,g3,g8,undefined,undefined,g7);}}['xOlUgU'];else g2?g8={async 'xOlUgU'(){let gg=O(arguments),gL=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gQ,gl]=g9(this);if(gl)return await f['call'](this,vF,gg,g3,g8,gL,undefined,gQ);return await f(vF,gg,g3,g8,gL,undefined,gQ);}}['xOlUgU']:g8=async function gg(){let gL=O(arguments),gQ=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gl,gW]=g9(this);if(gW)return await f['call'](this,vF,gL,g3,g8,gQ,undefined,gl);return await f(vF,gL,g3,g8,gQ,undefined,gl);};}else{if(vG)g8={'xOlUgU':(...gL)=>{return j(vF,gL,g3,g8,undefined,g7);}}['xOlUgU'];else g2?g8={'xOlUgU'(){let gL=O(arguments),gQ=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gl,gW]=g9(this);if(gW)return j['call'](this,vF,gL,g3,g8,gQ,gl);return j(vF,gL,g3,g8,gQ,gl);}}['xOlUgU']:g8=function gL(){let gQ=O(arguments),gl=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gW,gH]=g9(this);if(gH)return j['call'](this,vF,gQ,g3,g8,gl,gW);return j(vF,gQ,g3,g8,gl,gW);};}}r(g8,'length',{'value':g5,'writable':![],'enumerable':![],'configurable':!![]}),vk(g8),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt];vF===null||vF===undefined?vk(undefined):vk(vF[vc]);v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt],g0=P(vc);vmM(g0,vG,{'get':vF,'enumerable':g0===vc,'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=v5[vt];if(vmN_8b241f['_$Ptgw3I']&&vc in vmN_8b241f['_$Ptgw3I'])throw new ReferenceError('Cannot\x20access\x20\x27'+vc+'\x27\x20before\x20initialization');let vG=!(vc in vmN_8b241f)&&!(vc in vmV);vmN_8b241f[vc]=vF;vc in vmV&&(vmV[vc]=vF);vG&&(vmV[vc]=vF);vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vU();vz(vn(0x2)),vh(0x2,vF),v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc=vD(),vG=vj,g0=![];while(vG){if(vG['_$gaWUQy']&&vF in vG['_$gaWUQy']){if(vG['_$yRu0vL']&&vF in vG['_$yRu0vL'])break;vG['_$gaWUQy'][vF]=vc;!vG['_$yRu0vL']&&(vG['_$yRu0vL']={});vG['_$yRu0vL'][vF]=!![],g0=!![];break;}vG=vG['_$hGYhcW'];}!g0&&(z(vj,vF),vj['_$gaWUQy'][vF]=vc,!vj['_$yRu0vL']&&(vj['_$yRu0vL']={}),vj['_$yRu0vL'][vF]=!![]);v4++;break;}},function(vt){while(!![]){let vF=vD();vk(typeof vF==='bigint'?vF:+vF),v4++;break;}},function(vt){while(!![]){v4=vK(v7[v4]);break;}},function(vt){while(!![]){let vF=vD();if(vF==null)throw new TypeError('Cannot\x20iterate\x20over\x20'+vF);let vc=vF[Symbol['iterator']];if(typeof vc!=='function')throw new TypeError('Object\x20is\x20not\x20iterable');vk(vc['call'](vF)),v4++;break;}},function(vt){while(!![]){let vF=vn(0x3),vc=vn(0x2),vG=vU();vh(0x3,vc),vh(0x2,vG),vz(vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=M(vD,vF),vG=vD();if(typeof vG!=='function')throw new TypeError(vG+'\x20is\x20not\x20a\x20constructor');if(w['has'](vG))throw new TypeError(vG['name']+'\x20is\x20not\x20a\x20constructor');let g0=vmN_8b241f['_$JKwmbc'];vmN_8b241f['_$JKwmbc']=undefined;let g1;try{g1=Reflect['construct'](vG,vc);}finally{vmN_8b241f['_$JKwmbc']=g0;}vk(g1),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc%vF),v4++;break;}},function(vt){while(!![]){let vF=vD();vk(typeof vF==='bigint'?vF-0x1n:+vF-0x1),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vD(),g0=k(vG),g1=D(g0,vc);g1['desc']&&g1['desc']['set']?g1['desc']['set']['call'](vG,vF):vG[vc]=vF;vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vF['next']();vk(vc),v4++;break;}},function(vt){while(!![]){vk(vmw[vt]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc-vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc>vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc>>vF),v4++;break;}},function(vt){while(!![]){let vF=vK(v7[v4]);if(vL['length']>0x0){let vc=vL[vL['length']-0x1];if(vc['_$fTvbOX']!==undefined&&vF>=vc['_$FW2c7u']){vW['_$8u9kvO']=!![],vW['_$awlg2g']=vF,v4=vc['_$fTvbOX'];break;}}v4=vF;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU();vmM(vG,vc,{'value':vF,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc=vD();U(vj,vF),vj['_$gaWUQy'][vF]=vc;!vj['_$yRu0vL']&&(vj['_$yRu0vL']={});vj['_$yRu0vL'][vF]=!![],v4++;break;}},function(vt){while(!![]){let vF=vD(),vc={['_$gaWUQy']:vmI(null),['_$yRu0vL']:vmI(null),['_$Lpy0pj']:vmI(null),['_$hGYhcW']:vF};vj=vc,v4++;break;}},function(vt){while(!![]){let vF=vD();vk(vF),vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc^vF),v4++;break;}},function(vt){while(!![]){vk(vmr[vt]),v4++;break;}},function(vt){while(!![]){if(vt===-0x1)vk(Symbol());else{let vF=vD();vk(Symbol(vF));}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc===vF),v4++;break;}},function(vt){while(!![]){vk(null),v4++;break;}},function(vt){while(!![]){v4++;break;}},function(vt){while(!![]){let vF=vD();vk(import(vF)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=M(vD,vF),vG=vD();if(vt===0x1){vk(vc),v4++;break;}if(vmN_8b241f['_$ZtxiYY']){v4++;break;}let g0=vmN_8b241f['_$4qsoMd'];if(g0){let g1=g0['parent'],g2=g0['newTarget'],g3=Reflect['construct'](g1,vc,g2);v0&&v0!==g3&&vmP(v0)['forEach'](function(g4){!(g4 in g3)&&(g3[g4]=v0[g4]);});v0=g3,vZ=!![];va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);v4++;break;}if(typeof vG!=='function')throw new TypeError('Super\x20expression\x20must\x20be\x20a\x20constructor');vmN_8b241f['_$Ub6kQR']=G;try{let g4=vG['apply'](v0,vc);g4!==undefined&&g4!==v0&&typeof g4==='object'&&(v0&&Object['assign'](g4,v0),v0=g4),vZ=!![],va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);}catch(g5){if(g5 instanceof TypeError&&(g5['message']['includes']('\x27new\x27')||g5['message']['includes']('constructor'))){let g6=Reflect['construct'](vG,vc,G);g6!==v0&&v0&&Object['assign'](g6,v0),v0=g6,vZ=!![],va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);}else throw g5;}finally{delete vmN_8b241f['_$Ub6kQR'];}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc={'value':vF};V['add'](vc),vk(vc),v4++;break;}},function(vt){while(!![]){let vF=v5[vt];!vj['_$Lpy0pj']&&(vj['_$Lpy0pj']={});vj['_$Lpy0pj'][vF]=!![],v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc=vD(),vG=vj['_$hGYhcW'];vG&&(vG['_$gaWUQy'][vF]=vc);v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vD();if(vG===null||vG===undefined)throw new TypeError('Cannot\x20set\x20property\x20\x27'+String(vc)+'\x27\x20of\x20'+vG);n(vG,vc,vF,vY),vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc!==vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc<=vF),v4++;break;}},function(vt){while(!![]){v3[vt]=vD(),v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10;vk(v3[vF]+v5[vc]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc==vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc>>>vF),v4++;break;}},function(vt){while(!![]){vk({}),v4++;break;}},function(vt){while(!![]){if(vd&&!vZ)throw new ReferenceError('Must\x20call\x20super\x20constructor\x20in\x20derived\x20class\x20before\x20accessing\x20\x27this\x27\x20or\x20returning\x20from\x20derived\x20constructor');vk(v0),v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10;v3[vF]<v5[vc]?v4=vK(v7[v4]):v4++;break;}},function(vt){while(!![]){vD()?v4=vK(v7[v4]):v4++;break;}},function(vt){while(!![]){vk(!vD()),v4++;break;}},function(vt){while(!![]){let vF=vD();vk(Symbol['keyFor'](vF)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc>=vF),v4++;break;}},function(vt){while(!![]){let vF=vD();vF!==null&&vF!==undefined?v4=vK(v7[v4]):v4++;break;}},function(vt){while(!![]){v3[vt]=vD(),v4++;break;}},function(vt){while(!![]){vk(G),v4++;break;}},function(vt){while(!![]){let vF=vD();vk(typeof vF==='bigint'?vF+0x1n:+vF+0x1),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc**vF),v4++;break;}},function(vt){while(!![]){vk(v5[vt]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU();vc['push'](vF),v4++;break;}},function(vt){while(!![]){v3[vt]=v3[vt]-0x1,v4++;break;}},function(vt){while(!![]){if(vL['length']>0x0){let vF=vL[vL['length']-0x1];if(vF['_$fTvbOX']!==undefined){vl['_$YPMYO5']=!![],vl['_$nbFAH0']=vD(),v4=vF['_$fTvbOX'];break;}}vl['_$YPMYO5']&&(vl['_$YPMYO5']=![],vl['_$nbFAH0']=undefined);vR=!![],vb=vD();return;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=vU();vmM(vG,vc,{'get':vF,'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=v3[vt]+0x1;v3[vt]=vF,vk(vF),v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc=vD(),vG=vj,g0=![];while(vG){if(vG['_$Lpy0pj']&&vF in vG['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27'+vF+'\x27\x20before\x20initialization');if(vG['_$gaWUQy']&&vF in vG['_$gaWUQy']){if(vG['_$0TIvt5']&&vF in vG['_$0TIvt5']){if(vY)throw new TypeError('Assignment\x20to\x20constant\x20variable.');g0=!![];break;}if(vG['_$yRu0vL']&&vF in vG['_$yRu0vL'])throw new TypeError('Assignment\x20to\x20constant\x20variable.');vG['_$gaWUQy'][vF]=vc,g0=!![];break;}vG=vG['_$hGYhcW'];}if(!g0){if(vF in vmN_8b241f)vmN_8b241f[vF]=vc;else vF in vmV?vmV[vF]=vc:vmV[vF]=vc;}v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt];vmM(vc['prototype'],vG,{'value':vF,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc in vF),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD(),vG=v5[vt],g0=null,g1=K();if(g1){let g4=g1['get'](vG);g4&&g4['has'](vc)&&(g0=g4['get'](vc));}if(g0===null){let g5=A(vG);g5 in vc&&(g0=vc[g5]);}if(g0===null)throw new TypeError('Cannot\x20read\x20private\x20member\x20'+vG+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');if(typeof g0!=='function')throw new TypeError(vG+'\x20is\x20not\x20a\x20function');let g2=M(vD,vF),g3=g0['apply'](vc,g2);vk(g3),v4++;break;}},function(vt){while(!![]){let vF=v3[vt]-0x1;v3[vt]=vF,vk(vF),v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>>0x10;vk(v3[vF]-v5[vc]),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU();vF!==null&&vF!==undefined&&Object['assign'](vc,vF);v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vD();vk(vc instanceof vF),v4++;break;}},function(vt){while(!![]){vk(+vD()),v4++;break;}},function(vt){while(!![]){let vF=v5[vt],vc=vD();U(vj,vF),vj['_$gaWUQy'][vF]=vc,v4++;break;}},function(vt){while(!![]){let vF=vt&0xffff,vc=vt>>0x10,vG=v5[vF],g0=v5[vc];vk(new RegExp(vG,g0)),v4++;break;}},function(vt){while(!![]){let vF=vD(),vc=vU(),vG=v5[vt];vmM(vc,vG,{'set':vF,'enumerable':![],'configurable':!![]}),v4++;break;}}];vY=vN,vJ=vS,vd=vx,va=vV,vZ=vB,vy=vw,vu=vi,vj=vm,vC[vf[vq]](ve),vm=vj,vB=vZ;if(vR)return vR=![],vb;}break;}catch(vt){if(vL['length']>0x0){let vF=vL[vL['length']-0x1];v2=vF['_$VH0MMs'];if(vF['_$29BGsU']!==undefined)vk(vt),v4=vF['_$29BGsU'],vF['_$29BGsU']=undefined,vF['_$fTvbOX']===undefined&&vL['pop']();else vF['_$fTvbOX']!==undefined?(v4=vF['_$fTvbOX'],vF['_$k23sYO']=vt):(v4=vF['_$FW2c7u'],vL['pop']());continue;}throw vt;}}return v2>0x0?vD():vB?v0:undefined;}function*u(s,t,F,c,G,v0){let v1=[],v2=0x0,v3=new Array((s['p']||0x0)+(s['l']||0x0)),v4=0x0,v5=s['c'],v6=s['i'],v7=s['j']||{},v8=s['x']||{},v9=v6['length']>>0x1,vv=vp=>vp<<0x1,vg=vp=>(vp<<0x1)+0x1,vL=[],vQ=null,vl={['_$YPMYO5']:![],['_$nbFAH0']:undefined},vW={['_$8u9kvO']:![],['_$awlg2g']:0x0},vH={['_$nODOJw']:![],['_$FMxJ6y']:0x0},vT=s['o']||L,vN=!!s['st'],vS=!!s['sp'],vx=!!s['dc'],vV=!!s['nte'],vw=v0,vr=!!s['a'];!vN&&!vr&&(v0===undefined||v0===null)&&(v0=vmV);var vM=0x0,vI=null,vO=null;let vP=s['seKey'],vk,vD,vU,vz,vn,vh;if(vP!==undefined){let vp=vX=>typeof vX==='number'&&Number['isFinite'](vX)&&Number['isInteger'](vX)&&vX>=-0x80000000&&vX<=0x7fffffff&&!Object['is'](vX,-0x0)?vX^vP|0x0:vX;vk=vX=>{v1[v2++]=vp(vX);},vD=()=>vp(v1[--v2]),vU=()=>vp(v1[v2-0x1]),vz=vX=>{v1[v2-0x1]=vp(vX);},vn=vX=>vp(v1[v2-vX]),vh=(vX,vE)=>{v1[v2-vX]=vp(vE);};}else vk=vX=>{v1[v2++]=vX;},vD=()=>v1[--v2],vU=()=>v1[v2-0x1],vz=vX=>{v1[v2-0x1]=vX;},vn=vX=>v1[v2-vX],vh=(vX,vE)=>{v1[v2-vX]=vE;};let vK=vX=>vX,vm={['_$hGYhcW']:F,['_$gaWUQy']:vmI(null)};if(t)for(let vX=0x0;vX<Math['min'](t['length'],s['p']||0x0);vX++){v3[vX]=t[vX];}let vi=vN&&t?O(t):null,vA=null,vB=![];vV&&(!vm['_$Lpy0pj']&&(vm['_$Lpy0pj']=vmI(null)),vm['_$Lpy0pj']['__this__']=!![]);m(s,vm,c);while(v4<v9){try{while(v4<v9){let vE=v6[vv(v4)],vq=vE,vo=vT[vq],vs=v6[vg(v4)],ve=vs===null?undefined:vs;if(vq===x){let vt=vD(),vF=yield{['_$r1HRWx']:l,['_$VEvC4Y']:vt};vk(vF),v4++;continue;}if(vq===N){let vc=vD(),vG=yield{['_$r1HRWx']:W,['_$VEvC4Y']:vc};if(vG&&typeof vG==='object'&&vG['_$r1HRWx']===T){let g0=vG['_$VEvC4Y'];if(vL['length']>0x0){let g1=vL[vL['length']-0x1];if(g1['_$fTvbOX']!==undefined){vl['_$YPMYO5']=!![],vl['_$nbFAH0']=g0,v4=g1['_$fTvbOX'];continue;}}return g0;}vk(vG),v4++;continue;}if(vq===S){let g2=vD(),g3=yield{['_$r1HRWx']:H,['_$VEvC4Y']:g2};vk(g3),v4++;continue;}if(typeof vC==='undefined')var vR=![],vb,vY=![],vJ=![],vd=![],va=![],vZ=![],vy=undefined,vu=null,vj=null,vf={0x0:0x82,0x1:0x3b,0x2:0x68,0x3:0x46,0x4:0x63,0x5:0x50,0x6:0x40,0x7:0x72,0x8:0x20,0x9:0x49,0xa:0x22,0xb:0x5c,0xc:0x37,0xd:0x25,0xe:0x57,0xf:0x7,0x10:0x80,0x11:0x58,0x12:0x81,0x13:0x90,0x14:0x29,0x15:0x1f,0x16:0x64,0x17:0xb,0x18:0x30,0x19:0x5e,0x1a:0x75,0x1b:0x55,0x1c:0x52,0x20:0x7a,0x28:0x74,0x29:0x28,0x2a:0x67,0x2b:0x70,0x2c:0x2f,0x2d:0x71,0x2e:0x5d,0x2f:0x7c,0x32:0x53,0x33:0x79,0x34:0x13,0x35:0x7d,0x36:0x2a,0x37:0x10,0x38:0x85,0x39:0x2d,0x3a:0x1c,0x3b:0xf,0x3c:0x36,0x3d:0x34,0x3e:0x1,0x3f:0x5f,0x40:0x43,0x46:0xc,0x47:0xa,0x48:0xd,0x49:0x6f,0x4a:0x3e,0x4b:0x11,0x4c:0x4f,0x4d:0x76,0x4e:0x4d,0x4f:0x8a,0x51:0x8e,0x52:0x4,0x53:0x2c,0x54:0x3f,0x5a:0x33,0x5b:0x83,0x5d:0x6c,0x5e:0x17,0x5f:0x26,0x64:0x4c,0x68:0x56,0x69:0x6b,0x6a:0x6a,0x6e:0x4b,0x6f:0x8f,0x70:0x1a,0x7b:0x5a,0x7c:0x38,0x7f:0x54,0x80:0x0,0x81:0x16,0x82:0x15,0x83:0x41,0x84:0x32,0x8c:0x5,0x8d:0x1e,0x8e:0x6,0x8f:0x59,0x90:0x89,0x91:0x4e,0x92:0xe,0x93:0x4a,0x94:0x42,0x95:0x93,0x96:0x47,0x97:0x44,0x98:0x3c,0x99:0x1d,0x9a:0x8b,0x9b:0x18,0x9c:0x12,0x9d:0x19,0x9e:0x45,0xa0:0x77,0xa1:0x2,0xa2:0x92,0xa3:0x2e,0xa4:0x7f,0xa5:0x5b,0xa6:0x65,0xa7:0x66,0xa8:0x3,0xa9:0x7b,0xb4:0x3d,0xb5:0x60,0xb6:0x9,0xb7:0x24,0xb8:0x86,0xb9:0x31,0xc8:0x1b,0xc9:0x69,0xca:0x35,0xd2:0x62,0xd3:0x14,0xd4:0x88,0xd5:0x21,0xd6:0x39,0xd7:0x91,0xd8:0x51,0xd9:0x61,0xda:0x6d,0xdb:0x6e,0xdc:0x23,0xfa:0x2b,0xfb:0x84,0xfc:0x73,0xfd:0x8d,0xfe:0x27,0xff:0x48,0x100:0x3a,0x101:0x78,0x102:0x8,0x103:0x7e,0x104:0x87,0x105:0x8c},vC=[function(g4){while(!![]){let g5=vD();vk(!!g5['done']),v4++;break;}},function(g4){while(!![]){if(vl['_$YPMYO5']){let g5=vl['_$nbFAH0'];vl['_$YPMYO5']=![],vl['_$nbFAH0']=undefined,vR=!![],vb=g5;return;}if(vW['_$8u9kvO']){let g6=vW['_$awlg2g'];vW['_$8u9kvO']=![],vW['_$awlg2g']=0x0,v4=g6;break;}if(vH['_$nODOJw']){let g7=vH['_$FMxJ6y'];vH['_$nODOJw']=![],vH['_$FMxJ6y']=0x0,v4=g7;break;}if(vQ!==null){let g8=vQ;vQ=null;throw g8;}v4++;break;}},function(g4){while(!![]){if(vA===null){if(vY||!vJ){vA=[];let g5=vu||t;if(g5)for(let g6=0x0;g6<g5['length'];g6++){vA[g6]=g5[g6];}if(vY){let g7=function(){throw new TypeError('\x27caller\x27,\x20\x27callee\x27,\x20and\x20\x27arguments\x27\x20properties\x20may\x20not\x20be\x20accessed\x20on\x20strict\x20mode\x20functions\x20or\x20the\x20arguments\x20objects\x20for\x20calls\x20to\x20them');};vmM(vA,'callee',{'get':g7,'set':g7,'enumerable':![],'configurable':![]});}else vmM(vA,'callee',{'value':c,'writable':!![],'enumerable':![],'configurable':!![]});}else{let g8=t?t['length']:0x0,g9={},gv=function(gl){return typeof gl==='string'?parseInt(gl,0xa):NaN;},gg=function(gl){return!isNaN(gl)&&gl>=0x0;},gL=function(gl){return gl<t['length']?t[gl]:g9[gl];},gQ=function(gl){return gl<t['length']?gl in t:gl in g9;};vA=new Proxy([],{'get':function(gl,gW,gH){if(gW==='length')return g8;if(gW==='callee')return c;if(gW===Symbol['iterator'])return function(){let gS=0x0;return{'next':function(){if(gS<g8)return{'value':gL(gS++),'done':![]};return{'done':!![]};}};};let gT=gv(gW);if(gg(gT))return gL(gT);if(gW==='hasOwnProperty')return function(gS){if(gS==='length'||gS==='callee')return!![];let gx=gv(gS);return gg(gx)&&gx<g8&&gQ(gx);};let gN=Array['prototype'][gW];if(typeof gN==='function')return function(){let gS=[];for(let gx=0x0;gx<g8;gx++)gS[gx]=gL(gx);return gN['apply'](gS,arguments);};return undefined;},'set':function(gl,gW,gH){if(gW==='length')return g8=gH,!![];let gT=gv(gW);if(gg(gT)){if(gT<t['length'])t[gT]=gH;else g9[gT]=gH;if(gT>=g8)g8=gT+0x1;return!![];}return!![];},'has':function(gl,gW){if(gW==='length'||gW==='callee')return!![];let gH=gv(gW);if(gg(gH)&&gH<g8)return gQ(gH);return gW in Array['prototype'];},'deleteProperty':function(gl,gW){let gH=gv(gW);if(gg(gH)){if(gH<t['length'])delete t[gH];else delete g9[gH];}return!![];},'getOwnPropertyDescriptor':function(gl,gW){if(gW==='callee')return{'value':c,'writable':!![],'enumerable':![],'configurable':!![]};if(gW==='length')return{'value':g8,'writable':!![],'enumerable':![],'configurable':!![]};let gH=gv(gW);if(gg(gH)&&gH<g8&&gQ(gH))return{'value':gL(gH),'writable':!![],'enumerable':!![],'configurable':!![]};return undefined;},'ownKeys':function(gl){let gW=[];for(let gH=0x0;gH<g8;gH++)if(gQ(gH))gW['push'](String(gH));return gW['push']('length','callee'),gW;}});}}vk(vA),v4++;break;}},function(g4){while(!![]){let g5=v5[g4];vk(Symbol['for'](g5)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();g6===null||g6===undefined?vk(undefined):vk(g6[g5]);v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=g4,g8=function(g9,gv){let gg=function(){if(g9){gv&&(vmN_8b241f['_$YEQ3E5']=gg);let gL='_$Ub6kQR'in vmN_8b241f;!gL&&(vmN_8b241f['_$Ub6kQR']=new.target);try{let gQ=g9['apply'](this,O(arguments));if(gv&&gQ!==undefined&&(typeof gQ!=='object'||gQ===null))throw new TypeError('Derived\x20constructors\x20may\x20only\x20return\x20object\x20or\x20undefined');return gQ;}finally{gv&&delete vmN_8b241f['_$YEQ3E5'],!gL&&delete vmN_8b241f['_$Ub6kQR'];}}};return gg;}(g6,g7);g5&&vmM(g8,'name',{'value':g5,'configurable':!![]});vk(g8),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vmN_8b241f['_$JKwmbc'],g8=g7?vmU(g7):k(g6),g9=D(g8,g5),gv;if(g9['desc']&&g9['desc']['get'])gv=g9['desc']['get']['call'](g6),vk(gv);else{if(g9['desc']&&g9['desc']['set']&&!('value'in g9['desc']))vk(undefined);else{gv=g9['proto']?g9['proto'][g5]:g8[g5];if(typeof gv==='function'){let gg=g9['proto']||g8,gL=gv['bind'](g6),gQ=gv['constructor']&&gv['constructor']['name'],gl=gQ==='GeneratorFunction'||gQ==='AsyncFunction'||gQ==='AsyncGeneratorFunction';!gl&&(!vmN_8b241f['_$oCrrmd']&&(vmN_8b241f['_$oCrrmd']=new WeakMap()),vmN_8b241f['_$oCrrmd']['set'](gL,gg)),vk(gL);}else vk(gv);}}v4++;break;}},function(g4){while(!![]){vk(-vD()),v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10,g7=vD(),g8=M(vD,g7),g9=v3[g5],gv=v5[g6],gg=g9[gv];vk(gg['apply'](g9,g8)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU(),g8=P(g7);vmM(g8,g6,{'get':g5,'enumerable':g8===g7,'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4];if(g6===null||g6===undefined)throw new TypeError('Cannot\x20set\x20property\x20\x27'+String(g7)+'\x27\x20of\x20'+g6);n(g6,g7,g5,vY),vk(g5),v4++;break;}},function(g4){while(!![]){vk(~vD()),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4];if(g5===null||g5===undefined)throw new TypeError('Cannot\x20read\x20property\x20\x27'+String(g6)+'\x27\x20of\x20'+g5);vk(g5[g6]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();if(g6===null||g6===undefined)throw new TypeError('Cannot\x20read\x20property\x20\x27'+String(g5)+'\x27\x20of\x20'+g6);vk(g6[g5]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4],g8=P(g6);vmM(g8,g7,{'set':g5,'enumerable':g8===g6,'configurable':!![]}),v4++;break;}},function(g4){while(!![]){vL['pop'](),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vD();if(typeof g6!=='function')throw new TypeError(g6+'\x20is\x20not\x20a\x20function');let g8=vmN_8b241f['_$oCrrmd'],g9=g8&&g8['get'](g6),gv=vmN_8b241f['_$JKwmbc'];g9&&(vmN_8b241f['_$BpyoYr']=!![],vmN_8b241f['_$JKwmbc']=g9);try{let gg=g6['apply'](g7,M(vD,g5));vk(gg);}finally{g9&&(vmN_8b241f['_$BpyoYr']=![],vmN_8b241f['_$JKwmbc']=gv);}v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6;if(vmN_8b241f['_$Ptgw3I']&&g5 in vmN_8b241f['_$Ptgw3I'])throw new ReferenceError('Cannot\x20access\x20\x27'+g5+'\x27\x20before\x20initialization');if(g5 in vmN_8b241f)g6=vmN_8b241f[g5];else{if(g5 in vmV)g6=vmV[g5];else throw new ReferenceError(g5+'\x20is\x20not\x20defined');}vk(g6),v4++;break;}},function(g4){while(!![]){let g5=vD();vD();let g6=vU(),g7=v5[g4],g8=h();!g8['has'](g7)&&g8['set'](g7,new WeakMap());let g9=g8['get'](g7);g9['set'](g6,g5),v4++;break;}},function(g4){while(!![]){!vD()?v4=vK(v7[v4]):v4++;break;}},function(g4){while(!![]){let g5=v5[g4];if(g5==='__this__'){let gg=vj;while(gg){if(gg['_$Lpy0pj']&&'__this__'in gg['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27__this__\x27\x20before\x20initialization');if(gg['_$gaWUQy']&&'__this__'in gg['_$gaWUQy'])break;gg=gg['_$hGYhcW'];}vk(v0),v4++;break;}let g6=vj,g7,g8=![],g9=g5['indexOf']('$$'),gv=g9!==-0x1?g5['substring'](0x0,g9):null;while(g6){if(g6['_$Lpy0pj']&&g5 in g6['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27'+g5+'\x27\x20before\x20initialization');if(gv&&g6['_$Lpy0pj']&&gv in g6['_$Lpy0pj']){if(!(g6['_$gaWUQy']&&g5 in g6['_$gaWUQy']))throw new ReferenceError('Cannot\x20access\x20\x27'+gv+'\x27\x20before\x20initialization');}if(g6['_$gaWUQy']&&g5 in g6['_$gaWUQy']){g7=g6['_$gaWUQy'][g5],g8=!![];break;}g6=g6['_$hGYhcW'];}!g8&&(g5 in vmN_8b241f?g7=vmN_8b241f[g5]:g7=vmV[g5]);vk(g7),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=g5['next']();vk(Promise['resolve'](g6)),v4++;break;}},function(g4){while(!![]){let g5=vD();if(g5==null)throw new TypeError('Cannot\x20iterate\x20over\x20'+g5);let g6=g5[Symbol['asyncIterator']];if(typeof g6==='function')vk(g6['call'](g5));else{let g7=g5[Symbol['iterator']];if(typeof g7!=='function')throw new TypeError('Object\x20is\x20not\x20async\x20iterable');vk(g7['call'](g5));}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU();if(Array['isArray'](g5))Array['prototype']['push']['apply'](g6,g5);else for(let g7 of g5){g6['push'](g7);}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4];if(g5==null){vk(undefined),v4++;break;}let g7=h(),g8=g7['get'](g6);if(!g8||!g8['has'](g5))throw new TypeError('Cannot\x20read\x20private\x20member\x20'+g6+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');vk(g8['get'](g5)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4],g7=K();if(g7){let gv='get_'+g6,gg=g7['get'](gv);if(gg&&gg['has'](g5)){let gQ=gg['get'](g5);vk(gQ['call'](g5)),v4++;break;}let gL=g7['get'](g6);if(gL&&gL['has'](g5)){vk(gL['get'](g5)),v4++;break;}}let g8='_$E9f43W'+'get_'+g6['substring'](0x1)+'_$RBlWWJ';if(g8 in g5){let gl=g5[g8];vk(gl['call'](g5)),v4++;break;}let g9=i(g6);if(g9 in g5){vk(g5[g9]),v4++;break;}throw new TypeError('Cannot\x20read\x20private\x20member\x20'+g6+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(g4){while(!![]){let g5=v5[g4];g5 in vmN_8b241f?vk(typeof vmN_8b241f[g5]):vk(typeof vmV[g5]);v4++;break;}},function(g4){while(!![]){debugger;v4++;break;}},function(g4){while(!![]){let g5=v8[v4];vL['push']({['_$29BGsU']:g5[0x0]>=0x0?vK(g5[0x0]):undefined,['_$fTvbOX']:g5[0x1]>=0x0?vK(g5[0x1]):undefined,['_$FW2c7u']:g5[0x2]>=0x0?vK(g5[0x2]):undefined,['_$VH0MMs']:v2}),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4],g7=![],g8=K();if(g8){let g9=g8['get'](g6);g7=g9&&g9['has'](g5);}vk(g7),v4++;break;}},function(g4){while(!![]){let g6=vD(),g7=vU();if(g6===null){vmD(g7['prototype'],null),vmD(g7,Function['prototype']),g7['_$WhKRJP']=null,v4++;break;}let g8=![];try{let g9=vmI(g6['prototype']),gv=g6['apply'](g9,[]);gv!==undefined&&gv!==g9&&(g8=!![]);}catch(gg){gg instanceof TypeError&&(gg['message']['includes']('\x27new\x27')||gg['message']['includes']('constructor')||gg['message']['includes']('Illegal\x20constructor'))&&(g8=!![]);}if(g8){let gL=g7,gQ=vmN_8b241f,gl='_$Ub6kQR',gW='_$YEQ3E5',gH='_$4qsoMd';function g5(...gT){let gN=vmI(g6['prototype']);gQ[gH]={'parent':g6,'newTarget':new.target||g5},gQ[gW]=new.target||g5;let gS=gl in gQ;if(!gS)gQ[gl]=new.target;try{let gx=gL['apply'](gN,gT);gx!==undefined&&typeof gx==='object'&&(gN=gx);}finally{delete gQ[gH],delete gQ[gW];if(!gS)delete gQ[gl];}return gN;}g5['prototype']=vmI(g6['prototype']),g5['prototype']['constructor']=g5,vmD(g5,g6),vmP(gL)['forEach'](function(gT){gT!=='prototype'&&gT!=='length'&&gT!=='name'&&r(g5,gT,vmO(gL,gT));});gL['prototype']&&(vmP(gL['prototype'])['forEach'](function(gT){gT!=='constructor'&&r(g5['prototype'],gT,vmO(gL['prototype'],gT));}),vmk(gL['prototype'])['forEach'](function(gT){r(g5['prototype'],gT,vmO(gL['prototype'],gT));}));vD(),vk(g5),g5['_$WhKRJP']=g6,v4++;break;}vmD(g7['prototype'],g6['prototype']),vmD(g7,g6),g7['_$WhKRJP']=g6,v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6|g5),v4++;break;}},function(g4){while(!![]){vk(t[g4]),v4++;break;}},function(g4){while(!![]){vk(vj),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6+g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4];if(vY&&!(g6 in vmV)&&!(g6 in vmN_8b241f))throw new ReferenceError(g6+'\x20is\x20not\x20defined');vmN_8b241f[g6]=g5,vmV[g6]=g5,vk(g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU(),g8=P(g7);vmM(g8,g6,{'set':g5,'enumerable':g8===g7,'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6/g5),v4++;break;}},function(g4){while(!![]){let g5=vU();g5['length']++,v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10;vk(v3[g5]*v5[g6]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6!=g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6&g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vmN_8b241f['_$JKwmbc'];vmN_8b241f['_$JKwmbc']=undefined;try{let g8=g6['apply'](undefined,M(vD,g5));vk(g8);}finally{vmN_8b241f['_$JKwmbc']=g7;}v4++;break;}},function(g4){while(!![]){v3[g4]=v3[g4]+0x1,v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4];vmM(g6,g7,{'value':g5,'writable':!![],'enumerable':!![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){throw vD();break;}},function(g4){while(!![]){vD(),vk(undefined),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6<g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6<<g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU();vmM(g7,g6,{'set':g5,'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vD();vk(I(g5)),v4++;break;}},function(g4){while(!![]){vk([]),v4++;break;}},function(g4){while(!![]){if(vL['length']>0x0){let g5=vL[vL['length']-0x1];g5['_$fTvbOX']===v4&&(g5['_$k23sYO']!==undefined&&(vQ=g5['_$k23sYO']),vL['pop']());}v4++;break;}},function(g4){while(!![]){return v2>0x0?vD():undefined;break;}},function(g4){while(!![]){let g5=vD();if(g4>=0x0){let g6=v5[g4];vj['_$gaWUQy'][g6]=g5;}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6*g5),v4++;break;}},function(g4){while(!![]){let g5=vD();g5&&typeof g5['return']==='function'&&g5['return']();v4++;break;}},function(g4){while(!![]){vj&&vj['_$hGYhcW']&&(vj=vj['_$hGYhcW']);v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10;vk(v3[g5]<v5[g6]),v4++;break;}},function(g4){while(!![]){vk(undefined),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4],g8=h();!g8['has'](g7)&&g8['set'](g7,new WeakMap());let g9=g8['get'](g7);if(g9['has'](g6))throw new TypeError('Cannot\x20initialize\x20'+g7+'\x20twice\x20on\x20the\x20same\x20object');g9['set'](g6,g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU();vmM(g7['prototype'],g6,{'value':g5,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5,g6;g4!==undefined?(g6=vD(),g5=v5[g4]):(g5=vD(),g6=vD());let g7=delete g6[g5];if(vY&&!g7)throw new TypeError('Cannot\x20delete\x20property\x20\x27'+String(g5)+'\x27\x20of\x20object');vk(g7),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vD();vmM(g7,g6,{'value':g5,'writable':!![],'enumerable':!![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){vk(v3[g4]),v4++;break;}},function(g4){while(!![]){let g5=vD();g5&&typeof g5['return']==='function'?vk(Promise['resolve'](g5['return']())):vk(Promise['resolve']());v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4];vmM(g6,g7,{'get':g5,'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vK(v7[v4]);if(vL['length']>0x0){let g6=vL[vL['length']-0x1];if(g6['_$fTvbOX']!==undefined&&g5>=g6['_$FW2c7u']){vH['_$nODOJw']=!![],vH['_$FMxJ6y']=g5,v4=g6['_$fTvbOX'];break;}}v4=g5;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4],g8=h(),g9='set_'+g7,gv=g8['get'](g9);if(gv&&gv['has'](g6)){let gl=gv['get'](g6);gl['call'](g6,g5),vk(g5),v4++;break;}let gg='_$E9f43W'+'set_'+g7['substring'](0x1)+'_$RBlWWJ';if(g6['constructor']&&gg in g6['constructor']){let gW=g6['constructor'][gg];gW['call'](g6,g5),vk(g5),v4++;break;}let gL=g8['get'](g7);if(gL&&gL['has'](g6)){gL['set'](g6,g5),vk(g5),v4++;break;}let gQ=i(g7);if(gQ in g6){g6[gQ]=g5,vk(g5),v4++;break;}throw new TypeError('Cannot\x20write\x20private\x20member\x20'+g7+'\x20to\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4],g8=K();if(g8){let gg='set_'+g7,gL=g8['get'](gg);if(gL&&gL['has'](g6)){let gl=gL['get'](g6);gl['call'](g6,g5),vk(g5),v4++;break;}let gQ=g8['get'](g7);if(gQ&&gQ['has'](g6)){gQ['set'](g6,g5),vk(g5),v4++;break;}}let g9='_$E9f43W'+'set_'+g7['substring'](0x1)+'_$RBlWWJ';if(g9 in g6){let gW=g6[g9];gW['call'](g6,g5),vk(g5),v4++;break;}let gv=i(g7);if(gv in g6){g6[gv]=g5,vk(g5),v4++;break;}throw new TypeError('Cannot\x20write\x20private\x20member\x20'+g7+'\x20to\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(g4){while(!![]){vD(),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4],g7=h(),g8='get_'+g6,g9=g7['get'](g8);if(g9&&g9['has'](g5)){let gQ=g9['get'](g5);vk(gQ['call'](g5)),v4++;break;}let gv='_$E9f43W'+'get_'+g6['substring'](0x1)+'_$RBlWWJ';if(g5['constructor']&&gv in g5['constructor']){let gl=g5['constructor'][gv];vk(gl['call'](g5)),v4++;break;}let gg=g7['get'](g6);if(gg&&gg['has'](g5)){vk(gg['get'](g5)),v4++;break;}let gL=i(g6);if(gL in g5){vk(g5[gL]),v4++;break;}throw new TypeError('Cannot\x20read\x20private\x20member\x20'+g6+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10,g7=v3[g5],g8=v5[g6];vk(g7[g8]),v4++;break;}},function(g4){while(!![]){t[g4]=vD(),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4];vmM(g6,g7,{'value':g5,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){vk(typeof vD()),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=g(g5),g7=g6&&g6['a'],g8=g6&&g6['s'],g9=g6&&g6['g'],gv=g6&&g6['m'],gg=vj,gL=g6&&g6['ni']!==undefined?g6['c'][g6['ni']]:undefined,gQ=g6&&g6['p']||0x0,gl=g6&&g6['st'],gW=g7?vy:undefined,gH,gT=gl?function(gN){return gN===vmV?[undefined,![]]:[Q,!![]];}:function(gN){return[Q,!![]];};if(g9)gH=function gN(){let gS=O(arguments),[gx,gV]=gT(this);if(gV)return C['call'](this,g5,gS,gg,gH,undefined,gx);return C(g5,gS,gg,gH,undefined,gx);},w['add'](gH);else{if(g8){if(g7)gH={'xOlUgU':async(...gS)=>{return await f(g5,gS,gg,gH,undefined,undefined,gW);}}['xOlUgU'];else gv?gH={async 'xOlUgU'(){let gS=O(arguments),gx=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gV,gw]=gT(this);if(gw)return await f['call'](this,g5,gS,gg,gH,gx,undefined,gV);return await f(g5,gS,gg,gH,gx,undefined,gV);}}['xOlUgU']:gH=async function gS(){let gx=O(arguments),gV=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gw,gr]=gT(this);if(gr)return await f['call'](this,g5,gx,gg,gH,gV,undefined,gw);return await f(g5,gx,gg,gH,gV,undefined,gw);};}else{if(g7)gH={'xOlUgU':(...gx)=>{return j(g5,gx,gg,gH,undefined,gW);}}['xOlUgU'];else gv?gH={'xOlUgU'(){let gx=O(arguments),gV=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gw,gr]=gT(this);if(gr)return j['call'](this,g5,gx,gg,gH,gV,gw);return j(g5,gx,gg,gH,gV,gw);}}['xOlUgU']:gH=function gx(){let gV=O(arguments),gw=new.target!==undefined?new.target:vmN_8b241f['_$Ub6kQR'],[gr,gM]=gT(this);if(gM)return j['call'](this,g5,gV,gg,gH,gw,gr);return j(g5,gV,gg,gH,gw,gr);};}}r(gH,'length',{'value':gQ,'writable':![],'enumerable':![],'configurable':!![]}),vk(gH),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4];g5===null||g5===undefined?vk(undefined):vk(g5[g6]);v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4],g8=P(g6);vmM(g8,g7,{'get':g5,'enumerable':g8===g6,'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=v5[g4];if(vmN_8b241f['_$Ptgw3I']&&g6 in vmN_8b241f['_$Ptgw3I'])throw new ReferenceError('Cannot\x20access\x20\x27'+g6+'\x27\x20before\x20initialization');let g7=!(g6 in vmN_8b241f)&&!(g6 in vmV);vmN_8b241f[g6]=g5;g6 in vmV&&(vmV[g6]=g5);g7&&(vmV[g6]=g5);vk(g5),v4++;break;}},function(g4){while(!![]){let g5=vU();vz(vn(0x2)),vh(0x2,g5),v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6=vD(),g7=vj,g8=![];while(g7){if(g7['_$gaWUQy']&&g5 in g7['_$gaWUQy']){if(g7['_$yRu0vL']&&g5 in g7['_$yRu0vL'])break;g7['_$gaWUQy'][g5]=g6;!g7['_$yRu0vL']&&(g7['_$yRu0vL']={});g7['_$yRu0vL'][g5]=!![],g8=!![];break;}g7=g7['_$hGYhcW'];}!g8&&(z(vj,g5),vj['_$gaWUQy'][g5]=g6,!vj['_$yRu0vL']&&(vj['_$yRu0vL']={}),vj['_$yRu0vL'][g5]=!![]);v4++;break;}},function(g4){while(!![]){let g5=vD();vk(typeof g5==='bigint'?g5:+g5),v4++;break;}},function(g4){while(!![]){v4=vK(v7[v4]);break;}},function(g4){while(!![]){let g5=vD();if(g5==null)throw new TypeError('Cannot\x20iterate\x20over\x20'+g5);let g6=g5[Symbol['iterator']];if(typeof g6!=='function')throw new TypeError('Object\x20is\x20not\x20iterable');vk(g6['call'](g5)),v4++;break;}},function(g4){while(!![]){let g5=vn(0x3),g6=vn(0x2),g7=vU();vh(0x3,g6),vh(0x2,g7),vz(g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=M(vD,g5),g7=vD();if(typeof g7!=='function')throw new TypeError(g7+'\x20is\x20not\x20a\x20constructor');if(w['has'](g7))throw new TypeError(g7['name']+'\x20is\x20not\x20a\x20constructor');let g8=vmN_8b241f['_$JKwmbc'];vmN_8b241f['_$JKwmbc']=undefined;let g9;try{g9=Reflect['construct'](g7,g6);}finally{vmN_8b241f['_$JKwmbc']=g8;}vk(g9),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6%g5),v4++;break;}},function(g4){while(!![]){let g5=vD();vk(typeof g5==='bigint'?g5-0x1n:+g5-0x1),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vD(),g8=k(g7),g9=D(g8,g6);g9['desc']&&g9['desc']['set']?g9['desc']['set']['call'](g7,g5):g7[g6]=g5;vk(g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=g5['next']();vk(g6),v4++;break;}},function(g4){while(!![]){vk(vmw[g4]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6-g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6>g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6>>g5),v4++;break;}},function(g4){while(!![]){let g5=vK(v7[v4]);if(vL['length']>0x0){let g6=vL[vL['length']-0x1];if(g6['_$fTvbOX']!==undefined&&g5>=g6['_$FW2c7u']){vW['_$8u9kvO']=!![],vW['_$awlg2g']=g5,v4=g6['_$fTvbOX'];break;}}v4=g5;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU();vmM(g7,g6,{'value':g5,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6=vD();U(vj,g5),vj['_$gaWUQy'][g5]=g6;!vj['_$yRu0vL']&&(vj['_$yRu0vL']={});vj['_$yRu0vL'][g5]=!![],v4++;break;}},function(g4){while(!![]){let g5=vD(),g6={['_$gaWUQy']:vmI(null),['_$yRu0vL']:vmI(null),['_$Lpy0pj']:vmI(null),['_$hGYhcW']:g5};vj=g6,v4++;break;}},function(g4){while(!![]){let g5=vD();vk(g5),vk(g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6^g5),v4++;break;}},function(g4){while(!![]){vk(vmr[g4]),v4++;break;}},function(g4){while(!![]){if(g4===-0x1)vk(Symbol());else{let g5=vD();vk(Symbol(g5));}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6===g5),v4++;break;}},function(g4){while(!![]){vk(null),v4++;break;}},function(g4){while(!![]){v4++;break;}},function(g4){while(!![]){let g5=vD();vk(import(g5)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=M(vD,g5),g7=vD();if(g4===0x1){vk(g6),v4++;break;}if(vmN_8b241f['_$ZtxiYY']){v4++;break;}let g8=vmN_8b241f['_$4qsoMd'];if(g8){let g9=g8['parent'],gv=g8['newTarget'],gg=Reflect['construct'](g9,g6,gv);v0&&v0!==gg&&vmP(v0)['forEach'](function(gL){!(gL in gg)&&(gg[gL]=v0[gL]);});v0=gg,vZ=!![];va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);v4++;break;}if(typeof g7!=='function')throw new TypeError('Super\x20expression\x20must\x20be\x20a\x20constructor');vmN_8b241f['_$Ub6kQR']=G;try{let gL=g7['apply'](v0,g6);gL!==undefined&&gL!==v0&&typeof gL==='object'&&(v0&&Object['assign'](gL,v0),v0=gL),vZ=!![],va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);}catch(gQ){if(gQ instanceof TypeError&&(gQ['message']['includes']('\x27new\x27')||gQ['message']['includes']('constructor'))){let gl=Reflect['construct'](g7,g6,G);gl!==v0&&v0&&Object['assign'](gl,v0),v0=gl,vZ=!![],va&&(U(vj,'__this__'),vj['_$gaWUQy']['__this__']=v0);}else throw gQ;}finally{delete vmN_8b241f['_$Ub6kQR'];}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6={'value':g5};V['add'](g6),vk(g6),v4++;break;}},function(g4){while(!![]){let g5=v5[g4];!vj['_$Lpy0pj']&&(vj['_$Lpy0pj']={});vj['_$Lpy0pj'][g5]=!![],v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6=vD(),g7=vj['_$hGYhcW'];g7&&(g7['_$gaWUQy'][g5]=g6);v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vD();if(g7===null||g7===undefined)throw new TypeError('Cannot\x20set\x20property\x20\x27'+String(g6)+'\x27\x20of\x20'+g7);n(g7,g6,g5,vY),vk(g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6!==g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6<=g5),v4++;break;}},function(g4){while(!![]){v3[g4]=vD(),v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10;vk(v3[g5]+v5[g6]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6==g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6>>>g5),v4++;break;}},function(g4){while(!![]){vk({}),v4++;break;}},function(g4){while(!![]){if(vd&&!vZ)throw new ReferenceError('Must\x20call\x20super\x20constructor\x20in\x20derived\x20class\x20before\x20accessing\x20\x27this\x27\x20or\x20returning\x20from\x20derived\x20constructor');vk(v0),v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10;v3[g5]<v5[g6]?v4=vK(v7[v4]):v4++;break;}},function(g4){while(!![]){vD()?v4=vK(v7[v4]):v4++;break;}},function(g4){while(!![]){vk(!vD()),v4++;break;}},function(g4){while(!![]){let g5=vD();vk(Symbol['keyFor'](g5)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6>=g5),v4++;break;}},function(g4){while(!![]){let g5=vD();g5!==null&&g5!==undefined?v4=vK(v7[v4]):v4++;break;}},function(g4){while(!![]){v3[g4]=vD(),v4++;break;}},function(g4){while(!![]){vk(G),v4++;break;}},function(g4){while(!![]){let g5=vD();vk(typeof g5==='bigint'?g5+0x1n:+g5+0x1),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6**g5),v4++;break;}},function(g4){while(!![]){vk(v5[g4]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU();g6['push'](g5),v4++;break;}},function(g4){while(!![]){v3[g4]=v3[g4]-0x1,v4++;break;}},function(g4){while(!![]){if(vL['length']>0x0){let g5=vL[vL['length']-0x1];if(g5['_$fTvbOX']!==undefined){vl['_$YPMYO5']=!![],vl['_$nbFAH0']=vD(),v4=g5['_$fTvbOX'];break;}}vl['_$YPMYO5']&&(vl['_$YPMYO5']=![],vl['_$nbFAH0']=undefined);vR=!![],vb=vD();return;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=vU();vmM(g7,g6,{'get':g5,'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=v3[g4]+0x1;v3[g4]=g5,vk(g5),v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6=vD(),g7=vj,g8=![];while(g7){if(g7['_$Lpy0pj']&&g5 in g7['_$Lpy0pj'])throw new ReferenceError('Cannot\x20access\x20\x27'+g5+'\x27\x20before\x20initialization');if(g7['_$gaWUQy']&&g5 in g7['_$gaWUQy']){if(g7['_$0TIvt5']&&g5 in g7['_$0TIvt5']){if(vY)throw new TypeError('Assignment\x20to\x20constant\x20variable.');g8=!![];break;}if(g7['_$yRu0vL']&&g5 in g7['_$yRu0vL'])throw new TypeError('Assignment\x20to\x20constant\x20variable.');g7['_$gaWUQy'][g5]=g6,g8=!![];break;}g7=g7['_$hGYhcW'];}if(!g8){if(g5 in vmN_8b241f)vmN_8b241f[g5]=g6;else g5 in vmV?vmV[g5]=g6:vmV[g5]=g6;}v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4];vmM(g6['prototype'],g7,{'value':g5,'writable':!![],'enumerable':![],'configurable':!![]}),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6 in g5),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD(),g7=v5[g4],g8=null,g9=K();if(g9){let gL=g9['get'](g7);gL&&gL['has'](g6)&&(g8=gL['get'](g6));}if(g8===null){let gQ=A(g7);gQ in g6&&(g8=g6[gQ]);}if(g8===null)throw new TypeError('Cannot\x20read\x20private\x20member\x20'+g7+'\x20from\x20an\x20object\x20whose\x20class\x20did\x20not\x20declare\x20it');if(typeof g8!=='function')throw new TypeError(g7+'\x20is\x20not\x20a\x20function');let gv=M(vD,g5),gg=g8['apply'](g6,gv);vk(gg),v4++;break;}},function(g4){while(!![]){let g5=v3[g4]-0x1;v3[g4]=g5,vk(g5),v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>>0x10;vk(v3[g5]-v5[g6]),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU();g5!==null&&g5!==undefined&&Object['assign'](g6,g5);v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vD();vk(g6 instanceof g5),v4++;break;}},function(g4){while(!![]){vk(+vD()),v4++;break;}},function(g4){while(!![]){let g5=v5[g4],g6=vD();U(vj,g5),vj['_$gaWUQy'][g5]=g6,v4++;break;}},function(g4){while(!![]){let g5=g4&0xffff,g6=g4>>0x10,g7=v5[g5],g8=v5[g6];vk(new RegExp(g7,g8)),v4++;break;}},function(g4){while(!![]){let g5=vD(),g6=vU(),g7=v5[g4];vmM(g6,g7,{'set':g5,'enumerable':![],'configurable':!![]}),v4++;break;}}];vY=vN,vJ=vS,vd=vx,va=vV,vZ=vB,vy=vw,vu=vi,vj=vm,vC[vf[vq]](ve),vm=vj,vB=vZ;if(vR)return vR=![],vb;}break;}catch(g4){if(vL['length']>0x0){let g5=vL[vL['length']-0x1];v2=g5['_$VH0MMs'];if(g5['_$29BGsU']!==undefined)vk(g4),v4=g5['_$29BGsU'],g5['_$29BGsU']=undefined,g5['_$fTvbOX']===undefined&&vL['pop']();else g5['_$fTvbOX']!==undefined?(v4=g5['_$fTvbOX'],g5['_$k23sYO']=g4):(v4=g5['_$FW2c7u'],vL['pop']());continue;}throw g4;}}return v2>0x0?vD():vB?v0:undefined;}let j=function(s,t,F,c,G,v0){vmN_8b241f['_$BpyoYr']?vmN_8b241f['_$BpyoYr']=![]:vmN_8b241f['_$JKwmbc']=undefined;let v1=v0===Q?this:v0,v2=g(s);return y(v2,t,F,c,G,v1);},f=async function(s,t,F,c,G,v0,v1){let v2=v1===Q?this:v1,v3=g(s),v4=u(v3,t,F,c,G,v2),v5=v4['next']();while(!v5['done']){if(v5['value']['_$r1HRWx']===l)try{let v6=await Promise['resolve'](v5['value']['_$VEvC4Y']);vmN_8b241f['_$JKwmbc']=v0,v5=v4['next'](v6);}catch(v7){vmN_8b241f['_$JKwmbc']=v0,v5=v4['throw'](v7);}else throw new Error('Unexpected\x20yield\x20in\x20async\x20context');}return v5['value'];},C=function(s,t,F,c,G,v0){let v1=v0===Q?this:v0,v2=g(s),v3=u(v2,t,F,c,undefined,v1),v4=![],v5=null,v6=undefined,v7=![];function v8(vl,vW){if(v4)return{'value':undefined,'done':!![]};vmN_8b241f['_$JKwmbc']=G;if(v5){let vT;try{vT=vW?typeof v5['throw']==='function'?v5['throw'](vl):(v5=null,(function(){throw vl;}())):v5['next'](vl);}catch(vN){v5=null;try{let vS=v3['throw'](vN);return v9(vS);}catch(vx){v4=!![];throw vx;}}if(!vT['done'])return{'value':vT['value'],'done':![]};v5=null,vl=vT['value'],vW=![];}let vH;try{vH=vW?v3['throw'](vl):v3['next'](vl);}catch(vV){v4=!![];throw vV;}return v9(vH);}function v9(vl){if(vl['done']){v4=!![];if(v7)return v7=![],{'value':v6,'done':!![]};return{'value':vl['value'],'done':!![]};}let vW=vl['value'];if(vW['_$r1HRWx']===W)return{'value':vW['_$VEvC4Y'],'done':![]};if(vW['_$r1HRWx']===H){let vH=vW['_$VEvC4Y'],vT=vH;vT&&typeof vT[Symbol['iterator']]==='function'&&(vT=vT[Symbol['iterator']]());if(vT&&typeof vT['next']==='function'){let vN=vT['next']();if(!vN['done'])return v5=vT,{'value':vN['value'],'done':![]};return v8(vN['value'],![]);}return v8(undefined,![]);}throw new Error('Unexpected\x20signal\x20in\x20generator');}let vv=v2&&v2['s'],vg=async function(vl){if(v4)return{'value':vl,'done':!![]};if(v5&&typeof v5['return']==='function'){try{await v5['return']();}catch(vH){}v5=null;}let vW;try{vmN_8b241f['_$JKwmbc']=G,vW=v3['next']({['_$r1HRWx']:T,['_$VEvC4Y']:vl});}catch(vT){v4=!![];throw vT;}while(!vW['done']){let vN=vW['value'];if(vN['_$r1HRWx']===l)try{let vS=await Promise['resolve'](vN['_$VEvC4Y']);vmN_8b241f['_$JKwmbc']=G,vW=v3['next'](vS);}catch(vx){vmN_8b241f['_$JKwmbc']=G,vW=v3['throw'](vx);}else{if(vN['_$r1HRWx']===W)try{vmN_8b241f['_$JKwmbc']=G,vW=v3['next']();}catch(vV){v4=!![];throw vV;}else break;}}return v4=!![],{'value':vW['value'],'done':!![]};},vL=function(vl){if(v4)return{'value':vl,'done':!![]};if(v5&&typeof v5['return']==='function'){try{v5['return']();}catch(vH){}v5=null;}v6=vl,v7=!![];let vW;try{vmN_8b241f['_$JKwmbc']=G,vW=v3['next']({['_$r1HRWx']:T,['_$VEvC4Y']:vl});}catch(vT){v4=!![],v7=![];throw vT;}if(!vW['done']&&vW['value']&&vW['value']['_$r1HRWx']===W)return{'value':vW['value']['_$VEvC4Y'],'done':![]};return v4=!![],v7=![],{'value':vW['value'],'done':!![]};};if(vv){let vl=async function(vW,vH){if(v4)return{'value':undefined,'done':!![]};vmN_8b241f['_$JKwmbc']=G;if(v5){let vN;try{vN=vH?typeof v5['throw']==='function'?await v5['throw'](vW):(v5=null,(function(){throw vW;}())):await v5['next'](vW);}catch(vS){v5=null;try{vmN_8b241f['_$JKwmbc']=G;let vx=v3['throw'](vS);return await vQ(vx);}catch(vV){v4=!![];throw vV;}}if(!vN['done'])return{'value':vN['value'],'done':![]};v5=null,vW=vN['value'],vH=![];}let vT;try{vT=vH?v3['throw'](vW):v3['next'](vW);}catch(vw){v4=!![];throw vw;}return await vQ(vT);};async function vQ(vW){while(!vW['done']){let vH=vW['value'];if(vH['_$r1HRWx']===l){let vT;try{vT=await Promise['resolve'](vH['_$VEvC4Y']),vmN_8b241f['_$JKwmbc']=G,vW=v3['next'](vT);}catch(vN){vmN_8b241f['_$JKwmbc']=G,vW=v3['throw'](vN);}continue;}if(vH['_$r1HRWx']===W)return{'value':vH['_$VEvC4Y'],'done':![]};if(vH['_$r1HRWx']===H){let vS=vH['_$VEvC4Y'],vx=vS;if(vx&&typeof vx[Symbol['asyncIterator']]==='function')vx=vx[Symbol['asyncIterator']]();else vx&&typeof vx[Symbol['iterator']]==='function'&&(vx=vx[Symbol['iterator']]());if(vx&&typeof vx['next']==='function'){let vV=await vx['next']();if(!vV['done'])return v5=vx,{'value':vV['value'],'done':![]};vmN_8b241f['_$JKwmbc']=G,vW=v3['next'](vV['value']);continue;}vmN_8b241f['_$JKwmbc']=G,vW=v3['next'](undefined);continue;}throw new Error('Unexpected\x20signal\x20in\x20async\x20generator');}v4=!![];if(v7)return v7=![],{'value':v6,'done':!![]};return{'value':vW['value'],'done':!![]};}return{'next':function(vW){return vl(vW,![]);},'return':vg,'throw':function(vW){if(v4)return Promise['reject'](vW);return vl(vW,!![]);},[Symbol['asyncIterator']]:function(){return this;}};}else return{'next':function(vW){return v8(vW,![]);},'return':vL,'throw':function(vW){if(v4)throw vW;return v8(vW,!![]);},[Symbol['iterator']]:function(){return this;}};};return function(s,t,F,c,G){let v0=g(s);if(v0&&v0['g']){let v1=vmN_8b241f['_$JKwmbc'];return C['call'](this,s,t,F,c,v1,Q);}else{if(v0&&v0['s']){let v2=vmN_8b241f['_$JKwmbc'];return f['call'](this,s,t,F,c,G,v2,Q);}else{if(v0&&v0['st']&&this===vmV)return j(s,t,F,c,G,undefined);return j['call'](this,s,t,F,c,G,Q);}}};}());try{Audio,Object['defineProperty'](vmN_8b241f,'Audio',{'get':function(){return Audio;},'set':function(g){Audio=g;},'configurable':!![]});}catch(vmgI){}try{document,Object['defineProperty'](vmN_8b241f,'document',{'get':function(){return document;},'set':function(g){document=g;},'configurable':!![]});}catch(vmgO){}try{window,Object['defineProperty'](vmN_8b241f,'window',{'get':function(){return window;},'set':function(g){window=g;},'configurable':!![]});}catch(vmgP){}try{stopRepeatAudio,Object['defineProperty'](vmN_8b241f,'stopRepeatAudio',{'get':function(){return stopRepeatAudio;},'set':function(g){stopRepeatAudio=g;},'configurable':!![]});}catch(vmgk){}try{clearInterval,Object['defineProperty'](vmN_8b241f,'clearInterval',{'get':function(){return clearInterval;},'set':function(g){clearInterval=g;},'configurable':!![]});}catch(vmgD){}try{fetch,Object['defineProperty'](vmN_8b241f,'fetch',{'get':function(){return fetch;},'set':function(g){fetch=g;},'configurable':!![]});}catch(vmgU){}try{String,Object['defineProperty'](vmN_8b241f,'String',{'get':function(){return String;},'set':function(g){String=g;},'configurable':!![]});}catch(vmgz){}try{checkResumeStatus,Object['defineProperty'](vmN_8b241f,'checkResumeStatus',{'get':function(){return checkResumeStatus;},'set':function(g){checkResumeStatus=g;},'configurable':!![]});}catch(vmgn){}try{console,Object['defineProperty'](vmN_8b241f,'console',{'get':function(){return console;},'set':function(g){console=g;},'configurable':!![]});}catch(vmgh){}try{nextStep,Object['defineProperty'](vmN_8b241f,'nextStep',{'get':function(){return nextStep;},'set':function(g){nextStep=g;},'configurable':!![]});}catch(vmgK){}try{SpeechRecognition,Object['defineProperty'](vmN_8b241f,'SpeechRecognition',{'get':function(){return SpeechRecognition;},'set':function(g){SpeechRecognition=g;},'configurable':!![]});}catch(vmgm){}try{Math,Object['defineProperty'](vmN_8b241f,'Math',{'get':function(){return Math;},'set':function(g){Math=g;},'configurable':!![]});}catch(vmgi){}try{setTimeout,Object['defineProperty'](vmN_8b241f,'setTimeout',{'get':function(){return setTimeout;},'set':function(g){setTimeout=g;},'configurable':!![]});}catch(vmgA){}try{showMenu,Object['defineProperty'](vmN_8b241f,'showMenu',{'get':function(){return showMenu;},'set':function(g){showMenu=g;},'configurable':!![]});}catch(vmgB){}try{setInterval,Object['defineProperty'](vmN_8b241f,'setInterval',{'get':function(){return setInterval;},'set':function(g){setInterval=g;},'configurable':!![]});}catch(vmgR){}try{saveStatus,Object['defineProperty'](vmN_8b241f,'saveStatus',{'get':function(){return saveStatus;},'set':function(g){saveStatus=g;},'configurable':!![]});}catch(vmgb){}try{playASAudio,Object['defineProperty'](vmN_8b241f,'playASAudio',{'get':function(){return playASAudio;},'set':function(g){playASAudio=g;},'configurable':!![]});}catch(vmgY){}try{navigator,Object['defineProperty'](vmN_8b241f,'navigator',{'get':function(){return navigator;},'set':function(g){navigator=g;},'configurable':!![]});}catch(vmgJ){}try{MediaRecorder,Object['defineProperty'](vmN_8b241f,'MediaRecorder',{'get':function(){return MediaRecorder;},'set':function(g){MediaRecorder=g;},'configurable':!![]});}catch(vmgd){}try{stopRecording,Object['defineProperty'](vmN_8b241f,'stopRecording',{'get':function(){return stopRecording;},'set':function(g){stopRecording=g;},'configurable':!![]});}catch(vmga){}try{Blob,Object['defineProperty'](vmN_8b241f,'Blob',{'get':function(){return Blob;},'set':function(g){Blob=g;},'configurable':!![]});}catch(vmgZ){}try{FileReader,Object['defineProperty'](vmN_8b241f,'FileReader',{'get':function(){return FileReader;},'set':function(g){FileReader=g;},'configurable':!![]});}catch(vmgy){}try{JSON,Object['defineProperty'](vmN_8b241f,'JSON',{'get':function(){return JSON;},'set':function(g){JSON=g;},'configurable':!![]});}catch(vmgu){}try{Promise,Object['defineProperty'](vmN_8b241f,'Promise',{'get':function(){return Promise;},'set':function(g){Promise=g;},'configurable':!![]});}catch(vmgj){}try{Date,Object['defineProperty'](vmN_8b241f,'Date',{'get':function(){return Date;},'set':function(g){Date=g;},'configurable':!![]});}catch(vmgf){}try{confetti,Object['defineProperty'](vmN_8b241f,'confetti',{'get':function(){return confetti;},'set':function(g){confetti=g;},'configurable':!![]});}catch(vmgC){}try{isNaN,Object['defineProperty'](vmN_8b241f,'isNaN',{'get':function(){return isNaN;},'set':function(g){isNaN=g;},'configurable':!![]});}catch(vmgp){}try{parseFloat,Object['defineProperty'](vmN_8b241f,'parseFloat',{'get':function(){return parseFloat;},'set':function(g){parseFloat=g;},'configurable':!![]});}catch(vmgX){}try{parseInt,Object['defineProperty'](vmN_8b241f,'parseInt',{'get':function(){return parseInt;},'set':function(g){parseInt=g;},'configurable':!![]});}catch(vmgE){}try{location,Object['defineProperty'](vmN_8b241f,'location',{'get':function(){return location;},'set':function(g){location=g;},'configurable':!![]});}catch(vmgq){}vmN_8b241f['renderNoticePage']=renderNoticePage;globalThis['renderNoticePage']=vmN_8b241f['renderNoticePage'],vmN_8b241f["generateCalendarHTML"]=generateCalendarHTML;globalThis['generateCalendarHTML']=vmN_8b241f['generateCalendarHTML'],vmN_8b241f["renderProfilePage"]=renderProfilePage;globalThis['renderProfilePage']=vmN_8b241f['renderProfilePage'],vmN_8b241f["renderResultsCards"]=renderResultsCards;globalThis['renderResultsCards']=vmN_8b241f['renderResultsCards'],vmN_8b241f["renderResultsCards"]=renderResultsCards;globalThis['renderResultsCards']=vmN_8b241f['renderResultsCards'],vmN_8b241f["requestWakeLock"]=requestWakeLock;globalThis['requestWakeLock']=vmN_8b241f['requestWakeLock'],vmN_8b241f["triggerFireworkConfetti"]=triggerFireworkConfetti;globalThis['triggerFireworkConfetti']=vmN_8b241f['triggerFireworkConfetti'],vmN_8b241f["sendDataToGoogle"]=sendDataToGoogle;globalThis['sendDataToGoogle']=vmN_8b241f['sendDataToGoogle'],vmN_8b241f["updateProgress"]=updateProgress;globalThis['updateProgress']=vmN_8b241f['updateProgress'],vmN_8b241f["processRecording"]=processRecording;globalThis['processRecording']=vmN_8b241f['processRecording'],vmN_8b241f["startRecording"]=startRecording;globalThis['startRecording']=vmN_8b241f['startRecording'],vmN_8b241f["renderAccurateSpeakingPage"]=renderAccurateSpeakingPage;globalThis['renderAccurateSpeakingPage']=vmN_8b241f['renderAccurateSpeakingPage'],vmN_8b241f["renderASPage"]=renderASPage;globalThis['renderASPage']=vmN_8b241f['renderASPage'],vmN_8b241f['startRecognition']=startRecognition;globalThis['startRecognition']=vmN_8b241f['startRecognition'],vmN_8b241f["checkSimilarity"]=checkSimilarity;globalThis['checkSimilarity']=vmN_8b241f['checkSimilarity'],vmN_8b241f["playSentence"]=playSentence;globalThis['playSentence']=vmN_8b241f['playSentence'],vmN_8b241f["loadStudyData"]=loadStudyData;globalThis['loadStudyData']=vmN_8b241f['loadStudyData'],vmN_8b241f["renderUnitButtons"]=renderUnitButtons;globalThis['renderUnitButtons']=vmN_8b241f['renderUnitButtons'],vmN_8b241f["closeCustomModal"]=closeCustomModal;globalThis['closeCustomModal']=vmN_8b241f['closeCustomModal'],vmN_8b241f["showCustomModal"]=showCustomModal;globalThis['showCustomModal']=vmN_8b241f['showCustomModal'],vmN_8b241f["updateNavStateInApp"]=updateNavStateInApp;globalThis['updateNavStateInApp']=vmN_8b241f['updateNavStateInApp'],vmN_8b241f["showBox"]=showBox;globalThis['showBox']=vmN_8b241f['showBox'],vmN_8b241f['_$Ptgw3I']={'REPO_USER':!![],'REPO_NAME':!![],'BASE_URL':!![],'GOOGLE_SCRIPT_URL':!![],'currentTotalCycles':!![],'currentPart':!![],'userName':!![],'currentType':!![],'currentUnit':!![],'currentData':!![],'index':!![],'cycle':!![],'isRepeating':!![],'repeatIndex':!![],'repeatCycleCount':!![],'repeatCountVal':!![],'praiseList':!![],'player':!![],'wakeLock':!![],'asTimer':!![],'asSeconds':!![],'asData':!![],'isAlertShown':!![],'isRestoring':!![],'mediaRecorder':!![],'audioChunks':!![],'recordingTimer':!![],'recSeconds':!![],'modalCallback':!![],'successSound':!![],'failSound':!![],'bookDatabase':!![],'recognizer':!![]};const REPO_USER='jaydo14';vmN_8b241f['REPO_USER']=REPO_USER;globalThis['REPO_USER']=vmN_8b241f['REPO_USER'],vmN_8b241f['REPO_USER']=REPO_USER;globalThis['REPO_USER']=vmN_8b241f['REPO_USER'];delete vmN_8b241f['_$Ptgw3I']['REPO_USER'];const REPO_NAME='english-app';vmN_8b241f['REPO_NAME']=REPO_NAME;globalThis['REPO_NAME']=vmN_8b241f['REPO_NAME'],vmN_8b241f['REPO_NAME']=REPO_NAME;globalThis['REPO_NAME']=vmN_8b241f['REPO_NAME'];delete vmN_8b241f['_$Ptgw3I']['REPO_NAME'];const BASE_URL='https://raw.githubusercontent.com/'+vmN_8b241f['REPO_USER']+'/'+vmN_8b241f['REPO_NAME']+'/main/contents/';vmN_8b241f['BASE_URL']=BASE_URL;globalThis['BASE_URL']=vmN_8b241f['BASE_URL'],vmN_8b241f["BASE_URL"]=BASE_URL;globalThis['BASE_URL']=BASE_URL;delete vmN_8b241f['_$Ptgw3I']['BASE_URL'];const GOOGLE_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxhiMIaBuT1Up5WSMtRIK05q_IFfWvGIsY4Vc4wlqjTclOo8_3AMrX-fNKWkkbk4IVD/exec';vmN_8b241f['GOOGLE_SCRIPT_URL']=GOOGLE_SCRIPT_URL;globalThis['GOOGLE_SCRIPT_URL']=vmN_8b241f['GOOGLE_SCRIPT_URL'],vmN_8b241f["GOOGLE_SCRIPT_URL"]=GOOGLE_SCRIPT_URL;globalThis['GOOGLE_SCRIPT_URL']=GOOGLE_SCRIPT_URL;delete vmN_8b241f['_$Ptgw3I']['GOOGLE_SCRIPT_URL'];let currentTotalCycles=0x12;vmN_8b241f['currentTotalCycles']=currentTotalCycles;globalThis['currentTotalCycles']=vmN_8b241f['currentTotalCycles'],vmN_8b241f["currentTotalCycles"]=currentTotalCycles;globalThis['currentTotalCycles']=currentTotalCycles;delete vmN_8b241f['_$Ptgw3I']['currentTotalCycles'];let currentPart='Script';vmN_8b241f['currentPart']=currentPart;globalThis['currentPart']=vmN_8b241f['currentPart'],vmN_8b241f["currentPart"]=currentPart;globalThis['currentPart']=currentPart;delete vmN_8b241f['_$Ptgw3I']['currentPart'];let userName='';vmN_8b241f['userName']=userName;globalThis['userName']=vmN_8b241f['userName'],vmN_8b241f["userName"]=userName;globalThis['userName']=userName;delete vmN_8b241f['_$Ptgw3I']['userName'];let currentType='';vmN_8b241f['currentType']=currentType;globalThis['currentType']=vmN_8b241f['currentType'],vmN_8b241f["currentType"]=currentType;globalThis['currentType']=currentType;delete vmN_8b241f['_$Ptgw3I']['currentType'];let currentUnit=0x1;vmN_8b241f['currentUnit']=currentUnit;globalThis['currentUnit']=vmN_8b241f['currentUnit'],vmN_8b241f["currentUnit"]=currentUnit;globalThis['currentUnit']=currentUnit;delete vmN_8b241f['_$Ptgw3I']['currentUnit'];let currentData=[];vmN_8b241f['currentData']=currentData;globalThis['currentData']=vmN_8b241f['currentData'],vmN_8b241f["currentData"]=currentData;globalThis['currentData']=currentData;delete vmN_8b241f['_$Ptgw3I']['currentData'];let index=0x0;vmN_8b241f['index']=index;globalThis['index']=vmN_8b241f['index'],vmN_8b241f["index"]=index;globalThis['index']=index;delete vmN_8b241f['_$Ptgw3I']['index'];let cycle=0x1;vmN_8b241f['cycle']=cycle;globalThis['cycle']=vmN_8b241f['cycle'],vmN_8b241f["cycle"]=cycle;globalThis['cycle']=cycle;delete vmN_8b241f['_$Ptgw3I']['cycle'];let isRepeating=![];vmN_8b241f['isRepeating']=isRepeating;globalThis['isRepeating']=vmN_8b241f['isRepeating'],vmN_8b241f["isRepeating"]=isRepeating;globalThis['isRepeating']=isRepeating;delete vmN_8b241f['_$Ptgw3I']['isRepeating'];let repeatIndex=0x0;vmN_8b241f['repeatIndex']=repeatIndex;globalThis['repeatIndex']=vmN_8b241f['repeatIndex'],vmN_8b241f["repeatIndex"]=repeatIndex;globalThis['repeatIndex']=repeatIndex;delete vmN_8b241f['_$Ptgw3I']['repeatIndex'];let repeatCycleCount=0x0;vmN_8b241f['repeatCycleCount']=repeatCycleCount;globalThis['repeatCycleCount']=vmN_8b241f['repeatCycleCount'],vmN_8b241f["repeatCycleCount"]=repeatCycleCount;globalThis['repeatCycleCount']=repeatCycleCount;delete vmN_8b241f['_$Ptgw3I']['repeatCycleCount'];let repeatCountVal=0x3;vmN_8b241f['repeatCountVal']=repeatCountVal;globalThis['repeatCountVal']=vmN_8b241f['repeatCountVal'],vmN_8b241f["repeatCountVal"]=repeatCountVal;globalThis['repeatCountVal']=repeatCountVal;delete vmN_8b241f['_$Ptgw3I']['repeatCountVal'];const praiseList=['Excellent!','Great\x20job!','Amazing!','Perfect!','Fantastic!','Superb!','Unbelievable!'];vmN_8b241f['praiseList']=praiseList;globalThis['praiseList']=vmN_8b241f['praiseList'],vmN_8b241f["praiseList"]=praiseList;globalThis['praiseList']=praiseList;delete vmN_8b241f['_$Ptgw3I']['praiseList'];const player=new Audio();vmN_8b241f['player']=player;globalThis['player']=vmN_8b241f['player'],vmN_8b241f["player"]=player;globalThis['player']=player;delete vmN_8b241f['_$Ptgw3I']['player'];let wakeLock=null;vmN_8b241f['wakeLock']=wakeLock;globalThis['wakeLock']=vmN_8b241f['wakeLock'],vmN_8b241f["wakeLock"]=wakeLock;globalThis['wakeLock']=wakeLock;delete vmN_8b241f['_$Ptgw3I']['wakeLock'];let asTimer=null;vmN_8b241f['asTimer']=asTimer;globalThis['asTimer']=vmN_8b241f['asTimer'],vmN_8b241f["asTimer"]=asTimer;globalThis['asTimer']=asTimer;delete vmN_8b241f['_$Ptgw3I']['asTimer'];let asSeconds=0x0;vmN_8b241f['asSeconds']=asSeconds;globalThis['asSeconds']=vmN_8b241f['asSeconds'],vmN_8b241f["asSeconds"]=asSeconds;globalThis['asSeconds']=asSeconds;delete vmN_8b241f['_$Ptgw3I']['asSeconds'];let asData=null;vmN_8b241f['asData']=asData;globalThis['asData']=vmN_8b241f['asData'],vmN_8b241f["asData"]=asData;globalThis['asData']=asData;delete vmN_8b241f['_$Ptgw3I']['asData'];let isAlertShown=![];vmN_8b241f['isAlertShown']=isAlertShown;globalThis['isAlertShown']=vmN_8b241f['isAlertShown'],vmN_8b241f["isAlertShown"]=isAlertShown;globalThis['isAlertShown']=isAlertShown;delete vmN_8b241f['_$Ptgw3I']['isAlertShown'];let isRestoring=![];vmN_8b241f['isRestoring']=isRestoring;globalThis['isRestoring']=vmN_8b241f['isRestoring'],vmN_8b241f["isRestoring"]=isRestoring;globalThis['isRestoring']=isRestoring;delete vmN_8b241f['_$Ptgw3I']['isRestoring'];let mediaRecorder;globalThis['mediaRecorder']=vmN_8b241f['mediaRecorder'];delete vmN_8b241f['_$Ptgw3I']['mediaRecorder'];let audioChunks=[];vmN_8b241f['audioChunks']=audioChunks;globalThis['audioChunks']=vmN_8b241f['audioChunks'],vmN_8b241f["audioChunks"]=audioChunks;globalThis['audioChunks']=audioChunks;delete vmN_8b241f['_$Ptgw3I']['audioChunks'];let recordingTimer;globalThis['recordingTimer']=vmN_8b241f['recordingTimer'];delete vmN_8b241f['_$Ptgw3I']['recordingTimer'];let recSeconds=0x0;vmN_8b241f['recSeconds']=recSeconds;globalThis['recSeconds']=vmN_8b241f['recSeconds'],vmN_8b241f["recSeconds"]=recSeconds;globalThis['recSeconds']=recSeconds;delete vmN_8b241f['_$Ptgw3I']['recSeconds'];let modalCallback=null;vmN_8b241f['modalCallback']=modalCallback;globalThis['modalCallback']=vmN_8b241f['modalCallback'],vmN_8b241f["modalCallback"]=modalCallback;globalThis['modalCallback']=modalCallback;delete vmN_8b241f['_$Ptgw3I']['modalCallback'];const successSound=new Audio(BASE_URL+'common/success.mp3');vmN_8b241f['successSound']=successSound;globalThis['successSound']=vmN_8b241f['successSound'],vmN_8b241f["successSound"]=successSound;globalThis['successSound']=successSound;delete vmN_8b241f['_$Ptgw3I']['successSound'];const failSound=new Audio(BASE_URL+'common/fail.mp3');vmN_8b241f['failSound']=failSound;globalThis['failSound']=vmN_8b241f['failSound'],vmN_8b241f["failSound"]=failSound;globalThis['failSound']=failSound;delete vmN_8b241f['_$Ptgw3I']['failSound'];const bookDatabase={'hc12':{0x1:'Music',0x2:'Directions',0x3:'Favorite\x20beverage',0x4:'Movies',0x5:'Lunch',0x6:'Vacation',0x7:'New\x20years',0x8:'Switch\x20lives'},'fc21':{0x1:'Restaurant',0x2:'Birthday',0x3:'Expenses',0x4:'Dream\x20job',0x5:'Movies',0x6:'Eating\x20healthy',0x7:'Traveling\x20alone',0x8:'Education'}};vmN_8b241f['bookDatabase']=bookDatabase;globalThis['bookDatabase']=vmN_8b241f['bookDatabase'],vmN_8b241f["bookDatabase"]=bookDatabase;globalThis['bookDatabase']=bookDatabase;delete vmN_8b241f['_$Ptgw3I']['bookDatabase'];function showBox(v){return vml_fb5f1a['call'](this,0x1,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['requestWakeLock']:{'get':function(){return requestWakeLock;},'set':function(g){requestWakeLock=g;},'enumerable':!![]},['updateNavStateInApp']:{'get':function(){return updateNavStateInApp;},'set':function(g){updateNavStateInApp=g;},'enumerable':!![]}})},undefined,new.target);}function updateNavStateInApp(v){return vml_fb5f1a['call'](this,0x3,Array['from'](arguments),undefined,undefined,new.target);}function showCustomModal(v,g=null,L=!![]){return vml_fb5f1a['call'](this,0x4,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player},{['modalCallback']:{'get':function(){return modalCallback;},'set':function(Q){modalCallback=Q;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![]}},undefined,new.target);}function closeCustomModal(){return vml_fb5f1a['call'](this,0x5,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['modalCallback']:{'get':function(){return modalCallback;},'set':function(v){modalCallback=v;},'enumerable':!![]}})},undefined,new.target);}window['goBackToUnits']=function(){return vml_fb5f1a['call'](this,0x6,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['asTimer']:{'get':function(){return asTimer;},'set':function(v){asTimer=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}})},undefined,new.target);},window['showMenu']=function(){return vml_fb5f1a['call'](this,0x7,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player},{['asTimer']:{'get':function(){return asTimer;},'set':function(v){asTimer=v;},'enumerable':!![]},['recordingTimer']:{'get':function(){return recordingTimer;},'set':function(v){recordingTimer=v;},'enumerable':!![]},['mediaRecorder']:{'get':function(){return mediaRecorder;},'set':function(v){mediaRecorder=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![]}},undefined,new.target);},window['login']=function(){return vml_fb5f1a['call'](this,0xb,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['userName']:{'get':function(){return userName;},'set':function(v){userName=v;},'enumerable':!![]},['renderUnitButtons']:{'get':function(){return renderUnitButtons;},'set':function(v){renderUnitButtons=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderUnitButtons(){return vml_fb5f1a['call'](this,0xd,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'bookDatabase':bookDatabase},{['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['bookDatabase']:!![]}},undefined,new.target);}window['startScriptMode']=async function(){return vml_fb5f1a['call'](this,0xe,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['currentPart']:{'get':function(){return currentPart;},'set':function(v){currentPart=v;},'enumerable':!![]},['currentTotalCycles']:{'get':function(){return currentTotalCycles;},'set':function(v){currentTotalCycles=v;},'enumerable':!![]},['loadStudyData']:{'get':function(){return loadStudyData;},'set':function(v){loadStudyData=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]}})},undefined,new.target);},window['startVocaMode']=async function(){return vml_fb5f1a['call'](this,0xf,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['currentPart']:{'get':function(){return currentPart;},'set':function(v){currentPart=v;},'enumerable':!![]},['currentTotalCycles']:{'get':function(){return currentTotalCycles;},'set':function(v){currentTotalCycles=v;},'enumerable':!![]},['loadStudyData']:{'get':function(){return loadStudyData;},'set':function(v){loadStudyData=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]}})},undefined,new.target);};async function loadStudyData(v){return vml_fb5f1a['call'](this,0x10,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'BASE_URL':BASE_URL},{['isAlertShown']:{'get':function(){return isAlertShown;},'set':function(g){isAlertShown=g;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(g){currentType=g;},'enumerable':!![]},['currentData']:{'get':function(){return currentData;},'set':function(g){currentData=g;},'enumerable':!![]},['isRestoring']:{'get':function(){return isRestoring;},'set':function(g){isRestoring=g;},'enumerable':!![]},['index']:{'get':function(){return index;},'set':function(g){index=g;},'enumerable':!![]},['cycle']:{'get':function(){return cycle;},'set':function(g){cycle=g;},'enumerable':!![]},['updateProgress']:{'get':function(){return updateProgress;},'set':function(g){updateProgress=g;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(g){showBox=g;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(g){showCustomModal=g;},'enumerable':!![]}}),['_$yRu0vL']:{['BASE_URL']:!![]}},undefined,new.target);}window['startStudy']=function(){return vml_fb5f1a['call'](this,0x11,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['isRestoring']:{'get':function(){return isRestoring;},'set':function(v){isRestoring=v;},'enumerable':!![]},['requestWakeLock']:{'get':function(){return requestWakeLock;},'set':function(v){requestWakeLock=v;},'enumerable':!![]},['playSentence']:{'get':function(){return playSentence;},'set':function(v){playSentence=v;},'enumerable':!![]}})},undefined,new.target);},window['skipSentence']=function(){return vml_fb5f1a['call'](this,0x12,Array['from'](arguments),undefined,undefined,new.target);};function playSentence(){return vml_fb5f1a['call'](this,0x14,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player,'BASE_URL':BASE_URL,'recognizer':recognizer},{['currentData']:{'get':function(){return currentData;},'set':function(v){currentData=v;},'enumerable':!![]},['index']:{'get':function(){return index;},'set':function(v){index=v;},'enumerable':!![]},['updateProgress']:{'get':function(){return updateProgress;},'set':function(v){updateProgress=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![],['BASE_URL']:!![],['recognizer']:!![]}},undefined,new.target);}window['SpeechRecognition']=window['SpeechRecognition']||window['webkitSpeechRecognition'];const recognizer=new SpeechRecognition();vmN_8b241f['recognizer']=recognizer;globalThis['recognizer']=vmN_8b241f['recognizer'],vmN_8b241f["recognizer"]=recognizer;globalThis['recognizer']=recognizer;delete vmN_8b241f['_$Ptgw3I']['recognizer'],recognizer['lang']='en-US',recognizer['onresult']=v=>{return vml_fb5f1a['call'](this,0x15,[v],{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'successSound':successSound,'praiseList':praiseList,'failSound':failSound},{['currentData']:{'get':function(){return currentData;},'set':function(g){currentData=g;},'enumerable':!![]},['index']:{'get':function(){return index;},'set':function(g){index=g;},'enumerable':!![]},['checkSimilarity']:{'get':function(){return checkSimilarity;},'set':function(g){checkSimilarity=g;},'enumerable':!![]},['playSentence']:{'get':function(){return playSentence;},'set':function(g){playSentence=g;},'enumerable':!![]}}),['_$yRu0vL']:{['successSound']:!![],['praiseList']:!![],['failSound']:!![]}},undefined,undefined);};function checkSimilarity(v,g){return vml_fb5f1a['call'](this,0x17,Array['from'](arguments),undefined,undefined,new.target);}function startRecognition(){return vml_fb5f1a['call'](this,0x18,Array['from'](arguments),undefined,undefined,new.target);}window['nextStep']=function(){return vml_fb5f1a['call'](this,0x1a,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['index']:{'get':function(){return index;},'set':function(v){index=v;},'enumerable':!![]},['currentData']:{'get':function(){return currentData;},'set':function(v){currentData=v;},'enumerable':!![]},['cycle']:{'get':function(){return cycle;},'set':function(v){cycle=v;},'enumerable':!![]},['currentTotalCycles']:{'get':function(){return currentTotalCycles;},'set':function(v){currentTotalCycles=v;},'enumerable':!![]},['sendDataToGoogle']:{'get':function(){return sendDataToGoogle;},'set':function(v){sendDataToGoogle=v;},'enumerable':!![]},['currentPart']:{'get':function(){return currentPart;},'set':function(v){currentPart=v;},'enumerable':!![]},['isAlertShown']:{'get':function(){return isAlertShown;},'set':function(v){isAlertShown=v;},'enumerable':!![]},['triggerFireworkConfetti']:{'get':function(){return triggerFireworkConfetti;},'set':function(v){triggerFireworkConfetti=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['playSentence']:{'get':function(){return playSentence;},'set':function(v){playSentence=v;},'enumerable':!![]}})},undefined,new.target);},window['startASMode']=async function(){return vml_fb5f1a['call'](this,0x1c,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['currentPart']:{'get':function(){return currentPart;},'set':function(v){currentPart=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]},['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]},['renderASPage']:{'get':function(){return renderASPage;},'set':function(v){renderASPage=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderASPage(){return vml_fb5f1a['call'](this,0x1e,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]},['asSeconds']:{'get':function(){return asSeconds;},'set':function(v){asSeconds=v;},'enumerable':!![]}})},undefined,new.target);}window['startASStudy']=function(){return vml_fb5f1a['call'](this,0x20,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['isRestoring']:{'get':function(){return isRestoring;},'set':function(v){isRestoring=v;},'enumerable':!![]},['asSeconds']:{'get':function(){return asSeconds;},'set':function(v){asSeconds=v;},'enumerable':!![]},['asTimer']:{'get':function(){return asTimer;},'set':function(v){asTimer=v;},'enumerable':!![]}})},undefined,new.target);},window['playASAudio']=()=>{return vml_fb5f1a['call'](this,0x21,[],{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player,'BASE_URL':BASE_URL},{['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![],['BASE_URL']:!![]}},undefined,undefined);},window['finishASStudy']=function(){return vml_fb5f1a['call'](this,0x23,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['asTimer']:{'get':function(){return asTimer;},'set':function(v){asTimer=v;},'enumerable':!![]},['asSeconds']:{'get':function(){return asSeconds;},'set':function(v){asSeconds=v;},'enumerable':!![]},['sendDataToGoogle']:{'get':function(){return sendDataToGoogle;},'set':function(v){sendDataToGoogle=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}})},undefined,new.target);},window['startAccurateSpeakingMode']=async function(){return vml_fb5f1a['call'](this,0x24,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]},['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]},['closeCustomModal']:{'get':function(){return closeCustomModal;},'set':function(v){closeCustomModal=v;},'enumerable':!![]},['renderAccurateSpeakingPage']:{'get':function(){return renderAccurateSpeakingPage;},'set':function(v){renderAccurateSpeakingPage=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderAccurateSpeakingPage(){return vml_fb5f1a['call'](this,0x25,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]}})},undefined,new.target);}window['listenQuestion']=function(){return vml_fb5f1a['call'](this,0x28,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player,'BASE_URL':BASE_URL},{['asData']:{'get':function(){return asData;},'set':function(v){asData=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['requestWakeLock']:{'get':function(){return requestWakeLock;},'set':function(v){requestWakeLock=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['startRecording']:{'get':function(){return startRecording;},'set':function(v){startRecording=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![],['BASE_URL']:!![]}},undefined,new.target);};async function startRecording(){return vml_fb5f1a['call'](this,0x2c,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['mediaRecorder']:{'get':function(){return mediaRecorder;},'set':function(v){mediaRecorder=v;},'enumerable':!![]},['audioChunks']:{'get':function(){return audioChunks;},'set':function(v){audioChunks=v;},'enumerable':!![]},['processRecording']:{'get':function(){return processRecording;},'set':function(v){processRecording=v;},'enumerable':!![]},['recSeconds']:{'get':function(){return recSeconds;},'set':function(v){recSeconds=v;},'enumerable':!![]},['recordingTimer']:{'get':function(){return recordingTimer;},'set':function(v){recordingTimer=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}})},undefined,new.target);}window['stopRecording']=function(){return vml_fb5f1a['call'](this,0x2e,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['mediaRecorder']:{'get':function(){return mediaRecorder;},'set':function(v){mediaRecorder=v;},'enumerable':!![]},['recordingTimer']:{'get':function(){return recordingTimer;},'set':function(v){recordingTimer=v;},'enumerable':!![]}})},undefined,new.target);};async function processRecording(){return vml_fb5f1a['call'](this,0x30,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['audioChunks']:{'get':function(){return audioChunks;},'set':function(v){audioChunks=v;},'enumerable':!![]}})},undefined,new.target);}window['submitAccurateSpeaking']=async function(){return vml_fb5f1a['call'](this,0x35,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]},['closeCustomModal']:{'get':function(){return closeCustomModal;},'set':function(v){closeCustomModal=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);},window['adjustRepeatCount']=function(v){return vml_fb5f1a['call'](this,0x36,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['repeatCountVal']:{'get':function(){return repeatCountVal;},'set':function(g){repeatCountVal=g;},'enumerable':!![]}})},undefined,new.target);},window['startRepeatMode']=async function(){return vml_fb5f1a['call'](this,0x38,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'BASE_URL':BASE_URL},{['currentPart']:{'get':function(){return currentPart;},'set':function(v){currentPart=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['currentUnit']:{'get':function(){return currentUnit;},'set':function(v){currentUnit=v;},'enumerable':!![]},['currentData']:{'get':function(){return currentData;},'set':function(v){currentData=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]},['repeatCountVal']:{'get':function(){return repeatCountVal;},'set':function(v){repeatCountVal=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}}),['_$yRu0vL']:{['BASE_URL']:!![]}},undefined,new.target);},window['runRepeatAudio']=async function(){return vml_fb5f1a['call'](this,0x3c,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player,'BASE_URL':BASE_URL},{['repeatCountVal']:{'get':function(){return repeatCountVal;},'set':function(v){repeatCountVal=v;},'enumerable':!![]},['isRepeating']:{'get':function(){return isRepeating;},'set':function(v){isRepeating=v;},'enumerable':!![]},['isRestoring']:{'get':function(){return isRestoring;},'set':function(v){isRestoring=v;},'enumerable':!![]},['requestWakeLock']:{'get':function(){return requestWakeLock;},'set':function(v){requestWakeLock=v;},'enumerable':!![]},['repeatCycleCount']:{'get':function(){return repeatCycleCount;},'set':function(v){repeatCycleCount=v;},'enumerable':!![]},['repeatIndex']:{'get':function(){return repeatIndex;},'set':function(v){repeatIndex=v;},'enumerable':!![]},['currentData']:{'get':function(){return currentData;},'set':function(v){currentData=v;},'enumerable':!![]},['currentType']:{'get':function(){return currentType;},'set':function(v){currentType=v;},'enumerable':!![]},['sendDataToGoogle']:{'get':function(){return sendDataToGoogle;},'set':function(v){sendDataToGoogle=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![],['BASE_URL']:!![]}},undefined,new.target);},window['stopRepeatAudio']=()=>{return vml_fb5f1a['call'](this,0x3d,[],{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'player':player},{['isRepeating']:{'get':function(){return isRepeating;},'set':function(v){isRepeating=v;},'enumerable':!![]}}),['_$yRu0vL']:{['player']:!![]}},undefined,undefined);};function updateProgress(){return vml_fb5f1a['call'](this,0x3e,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['cycle']:{'get':function(){return cycle;},'set':function(v){cycle=v;},'enumerable':!![]},['currentData']:{'get':function(){return currentData;},'set':function(v){currentData=v;},'enumerable':!![]},['index']:{'get':function(){return index;},'set':function(v){index=v;},'enumerable':!![]},['currentTotalCycles']:{'get':function(){return currentTotalCycles;},'set':function(v){currentTotalCycles=v;},'enumerable':!![]}})},undefined,new.target);}function sendDataToGoogle(v,g){return vml_fb5f1a['call'](this,0x3f,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['currentUnit']:{'get':function(){return currentUnit;},'set':function(L){currentUnit=L;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);}function triggerFireworkConfetti(){return vml_fb5f1a['call'](this,0x41,Array['from'](arguments),undefined,undefined,new.target);}async function requestWakeLock(){return vml_fb5f1a['call'](this,0x42,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['wakeLock']:{'get':function(){return wakeLock;},'set':function(v){wakeLock=v;},'enumerable':!![]}})},undefined,new.target);}window['showResultsPage']=async function(){return vml_fb5f1a['call'](this,0x43,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]},['renderResultsCards']:{'get':function(){return renderResultsCards;},'set':function(v){renderResultsCards=v;},'enumerable':!![]},['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderResultsCards(v){return vml_fb5f1a['call'](this,0x46,Array['from'](arguments),undefined,undefined,new.target);}window['showReport']=async function(){return vml_fb5f1a['call'](this,0x47,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['closeCustomModal']:{'get':function(){return closeCustomModal;},'set':function(v){closeCustomModal=v;},'enumerable':!![]},['renderResultsCards']:{'get':function(){return renderResultsCards;},'set':function(v){renderResultsCards=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderResultsCards(v){return vml_fb5f1a['call'](this,0x4a,Array['from'](arguments),undefined,undefined,new.target);}window['showRanking']=function(){return vml_fb5f1a['call'](this,0x4b,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}})},undefined,new.target);},window['showProfile']=async function(){return vml_fb5f1a['call'](this,0x4c,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['closeCustomModal']:{'get':function(){return closeCustomModal;},'set':function(v){closeCustomModal=v;},'enumerable':!![]},['renderProfilePage']:{'get':function(){return renderProfilePage;},'set':function(v){renderProfilePage=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderProfilePage(v){return vml_fb5f1a['call'](this,0x4d,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['generateCalendarHTML']:{'get':function(){return generateCalendarHTML;},'set':function(g){generateCalendarHTML=g;},'enumerable':!![]}})},undefined,new.target);}function generateCalendarHTML(v,g,L){return vml_fb5f1a['call'](this,0x4e,Array['from'](arguments),undefined,undefined,new.target);}window['logout']=function(){return vml_fb5f1a['call'](this,0x50,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]}})},undefined,new.target);},window['showNotice']=async function(){return vml_fb5f1a['call'](this,0x51,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({'GOOGLE_SCRIPT_URL':GOOGLE_SCRIPT_URL},{['showCustomModal']:{'get':function(){return showCustomModal;},'set':function(v){showCustomModal=v;},'enumerable':!![]},['closeCustomModal']:{'get':function(){return closeCustomModal;},'set':function(v){closeCustomModal=v;},'enumerable':!![]},['renderNoticePage']:{'get':function(){return renderNoticePage;},'set':function(v){renderNoticePage=v;},'enumerable':!![]},['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}}),['_$yRu0vL']:{['GOOGLE_SCRIPT_URL']:!![]}},undefined,new.target);};function renderNoticePage(v){return vml_fb5f1a['call'](this,0x52,Array['from'](arguments),undefined,undefined,new.target);}window['goBackToUnits']=function(){return vml_fb5f1a['call'](this,0x53,Array['from'](arguments),{['_$hGYhcW']:undefined,['_$gaWUQy']:Object['defineProperties']({},{['showBox']:{'get':function(){return showBox;},'set':function(v){showBox=v;},'enumerable':!![]}})},undefined,new.target);};
+// ======================================================
+// 1. 기본 설정 및 상수
+// ======================================================
+const REPO_USER = "jaydo14"; 
+const REPO_NAME = "english-app";
+const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
+// ⭐ [필수] Apps Script '새 배포' URL을 여기에 넣어주세요!
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhiMIaBuT1Up5WSMtRIK05q_IFfWvGIsY4Vc4wlqjTclOo8_3AMrX-fNKWkkbk4IVD/exec"; 
+
+let currentTotalCycles = 18; 
+let currentPart = "Script"; 
+let userName = ""; 
+let currentType = ""; 
+let currentUnit = 1;
+let currentData = []; 
+let index = 0;
+let cycle = 1;
+let isRepeating = false;
+
+// 반복듣기 상태
+let repeatIndex = 0; 
+let repeatCycleCount = 0; 
+// [추가] 반복 횟수 저장 변수 (기본값 3)
+let repeatCountVal = 3;
+
+const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
+
+const player = new Audio();
+let wakeLock = null;
+let asTimer = null;
+let asSeconds = 0;
+let asData = null;
+let isAlertShown = false; 
+let isRestoring = false; 
+
+let mediaRecorder; 
+let audioChunks = []; 
+let recordingTimer; 
+let recSeconds = 0; 
+let modalCallback = null; 
+
+const successSound = new Audio(BASE_URL + "common/success.mp3");
+const failSound = new Audio(BASE_URL + "common/fail.mp3");
+
+const bookDatabase = {
+  "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
+  "fc21": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
+};
+
+// ======================================================
+// 2. UI 및 유틸리티 (화면 전환 & 네비게이션 색상 완벽 수정본)
+// ======================================================
+
+// [수정] 화면 전환 함수
+function showBox(boxId) {
+    // 1. 관리할 모든 화면 ID 리스트
+    // (여기에 notice-box가 포함되어야 뒤로가기 할 때 화면이 깔끔하게 꺼집니다)
+    const boxes = [
+        'login-box', 'unit-selector', 'menu-box', 'study-box', 
+        'repeat-box', 'dev-box', 'as-box', 'results-box', 
+        'as-record-box', 'report-box', 'profile-box', 'notice-box'
+    ];
+  
+    // 2. 일단 모든 박스를 다 숨김 (display: none)
+    boxes.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+
+    // 3. 선택된 박스만 켬
+    const targetEl = document.getElementById(boxId);
+    if(targetEl) targetEl.style.display = 'block';
+
+    // 4. 로그인 화면일 때는 앱 컨테이너 숨기기
+    const app = document.getElementById("app");
+    const loginBox = document.getElementById("login-box");
+    const bottomNav = document.getElementById("bottom-nav");
+
+    if (boxId === 'login-box') {
+        if(app) app.style.display = 'none';
+        if(loginBox) loginBox.style.display = 'flex';
+        if(bottomNav) bottomNav.style.display = 'none';
+    } else {
+        if(app) app.style.display = 'flex';
+        if(loginBox) loginBox.style.display = 'none';
+        if(bottomNav) bottomNav.style.display = 'flex';
+    }
+
+    // 5. 화면 꺼짐 방지 (학습 화면일 때만 켜짐 유지)
+    if (boxId === 'study-box' || boxId === 'repeat-box') {
+        if (typeof requestWakeLock === 'function') requestWakeLock();
+    }
+
+    // 6. [핵심] 네비게이션 버튼 색상 업데이트 실행
+    updateNavStateInApp(boxId);
+}
+
+// [추가] 네비게이션 색상 제어 함수
+function updateNavStateInApp(currentBox) {
+    const navBtns = document.querySelectorAll('#bottom-nav button');
+    if (navBtns.length === 0) return;
+
+    // [A] 초기화: 모든 버튼을 회색(#737373)으로 끔
+    navBtns.forEach(btn => {
+        const icon = btn.querySelector('.material-icons-round');
+        const text = btn.querySelector('span:last-child');
+        // !important를 써서 강제로 색상을 변경합니다.
+        if(icon) icon.style.cssText = 'color: #737373 !important;'; 
+        if(text) text.style.cssText = 'color: #737373 !important;';
+    });
+
+    // [B] 켜야 할 버튼 번호 찾기
+    let activeIndex = -1; 
+    
+    // 1번: UNIT (유닛 목록, 메뉴, 학습, AS, 녹음 등)
+    if (['unit-selector', 'menu-box', 'study-box', 'repeat-box', 'as-box', 'as-record-box', 'dev-box'].includes(currentBox)) {
+        activeIndex = 0; 
+    } 
+    // 2번: PROGRESS REPORT (결과 화면)
+    else if (['results-box', 'report-box'].includes(currentBox)) { 
+        activeIndex = 1; 
+    } 
+    // 3번: PROFILE (프로필)
+    else if (currentBox === 'profile-box') {
+        activeIndex = 2; 
+    } 
+    // 4번: NOTICE (공지사항)
+    else if (currentBox === 'notice-box') {
+        activeIndex = 3; 
+    }
+
+    // [C] 해당 버튼만 형광 녹색(#39FF14)으로 켜기
+    if (activeIndex >= 0 && navBtns[activeIndex]) {
+        const activeBtn = navBtns[activeIndex];
+        const icon = activeBtn.querySelector('.material-icons-round');
+        const text = activeBtn.querySelector('span:last-child');
+        if(icon) icon.style.cssText = 'color: #39FF14 !important;';
+        if(text) text.style.cssText = 'color: #39FF14 !important;';
+    }
+}
+
+// ======================================================
+// [수정] 커스텀 모달 (기존 코드 유지)
+// ======================================================
+function showCustomModal(msg, callback = null, showButton = true) {
+  // (이 아래 모달 관련 함수들은 기존에 쓰시던 것 그대로 두셔도 됩니다)
+  if(typeof player !== 'undefined') player.pause(); 
+  document.getElementById('modal-msg').innerText = msg;
+  const modal = document.getElementById('custom-modal');
+  modal.style.display = 'flex';
+  
+  const btn = modal.querySelector('button'); 
+  if(btn) btn.style.display = showButton ? 'block' : 'none';
+
+  modalCallback = callback; 
+}
+
+function closeCustomModal() {
+  const modal = document.getElementById('custom-modal');
+  modal.style.display = 'none';
+  const btn = modal.querySelector('button'); 
+  if(btn) btn.style.display = 'block';
+
+  if (modalCallback) { modalCallback(); modalCallback = null; }
+}
+
+// [추가] UNIT 버튼 클릭 시 실행될 함수 (RETURN 버튼용)
+window.goBackToUnits = function() {
+    // 오디오 정지
+    if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    
+    // 유닛 목록 화면으로 이동
+    showBox('unit-selector');
+};
+
+// [수정] 메뉴 화면 이동
+window.showMenu = function() {
+    if (typeof player !== 'undefined') player.pause();
+    if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
+
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    if (typeof recordingTimer !== 'undefined' && recordingTimer) clearInterval(recordingTimer);
+    
+    if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+
+    const recUI = document.getElementById('recording-ui');
+    const listenBtn = document.getElementById('as-listen-btn');
+    const submitUI = document.getElementById('submit-ui');
+    
+    if(recUI) recUI.style.display = 'none';
+    if(submitUI) submitUI.style.display = 'none';
+    if(listenBtn) {
+        listenBtn.style.display = 'flex';
+        listenBtn.style.opacity = '1';
+    }
+
+    showBox('menu-box');
+};
+
+// ... (이후 saveStatus 함수 등은 그대로 유지) ...
+
+// ======================================================
+// 3. 로그인
+// ======================================================
+// [수정] 로그인 (자동 이동 기능 삭제 -> 무조건 목록 화면)
+window.login = function () {
+  const phoneInput = document.getElementById("phone-input");
+  const inputVal = phoneInput.value.trim();
+  if (inputVal.length < 1) return showCustomModal("번호를 입력해주세요.");
+  
+  const loginBtn = document.querySelector("#login-box button");
+  loginBtn.disabled = true; loginBtn.innerText = "CHECKING...";
+
+  fetch(GOOGLE_SCRIPT_URL + "?phone=" + inputVal)
+    .then(res => res.json())
+    .then(data => {
+      if (data.result === "success") {
+        currentType = data.type; userName = data.name;
+        
+        // 버튼 먼저 그리기
+        renderUnitButtons();
+        
+        // [수정] 마지막 위치로 자동 이동하는 코드 삭제함!
+        // 무조건 유닛 선택 화면 보여주기
+        showBox('unit-selector');
+        showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
+        
+      } else {
+        showCustomModal("등록되지 않은 번호입니다.");
+        loginBtn.disabled = false; loginBtn.innerText = "Login";
+      }
+    }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
+};
+
+// [수정] 유닛 버튼 렌더링 (교재별 아이콘 자동 변경 기능 추가)
+function renderUnitButtons() {
+  const container = document.getElementById("unit-buttons");
+  container.innerHTML = ""; 
+  const currentTitles = bookDatabase[currentType] || {};
+  
+  // 1. 교재별 아이콘 데이터베이스 정의
+  const iconDatabase = {
+    "hc12": [ // 첫 번째 교재 (Music, Directions...)
+      "music_note",       // Unit 1
+      "explore",          // Unit 2
+      "local_cafe",       // Unit 3
+      "movie",            // Unit 4
+      "restaurant",       // Unit 5
+      "flight_takeoff",   // Unit 6
+      "celebration",      // Unit 7
+      "switch_account"    // Unit 8
+    ],
+    "fc21": [ // 두 번째 교재 (Restaurant, Birthday...)
+      "restaurant_menu",  // Unit 1: Restaurant
+      "cake",             // Unit 2: Birthday
+      "payments",         // Unit 3: Expenses
+      "work",             // Unit 4: Dream job
+      "theaters",         // Unit 5: Movies
+      "eco",              // Unit 6: Eating healthy (건강/자연)
+      "backpack",         // Unit 7: Traveling alone (배낭여행)
+      "school"            // Unit 8: Education
+    ]
+  };
+
+  // 2. 현재 교재에 맞는 아이콘 리스트 가져오기 (없으면 기본값 hc12)
+  const currentIcons = iconDatabase[currentType] || iconDatabase["hc12"];
+
+  for (let i = 1; i <= 8; i++) {
+    const title = currentTitles[i] || "Locked";
+    // 해당 유닛 번호에 맞는 아이콘 매칭
+    const icon = currentIcons[i-1] || "lock"; 
+
+    const btn = document.createElement("button");
+    btn.className = "w-full bg-[#1c1c1c] rounded-2xl p-4 flex items-center justify-between mb-1 active:scale-[0.98] transition-transform border border-transparent hover:border-neutral-800";
+    
+    btn.innerHTML = `
+      <div class="flex items-center gap-5">
+        <div class="w-12 h-12 rounded-xl bg-[#1a2e1a] flex items-center justify-center text-[#39FF14]">
+          <span class="material-icons-round text-2xl">${icon}</span>
+        </div>
+        <div class="text-left">
+          <p class="text-[10px] font-mono font-bold text-[#39FF14] uppercase tracking-wider mb-1">UNIT ${String(i).padStart(2, '0')}</p>
+          <h3 class="text-lg font-bold text-white leading-none">${title}</h3>
+        </div>
+      </div>
+      <span class="material-icons-round text-neutral-600 text-3xl">chevron_right</span>
+    `;
+    
+    btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
+    container.appendChild(btn);
+  }
+}
+
+// ======================================================
+// 4. 학습 엔진 (Script/Vocab - 버튼 대기 적용)
+// ======================================================
+window.startScriptMode = async function() { 
+    currentPart = "Script"; 
+    checkResumeStatus("Script"); 
+    currentTotalCycles = 18; 
+    loadStudyData(`${currentType}u${currentUnit}.json`); 
+};
+
+window.startVocaMode = async function() { 
+    currentPart = "Vocab"; 
+    checkResumeStatus("Vocab"); 
+    currentTotalCycles = 10; 
+    loadStudyData(`${currentType}u${currentUnit}_voca.json`); 
+};
+
+// [수정 2] loadStudyData 함수 (Start 버튼 고정 + 괄호 오류 방지)
+async function loadStudyData(fileName) {
+  isAlertShown = false; 
+  try {
+    const res = await fetch(BASE_URL + currentType + "u/" + fileName);
+    currentData = await res.json();
+    
+    if (!isRestoring) {
+        index = 0; cycle = 1;
+    }
+    
+    // 버튼 설정 (항상 Start로 표시)
+    const skipBtn = document.getElementById("skip-btn");
+    const backBtn = document.getElementById("back-btn");
+    const startBtn = document.getElementById("start-btn");
+
+    if(startBtn) startBtn.innerText = "Start"; 
+    
+    // 버튼 레이아웃 제어
+    if (isRestoring) {
+        if(skipBtn) skipBtn.style.display = "block";
+        if(backBtn) backBtn.classList.remove("col-span-2"); 
+    } else {
+        if(skipBtn) skipBtn.style.display = "none";
+        if(backBtn) backBtn.classList.add("col-span-2"); 
+    }
+    
+    updateProgress(); 
+    showBox('study-box');
+    
+    // 텍스트 미리보기
+    if (isRestoring) {
+        const sText = document.getElementById("sentence");
+        const item = currentData[index];
+        sText.innerText = item.en; sText.style.color = "#fff";
+        document.getElementById("sentence-kor").innerText = item.ko;
+    }
+  } catch (e) { 
+      console.error(e);
+      showCustomModal("파일 로드 실패"); 
+  }
+}
+
+// [app.js 수정] startStudy 함수 내부
+window.startStudy = function () { 
+    document.getElementById("start-btn").innerText = "Listen again";
+    
+    // [수정] Skip 버튼이 나타나면서 Back 버튼과 나란히 배치됨
+    const skipBtn = document.getElementById("skip-btn");
+    const backBtn = document.getElementById("back-btn");
+    
+    skipBtn.style.display = "block";
+    if(backBtn) backBtn.classList.remove("col-span-2"); // 반반 모드
+    
+    if (isRestoring) isRestoring = false;
+    requestWakeLock();
+    playSentence(); 
+};
+
+window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
+
+function playSentence() {
+  const sText = document.getElementById("sentence");
+  const item = currentData[index];
+  sText.classList.remove("shake"); 
+  sText.innerText = item.en; sText.style.color = "#fff";
+  document.getElementById("sentence-kor").innerText = item.ko;
+  updateProgress();
+  player.src = BASE_URL + currentType + "u/" + item.audio;
+  player.play();
+  player.onended = () => { sText.style.color = "#ffff00"; try { recognizer.start(); } catch(e) {} };
+}
+
+window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognizer = new SpeechRecognition();
+recognizer.lang = "en-US";
+recognizer.onresult = (event) => {
+  const spoken = event.results[0][0].transcript.toLowerCase();
+  const target = currentData[index].en.toLowerCase().replace(/[.,?!'"]/g, "");
+  const sText = document.getElementById("sentence");
+
+  if (checkSimilarity(spoken, target) >= 0.5) {
+    successSound.play(); 
+    const praise = praiseList[Math.floor(Math.random() * praiseList.length)];
+    sText.innerText = praise; sText.style.color = "#39ff14";
+    setTimeout(nextStep, 700);
+  } else {
+    failSound.play(); 
+    sText.innerText = "Try again"; sText.style.color = "#ff4b4b";
+    sText.classList.remove("shake"); void sText.offsetWidth; sText.classList.add("shake");
+    setTimeout(playSentence, 800);
+  }
+};
+
+function checkSimilarity(spoken, target) {
+  const sWords = spoken.split(' ');
+  const tWords = target.split(' ');
+  let cnt = 0;
+  tWords.forEach(w => { if(spoken.includes(w)) cnt++; });
+  return cnt / tWords.length;
+}
+
+function startRecognition() { try { recognizer.start(); } catch(e) {} }
+
+window.nextStep = function() {
+  index++; if (index >= currentData.length) { index = 0; cycle++; }
+  const percent = Math.floor((((cycle - 1) * currentData.length) + index) / (currentTotalCycles * currentData.length) * 100);
+  sendDataToGoogle(currentPart, percent + "%"); 
+  if (percent >= 100 && !isAlertShown) { 
+    isAlertShown = true; triggerFireworkConfetti(); 
+    showCustomModal(`${currentPart} 100% 달성! 🎉`, () => playSentence()); return; 
+  }
+  playSentence();
+};
+
+// ======================================================
+// 5. AS Correction (버튼 대기 적용 + 누적 저장)
+// ======================================================
+window.startASMode = async function() {
+  currentPart = "AS Correction"; 
+  checkResumeStatus("AS Correction");
+  
+  const phone = document.getElementById("phone-input").value.trim(); showBox('dev-box');
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
+    asData = await res.json(); renderASPage(); showBox('as-box');
+  } catch (e) { showCustomModal("첨삭 데이터 없음", () => showMenu()); }
+};
+
+// [수정 3] AS Correction 화면 (버튼 위치 복구)
+function renderASPage() {
+  const container = document.getElementById('as-box');
+  container.className = "px-4 pt-2 flex flex-col text-left pb-10"; // h-full 제거
+  
+  const format = (t) => t ? String(t).replace(/\n/g, '<br>').replace(/\[(.*?)\]/g, '<span style="color:#ff4b4b; font-weight:bold;">$1</span>') : "";
+  
+  container.innerHTML = `
+    <div class="mb-6">
+        <h2 class="text-[#39FF14] text-lg font-bold mb-1">AS Correction</h2>
+        <p class="text-[#39FF14] text-xs font-bold mb-1">[Question]</p>
+        <p class="text-white text-xl font-bold leading-snug">${format(asData.question)}</p>
+    </div>
+    <div class="space-y-4 mb-6">
+        <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
+            <p class="text-neutral-500 text-xs font-bold mb-2">My Answer</p>
+            <p class="text-neutral-300 text-sm leading-relaxed">${format(asData.original)}</p>
+        </div>
+        <div class="bg-[#1c1c1c] rounded-xl p-4 w-full border border-neutral-800">
+            <p class="text-[#39FF14] text-xs font-bold mb-2">Feedback</p>
+            <p class="text-white text-sm leading-relaxed">${format(asData.corrected)}</p>
+        </div>
+    </div>
+    <div id="as-timer" class="text-[#39FF14] text-3xl font-black font-mono mb-4 tracking-tighter">
+        ${Math.floor(asSeconds/60).toString().padStart(2,'0')}:${(asSeconds%60).toString().padStart(2,'0')}
+    </div>
+    <div class="mt-4 w-full flex gap-3 h-14">
+        <button id="as-start-btn" onclick="startASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform hover:bg-[#32e012]">Start</button>
+        <div id="as-controls" style="display:none;" class="flex-1 flex gap-2">
+             <button onclick="playASAudio()" class="flex-1 bg-[#222] text-white font-bold rounded-xl border border-neutral-700 active:border-[#39FF14] transition-all text-sm">Listen</button>
+             <button onclick="finishASStudy()" class="flex-1 bg-[#39FF14] text-black font-bold rounded-xl shadow-[0_0_10px_#39FF14] transition-all text-sm">Finish</button>
+        </div>
+        <button onclick="showMenu()" class="w-24 bg-[#1c1c1c] text-white font-bold rounded-xl border border-neutral-800 active:border-[#39FF14] active:text-[#39FF14] transition-all hover:bg-[#252525]">Back</button>
+    </div>`;
+    document.getElementById('as-start-btn').style.display = 'block';
+    document.getElementById('as-controls').style.display = 'none';
+}
+
+window.startASStudy = function() {
+  document.getElementById('as-start-btn').style.display = 'none'; document.getElementById('as-controls').style.display = 'flex';
+  
+  if (!isRestoring) { asSeconds = 0; }
+  isRestoring = false;
+
+  if (asTimer) clearInterval(asTimer);
+  asTimer = setInterval(() => {
+    asSeconds++;
+    const m = Math.floor(asSeconds/60).toString().padStart(2,'0');
+    const s = (asSeconds%60).toString().padStart(2,'0');
+    const timerEl = document.getElementById('as-timer');
+    if(timerEl) timerEl.innerText = `${m}:${s}`;
+    saveStatus(); 
+  }, 1000);
+  playASAudio();
+};
+window.playASAudio = () => { player.src = BASE_URL + currentType + "u/" + asData.audio; player.play(); };
+window.finishASStudy = function() {
+  clearInterval(asTimer); const timeStr = Math.floor(asSeconds/60) + "분 " + (asSeconds%60) + "초";
+  sendDataToGoogle("AS Correction", timeStr); // 저장 요청
+  showCustomModal(`학습 완료! ✔`, () => showMenu());
+};
+
+// ======================================================
+// 5. ACCURATE SPEAKING (화면 렌더링 추가로 검은 화면 해결)
+// ======================================================
+
+// ======================================================
+// [수정 2] Accurate Speaking 시작 (로딩 시 버튼 숨김 적용)
+// ======================================================
+window.startAccurateSpeakingMode = async function() {
+  const phoneInput = document.getElementById("phone-input");
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+  
+  if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+  // [핵심] 3번째 인자로 false를 넘겨서 OK 버튼을 숨김
+  showCustomModal("데이터를 불러오는 중입니다...", null, false);
+
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAS&phone=${phone}&unit=Unit ${currentUnit}`);
+    asData = await res.json();
+    
+    closeCustomModal(); 
+    renderAccurateSpeakingPage(); 
+    showBox('as-record-box'); 
+
+  } catch (e) { 
+      console.error(e);
+      showCustomModal("로드 실패\n(데이터를 가져오지 못했습니다)"); 
+  }
+};
+
+// ======================================================
+// [수정 3] 화면 렌더링 (질문 크기 축소, 박스 확대, 버튼 잘림 해결)
+// ======================================================
+// [수정] Accurate Speaking 화면 (중앙 정렬 + BACK TO MODE + 위치 수정)
+function renderAccurateSpeakingPage() {
+    const container = document.getElementById('as-record-box');
+    
+    // 1. 컨테이너 설정: 화면 꽉 채우기 + 중앙 정렬 준비
+    // flex-col, h-full: 높이를 꽉 채움
+    container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col";
+    
+    const isSubmitted = asData && asData.isSubmitted;
+    const questionText = asData ? asData.question : "질문 데이터 없음";
+
+    // ---------------------------------------------------------
+    // Case 1: 이미 제출 완료된 상태 (중앙 정렬)
+    // ---------------------------------------------------------
+    if (isSubmitted) {
+        container.innerHTML = `
+            <div class="w-full h-full flex flex-col items-center justify-center space-y-8">
+                
+                <div class="text-center">
+                    <h2 class="text-[#39FF14] text-lg font-bold mb-8">Accurate Speaking</h2>
+                    <span class="material-icons-round text-[#39FF14] text-6xl mb-4">check_circle</span>
+                    <p class="text-white text-xl font-bold">이미 제출 완료되었습니다.</p>
+                    <p class="text-neutral-500 text-sm mt-2">첨삭 결과를 기다려주세요!</p>
+                </div>
+
+                <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+                    BACK TO MODE
+                </button>
+            </div>
+        `;
+        return; 
+    }
+
+    // ---------------------------------------------------------
+    // Case 2: 학습 진행 중 상태 (중앙 정렬 + 버튼 위치 조정)
+    // ---------------------------------------------------------
+    container.innerHTML = `
+        <div class="w-full h-full flex flex-col items-center justify-center">
+            
+            <div class="w-full text-center mb-8">
+                <h2 class="text-[#39FF14] text-lg font-bold mb-6">Accurate Speaking</h2>
+                <p class="text-[#39FF14] text-xs font-bold mb-3 tracking-widest uppercase opacity-80">[ Question ]</p>
+                <p id="as-q-text" class="text-white text-xl font-bold leading-relaxed break-keep drop-shadow-md">
+                    ${questionText}
+                </p>
+            </div>
+
+            <div class="w-full flex flex-col items-center mb-4">
+
+                <button id="as-listen-btn" onclick="listenQuestion()" class="flex flex-col items-center justify-center w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.2)] active:scale-95 transition-all hover:bg-[#252525]">
+                    <span class="material-icons-round text-5xl text-[#39FF14] mb-2">headphones</span>
+                    <span class="text-white text-sm font-bold tracking-wider">LISTEN</span>
+                </button>
+
+                <div id="recording-ui" style="display:none;" class="flex-col items-center w-full animate-fade-in-up">
+                    <div class="w-40 h-40 rounded-full bg-[#1c1c1c] border-2 border-[#ff4757] flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(255,71,87,0.3)]">
+                        <div id="rec-timer" class="text-[#ff4757] text-4xl font-black font-mono">00:00</div>
+                    </div>
+                    <button onclick="stopRecording()" class="w-full bg-[#ff4757] text-white font-black text-lg py-4 rounded-xl shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
+                        STOP RECORDING
+                    </button>
+                </div>
+
+                <div id="submit-ui" style="display:none;" class="w-full animate-fade-in-up">
+                    <div class="bg-[#1c1c1c] -mx-6 px-6 py-6 border-y border-neutral-800 mb-6">
+                        <p class="text-neutral-500 text-xs font-bold mb-3">DICTATION</p>
+                        <textarea id="student-text-input" rows="6" placeholder="녹음한 내용을 영어로 적어주세요..." 
+                            class="w-full bg-transparent text-white text-lg font-medium focus:outline-none placeholder-neutral-600 resize-none leading-relaxed"></textarea>
+                    </div>
+                    
+                    <button onclick="submitAccurateSpeaking()" class="w-full bg-[#39FF14] text-black font-black text-lg py-4 rounded-xl shadow-[0_0_20px_rgba(57,255,20,0.4)] active:scale-95 transition-transform hover:bg-[#32e012] uppercase tracking-widest">
+                        SUBMIT ANSWER
+                    </button>
+                </div>
+
+            </div>
+
+            <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider mt-4">
+                BACK TO MODE
+            </button>
+
+        </div>
+    `;
+}
+
+// [기능] 질문 듣기 -> 끝나면 녹음 시작
+window.listenQuestion = function() {
+  if (!asData || !asData.audio) return showCustomModal("오디오 정보가 없습니다.");
+  
+  const btn = document.getElementById('as-listen-btn');
+  btn.style.opacity = "0.5"; // 재생 중 표시
+  
+  requestWakeLock();
+  player.src = BASE_URL + currentType + "u/" + asData.audio;
+  player.play().catch(() => showCustomModal("오디오 재생 실패"));
+  
+  player.onended = () => { 
+      btn.style.opacity = "1";
+      startRecording(); 
+  }; 
+};
+
+// [기능] 녹음 시작
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream); 
+    audioChunks = [];
+    
+    // UI 전환
+    document.getElementById('as-listen-btn').style.display = 'none';
+    document.getElementById('recording-ui').style.display = 'flex';
+    
+    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => { processRecording(); };
+    mediaRecorder.start();
+    
+    // 타이머 시작
+    recSeconds = 0;
+    if (recordingTimer) clearInterval(recordingTimer);
+    recordingTimer = setInterval(() => { 
+        recSeconds++; 
+        document.getElementById('rec-timer').innerText = `00:${recSeconds.toString().padStart(2,'0')}`; 
+        if (recSeconds >= 60) stopRecording(); // 최대 60초
+    }, 1000);
+    
+  } catch (e) { 
+      showCustomModal("마이크 권한이 필요합니다.\n설정에서 허용해주세요."); 
+      document.getElementById('as-listen-btn').style.display = 'flex'; // 실패 시 원상복구
+  }
+}
+
+// [기능] 녹음 중지
+window.stopRecording = function() { 
+    if (mediaRecorder && mediaRecorder.state !== "inactive") { 
+        mediaRecorder.stop(); 
+        clearInterval(recordingTimer); 
+        
+        // UI 전환
+        document.getElementById('recording-ui').style.display = 'none'; 
+        document.getElementById('submit-ui').style.display = 'block'; 
+        
+        // 입력창에 포커스
+        setTimeout(() => document.getElementById('student-text-input').focus(), 100);
+    } 
+};
+
+// [기능] 오디오 데이터 처리
+async function processRecording() { 
+    const blob = new Blob(audioChunks, { type: 'audio/webm' }); 
+    const reader = new FileReader(); 
+    reader.readAsDataURL(blob); 
+    reader.onloadend = () => { window.lastAudioBase64 = reader.result.split(',')[1]; }; 
+}
+
+// [수정] 최종 제출 함수 (성공 시 모드 선택 화면으로 이동)
+window.submitAccurateSpeaking = async function() {
+    const textInput = document.getElementById('student-text-input');
+    const text = textInput.value.trim();
+    
+    if(!text) return showCustomModal("받아적은 내용을 입력해주세요!");
+    
+    // 로딩 알림 (OK 버튼 없음)
+    showCustomModal("제출 중입니다...", null, false); 
+    
+    const payload = { 
+        action: "uploadAS", 
+        phone: document.getElementById("phone-input").value.trim(), 
+        unit: "Unit " + currentUnit, 
+        studentText: text, 
+        audioData: window.lastAudioBase64 
+    };
+    
+    fetch(GOOGLE_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+      .then(res => res.json())
+      .then(data => { 
+          closeCustomModal(); // 로딩 닫기
+
+          if(data.result === "success") {
+              // [수정] 성공 시 'showMenu()'를 호출하여 '모드 선택 화면'으로 이동
+              showCustomModal("제출 성공! ✔", () => showMenu());
+          } else {
+              showCustomModal("제출 실패\n다시 시도해주세요.");
+          }
+      })
+      .catch(() => {
+          closeCustomModal();
+          showCustomModal("네트워크 오류 발생");
+      });
+};
+
+// ======================================================
+// 6. 반복듣기 (최종 수정: 버튼 위치 상향 + 횟수 조절 기능 복구)
+// ======================================================
+
+// [중요] 횟수 조절 함수 (이게 있어야 +, - 버튼이 작동합니다!)
+window.adjustRepeatCount = function(diff) {
+    repeatCountVal += diff;
+    if(repeatCountVal < 1) repeatCountVal = 1; // 최소 1회
+    if(repeatCountVal > 99) repeatCountVal = 99; // 최대 99회
+    
+    // 화면에 숫자 업데이트
+    const display = document.getElementById('repeat-count-display');
+    if(display) display.innerText = repeatCountVal;
+};
+
+// [수정] 반복듣기 모드 시작
+window.startRepeatMode = async function() {
+  currentPart = "반복듣기";
+  try {
+    const res = await fetch(`${BASE_URL}${currentType}u/${currentType}u${currentUnit}.json`);
+    currentData = await res.json();
+    checkResumeStatus("반복듣기"); 
+    showBox('repeat-box');
+    
+    const container = document.getElementById('repeat-box');
+    
+    // 컨테이너 설정
+    container.className = "px-4 pt-2 min-h-screen relative";
+
+    container.innerHTML = `
+      <div class="mb-4">
+          <h2 class="text-[#39FF14] text-lg font-bold">Listen & Repeat</h2>
+      </div>
+
+      <div id="repeat-list" class="space-y-2 pb-[260px]">
+         </div>
+
+      <div class="fixed bottom-[100px] left-0 right-0 px-4 bg-gradient-to-t from-black via-black to-transparent pt-10 pb-2 z-50">
+          
+          <div class="flex items-center justify-center gap-4 bg-[#1c1c1c] rounded-xl p-2 border border-neutral-800 mb-2 shadow-2xl">
+              <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">REPEATS</span>
+              <div class="flex items-center gap-2 bg-[#111] rounded-lg p-1 border border-neutral-800">
+                  <button onclick="adjustRepeatCount(-1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
+                      <span class="material-icons-round text-sm">remove</span>
+                  </button>
+                  <span id="repeat-count-display" class="text-[#39FF14] font-bold font-mono text-lg w-6 text-center">${repeatCountVal}</span>
+                  <button onclick="adjustRepeatCount(1)" class="w-8 h-8 flex items-center justify-center text-neutral-400 hover:text-white active:bg-neutral-800 rounded-md transition-colors">
+                      <span class="material-icons-round text-sm">add</span>
+                  </button>
+              </div>
+              <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">CYCLES</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-2">
+              <button id="repeat-start-btn" onclick="runRepeatAudio()" class="h-12 bg-[#39FF14] text-black font-black rounded-xl shadow-[0_0_15px_rgba(57,255,20,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#32e012]">
+                  <span class="material-icons-round">play_arrow</span> START
+              </button>
+              <button onclick="stopRepeatAudio()" class="h-12 bg-[#ff4757] text-white font-black rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2 hover:bg-[#ff6b81]">
+                  <span class="material-icons-round">stop</span> STOP
+              </button>
+          </div>
+
+          <button onclick="stopRepeatAudio(); showMenu();" class="w-full py-3 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider shadow-lg">
+              Back to Menu
+          </button>
+      </div>`;
+    
+    // 리스트 아이템 생성
+    const list = document.getElementById('repeat-list');
+    currentData.forEach((item, idx) => {
+      const div = document.createElement('div'); 
+      div.id = `repeat-${idx}`; 
+      div.className = 'repeat-item py-1.5 px-3 rounded-xl border border-transparent transition-all duration-300';
+      div.innerHTML = `
+        <div class="en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors">${item.en}</div>
+        <div class="ko-text text-neutral-400 text-xs font-medium">${item.ko}</div>
+      `;
+      list.appendChild(div);
+    });
+
+  } catch (e) { console.error(e); showCustomModal("로드 실패"); }
+};
+
+// [수정] 반복 재생 실행 함수 (스타일 유지)
+window.runRepeatAudio = async function() {
+  const totalCycles = repeatCountVal;
+  const btn = document.getElementById('repeat-start-btn');
+  
+  if (isRepeating) return; 
+  isRepeating = true; 
+  
+  if(btn) {
+      btn.disabled = true; 
+      btn.innerHTML = `<div class="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin"></div>`;
+  }
+
+  if (isRestoring) isRestoring = false; 
+  requestWakeLock();
+
+  for (let c = repeatCycleCount; c < totalCycles; c++) {
+    repeatCycleCount = c;
+    let sIdx = (c === repeatCycleCount) ? repeatIndex : 0; 
+    
+    for (let i = sIdx; i < currentData.length; i++) {
+      if (!isRepeating) { repeatIndex = i; saveStatus(); return; } 
+      
+      await new Promise(resolve => {
+        document.querySelectorAll('.repeat-item').forEach(el => {
+            el.className = 'repeat-item py-1.5 px-3 rounded-xl border border-transparent transition-all duration-300'; 
+            el.querySelector('.en-text').className = 'en-text text-white text-base font-bold leading-snug mb-0.5 transition-colors';
+            el.querySelector('.ko-text').className = 'ko-text text-neutral-400 text-xs font-medium';
+        });
+        
+        const el = document.getElementById(`repeat-${i}`);
+        if(el) { 
+            el.className = 'repeat-item py-1.5 px-3 rounded-xl bg-[#1a3a1a] border border-[#39FF14]/30 shadow-[0_0_15px_rgba(57,255,20,0.1)] transition-all duration-300';
+            const enDiv = el.querySelector('.en-text');
+            if(enDiv) enDiv.className = 'en-text text-[#39FF14] text-base font-bold leading-snug mb-0.5 transition-colors';
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
+        }
+
+        player.src = `${BASE_URL}${currentType}u/${currentData[i].audio}`; 
+        player.play();
+        player.onended = resolve;
+      });
+      repeatIndex = i; saveStatus();
+    }
+    repeatIndex = 0; 
+    sendDataToGoogle("반복듣기", `${c + 1}회 완료`); 
+    
+    if (c < totalCycles - 1 && isRepeating) { await new Promise(resolve => setTimeout(resolve, 1500)); }
+  }
+  
+  stopRepeatAudio();
+  repeatIndex = 0; repeatCycleCount = 0;
+  saveStatus(); 
+};
+
+// [수정] 정지 함수
+window.stopRepeatAudio = () => { 
+  isRepeating = false; 
+  player.pause(); 
+  const btn = document.getElementById('repeat-start-btn');
+  if(btn) { 
+      btn.disabled = false; 
+      btn.innerHTML = `<span class="material-icons-round">play_arrow</span> START`; 
+  }
+  saveStatus(); 
+};
+
+// ======================================================
+// 7. 유틸리티 (Progress, 저장, Confetti)
+// ======================================================
+function updateProgress() {
+  const currentCount = ((cycle - 1) * currentData.length) + index;
+  const percent = Math.floor((currentCount / (currentTotalCycles * currentData.length)) * 100);
+  document.getElementById("progress-percent").innerText = percent + "%";
+  document.getElementById("progress").style.width = Math.min(percent, 100) + "%";
+  saveStatus(); 
+}
+
+function sendDataToGoogle(part, val) {
+  const phone = document.getElementById("phone-input").value.trim();
+  fetch(GOOGLE_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "save", phone, unit: "Unit " + currentUnit, percent: val, part }) });
+}
+
+function triggerFireworkConfetti() {
+  var duration = 4 * 1000; var animationEnd = Date.now() + duration;
+  var interval = setInterval(function() {
+    var timeLeft = animationEnd - Date.now();
+    if (timeLeft <= 0) return clearInterval(interval);
+    confetti({ particleCount: 50, startVelocity: 30, spread: 360, origin: { x: Math.random(), y: Math.random() - 0.2 } });
+  }, 250);
+}
+
+// [추가] 화면 꺼짐 방지 (Wake Lock)
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+    }
+  } catch (err) {
+    console.log("Wake Lock Error:", err);
+  }
+}
+
+// [복구] 결과 리포트 페이지 보기
+window.showResultsPage = async function() {
+  const phone = document.getElementById("phone-input").value.trim(); 
+  showBox('dev-box');
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const data = await res.json(); 
+    renderResultsCards(data); 
+    showBox('results-box');
+  } catch (e) { showCustomModal("데이터 로드 실패"); }
+};
+
+// [복구] 리포트 카드 디자인 렌더링
+function renderResultsCards(data) {
+  const container = document.getElementById('results-content'); 
+  container.innerHTML = "";
+  
+  // 중복된 파트 제거 (최신순 정렬 등 필요 시 로직 추가 가능)
+  const uniqueParts = [];
+  const filteredData = data.filter(row => { 
+      if (row.part && !uniqueParts.includes(row.part)) { 
+          uniqueParts.push(row.part); 
+          return true; 
+      } 
+      return false; 
+  });
+  
+  // 유닛 1~8까지 카드 생성
+  for (let u = 0; u < 8; u++) {
+    const card = document.createElement('div'); 
+    card.style.cssText = "background:#222; border:1px solid #333; border-radius:15px; padding:15px; margin-bottom:15px; text-align:left;";
+    
+    let html = `<h3 style="color:#39ff14; border-bottom:1px solid #333; padding-bottom:5px;">Unit ${u+1}</h3>`;
+    
+    filteredData.forEach(row => {
+      let val = row.units[u] || "-";
+      // 숫자인 경우 % 붙이기, 텍스트(시간/횟수)는 그대로 출력
+      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1) {
+          val = Math.round(parseFloat(val) * 100) + "%";
+      }
+      
+      // 100%이거나 완료된 항목은 초록색 표시
+      const isDone = (val === "100%" || String(val).includes("완료"));
+      const color = isDone ? "#39ff14" : "#fff";
+      
+      html += `<div style="display:flex; justify-content:space-between; margin-top:5px; font-size:14px;">
+                 <span style="color:#aaa;">${row.part}</span>
+                 <span style="color:${color}; font-weight:bold;">${val}</span>
+               </div>`;
+    });
+    
+    card.innerHTML = html; 
+    container.appendChild(card);
+  }
+}
+
+// ======================================================
+// 7. 하단 네비게이션 및 리포트 (기능 완벽 복구)
+// ======================================================
+
+// [1] 리포트 페이지 보기 (함수명을 showReport로 변경하여 버튼과 연결)
+window.showReport = async function() {
+  const phoneInput = document.getElementById("phone-input");
+  const phone = phoneInput ? phoneInput.value.trim() : "";
+  
+  if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+  showCustomModal("데이터를 불러오는 중...", null, false); // 로딩 표시
+
+  try {
+    // [핵심] 사용자님이 주신 원본 로직 그대로 사용 (action=getResults)
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getResults&phone=${phone}`);
+    const data = await res.json();
+    
+    closeCustomModal();
+    renderResultsCards(data); // 데이터 렌더링
+    showBox('results-box');   // 화면 전환
+
+  } catch (e) { 
+      console.error(e);
+      showCustomModal("데이터 로드 실패"); 
+  }
+};
+
+// [2] 리포트 카드 디자인 렌더링 (수정됨: AS Correction 15분 이상 시 초록색)
+function renderResultsCards(data) {
+  const container = document.getElementById('results-box');
+  
+  // 화면 고정 및 스크롤 설정
+  container.className = "fixed top-[80px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 pb-10 flex flex-col";
+  
+  // 헤더
+  let htmlContent = `
+      <div class="mt-4 mb-6 text-center shrink-0">
+          <h2 class="text-[#39FF14] text-lg font-bold">Progress Report</h2>
+          <p class="text-neutral-500 text-xs mt-1">학습 현황 분석</p>
+      </div>
+      <div id="results-content" class="space-y-4 w-full flex-1">
+  `;
+
+  // 중복 데이터 제거
+  const uniqueParts = [];
+  const filteredData = data.filter(row => { 
+      if (row.part && !uniqueParts.includes(row.part)) { 
+          uniqueParts.push(row.part); 
+          return true; 
+      } 
+      return false; 
+  });
+  
+  // Unit 1~8 카드 생성
+  for (let u = 0; u < 8; u++) {
+    htmlContent += `
+        <div class="w-full bg-[#1c1c1c] rounded-2xl p-5 border border-neutral-800 shadow-lg mb-4">
+            <h3 class="text-[#39FF14] font-bold text-base border-b border-neutral-800 pb-2 mb-3 tracking-wider">
+                Unit ${u+1}
+            </h3>
+            <div class="space-y-2">
+    `;
+    
+    filteredData.forEach(row => {
+      let val = row.units[u] || "-";
+      
+      // % 변환 로직 (숫자만 있을 때)
+      if (!isNaN(val) && val !== "" && String(val).indexOf(':') === -1 && String(val).indexOf('회') === -1 && String(val).indexOf('분') === -1) {
+          val = Math.round(parseFloat(val) * 100) + "%";
+      }
+      
+      // [기존 조건] 100%이거나 '완료' 글자가 있으면 통과
+      let isDone = (val === "100%" || String(val).includes("완료"));
+
+      // ⭐ [여기가 추가된 핵심 부분입니다!] ⭐
+      // 파트 이름이 "AS Correction"이고, 내용에 "분"이 들어있으면 시간을 확인합니다.
+      if (row.part === "AS Correction" && typeof val === 'string' && val.includes('분')) {
+          // "16분 30초" 같은 문자열에서 숫자(16)만 뽑아냅니다.
+          const minutes = parseInt(val); 
+          // 그 숫자가 15 이상이면 완료(초록색) 처리!
+          if (!isNaN(minutes) && minutes >= 15) {
+              isDone = true;
+          }
+      }
+
+      // 색상 적용
+      const colorClass = isDone ? "text-[#39FF14] font-bold" : "text-white font-medium";
+      const icon = isDone ? "check_circle" : "remove_circle_outline";
+      const iconColor = isDone ? "text-[#39FF14]" : "text-neutral-700";
+
+      htmlContent += `
+          <div class="flex justify-between items-center text-sm">
+              <span class="text-neutral-400 text-xs">${row.part}</span>
+              <div class="flex items-center gap-2">
+                  <span class="${colorClass}">${val}</span>
+                  <span class="material-icons-round ${iconColor} text-sm">${icon}</span>
+              </div>
+          </div>
+      `;
+    });
+
+    htmlContent += `</div></div>`; 
+  }
+
+  htmlContent += `</div>`; 
+
+  // Back 버튼
+  htmlContent += `
+      <div class="mt-8 w-full shrink-0">
+          <button onclick="showMenu()" class="w-full py-4 bg-[#1c1c1c] text-neutral-400 font-bold rounded-xl border border-neutral-800 active:border-white active:text-white transition-all text-sm uppercase tracking-wider">
+              Back to Menu
+          </button>
+      </div>
+  `;
+
+  container.innerHTML = htmlContent;
+}
+
+window.showRanking = function() {
+    showCustomModal("🏆기능 준비중입니다.\n(Ranking Coming Soon)");
+};
+
+// ======================================================
+// 8. 프로필 (달력 & 정보)
+// ======================================================
+
+// [추가] 프로필 데이터 불러오기
+window.showProfile = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("프로필 정보를 불러오는 중...", null, false);
+
+    try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getProfile&phone=${phone}`);
+        const data = await res.json();
+        
+        closeCustomModal();
+        
+        if (data.result === "success") {
+            renderProfilePage(data);
+            showBox('profile-box'); // 화면 전환
+        } else {
+            showCustomModal("학생 정보를 찾을 수 없습니다.");
+        }
+
+    } catch (e) {
+        console.error(e);
+        showCustomModal("프로필 로드 실패");
+    }
+};
+
+// [수정] top-[80px]를 top-[140px]로 변경하여 로고 공간 확보
+function renderProfilePage(data) {
+    let container = document.getElementById('profile-box');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'profile-box';
+        document.body.appendChild(container);
+    }
+
+    // top-[80px] -> top-[140px]로 변경, pt-12 -> pt-4로 조정
+    container.className = "fixed top-[140px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
+
+    // 날짜 계산
+    const date = new Date();
+    const curYear = date.getFullYear();
+    const curMonth = date.getMonth(); 
+    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+    const currentMonthName = monthNames[curMonth];
+
+    // 달력 HTML 생성
+    let calendarHtml = generateCalendarHTML(curYear, curMonth, data.attendance || []);
+
+    container.innerHTML = `
+        <div class="w-full bg-[#0a0a0a] border border-[#333] border-l-4 border-l-[#39FF14] rounded-xl p-6 shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8 relative overflow-hidden">
+            
+            <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#39FF14]/10 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <p class="text-[#39FF14] font-mono text-[10px] font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 bg-[#39FF14] rounded-full animate-pulse"></span>
+                    STUDENT IDENTITY
+                </p>
+
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h1 class="text-white text-4xl font-black tracking-tight leading-none mb-1 drop-shadow-md">${data.name}</h1>
+                        <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-widest">Agent Name</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="inline-block border border-[#39FF14] px-3 py-1 rounded bg-[#39FF14]/10">
+                            <h1 class="text-[#39FF14] text-xl font-black tracking-tighter leading-none">${data.level}</h1>
+                        </div>
+                        <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-widest mt-1">Level</p>
+                    </div>
+                </div>
+
+                <div class="bg-[#1c1c1c] rounded-lg p-3 border border-neutral-800 flex items-center gap-3">
+                    <span class="material-icons-round text-neutral-400 text-lg">schedule</span>
+                    <div>
+                        <h2 class="text-white text-sm font-bold tracking-wide">${data.classInfo}</h2>
+                        <p class="text-neutral-600 text-[10px] font-bold uppercase tracking-widest">Assigned Class</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full mb-8">
+            <div class="flex items-center justify-between mb-4 px-1">
+                <div class="flex items-center gap-2">
+                    <span class="material-icons-round text-[#39FF14] text-base">date_range</span>
+                    <h3 class="text-white font-bold text-lg tracking-wider font-mono">${currentMonthName} <span class="text-neutral-500 text-sm">${curYear}</span></h3>
+                </div>
+            </div>
+
+            <div class="bg-[#111] rounded-2xl p-4 border border-neutral-800 shadow-lg">
+                <div class="grid grid-cols-7 text-center mb-3 border-b border-neutral-800 pb-2">
+                    <span class="text-[#ff4757] text-[10px] font-black font-mono">SUN</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">MON</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">TUE</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">WED</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">THU</span>
+                    <span class="text-neutral-500 text-[10px] font-bold font-mono">FRI</span>
+                    <span class="text-[#39FF14] text-[10px] font-black font-mono">SAT</span>
+                </div>
+
+                <div class="grid grid-cols-7 gap-2 text-center">
+                    ${calendarHtml}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-auto w-full py-8">
+            <button onclick="logout()" class="w-full py-4 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#39FF14]/10 hover:text-[#39FF14] hover:border-[#39FF14] active:scale-95 transition-all uppercase flex items-center justify-center gap-2 group">
+                <span class="material-icons-round text-sm group-hover:text-[#39FF14] transition-colors">power_settings_new</span>
+                System Logout
+            </button>
+        </div>
+    `;
+}
+
+// [수정] 달력 HTML 생성 함수 (디자인 디테일 수정)
+function generateCalendarHTML(year, month, attendedDays) {
+    const firstDay = new Date(year, month, 1).getDay(); 
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); 
+    
+    let html = "";
+    
+    // 빈 칸
+    for (let i = 0; i < firstDay; i++) {
+        html += `<div class="h-10"></div>`;
+    }
+    
+    // 날짜
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isAttended = attendedDays.includes(day);
+        
+        let content = `<span class="text-neutral-500 text-sm font-medium font-mono">${day}</span>`;
+        let bgClass = "bg-transparent"; 
+        let borderClass = "border border-transparent"; 
+
+        if (isAttended) {
+            // [수정] 출석한 날: 네온 글로우 효과 강화
+            content = `<span class="text-[#111] text-sm font-black font-mono relative z-10">${day}</span>`;
+            bgClass = "bg-[#39FF14]"; 
+            borderClass = "border border-[#39FF14] shadow-[0_0_10px_#39FF14]";
+        } else {
+            // 미출석: 마우스 올리면 살짝 표시
+            borderClass = "border border-neutral-900";
+        }
+        
+        html += `
+            <div class="h-10 rounded-lg ${bgClass} ${borderClass} flex items-center justify-center relative transition-all">
+                 ${content}
+            </div>
+        `;
+    }
+    
+    return html;
+}
+
+// [추가] 로그아웃 함수
+window.logout = function() {
+    showCustomModal("로그아웃 하시겠습니까?", () => {
+        location.reload(); // 가장 간단한 방법: 새로고침
+    });
+};
+
+// ======================================================
+// 9. 공지사항 (NOTICE - 사이버펑크 스타일)
+// ======================================================
+
+window.showNotice = async function() {
+    const phoneInput = document.getElementById("phone-input");
+    const phone = phoneInput ? phoneInput.value.trim() : "";
+    
+    if (!phone) return showCustomModal("로그인 정보가 없습니다.");
+
+    showCustomModal("데이터 수신 중...", null, false);
+
+    try {
+        const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getNotice&phone=${phone}`);
+        const data = await res.json();
+        
+        closeCustomModal();
+        renderNoticePage(data.notice);
+        showBox('notice-box');
+
+    } catch (e) {
+        console.error(e);
+        showCustomModal("통신 오류: 데이터 접근 불가");
+    }
+};
+
+// [최종 수정] 텍스트 앞 공백 제거 + 완벽한 중앙 정렬
+function renderNoticePage(noticeText) {
+    let container = document.getElementById('notice-box');
+    
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notice-box';
+        document.body.appendChild(container);
+    }
+
+    // 1. 데이터 클리닝: 앞뒤 공백 제거 및 내용 없을 시 기본 문구 설정
+    let cleanNotice = (noticeText || "").trim();
+    if (cleanNotice === "" || cleanNotice === "undefined" || cleanNotice === "null") {
+        cleanNotice = "현재 등록된 공지사항이 없습니다.";
+    }
+
+    // 레이아웃 설정
+    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
+
+    container.innerHTML = `
+        <div class="w-full mb-5 shrink-0">
+            <div class="bg-[#0a0a0a] border border-neutral-800 py-5 rounded-2xl text-center shadow-[0_0_15px_rgba(255,255,255,0.03)]">
+                <p class="text-neutral-600 text-[10px] font-mono tracking-[0.4em] uppercase mb-1">System Broadcast</p>
+                <h1 class="text-white text-3xl font-black tracking-widest uppercase leading-none">NOTICE</h1>
+            </div>
+        </div>
+
+        <div class="w-full flex-grow min-h-[450px] relative flex flex-col mb-4">
+            
+            <div class="bg-[#111] rounded-none border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-6 overflow-hidden z-10">
+                
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
+
+                <div class="relative z-20 w-full flex justify-center items-center">
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center w-full m-0 p-0">${cleanNotice}</p>
+                </div>
+            </div>
+
+            <div class="absolute -top-1 -left-1 w-6 h-6 border-t-2 border-l-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -top-1 -right-1 w-6 h-6 border-t-2 border-r-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-2 border-l-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-2 border-r-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+        </div>
+
+        <div class="w-full shrink-0 pb-10">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#1c1c1c] hover:text-[#39FF14] hover:border-[#39FF14]/50 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
+                <span class="material-icons-round text-lg">arrow_back</span>
+                RETURN TO UNIT LIST
+            </button>
+        </div>
+    `;
+}
+
+// [추가] 공지사항에서 돌아가기 버튼 기능
+window.goBackToUnits = function() {
+    showBox('unit-selector');
+};
