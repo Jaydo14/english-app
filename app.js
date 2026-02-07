@@ -1293,7 +1293,7 @@ window.showNotice = async function() {
     }
 };
 
-// [정렬 문제 완전 해결] NOTICE 페이지: 텍스트 물리적 정중앙 배치 + 사이버펑크 포인트
+// [최종 디자인] NOTICE 페이지: 아이콘 제거 + 직각 모서리 + 대형 박스 + 완벽 중앙 정렬
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1303,44 +1303,38 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 1. 전체 컨테이너: 스크롤 영역을 유지하되 내부 요소들이 높이를 가질 수 있도록 설정
-    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col";
+    // 전체 레이아웃 설정
+    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     container.innerHTML = `
-        <div class="w-full mb-4 shrink-0">
+        <div class="w-full mb-5 shrink-0">
             <div class="bg-[#0a0a0a] border border-neutral-800 py-5 rounded-2xl text-center shadow-[0_0_15px_rgba(255,255,255,0.03)]">
                 <p class="text-neutral-600 text-[10px] font-mono tracking-[0.4em] uppercase mb-1">System Broadcast</p>
                 <h1 class="text-white text-3xl font-black tracking-widest uppercase leading-none">NOTICE</h1>
             </div>
         </div>
 
-        <div class="w-full flex-grow min-h-[400px] relative mb-4">
+        <div class="w-full flex-grow min-h-[450px] relative flex flex-col mb-4">
             
-            <div class="w-full h-full bg-[#111] rounded-3xl border border-neutral-800 shadow-lg relative flex flex-col items-center justify-center p-8 overflow-hidden z-10">
+            <div class="bg-[#111] rounded-none border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-12 overflow-hidden z-10">
                 
-                <div class="absolute top-10 left-1/2 -translate-x-1/2">
-                    <div class="bg-[#1c1c1c] w-16 h-16 rounded-full border border-[#39FF14]/20 flex items-center justify-center shadow-[0_0_15px_rgba(57,255,20,0.1)]">
-                        <span class="material-icons-round text-[#39FF14] text-4xl">info</span>
-                    </div>
-                </div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
-                <div class="w-full flex flex-col items-center justify-center text-center">
-                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap">
+                <div class="relative z-20 w-full">
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center">
                         ${noticeText}
                     </p>
                 </div>
-
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
             </div>
 
-            <div class="absolute -top-1 -left-1 w-6 h-6 border-t-2 border-l-2 border-[#39FF14] rounded-tl-md shadow-[0_0_10px_rgba(57,255,20,0.4)] z-20"></div>
-            <div class="absolute -top-1 -right-1 w-6 h-6 border-t-2 border-r-2 border-[#39FF14] rounded-tr-md shadow-[0_0_10px_rgba(57,255,20,0.4)] z-20"></div>
-            <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-2 border-l-2 border-[#39FF14] rounded-bl-md shadow-[0_0_10px_rgba(57,255,20,0.4)] z-20"></div>
-            <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-2 border-r-2 border-[#39FF14] rounded-br-md shadow-[0_0_10px_rgba(57,255,20,0.4)] z-20"></div>
+            <div class="absolute -top-1 -left-1 w-6 h-6 border-t-2 border-l-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -top-1 -right-1 w-6 h-6 border-t-2 border-r-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-2 border-l-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
+            <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-2 border-r-2 border-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.5)] z-20"></div>
         </div>
 
         <div class="w-full shrink-0 pb-10">
-            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#1c1c1c] hover:text-[#39FF14] hover:border-[#39FF14]/50 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
                 <span class="material-icons-round text-lg">arrow_back</span>
                 RETURN TO UNIT LIST
             </button>
