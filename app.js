@@ -1293,7 +1293,7 @@ window.showNotice = async function() {
     }
 };
 
-// [최종 완성] 공지사항 화면: 텍스트 완벽 정중앙 정렬 + 사이버펑크 코너 장식 추가
+// [최종 디자인 보정] NOTICE 페이지: 상단 포인트 제거 + 중단 박스 크기 복구 + 텍스트 정중앙 정렬
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1303,34 +1303,30 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 전체 컨테이너 레이아웃 설정 (상하 여백 확보)
-    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col";
+    // 전체 레이아웃: 화면 높이에 맞춰 유연하게 대응
+    container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center";
 
     container.innerHTML = `
-        <div class="w-full mb-6 relative shrink-0">
-            <div class="bg-[#0a0a0a] border border-neutral-800 py-4 rounded-xl text-center shadow-[0_0_15px_rgba(255,255,255,0.03)] relative z-10">
-                <p class="text-neutral-500 text-[9px] font-mono tracking-[0.3em] uppercase mb-1">System Broadcast</p>
-                <h1 class="text-white text-2xl font-black tracking-widest uppercase leading-none">NOTICE</h1>
+        <div class="w-full mb-5 shrink-0">
+            <div class="bg-[#0a0a0a] border border-neutral-800 py-5 rounded-2xl text-center shadow-[0_0_15px_rgba(255,255,255,0.03)]">
+                <p class="text-neutral-600 text-[10px] font-mono tracking-[0.4em] uppercase mb-1">System Broadcast</p>
+                <h1 class="text-white text-3xl font-black tracking-widest uppercase leading-none">NOTICE</h1>
             </div>
-            
-            <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#39FF14] rounded-tl-lg shadow-[0_0_10px_rgba(57,255,20,0.3)] z-0"></div>
-            <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#39FF14] rounded-br-lg shadow-[0_0_10px_rgba(57,255,20,0.3)] z-0"></div>
         </div>
 
-
-        <div class="w-full flex-grow relative flex flex-col">
+        <div class="w-full flex-grow min-h-[420px] relative flex flex-col mb-5">
             
-            <div class="bg-[#111] rounded-2xl border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-8 overflow-hidden z-10">
+            <div class="bg-[#111] rounded-3xl border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-10 overflow-hidden z-10">
                 
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_60%)] pointer-events-none"></div>
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
                 <div class="relative z-20 flex flex-col items-center text-center w-full">
-                    <div class="bg-[#1c1c1c] w-16 h-16 rounded-full border border-[#39FF14]/30 flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-6">
-                        <span class="material-icons-round text-[#39FF14] text-4xl">info</span>
+                    <div class="bg-[#1c1c1c] w-20 h-20 rounded-full border border-[#39FF14]/20 flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8">
+                        <span class="material-icons-round text-[#39FF14] text-5xl">info</span>
                     </div>
                     
-                    <div class="w-full max-w-[300px]">
-                        <p class="text-white text-lg font-bold leading-relaxed break-keep whitespace-pre-wrap text-center drop-shadow-sm">
+                    <div class="w-full">
+                        <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center">
                             ${noticeText}
                         </p>
                     </div>
@@ -1343,10 +1339,9 @@ function renderNoticePage(noticeText) {
             <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-2 border-r-2 border-[#39FF14] rounded-br-md shadow-[0_0_10px_rgba(57,255,20,0.4)] z-20"></div>
         </div>
 
-
-        <div class="mt-6 w-full shrink-0">
-            <button onclick="goBackToUnits()" class="w-full py-4 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.15em] text-[11px] hover:bg-[#1c1c1c] hover:text-[#39FF14] hover:border-[#39FF14]/50 active:scale-95 transition-all uppercase flex items-center justify-center gap-2 group bg-[#0a0a0a]">
-                <span class="material-icons-round text-base group-hover:text-[#39FF14] transition-colors">arrow_back</span>
+        <div class="w-full shrink-0 pb-10">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#1c1c1c] hover:text-[#39FF14] hover:border-[#39FF14]/50 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
+                <span class="material-icons-round text-lg">arrow_back</span>
                 RETURN TO UNIT LIST
             </button>
         </div>
