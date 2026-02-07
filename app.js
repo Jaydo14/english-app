@@ -1293,7 +1293,8 @@ window.showNotice = async function() {
     }
 };
 
-// [수정] 공지사항 화면 그리기 (깔끔한 카드형 디자인 적용)
+// app.js의 renderNoticePage 함수를 아래 코드로 교체하세요.
+
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1303,54 +1304,48 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 프로필과 동일한 상단 여백 설정
+    // 상단 여백 설정 (로고와 겹치지 않게 고정)
     container.className = "fixed top-[140px] bottom-[90px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     container.innerHTML = `
-        <div class="w-full flex items-center gap-3 mb-8 px-2">
-            <div class="bg-[#1c1c1c] p-3 rounded-xl border border-neutral-800">
-                <span class="material-icons-round text-[#39FF14] text-3xl animate-pulse">campaign</span>
-            </div>
-            <div>
-                <h1 class="text-white text-3xl font-black tracking-tighter leading-none mb-1 uppercase">NOTICE</h1>
-                <p class="text-neutral-500 text-[10px] font-mono uppercase tracking-[0.2em]">SYSTEM BROADCAST</p>
+        <div class="w-full flex justify-center mb-6">
+            <div class="bg-[#0a0a0a] border border-neutral-800 px-8 py-3 rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.05)] text-center">
+                <p class="text-neutral-500 text-[9px] font-mono tracking-[0.3em] uppercase mb-1">System Broadcast</p>
+                <h1 class="text-white text-3xl font-black tracking-tighter uppercase leading-none">NOTICE</h1>
             </div>
         </div>
 
-        <div class="w-full bg-[#111] rounded-3xl p-8 border border-neutral-800/50 shadow-lg relative overflow-hidden min-h-[300px] group hover:border-[#39FF14]/30 transition-colors duration-300">
+        <div class="w-full bg-[#111] rounded-3xl p-10 border border-neutral-800 shadow-lg relative min-h-[420px] flex flex-col items-center justify-center overflow-hidden group">
             
-            <div class="flex justify-between items-center mb-6 opacity-60 group-hover:opacity-100 transition-opacity">
-                <p class="text-neutral-400 font-mono text-[10px] uppercase tracking-[0.2em]">MESSAGE BODY</p>
-                <p class="text-neutral-500 font-mono text-[10px]">V2.6.0</p>
-            </div>
-            
-            <div class="flex flex-col items-center justify-center text-center space-y-6 py-8">
-                <div class="bg-[#1c1c1c] p-4 rounded-full border border-neutral-800 group-hover:border-[#39FF14]/50 transition-colors">
-                    <span class="material-icons-round text-[#39FF14] text-4xl">info</span>
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col items-center text-center space-y-6">
+                <div class="bg-[#1c1c1c] p-5 rounded-full border border-[#39FF14]/20 shadow-[0_0_20px_rgba(57,255,20,0.1)]">
+                    <span class="material-icons-round text-[#39FF14] text-5xl">info</span>
                 </div>
                 
-                <div class="space-y-2">
-                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap font-display">
+                <div class="space-y-3">
+                    <p class="text-white text-2xl font-bold leading-relaxed break-keep whitespace-pre-wrap font-display">
                         ${noticeText}
                     </p>
-                    <p class="text-neutral-500 text-sm font-mono">
+                    <p class="text-neutral-600 text-sm font-mono tracking-wide">
                         No notifications found.
                     </p>
                 </div>
             </div>
             
-            <div class="mt-8 pt-6 border-t border-neutral-800/50 flex justify-between items-center opacity-60 group-hover:opacity-100 transition-opacity">
-                <div class="flex gap-1">
-                    <div class="w-3 h-1 bg-[#39FF14] rounded-full"></div>
-                    <div class="w-8 h-1 bg-[#39FF14]/20 rounded-full"></div>
+            <div class="absolute bottom-8 left-10 right-10 flex justify-between items-center opacity-40">
+                <div class="flex gap-1.5">
+                    <div class="w-6 h-1 bg-[#39FF14] rounded-full"></div>
+                    <div class="w-2 h-1 bg-[#39FF14]/50 rounded-full"></div>
                 </div>
-                <p class="text-neutral-600 font-mono text-[9px] tracking-[0.3em] italic">ENCRYPTED DATA STREAM</p>
+                <p class="text-neutral-700 font-mono text-[8px] tracking-[0.4em] italic uppercase">Encrypted Data Stream</p>
             </div>
         </div>
 
-        <div class="mt-12 w-full pb-8">
-            <button onclick="goBackToUnits()" class="w-full py-4 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#1c1c1c] hover:text-white hover:border-neutral-700 active:scale-95 transition-all uppercase flex items-center justify-center gap-2 group">
-                <span class="material-icons-round text-sm text-neutral-600 group-hover:text-white transition-colors">arrow_back</span>
+        <div class="mt-8 w-full pb-10">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-400 font-bold tracking-[0.2em] text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase flex items-center justify-center gap-3">
+                <span class="material-icons-round text-lg">arrow_back</span>
                 RETURN TO UNIT LIST
             </button>
         </div>
