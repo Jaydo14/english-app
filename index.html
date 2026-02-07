@@ -231,17 +231,21 @@
 <script src="app.js"></script>
     
 <script>
+    // ============================================================
+    // [1] 보안 기능: 우클릭 및 개발자 도구(F12) 방지
+    // ============================================================
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123) { return false; } // F12
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Ctrl+Shift+C
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U
+    }
 
-    // [보안] 우클릭 및 개발자 도구(F12) 방지
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.onkeydown = function(e) {
-    if(e.keyCode == 123) { return false; } // F12
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Ctrl+Shift+C
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U
-}
-    // [기능 추가] 화면 꺼짐 방지 (Wake Lock API)
+    // ============================================================
+    // [2] 화면 꺼짐 방지 (Wake Lock API)
+    // ============================================================
     let wakeLock = null;
 
     async function toggleScreenKeepAwake(enable) {
@@ -250,13 +254,13 @@ document.onkeydown = function(e) {
                 if (enable) {
                     if (!wakeLock) {
                         wakeLock = await navigator.wakeLock.request('screen');
-                        console.log('💡 Screen Wake Lock Active (화면 켜짐 유지)');
+                        console.log('💡 Screen Wake Lock Active');
                     }
                 } else {
                     if (wakeLock) {
                         await wakeLock.release();
                         wakeLock = null;
-                        console.log('🌑 Screen Wake Lock Released (화면 제어 해제)');
+                        console.log('🌑 Screen Wake Lock Released');
                     }
                 }
             }
@@ -265,22 +269,23 @@ document.onkeydown = function(e) {
         }
     }
 
-    // 1. 화면 전환 관리 함수
-    const originalShowBox = window.showBox;
+    // ============================================================
+    // [3] 화면 전환 관리 함수 (네비게이션 색상 제어 포함)
+    // ============================================================
     window.showBox = function(boxId) {
-        // 화면 리스트
         const boxes = [
             'login-box', 'unit-selector', 'menu-box', 'study-box', 
             'repeat-box', 'dev-box', 'as-box', 'results-box', 
             'as-record-box', 'report-box', 'profile-box', 'notice-box'
         ];
         
+        // 모든 박스 제어
         boxes.forEach(id => {
             const el = document.getElementById(id);
             if(el) el.style.display = (id === boxId) ? 'block' : 'none';
         });
         
-        // 로그인/네비게이션 바 제어
+        // 로그인 화면 및 하단 바 제어
         const isLogin = (boxId === 'login-box');
         const appEl = document.getElementById("app");
         const loginEl = document.getElementById('login-box');
@@ -290,57 +295,66 @@ document.onkeydown = function(e) {
         if(loginEl) loginEl.style.display = isLogin ? 'flex' : 'none';
         if(navBar) navBar.style.display = isLogin ? 'none' : 'flex';
 
-        // ⭐ [핵심] 학습 화면('study-box')일 때만 화면 켜짐 유지
+        // 학습 화면일 때만 화면 켜짐 유지
         if (boxId === 'study-box' || boxId === 'repeat-box') {
             toggleScreenKeepAwake(true);
         } else {
             toggleScreenKeepAwake(false);
         }
 
-        // 네비게이션 버튼 색상 업데이트
+        // 네비게이션 버튼 색상 업데이트 실행
         updateNavState(boxId);
     }
 
-    // 2. 네비게이션 버튼 색상 제어 함수
+    // ============================================================
+    // [4] 네비게이션 버튼 색상 제어 함수 (UNIT 녹색 고정 해결됨)
+    // ============================================================
     function updateNavState(currentBox) {
         const navBtns = document.querySelectorAll('#bottom-nav button');
         if (navBtns.length === 0) return;
 
-        // [A] 초기화 (회색)
+        // [A] 초기화: 모든 버튼을 강제로 '회색(#737373)'으로 끔
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
             const text = btn.querySelector('span:last-child');
-            if(icon) icon.style.color = '#737373'; 
-            if(text) text.style.color = '#737373';
+            if(icon) icon.style.cssText = 'color: #737373 !important;'; 
+            if(text) text.style.cssText = 'color: #737373 !important;';
         });
 
-        // [B] 활성화 인덱스 찾기
+        // [B] 현재 화면에 맞는 버튼 번호(Index) 찾기
         let activeIndex = -1; 
-        if (currentBox === 'unit-selector') {
-            activeIndex = 0; // UNIT
-        } else if (currentBox === 'results-box' || currentBox === 'report-box') { 
-            activeIndex = 1; // PROGRESS REPORT
-        } else if (currentBox === 'profile-box') {
-            activeIndex = 2; // PROFILE
-        } else if (currentBox === 'notice-box') {
-            activeIndex = 3; // NOTICE
+        
+        // 1번 버튼: UNIT (유닛 목록, 메뉴, 학습 화면 등)
+        if (currentBox === 'unit-selector' || currentBox === 'menu-box' || currentBox === 'study-box' || currentBox === 'repeat-box' || currentBox === 'as-box') {
+            activeIndex = 0; 
+        } 
+        // 2번 버튼: PROGRESS REPORT (리포트 관련)
+        else if (currentBox === 'results-box' || currentBox === 'report-box') { 
+            activeIndex = 1; 
+        } 
+        // 3번 버튼: PROFILE (프로필)
+        else if (currentBox === 'profile-box') {
+            activeIndex = 2; 
+        } 
+        // 4번 버튼: NOTICE (공지사항)
+        else if (currentBox === 'notice-box') {
+            activeIndex = 3; 
         }
 
-        // [C] 활성화 (형광 녹색)
+        // [C] 해당 버튼만 '형광 녹색(#39FF14)'으로 켜기
         if (activeIndex >= 0 && navBtns[activeIndex]) {
             const activeBtn = navBtns[activeIndex];
             const icon = activeBtn.querySelector('.material-icons-round');
             const text = activeBtn.querySelector('span:last-child');
-            if(icon) icon.style.color = '#39FF14';
-            if(text) text.style.color = '#39FF14';
+            if(icon) icon.style.cssText = 'color: #39FF14 !important;';
+            if(text) text.style.cssText = 'color: #39FF14 !important;';
         }
     }
 
-    // [추가] 브라우저 탭을 나갔다 들어올 때 Wake Lock이 풀리는 경우 재요청
+    // [5] 브라우저 탭 복귀 시 화면 켜짐 상태 재확인
     document.addEventListener('visibilitychange', async () => {
         const studyBox = document.getElementById('study-box');
         const repeatBox = document.getElementById('repeat-box');
-        // 학습 화면이 보이는 상태라면 다시 락을 겁니다.
         if (document.visibilityState === 'visible' && 
            (studyBox.style.display === 'block' || repeatBox.style.display === 'block')) {
             await toggleScreenKeepAwake(true);
@@ -349,6 +363,7 @@ document.onkeydown = function(e) {
 </script>
 </body>
 </html>
+
 
 
 
