@@ -231,10 +231,34 @@
 <script src="app.js"></script>
     
 <script>
+    // [기능 추가] 화면 꺼짐 방지 (Wake Lock API)
+    let wakeLock = null;
+
+    async function toggleScreenKeepAwake(enable) {
+        try {
+            if ('wakeLock' in navigator) {
+                if (enable) {
+                    if (!wakeLock) {
+                        wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('💡 Screen Wake Lock Active (화면 켜짐 유지)');
+                    }
+                } else {
+                    if (wakeLock) {
+                        await wakeLock.release();
+                        wakeLock = null;
+                        console.log('🌑 Screen Wake Lock Released (화면 제어 해제)');
+                    }
+                }
+            }
+        } catch (err) {
+            console.log(`Wake Lock Error: ${err.name}, ${err.message}`);
+        }
+    }
+
     // 1. 화면 전환 관리 함수
     const originalShowBox = window.showBox;
     window.showBox = function(boxId) {
-        // 모든 화면 ID 리스트 (새로 추가된 notice-box 포함)
+        // 화면 리스트
         const boxes = [
             'login-box', 'unit-selector', 'menu-box', 'study-box', 
             'repeat-box', 'dev-box', 'as-box', 'results-box', 
@@ -246,7 +270,7 @@
             if(el) el.style.display = (id === boxId) ? 'block' : 'none';
         });
         
-        // 로그인 화면 여부에 따른 레이아웃 제어
+        // 로그인/네비게이션 바 제어
         const isLogin = (boxId === 'login-box');
         const appEl = document.getElementById("app");
         const loginEl = document.getElementById('login-box');
@@ -256,18 +280,23 @@
         if(loginEl) loginEl.style.display = isLogin ? 'flex' : 'none';
         if(navBar) navBar.style.display = isLogin ? 'none' : 'flex';
 
-        // 네비게이션 바 상태 업데이트 호출
+        // ⭐ [핵심] 학습 화면('study-box')일 때만 화면 켜짐 유지
+        if (boxId === 'study-box' || boxId === 'repeat-box') {
+            toggleScreenKeepAwake(true);
+        } else {
+            toggleScreenKeepAwake(false);
+        }
+
+        // 네비게이션 버튼 색상 업데이트
         updateNavState(boxId);
     }
 
-    // 2. 네비게이션 버튼 색상 제어 함수 (핵심 수정 부분)
+    // 2. 네비게이션 버튼 색상 제어 함수
     function updateNavState(currentBox) {
-        // 하단 네비게이션 바 안의 모든 버튼을 가져옵니다.
         const navBtns = document.querySelectorAll('#bottom-nav button');
-        
         if (navBtns.length === 0) return;
 
-        // [A] 먼저 모든 버튼의 아이콘과 글자를 '회색(#737373)'으로 끕니다.
+        // [A] 초기화 (회색)
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
             const text = btn.querySelector('span:last-child');
@@ -275,20 +304,19 @@
             if(text) text.style.color = '#737373';
         });
 
-        // [B] 현재 화면(currentBox)에 따라 불을 켤 버튼 번호(Index)를 정합니다.
+        // [B] 활성화 인덱스 찾기
         let activeIndex = -1; 
-
         if (currentBox === 'unit-selector') {
-            activeIndex = 0; // UNIT 버튼 (첫 번째)
+            activeIndex = 0; // UNIT
         } else if (currentBox === 'results-box' || currentBox === 'report-box') { 
-            activeIndex = 1; // PROGRESS REPORT 버튼 (두 번째)
+            activeIndex = 1; // PROGRESS REPORT
         } else if (currentBox === 'profile-box') {
-            activeIndex = 2; // PROFILE 버튼 (세 번째)
+            activeIndex = 2; // PROFILE
         } else if (currentBox === 'notice-box') {
-            activeIndex = 3; // NOTICE 버튼 (네 번째)
+            activeIndex = 3; // NOTICE
         }
 
-        // [C] 선택된 버튼만 '형광 녹색(#39FF14)'으로 켭니다.
+        // [C] 활성화 (형광 녹색)
         if (activeIndex >= 0 && navBtns[activeIndex]) {
             const activeBtn = navBtns[activeIndex];
             const icon = activeBtn.querySelector('.material-icons-round');
@@ -297,9 +325,21 @@
             if(text) text.style.color = '#39FF14';
         }
     }
+
+    // [추가] 브라우저 탭을 나갔다 들어올 때 Wake Lock이 풀리는 경우 재요청
+    document.addEventListener('visibilitychange', async () => {
+        const studyBox = document.getElementById('study-box');
+        const repeatBox = document.getElementById('repeat-box');
+        // 학습 화면이 보이는 상태라면 다시 락을 겁니다.
+        if (document.visibilityState === 'visible' && 
+           (studyBox.style.display === 'block' || repeatBox.style.display === 'block')) {
+            await toggleScreenKeepAwake(true);
+        }
+    });
 </script>
 </body>
 </html>
+
 
 
 
