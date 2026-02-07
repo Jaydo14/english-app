@@ -238,6 +238,62 @@ function renderUnitButtons() {
 }
 
 // ======================================================
+// [여기부터 복사하세요] 누락된 메뉴 이동 함수 복구
+// ======================================================
+
+// 1. 메뉴 화면으로 이동 (유닛 버튼 누르면 실행되는 함수)
+window.showMenu = function() {
+    // 오디오/녹음기 정지 (안전장치)
+    if (typeof player !== 'undefined') player.pause();
+    if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
+
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    if (typeof recordingTimer !== 'undefined' && recordingTimer) clearInterval(recordingTimer);
+    
+    if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop();
+    }
+
+    // [중요] 음성인식기 끄기 (Script/Vocab 간 충돌 방지)
+    if (typeof recognizer !== 'undefined') {
+        try { recognizer.abort(); } catch(e) {} 
+        try { recognizer.stop(); } catch(e) {}
+    }
+
+    // UI 정리 (AS Correction 등에서 썼던 버튼들 초기화)
+    const recUI = document.getElementById('recording-ui');
+    const listenBtn = document.getElementById('as-listen-btn');
+    const submitUI = document.getElementById('submit-ui');
+    
+    if(recUI) recUI.style.display = 'none';
+    if(submitUI) submitUI.style.display = 'none';
+    if(listenBtn) {
+        listenBtn.style.display = 'flex';
+        listenBtn.style.opacity = '1';
+    }
+
+    // 화면 이동
+    showBox('menu-box');
+};
+
+// 2. 유닛 목록으로 돌아가기 (Back 버튼 기능)
+window.goBackToUnits = function() {
+    // 오디오 정지
+    if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
+    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    
+    // 음성인식 끄기
+    if (typeof recognizer !== 'undefined') {
+        try { recognizer.abort(); } catch(e) {} 
+        try { recognizer.stop(); } catch(e) {} 
+    }
+
+    // 화면 이동
+    showBox('unit-selector');
+};
+
+
+// ======================================================
 // 4. 학습 엔진 (Script/Vocab - 버튼 대기 적용)
 // ======================================================
 window.startScriptMode = async function() { 
