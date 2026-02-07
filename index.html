@@ -231,6 +231,16 @@
 <script src="app.js"></script>
     
 <script>
+
+    // [보안] 우클릭 및 개발자 도구(F12) 방지
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.onkeydown = function(e) {
+    if(e.keyCode == 123) { return false; } // F12
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Ctrl+Shift+C
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U
+}
     // [기능 추가] 화면 꺼짐 방지 (Wake Lock API)
     let wakeLock = null;
 
@@ -339,6 +349,7 @@
 </script>
 </body>
 </html>
+
 
 
 
