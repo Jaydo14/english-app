@@ -270,22 +270,27 @@
     }
 
     // ============================================================
-    // [3] 화면 전환 관리 함수 (네비게이션 색상 제어 포함)
+    // [3] 화면 전환 관리 함수 (이 부분이 핵심 수정됨!)
     // ============================================================
     window.showBox = function(boxId) {
+        // 관리할 모든 화면의 ID 리스트 (여기에 notice-box가 꼭 있어야 겹치지 않습니다)
         const boxes = [
             'login-box', 'unit-selector', 'menu-box', 'study-box', 
             'repeat-box', 'dev-box', 'as-box', 'results-box', 
             'as-record-box', 'report-box', 'profile-box', 'notice-box'
         ];
         
-        // 모든 박스 제어
+        // 1. 모든 박스를 일단 다 숨김 (display: none)
         boxes.forEach(id => {
             const el = document.getElementById(id);
-            if(el) el.style.display = (id === boxId) ? 'block' : 'none';
+            if(el) el.style.display = 'none'; // 일단 다 끔
         });
+
+        // 2. 선택된 박스만 켬
+        const targetEl = document.getElementById(boxId);
+        if(targetEl) targetEl.style.display = 'block';
         
-        // 로그인 화면 및 하단 바 제어
+        // 3. 로그인 화면 및 하단 바 제어
         const isLogin = (boxId === 'login-box');
         const appEl = document.getElementById("app");
         const loginEl = document.getElementById('login-box');
@@ -295,25 +300,25 @@
         if(loginEl) loginEl.style.display = isLogin ? 'flex' : 'none';
         if(navBar) navBar.style.display = isLogin ? 'none' : 'flex';
 
-        // 학습 화면일 때만 화면 켜짐 유지
+        // 4. 학습 화면일 때만 화면 켜짐 유지
         if (boxId === 'study-box' || boxId === 'repeat-box') {
             toggleScreenKeepAwake(true);
         } else {
             toggleScreenKeepAwake(false);
         }
 
-        // 네비게이션 버튼 색상 업데이트 실행
+        // 5. 네비게이션 버튼 색상 업데이트 실행
         updateNavState(boxId);
     }
 
     // ============================================================
-    // [4] 네비게이션 버튼 색상 제어 함수 (UNIT 녹색 고정 해결됨)
+    // [4] 네비게이션 버튼 색상 제어 함수
     // ============================================================
     function updateNavState(currentBox) {
         const navBtns = document.querySelectorAll('#bottom-nav button');
         if (navBtns.length === 0) return;
 
-        // [A] 초기화: 모든 버튼을 강제로 '회색(#737373)'으로 끔
+        // [A] 초기화: 모든 버튼을 강제로 '회색(#737373)'으로 끔 (HTML 클래스 무시하고 덮어씌움)
         navBtns.forEach(btn => {
             const icon = btn.querySelector('.material-icons-round');
             const text = btn.querySelector('span:last-child');
@@ -363,6 +368,7 @@
 </script>
 </body>
 </html>
+
 
 
 
