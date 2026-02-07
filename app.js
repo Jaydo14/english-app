@@ -4,7 +4,6 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-// ⭐ [필수] Apps Script '새 배포' URL 확인!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVmPohCumHBEl9BBnAhm-ZDp5NO00fENXCeQCVT4ZqKBSaV6sikWvRIUAFY5vs7MlC/exec"; 
 
 // 학습 상태 변수
@@ -18,23 +17,23 @@ let index = 0;
 let cycle = 1;
 let isRepeating = false;
 
-// 반복듣기 상태 변수
+// 반복듣기 상태
 let repeatIndex = 0; 
 let repeatCycleCount = 0; 
-let repeatCountVal = 3; // 기본값 3회
+let repeatCountVal = 3; 
 
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
 // 오디오 및 시스템 변수
 const player = new Audio();
-let wakeLock = null; // ⭐ 중복 선언 방지를 위해 여기서만 선언
+let wakeLock = null; 
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
 let isAlertShown = false; 
 let isRestoring = false; 
 
-// 녹음 관련 변수
+// 녹음 변수
 let mediaRecorder; 
 let audioChunks = []; 
 let recordingTimer; 
@@ -50,14 +49,14 @@ const bookDatabase = {
 };
 
 // ======================================================
-// 2. 변수 및 요소 가져오기 (DOM Elements)
+// 2. 변수 및 요소 가져오기 (여기가 문제였음! 복구 완료)
 // ======================================================
 const loginBox = document.getElementById("login-box");
 const app = document.getElementById("app");
 const unitButtonsContainer = document.getElementById("unit-buttons");
 const phoneInput = document.getElementById("phone-input");
 
-// 🚨 [중요] 학습 화면 요소 (이게 없으면 오류남)
+// 🚨 [필수 복구] 아래 변수들이 없어서 Script 에러가 났었습니다.
 const sentenceText = document.getElementById("sentence");
 const sentenceKor = document.getElementById("sentence-kor");
 const progressBar = document.getElementById("progress");
@@ -65,6 +64,7 @@ const progressPercent = document.getElementById("progress-percent");
 
 const startBtn = document.getElementById("start-btn");
 const skipBtn = document.getElementById("skip-btn");
+const backBtn = document.getElementById("back-btn");
 
 // 화면 박스들
 const menuBox = document.getElementById("menu-box");
@@ -73,104 +73,10 @@ const devBox = document.getElementById("dev-box");
 const repeatBox = document.getElementById("repeat-box");
 
 // ======================================================
-// 3. UI 및 유틸리티 함수
+// 3. UI 및 유틸리티
 // ======================================================
 
-// [수정] 화면 전환 함수
-function showBox(boxId) {
-    const boxes = [
-        'login-box', 'unit-selector', 'menu-box', 'study-box', 
-        'repeat-box', 'dev-box', 'as-box', 'results-box', 
-        'as-record-box', 'report-box', 'profile-box', 'notice-box'
-    ];
-  
-    // 모든 박스 숨기기
-    boxes.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-    });
-
-    // 목표 박스 보이기
-    const targetEl = document.getElementById(boxId);
-    if(targetEl) targetEl.style.display = 'block';
-
-    // 로그인 화면일 때와 아닐 때의 앱 컨테이너 처리
-    if (boxId === 'login-box') {
-        if(app) app.style.display = 'none';
-        if(loginBox) loginBox.style.display = 'flex';
-    } else {
-        if(app) app.style.display = 'flex'; // 혹은 block
-        if(loginBox) loginBox.style.display = 'none';
-    }
-
-    // 네비게이션 색상 업데이트 (함수가 있다면)
-    if (typeof updateNavStateInApp === 'function') {
-        updateNavStateInApp(boxId);
-    }
-}
-// ======================================================
-// 2. UI 및 유틸리티 (음성인식 버그 수정 + 저장 기능 포함)
-// ======================================================
-
-// [수정] 화면 전환 함수
-function showBox(boxId) {
-    const boxes = [
-        'login-box', 'unit-selector', 'menu-box', 'study-box', 
-        'repeat-box', 'dev-box', 'as-box', 'results-box', 
-        'as-record-box', 'report-box', 'profile-box', 'notice-box'
-    ];
-  
-    boxes.forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.style.display = 'none';
-    });
-
-    const targetEl = document.getElementById(boxId);
-    if(targetEl) targetEl.style.display = 'block';
-
-    const app = document.getElementById("app");
-    // ----------------------
-// 2. 변수 및 요소 가져오기 (수정됨: 누락된 변수 복구)
-// ----------------------
-const loginBox = document.getElementById("login-box");
-const app = document.getElementById("app");
-const unitButtonsContainer = document.getElementById("unit-buttons");
-const phoneInput = document.getElementById("phone-input");
-
-// 🚨 [여기가 누락되어 오류가 났습니다!] 아래 4줄이 꼭 있어야 합니다.
-const sentenceText = document.getElementById("sentence");
-const sentenceKor = document.getElementById("sentence-kor");
-const progressBar = document.getElementById("progress");
-const progressPercent = document.getElementById("progress-percent");
-
-const startBtn = document.getElementById("start-btn");
-const skipBtn = document.getElementById("skip-btn");
-
-// 화면 박스들
-const menuBox = document.getElementById("menu-box");
-const studyBox = document.getElementById("study-box");
-const devBox = document.getElementById("dev-box");
-const repeatBox = document.getElementById("repeat-box");
-    const bottomNav = document.getElementById("bottom-nav");
-
-    if (boxId === 'login-box') {
-        if(app) app.style.display = 'none';
-        if(loginBox) loginBox.style.display = 'flex';
-        if(bottomNav) bottomNav.style.display = 'none';
-    } else {
-        if(app) app.style.display = 'flex';
-        if(loginBox) loginBox.style.display = 'none';
-        if(bottomNav) bottomNav.style.display = 'flex';
-    }
-
-    if (boxId === 'study-box' || boxId === 'repeat-box') {
-        if (typeof requestWakeLock === 'function') requestWakeLock();
-    }
-
-    updateNavStateInApp(boxId);
-}
-
-// [추가] 네비게이션 색상 제어 함수
+// [복구] 하단 네비게이션 색상 제어
 function updateNavStateInApp(currentBox) {
     const navBtns = document.querySelectorAll('#bottom-nav button');
     if (navBtns.length === 0) return;
@@ -202,195 +108,112 @@ function updateNavStateInApp(currentBox) {
     }
 }
 
-// [수정] 커스텀 모달
+// [수정] 화면 전환 함수 (순서 정리됨)
+function showBox(boxId) {
+    const boxes = [
+        'login-box', 'unit-selector', 'menu-box', 'study-box', 
+        'repeat-box', 'dev-box', 'as-box', 'results-box', 
+        'as-record-box', 'report-box', 'profile-box', 'notice-box'
+    ];
+  
+    boxes.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+
+    const targetEl = document.getElementById(boxId);
+    if(targetEl) targetEl.style.display = 'block';
+
+    const bottomNav = document.getElementById("bottom-nav");
+
+    if (boxId === 'login-box') {
+        if(app) app.style.display = 'none';
+        if(loginBox) loginBox.style.display = 'flex';
+        if(bottomNav) bottomNav.style.display = 'none';
+    } else {
+        if(app) app.style.display = 'flex';
+        if(loginBox) loginBox.style.display = 'none';
+        if(bottomNav) bottomNav.style.display = 'flex';
+    }
+
+    if (boxId === 'study-box' || boxId === 'repeat-box') {
+        if (typeof requestWakeLock === 'function') requestWakeLock();
+    }
+
+    updateNavStateInApp(boxId);
+}
+
+// [복구] 커스텀 모달
 function showCustomModal(msg, callback = null, showButton = true) {
     if(typeof player !== 'undefined') player.pause(); 
-    document.getElementById('modal-msg').innerText = msg;
-    const modal = document.getElementById('custom-modal');
-    modal.style.display = 'flex';
-    
-    const btn = modal.querySelector('button'); 
-    if(btn) btn.style.display = showButton ? 'block' : 'none';
+    const msgEl = document.getElementById('modal-msg');
+    if(msgEl) msgEl.innerText = msg;
 
+    const modal = document.getElementById('custom-modal');
+    if(modal) {
+        modal.style.display = 'flex';
+        const btn = modal.querySelector('button'); 
+        if(btn) btn.style.display = showButton ? 'block' : 'none';
+    }
     modalCallback = callback; 
 }
 
 function closeCustomModal() {
     const modal = document.getElementById('custom-modal');
-    modal.style.display = 'none';
-    const btn = modal.querySelector('button'); 
-    if(btn) btn.style.display = 'block';
-
+    if(modal) modal.style.display = 'none';
     if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
-// [수정] UNIT 버튼 기능 (여기에 마이크 끄기 기능 추가!)
-window.goBackToUnits = function() {
-    // 1. 오디오 정지
-    if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
-    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
-    
-    // 2. [중요] 음성인식기(Script/Vocab)가 켜져 있다면 강제로 끄기
-    if (typeof recognizer !== 'undefined') {
-        try { recognizer.abort(); } catch(e) {} // 인식 중단
-        try { recognizer.stop(); } catch(e) {}  // 마이크 끄기
-    }
-
-    // 3. 화면 이동
-    showBox('unit-selector');
-};
-
-// [수정] 메뉴 화면 이동 (여기에 마이크 끄기 기능 추가!)
-window.showMenu = function() {
-    // 1. 오디오/녹음기 정지
-    if (typeof player !== 'undefined') player.pause();
-    if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
-
-    if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
-    if (typeof recordingTimer !== 'undefined' && recordingTimer) clearInterval(recordingTimer);
-    
-    if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== "inactive") {
-        mediaRecorder.stop();
-    }
-
-    // 2. [중요] 음성인식기(Script/Vocab)가 켜져 있다면 강제로 끄기
-    // 이 코드가 없어서 Vocab에서 나간 뒤에도 인식이 되었던 것입니다.
-    if (typeof recognizer !== 'undefined') {
-        try { recognizer.abort(); } catch(e) {} 
-        try { recognizer.stop(); } catch(e) {}
-    }
-
-    // 3. UI 정리
-    const recUI = document.getElementById('recording-ui');
-    const listenBtn = document.getElementById('as-listen-btn');
-    const submitUI = document.getElementById('submit-ui');
-    
-    if(recUI) recUI.style.display = 'none';
-    if(submitUI) submitUI.style.display = 'none';
-    if(listenBtn) {
-        listenBtn.style.display = 'flex';
-        listenBtn.style.opacity = '1';
-    }
-
-    showBox('menu-box');
-};
-
-// [수정] 학습 상태 저장
-function saveStatus() {
-  let allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
-  
-  if (!allStatus.history) allStatus.history = {};
-  
-  const key = `${currentUnit}_${currentPart}`;
-  
-  allStatus.history[key] = {
-    index: index, cycle: cycle,
-    repeatIndex: repeatIndex, repeatCycle: repeatCycleCount,
-    timer: asSeconds
-  };
-  
-  allStatus.lastActive = { 
-    type: currentType, unit: currentUnit, part: currentPart, name: userName 
-  };
-  
-  localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
-}
-
-// 학습 상태 불러오기
-function loadStatus() {
-  const saved = localStorage.getItem("myEnglishAppStatus");
-  if (saved) return JSON.parse(saved);
-  return null;
-}
-
-// 이어하기 체크
-function checkResumeStatus(partName) {
-    const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
-    const key = `${currentUnit}_${partName}`;
-    const saved = allStatus.history ? allStatus.history[key] : null;
-    
-    if (saved && allStatus.lastActive && allStatus.lastActive.type === currentType) {
-        index = saved.index || 0;
-        cycle = saved.cycle || 1;
-        repeatIndex = saved.repeatIndex || 0;
-        repeatCycleCount = saved.repeatCycle || 0;
-        asSeconds = saved.timer || 0;
-        isRestoring = true; 
-    } else {
-        index = 0; cycle = 1; repeatIndex = 0; repeatCycleCount = 0; asSeconds = 0;
-        isRestoring = false;
-    }
-}
-
-// ======================================================
-// 3. 로그인
-// ======================================================
-// [수정] 로그인 (자동 이동 기능 삭제 -> 무조건 목록 화면)
+// [복구] 로그인 함수
 window.login = function () {
-  const phoneInput = document.getElementById("phone-input");
   const inputVal = phoneInput.value.trim();
   if (inputVal.length < 1) return showCustomModal("번호를 입력해주세요.");
   
   const loginBtn = document.querySelector("#login-box button");
-  loginBtn.disabled = true; loginBtn.innerText = "CHECKING...";
+  loginBtn.disabled = true; 
+  loginBtn.innerText = "CHECKING...";
 
   fetch(GOOGLE_SCRIPT_URL + "?phone=" + inputVal)
     .then(res => res.json())
     .then(data => {
       if (data.result === "success") {
-        currentType = data.type; userName = data.name;
+        currentType = data.type; 
+        userName = data.name;
         
-        // 버튼 먼저 그리기
+        // 아이콘 렌더링 유지
         renderUnitButtons();
         
-        // [수정] 마지막 위치로 자동 이동하는 코드 삭제함!
-        // 무조건 유닛 선택 화면 보여주기
         showBox('unit-selector');
         showCustomModal(`${userName}님, 🔥오늘도 화이팅 입니다!🔥`);
         
       } else {
         showCustomModal("등록되지 않은 번호입니다.");
-        loginBtn.disabled = false; loginBtn.innerText = "Login";
+        loginBtn.disabled = false; 
+        loginBtn.innerText = "Login";
       }
-    }).catch(() => { showCustomModal("접속 오류"); loginBtn.disabled = false; });
+    }).catch((e) => { 
+        console.error(e);
+        showCustomModal("접속 오류"); 
+        loginBtn.disabled = false; 
+        loginBtn.innerText = "Login";
+    });
 };
 
-// [수정] 유닛 버튼 렌더링 (교재별 아이콘 자동 변경 기능 추가)
+// [복구] 유닛 버튼 렌더링 (선생님의 아이콘 설정 그대로 유지!)
 function renderUnitButtons() {
   const container = document.getElementById("unit-buttons");
   container.innerHTML = ""; 
   const currentTitles = bookDatabase[currentType] || {};
   
-  // 1. 교재별 아이콘 데이터베이스 정의
   const iconDatabase = {
-    "hc12": [ // 첫 번째 교재 (Music, Directions...)
-      "music_note",       // Unit 1
-      "explore",          // Unit 2
-      "local_cafe",       // Unit 3
-      "movie",            // Unit 4
-      "restaurant",       // Unit 5
-      "flight_takeoff",   // Unit 6
-      "celebration",      // Unit 7
-      "switch_account"    // Unit 8
-    ],
-    "fc21": [ // 두 번째 교재 (Restaurant, Birthday...)
-      "restaurant_menu",  // Unit 1: Restaurant
-      "cake",             // Unit 2: Birthday
-      "payments",         // Unit 3: Expenses
-      "work",             // Unit 4: Dream job
-      "theaters",         // Unit 5: Movies
-      "eco",              // Unit 6: Eating healthy (건강/자연)
-      "backpack",         // Unit 7: Traveling alone (배낭여행)
-      "school"            // Unit 8: Education
-    ]
+    "hc12": [ "music_note", "explore", "local_cafe", "movie", "restaurant", "flight_takeoff", "celebration", "switch_account" ],
+    "fc21": [ "restaurant_menu", "cake", "payments", "work", "theaters", "eco", "backpack", "school" ]
   };
 
-  // 2. 현재 교재에 맞는 아이콘 리스트 가져오기 (없으면 기본값 hc12)
   const currentIcons = iconDatabase[currentType] || iconDatabase["hc12"];
 
   for (let i = 1; i <= 8; i++) {
     const title = currentTitles[i] || "Locked";
-    // 해당 유닛 번호에 맞는 아이콘 매칭
     const icon = currentIcons[i-1] || "lock"; 
 
     const btn = document.createElement("button");
@@ -409,7 +232,7 @@ function renderUnitButtons() {
       <span class="material-icons-round text-neutral-600 text-3xl">chevron_right</span>
     `;
     
-    btn.onclick = () => { currentUnit = i; showBox('menu-box'); };
+    btn.onclick = () => { currentUnit = i; showMenu(); }; // [수정] showMenu()로 이동해야 함
     container.appendChild(btn);
   }
 }
