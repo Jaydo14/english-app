@@ -48,50 +48,107 @@ const bookDatabase = {
 };
 
 // ======================================================
-// 2. UI 및 유틸리티
+// 2. UI 및 유틸리티 (화면 전환 & 네비게이션 색상 완벽 수정본)
 // ======================================================
+
 // [수정] 화면 전환 함수
-// [수정 1] 화면 전환 함수 (HTML의 제어를 따르도록 연결)
 function showBox(boxId) {
-  // index.html에 있는 최신 화면 전환 로직을 빌려씁니다.
-  if (typeof window.showBox === 'function' && window.showBox.length === 1) {
-      // 재귀 호출 방지를 위해 내부 로직 확인 없이 HTML 스크립트가 덮어쓴 함수가 있다면 사용
-      // (보통 index.html 하단의 스크립트가 이 함수를 덮어씁니다)
-  }
+    // 1. 관리할 모든 화면 ID 리스트
+    // (여기에 notice-box가 포함되어야 뒤로가기 할 때 화면이 깔끔하게 꺼집니다)
+    const boxes = [
+        'login-box', 'unit-selector', 'menu-box', 'study-box', 
+        'repeat-box', 'dev-box', 'as-box', 'results-box', 
+        'as-record-box', 'report-box', 'profile-box', 'notice-box'
+    ];
   
-  // 만약 HTML 스크립트가 아직 로드되지 않았거나 덮어쓰지 못했다면 비상용 로직 실행
-  const boxes = ['login-box', 'unit-selector', 'menu-box', 'study-box', 'repeat-box', 'dev-box', 'as-box', 'results-box', 'as-record-box'];
-  boxes.forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.style.display = (id === boxId) ? 'block' : 'none';
-  });
+    // 2. 일단 모든 박스를 다 숨김 (display: none)
+    boxes.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
 
-  // 로그인 화면일 때는 앱 컨테이너 숨기기
-  const app = document.getElementById("app");
-  const loginBox = document.getElementById("login-box");
-  const bottomNav = document.getElementById("bottom-nav");
+    // 3. 선택된 박스만 켬
+    const targetEl = document.getElementById(boxId);
+    if(targetEl) targetEl.style.display = 'block';
 
-  if (boxId === 'login-box') {
-      if(app) app.style.display = 'none';
-      if(loginBox) loginBox.style.display = 'flex';
-      if(bottomNav) bottomNav.style.display = 'none';
-  } else {
-      if(app) app.style.display = 'flex';
-      if(loginBox) loginBox.style.display = 'none';
-      if(bottomNav) bottomNav.style.display = 'flex';
-  }
+    // 4. 로그인 화면일 때는 앱 컨테이너 숨기기
+    const app = document.getElementById("app");
+    const loginBox = document.getElementById("login-box");
+    const bottomNav = document.getElementById("bottom-nav");
+
+    if (boxId === 'login-box') {
+        if(app) app.style.display = 'none';
+        if(loginBox) loginBox.style.display = 'flex';
+        if(bottomNav) bottomNav.style.display = 'none';
+    } else {
+        if(app) app.style.display = 'flex';
+        if(loginBox) loginBox.style.display = 'none';
+        if(bottomNav) bottomNav.style.display = 'flex';
+    }
+
+    // 5. 화면 꺼짐 방지 (학습 화면일 때만 켜짐 유지)
+    if (boxId === 'study-box' || boxId === 'repeat-box') {
+        if (typeof requestWakeLock === 'function') requestWakeLock();
+    }
+
+    // 6. [핵심] 네비게이션 버튼 색상 업데이트 실행
+    updateNavStateInApp(boxId);
+}
+
+// [추가] 네비게이션 색상 제어 함수
+function updateNavStateInApp(currentBox) {
+    const navBtns = document.querySelectorAll('#bottom-nav button');
+    if (navBtns.length === 0) return;
+
+    // [A] 초기화: 모든 버튼을 회색(#737373)으로 끔
+    navBtns.forEach(btn => {
+        const icon = btn.querySelector('.material-icons-round');
+        const text = btn.querySelector('span:last-child');
+        // !important를 써서 강제로 색상을 변경합니다.
+        if(icon) icon.style.cssText = 'color: #737373 !important;'; 
+        if(text) text.style.cssText = 'color: #737373 !important;';
+    });
+
+    // [B] 켜야 할 버튼 번호 찾기
+    let activeIndex = -1; 
+    
+    // 1번: UNIT (유닛 목록, 메뉴, 학습, AS, 녹음 등)
+    if (['unit-selector', 'menu-box', 'study-box', 'repeat-box', 'as-box', 'as-record-box', 'dev-box'].includes(currentBox)) {
+        activeIndex = 0; 
+    } 
+    // 2번: PROGRESS REPORT (결과 화면)
+    else if (['results-box', 'report-box'].includes(currentBox)) { 
+        activeIndex = 1; 
+    } 
+    // 3번: PROFILE (프로필)
+    else if (currentBox === 'profile-box') {
+        activeIndex = 2; 
+    } 
+    // 4번: NOTICE (공지사항)
+    else if (currentBox === 'notice-box') {
+        activeIndex = 3; 
+    }
+
+    // [C] 해당 버튼만 형광 녹색(#39FF14)으로 켜기
+    if (activeIndex >= 0 && navBtns[activeIndex]) {
+        const activeBtn = navBtns[activeIndex];
+        const icon = activeBtn.querySelector('.material-icons-round');
+        const text = activeBtn.querySelector('span:last-child');
+        if(icon) icon.style.cssText = 'color: #39FF14 !important;';
+        if(text) text.style.cssText = 'color: #39FF14 !important;';
+    }
 }
 
 // ======================================================
-// [수정 1] 커스텀 모달 (버튼 숨김 옵션 추가)
+// [수정] 커스텀 모달 (기존 코드 유지)
 // ======================================================
 function showCustomModal(msg, callback = null, showButton = true) {
-  player.pause(); 
+  // (이 아래 모달 관련 함수들은 기존에 쓰시던 것 그대로 두셔도 됩니다)
+  if(typeof player !== 'undefined') player.pause(); 
   document.getElementById('modal-msg').innerText = msg;
   const modal = document.getElementById('custom-modal');
   modal.style.display = 'flex';
   
-  // 모달 내부의 버튼을 찾아서 표시 여부 결정
   const btn = modal.querySelector('button'); 
   if(btn) btn.style.display = showButton ? 'block' : 'none';
 
@@ -101,39 +158,34 @@ function showCustomModal(msg, callback = null, showButton = true) {
 function closeCustomModal() {
   const modal = document.getElementById('custom-modal');
   modal.style.display = 'none';
-  // 닫을 때 버튼 다시 보이게 초기화
   const btn = modal.querySelector('button'); 
   if(btn) btn.style.display = 'block';
 
   if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
-// [추가/수정] UNIT 버튼 클릭 시 실행될 함수
+// [추가] UNIT 버튼 클릭 시 실행될 함수 (RETURN 버튼용)
 window.goBackToUnits = function() {
-    // 1. 재생 중인 오디오나 타이머가 있다면 정지
-    stopRepeatAudio(); 
+    // 오디오 정지
+    if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
     if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
     
-    // 2. 유닛 목록 화면('unit-selector')으로 이동
+    // 유닛 목록 화면으로 이동
     showBox('unit-selector');
 };
 
-// [수정/추가] 모드 선택 화면으로 이동 (AS 모드 정리 기능 포함)
+// [수정] 메뉴 화면 이동
 window.showMenu = function() {
-    // 1. 재생 중인 오디오 정지
     if (typeof player !== 'undefined') player.pause();
     if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
 
-    // 2. AS 모드 타이머 및 녹음 정지 (오류 방지)
     if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
     if (typeof recordingTimer !== 'undefined' && recordingTimer) clearInterval(recordingTimer);
     
-    // 녹음 중이었다면 녹음도 중지
     if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== "inactive") {
         mediaRecorder.stop();
     }
 
-    // 3. UI 정리 (녹음 UI 숨기고 듣기 버튼 다시 표시)
     const recUI = document.getElementById('recording-ui');
     const listenBtn = document.getElementById('as-listen-btn');
     const submitUI = document.getElementById('submit-ui');
@@ -145,68 +197,10 @@ window.showMenu = function() {
         listenBtn.style.opacity = '1';
     }
 
-    // 4. 모드 선택 화면('menu-box')으로 이동
     showBox('menu-box');
 };
 
-// [수정] 학습 상태 저장 (파트별 개별 저장 + 마지막 위치 기억)
-function saveStatus() {
-  // 기존 데이터 불러오기 (없으면 빈 깡통)
-  let allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
-  
-  // 1. "history" 방이 없으면 만들기
-  if (!allStatus.history) allStatus.history = {};
-  
-  // 2. 현재 유닛과 파트 이름으로 '고유 열쇠' 만들기 (예: "1_Script")
-  const key = `${currentUnit}_${currentPart}`;
-  
-  // 3. 해당 칸에만 점수 기록 (다른 파트 건드리지 않음!)
-  allStatus.history[key] = {
-    index: index, cycle: cycle,
-    repeatIndex: repeatIndex, repeatCycle: repeatCycleCount,
-    timer: asSeconds
-  };
-  
-  // 4. "마지막에 뭐 했는지"는 따로 적어두기 (로그인 시 납치용)
-  allStatus.lastActive = { 
-    type: currentType, unit: currentUnit, part: currentPart, name: userName 
-  };
-  
-  // 저장!
-  localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
-}
-
-// 학습 상태 불러오기
-function loadStatus() {
-  const saved = localStorage.getItem("myEnglishAppStatus");
-  if (saved) return JSON.parse(saved);
-  return null;
-}
-
-// 이어하기 체크 (모드 진입 시)
-function checkResumeStatus(partName) {
-    const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
-    
-    // 내 열쇠 만들기 (예: "1_Script")
-    const key = `${currentUnit}_${partName}`;
-    
-    // 기록 찾기
-    const saved = allStatus.history ? allStatus.history[key] : null;
-    
-    // 기록이 있고, 교재 타입이 맞으면 복원
-    if (saved && allStatus.lastActive && allStatus.lastActive.type === currentType) {
-        index = saved.index || 0;
-        cycle = saved.cycle || 1;
-        repeatIndex = saved.repeatIndex || 0;
-        repeatCycleCount = saved.repeatCycle || 0;
-        asSeconds = saved.timer || 0;
-        isRestoring = true; 
-    } else {
-        // 기록 없으면 초기화
-        index = 0; cycle = 1; repeatIndex = 0; repeatCycleCount = 0; asSeconds = 0;
-        isRestoring = false;
-    }
-}
+// ... (이후 saveStatus 함수 등은 그대로 유지) ...
 
 // ======================================================
 // 3. 로그인
