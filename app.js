@@ -410,25 +410,56 @@ window.startStudy = function () {
 
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
+// ----------------------
+// 8. 재생 및 화면 표시
+// ----------------------
 function playSentence() {
-  const sText = document.getElementById("sentence");
+  // 1. 기존 스타일 초기화
+  sentenceText.classList.remove("success", "fail");
+  sentenceText.style.color = "#fff"; 
+  
+  // 2. 텍스트 화면에 뿌리기
   const item = currentData[index];
-  sText.classList.remove("shake"); 
-  sText.innerText = item.en; sText.style.color = "#fff";
-  document.getElementById("sentence-kor").innerText = item.ko;
+  sentenceText.innerText = item.en;
+  sentenceKor.innerText = item.ko;
+  
+  // 3. 진행바 업데이트
   updateProgress();
-  player.src = BASE_URL + currentType + "u/" + item.audio;
-  player.play();
-  player.onended = () => { sText.style.color = "#ffff00"; try { recognizer.start(); } catch(e) {} };
+
+  // 4. 오디오 재생
+  if (item.audio) {
+    player.src = BASE_URL + currentType + "/" + item.audio;
+    // 아이폰 오디오 정책 호환성 (Promise catch)
+    player.play().catch(e => console.log("재생 오류", e));
+  } else {
+    alert("오디오 파일 정보가 없습니다.");
+  }
+
+  // ⭐ [여기가 핵심 수정됨] 오디오가 끝났을 때의 행동
+  player.onended = () => {
+    sentenceText.style.color = "#ffff00"; // 글씨 노란색 변경
+    
+    // ⏳ 아이폰을 위해 0.3초(300ms) 기다렸다가 마이크 켜기
+    setTimeout(() => {
+      try { 
+        recognizer.start(); // 음성인식 시작!
+      } catch(e) {
+        // 이미 켜져 있거나 에러가 나도 무시하고 넘어감
+      }
+    }, 300);
+  };
 }
 
+// ----------------------
+// 9. 음성 인식
+// ----------------------
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognizer = new SpeechRecognition();
 recognizer.lang = "en-US";
-recognizer.onresult = (event) => {
-  const spoken = event.results[0][0].transcript.toLowerCase();
-  const target = currentData[index].en.toLowerCase().replace(/[.,?!'"]/g, "");
-  const sText = document.getElementById("sentence");
+recognizer.interimResults = false;
+recognizer.maxAlternatives = 1;
+// 🚨 [수정] 아이폰은 false가 더 안정적입니다.
+recognizer.continuous = false;
 
   if (checkSimilarity(spoken, target) >= 0.5) {
     successSound.play(); 
