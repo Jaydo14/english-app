@@ -1293,7 +1293,7 @@ window.showNotice = async function() {
     }
 };
 
-// [최종 디자인 보정] NOTICE 페이지: 상단 포인트 제거 + 중단 박스 크기 복구 + 텍스트 정중앙 정렬
+// [최종 보정] 아이콘 간섭 제거 -> 텍스트 정중앙 정렬 + 사이버펑크 포인트 유지
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1303,7 +1303,7 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 전체 레이아웃: 화면 높이에 맞춰 유연하게 대응
+    // 전체 레이아웃 설정
     container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center";
 
     container.innerHTML = `
@@ -1314,22 +1314,22 @@ function renderNoticePage(noticeText) {
             </div>
         </div>
 
-        <div class="w-full flex-grow min-h-[420px] relative flex flex-col mb-5">
+        <div class="w-full flex-grow min-h-[420px] relative flex flex-col mb-4">
             
             <div class="bg-[#111] rounded-3xl border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-10 overflow-hidden z-10">
                 
+                <div class="absolute top-12 left-1/2 -translate-x-1/2 z-20">
+                    <div class="bg-[#1c1c1c] w-16 h-16 rounded-full border border-[#39FF14]/20 flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20 dropped-shadow-md)]">
+                        <span class="material-icons-round text-[#39FF14] text-4xl">info</span>
+                    </div>
+                </div>
+
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
-                <div class="relative z-20 flex flex-col items-center text-center w-full">
-                    <div class="bg-[#1c1c1c] w-20 h-20 rounded-full border border-[#39FF14]/20 flex items-center justify-center shadow-[0_0_20px_rgba(57,255,20,0.1)] mb-8">
-                        <span class="material-icons-round text-[#39FF14] text-5xl">info</span>
-                    </div>
-                    
-                    <div class="w-full">
-                        <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center">
-                            ${noticeText}
-                        </p>
-                    </div>
+                <div class="relative z-10 w-full mt-10">
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center drop-shadow-lg">
+                        ${noticeText}
+                    </p>
                 </div>
             </div>
 
@@ -1340,7 +1340,7 @@ function renderNoticePage(noticeText) {
         </div>
 
         <div class="w-full shrink-0 pb-10">
-            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-[#1c1c1c] hover:text-[#39FF14] hover:border-[#39FF14]/50 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
+            <button onclick="goBackToUnits()" class="w-full py-5 rounded-xl border border-neutral-800 text-neutral-500 font-bold tracking-[0.2em] text-xs hover:bg-neutral-900 active:scale-95 transition-all uppercase flex items-center justify-center gap-3 bg-[#0a0a0a]">
                 <span class="material-icons-round text-lg">arrow_back</span>
                 RETURN TO UNIT LIST
             </button>
