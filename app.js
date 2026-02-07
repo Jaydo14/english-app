@@ -4,9 +4,10 @@
 const REPO_USER = "jaydo14"; 
 const REPO_NAME = "english-app";
 const BASE_URL = `https://raw.githubusercontent.com/${REPO_USER}/${REPO_NAME}/main/contents/`;
-// ⭐ [필수] Apps Script '새 배포' URL을 여기에 넣어주세요!
+// ⭐ [필수] Apps Script '새 배포' URL 확인!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxVmPohCumHBEl9BBnAhm-ZDp5NO00fENXCeQCVT4ZqKBSaV6sikWvRIUAFY5vs7MlC/exec"; 
 
+// 학습 상태 변수
 let currentTotalCycles = 18; 
 let currentPart = "Script"; 
 let userName = ""; 
@@ -17,22 +18,23 @@ let index = 0;
 let cycle = 1;
 let isRepeating = false;
 
-// 반복듣기 상태
+// 반복듣기 상태 변수
 let repeatIndex = 0; 
 let repeatCycleCount = 0; 
-// [추가] 반복 횟수 저장 변수 (기본값 3)
-let repeatCountVal = 3;
+let repeatCountVal = 3; // 기본값 3회
 
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
+// 오디오 및 시스템 변수
 const player = new Audio();
-let wakeLock = null;
+let wakeLock = null; // ⭐ 중복 선언 방지를 위해 여기서만 선언
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
 let isAlertShown = false; 
 let isRestoring = false; 
 
+// 녹음 관련 변수
 let mediaRecorder; 
 let audioChunks = []; 
 let recordingTimer; 
@@ -47,6 +49,65 @@ const bookDatabase = {
   "fc21": { 1: "Restaurant", 2: "Birthday", 3: "Expenses", 4: "Dream job", 5: "Movies", 6: "Eating healthy", 7: "Traveling alone", 8: "Education" }
 };
 
+// ======================================================
+// 2. 변수 및 요소 가져오기 (DOM Elements)
+// ======================================================
+const loginBox = document.getElementById("login-box");
+const app = document.getElementById("app");
+const unitButtonsContainer = document.getElementById("unit-buttons");
+const phoneInput = document.getElementById("phone-input");
+
+// 🚨 [중요] 학습 화면 요소 (이게 없으면 오류남)
+const sentenceText = document.getElementById("sentence");
+const sentenceKor = document.getElementById("sentence-kor");
+const progressBar = document.getElementById("progress");
+const progressPercent = document.getElementById("progress-percent");
+
+const startBtn = document.getElementById("start-btn");
+const skipBtn = document.getElementById("skip-btn");
+
+// 화면 박스들
+const menuBox = document.getElementById("menu-box");
+const studyBox = document.getElementById("study-box");
+const devBox = document.getElementById("dev-box");
+const repeatBox = document.getElementById("repeat-box");
+
+// ======================================================
+// 3. UI 및 유틸리티 함수
+// ======================================================
+
+// [수정] 화면 전환 함수
+function showBox(boxId) {
+    const boxes = [
+        'login-box', 'unit-selector', 'menu-box', 'study-box', 
+        'repeat-box', 'dev-box', 'as-box', 'results-box', 
+        'as-record-box', 'report-box', 'profile-box', 'notice-box'
+    ];
+  
+    // 모든 박스 숨기기
+    boxes.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = 'none';
+    });
+
+    // 목표 박스 보이기
+    const targetEl = document.getElementById(boxId);
+    if(targetEl) targetEl.style.display = 'block';
+
+    // 로그인 화면일 때와 아닐 때의 앱 컨테이너 처리
+    if (boxId === 'login-box') {
+        if(app) app.style.display = 'none';
+        if(loginBox) loginBox.style.display = 'flex';
+    } else {
+        if(app) app.style.display = 'flex'; // 혹은 block
+        if(loginBox) loginBox.style.display = 'none';
+    }
+
+    // 네비게이션 색상 업데이트 (함수가 있다면)
+    if (typeof updateNavStateInApp === 'function') {
+        updateNavStateInApp(boxId);
+    }
+}
 // ======================================================
 // 2. UI 및 유틸리티 (음성인식 버그 수정 + 저장 기능 포함)
 // ======================================================
@@ -68,7 +129,28 @@ function showBox(boxId) {
     if(targetEl) targetEl.style.display = 'block';
 
     const app = document.getElementById("app");
-    const loginBox = document.getElementById("login-box");
+    // ----------------------
+// 2. 변수 및 요소 가져오기 (수정됨: 누락된 변수 복구)
+// ----------------------
+const loginBox = document.getElementById("login-box");
+const app = document.getElementById("app");
+const unitButtonsContainer = document.getElementById("unit-buttons");
+const phoneInput = document.getElementById("phone-input");
+
+// 🚨 [여기가 누락되어 오류가 났습니다!] 아래 4줄이 꼭 있어야 합니다.
+const sentenceText = document.getElementById("sentence");
+const sentenceKor = document.getElementById("sentence-kor");
+const progressBar = document.getElementById("progress");
+const progressPercent = document.getElementById("progress-percent");
+
+const startBtn = document.getElementById("start-btn");
+const skipBtn = document.getElementById("skip-btn");
+
+// 화면 박스들
+const menuBox = document.getElementById("menu-box");
+const studyBox = document.getElementById("study-box");
+const devBox = document.getElementById("dev-box");
+const repeatBox = document.getElementById("repeat-box");
     const bottomNav = document.getElementById("bottom-nav");
 
     if (boxId === 'login-box') {
