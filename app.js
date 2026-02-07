@@ -48,20 +48,19 @@ const bookDatabase = {
 };
 
 // ======================================================
-// 2. UI 및 유틸리티 (화면 전환 & 네비게이션 색상 완벽 수정본)
+// 2. UI 및 유틸리티 (화면 전환 + 저장 기능 복구 완료)
 // ======================================================
 
-// [수정] 화면 전환 함수
+// [수정] 화면 전환 함수 (NOTICE 화면 겹침 & 네비게이션 색상 해결)
 function showBox(boxId) {
     // 1. 관리할 모든 화면 ID 리스트
-    // (여기에 notice-box가 포함되어야 뒤로가기 할 때 화면이 깔끔하게 꺼집니다)
     const boxes = [
         'login-box', 'unit-selector', 'menu-box', 'study-box', 
         'repeat-box', 'dev-box', 'as-box', 'results-box', 
         'as-record-box', 'report-box', 'profile-box', 'notice-box'
     ];
   
-    // 2. 일단 모든 박스를 다 숨김 (display: none)
+    // 2. 모든 박스를 강제로 숨김
     boxes.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = 'none';
@@ -71,7 +70,7 @@ function showBox(boxId) {
     const targetEl = document.getElementById(boxId);
     if(targetEl) targetEl.style.display = 'block';
 
-    // 4. 로그인 화면일 때는 앱 컨테이너 숨기기
+    // 4. 로그인 화면일 때는 앱 컨테이너/하단바 숨기기
     const app = document.getElementById("app");
     const loginBox = document.getElementById("login-box");
     const bottomNav = document.getElementById("bottom-nav");
@@ -86,12 +85,12 @@ function showBox(boxId) {
         if(bottomNav) bottomNav.style.display = 'flex';
     }
 
-    // 5. 화면 꺼짐 방지 (학습 화면일 때만 켜짐 유지)
+    // 5. 화면 꺼짐 방지 (학습 화면일 때만)
     if (boxId === 'study-box' || boxId === 'repeat-box') {
         if (typeof requestWakeLock === 'function') requestWakeLock();
     }
 
-    // 6. [핵심] 네비게이션 버튼 색상 업데이트 실행
+    // 6. 네비게이션 버튼 색상 업데이트
     updateNavStateInApp(boxId);
 }
 
@@ -100,11 +99,10 @@ function updateNavStateInApp(currentBox) {
     const navBtns = document.querySelectorAll('#bottom-nav button');
     if (navBtns.length === 0) return;
 
-    // [A] 초기화: 모든 버튼을 회색(#737373)으로 끔
+    // [A] 초기화: 모든 버튼 회색(#737373)
     navBtns.forEach(btn => {
         const icon = btn.querySelector('.material-icons-round');
         const text = btn.querySelector('span:last-child');
-        // !important를 써서 강제로 색상을 변경합니다.
         if(icon) icon.style.cssText = 'color: #737373 !important;'; 
         if(text) text.style.cssText = 'color: #737373 !important;';
     });
@@ -112,19 +110,19 @@ function updateNavStateInApp(currentBox) {
     // [B] 켜야 할 버튼 번호 찾기
     let activeIndex = -1; 
     
-    // 1번: UNIT (유닛 목록, 메뉴, 학습, AS, 녹음 등)
+    // 1번: UNIT (학습 관련 모든 화면)
     if (['unit-selector', 'menu-box', 'study-box', 'repeat-box', 'as-box', 'as-record-box', 'dev-box'].includes(currentBox)) {
         activeIndex = 0; 
     } 
-    // 2번: PROGRESS REPORT (결과 화면)
+    // 2번: PROGRESS REPORT
     else if (['results-box', 'report-box'].includes(currentBox)) { 
         activeIndex = 1; 
     } 
-    // 3번: PROFILE (프로필)
+    // 3번: PROFILE
     else if (currentBox === 'profile-box') {
         activeIndex = 2; 
     } 
-    // 4번: NOTICE (공지사항)
+    // 4번: NOTICE
     else if (currentBox === 'notice-box') {
         activeIndex = 3; 
     }
@@ -139,38 +137,32 @@ function updateNavStateInApp(currentBox) {
     }
 }
 
-// ======================================================
-// [수정] 커스텀 모달 (기존 코드 유지)
-// ======================================================
+// [수정] 커스텀 모달
 function showCustomModal(msg, callback = null, showButton = true) {
-  // (이 아래 모달 관련 함수들은 기존에 쓰시던 것 그대로 두셔도 됩니다)
-  if(typeof player !== 'undefined') player.pause(); 
-  document.getElementById('modal-msg').innerText = msg;
-  const modal = document.getElementById('custom-modal');
-  modal.style.display = 'flex';
-  
-  const btn = modal.querySelector('button'); 
-  if(btn) btn.style.display = showButton ? 'block' : 'none';
+    if(typeof player !== 'undefined') player.pause(); 
+    document.getElementById('modal-msg').innerText = msg;
+    const modal = document.getElementById('custom-modal');
+    modal.style.display = 'flex';
+    
+    const btn = modal.querySelector('button'); 
+    if(btn) btn.style.display = showButton ? 'block' : 'none';
 
-  modalCallback = callback; 
+    modalCallback = callback; 
 }
 
 function closeCustomModal() {
-  const modal = document.getElementById('custom-modal');
-  modal.style.display = 'none';
-  const btn = modal.querySelector('button'); 
-  if(btn) btn.style.display = 'block';
+    const modal = document.getElementById('custom-modal');
+    modal.style.display = 'none';
+    const btn = modal.querySelector('button'); 
+    if(btn) btn.style.display = 'block';
 
-  if (modalCallback) { modalCallback(); modalCallback = null; }
+    if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
-// [추가] UNIT 버튼 클릭 시 실행될 함수 (RETURN 버튼용)
+// [추가] UNIT 버튼 기능 (RETURN 버튼용)
 window.goBackToUnits = function() {
-    // 오디오 정지
     if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
     if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
-    
-    // 유닛 목록 화면으로 이동
     showBox('unit-selector');
 };
 
@@ -200,7 +192,56 @@ window.showMenu = function() {
     showBox('menu-box');
 };
 
-// ... (이후 saveStatus 함수 등은 그대로 유지) ...
+// ======================================================
+// [복구됨] 학습 상태 저장 및 로드 (이게 없어서 기능이 안됐던 것!)
+// ======================================================
+
+// [수정] 학습 상태 저장
+function saveStatus() {
+  let allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+  
+  if (!allStatus.history) allStatus.history = {};
+  
+  const key = `${currentUnit}_${currentPart}`;
+  
+  allStatus.history[key] = {
+    index: index, cycle: cycle,
+    repeatIndex: repeatIndex, repeatCycle: repeatCycleCount,
+    timer: asSeconds
+  };
+  
+  allStatus.lastActive = { 
+    type: currentType, unit: currentUnit, part: currentPart, name: userName 
+  };
+  
+  localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
+}
+
+// 학습 상태 불러오기 (기존 유지)
+function loadStatus() {
+  const saved = localStorage.getItem("myEnglishAppStatus");
+  if (saved) return JSON.parse(saved);
+  return null;
+}
+
+// [복구됨] 이어하기 체크 (모드 진입 시 필수 함수)
+function checkResumeStatus(partName) {
+    const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+    const key = `${currentUnit}_${partName}`;
+    const saved = allStatus.history ? allStatus.history[key] : null;
+    
+    if (saved && allStatus.lastActive && allStatus.lastActive.type === currentType) {
+        index = saved.index || 0;
+        cycle = saved.cycle || 1;
+        repeatIndex = saved.repeatIndex || 0;
+        repeatCycleCount = saved.repeatCycle || 0;
+        asSeconds = saved.timer || 0;
+        isRestoring = true; 
+    } else {
+        index = 0; cycle = 1; repeatIndex = 0; repeatCycleCount = 0; asSeconds = 0;
+        isRestoring = false;
+    }
+}
 
 // ======================================================
 // 3. 로그인
