@@ -164,6 +164,59 @@ function closeCustomModal() {
     if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
+// ======================================================
+// [여기부터 복사] 누락된 저장 기능 복구
+// ======================================================
+
+// [복구] 학습 상태 저장 함수
+function saveStatus() {
+  let allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+  
+  if (!allStatus.history) allStatus.history = {};
+  
+  // 현재 위치 Key 생성
+  const key = `${currentUnit}_${currentPart}`;
+  
+  allStatus.history[key] = {
+    index: index, cycle: cycle,
+    repeatIndex: repeatIndex, repeatCycle: repeatCycleCount,
+    timer: asSeconds
+  };
+  
+  allStatus.lastActive = { 
+    type: currentType, unit: currentUnit, part: currentPart, name: userName 
+  };
+  
+  localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
+}
+
+// [복구] 학습 상태 불러오기
+function loadStatus() {
+  const saved = localStorage.getItem("myEnglishAppStatus_V2");
+  if (saved) return JSON.parse(saved);
+  return null;
+}
+
+// [복구] 이어하기 체크 함수
+function checkResumeStatus(partName) {
+    const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
+    const key = `${currentUnit}_${partName}`;
+    const saved = allStatus.history ? allStatus.history[key] : null;
+    
+    if (saved && allStatus.lastActive && allStatus.lastActive.type === currentType) {
+        index = saved.index || 0;
+        cycle = saved.cycle || 1;
+        repeatIndex = saved.repeatIndex || 0;
+        repeatCycleCount = saved.repeatCycle || 0;
+        asSeconds = saved.timer || 0;
+        isRestoring = true; 
+    } else {
+        index = 0; cycle = 1; repeatIndex = 0; repeatCycleCount = 0; asSeconds = 0;
+        isRestoring = false;
+    }
+}
+
+
 // [복구] 로그인 함수
 window.login = function () {
   const inputVal = phoneInput.value.trim();
