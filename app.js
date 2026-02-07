@@ -1293,7 +1293,7 @@ window.showNotice = async function() {
     }
 };
 
-// [최종 디자인 보정] NOTICE 페이지: 박스 크기 확대 + 공백 제거 + 완벽 정중앙 정렬
+// [최종 수정] 텍스트 앞 공백 제거 + 완벽한 중앙 정렬
 function renderNoticePage(noticeText) {
     let container = document.getElementById('notice-box');
     
@@ -1303,10 +1303,13 @@ function renderNoticePage(noticeText) {
         document.body.appendChild(container);
     }
 
-    // 1. 텍스트 앞뒤의 모든 공백(스페이스, 줄바꿈 등)을 제거하여 정렬 오류를 방지합니다.
-    const cleanNotice = (noticeText || "").trim();
+    // 1. 데이터 클리닝: 앞뒤 공백 제거 및 내용 없을 시 기본 문구 설정
+    let cleanNotice = (noticeText || "").trim();
+    if (cleanNotice === "" || cleanNotice === "undefined" || cleanNotice === "null") {
+        cleanNotice = "현재 등록된 공지사항이 없습니다.";
+    }
 
-    // 전체 레이아웃 설정
+    // 레이아웃 설정
     container.className = "fixed top-[120px] bottom-[100px] left-0 right-0 z-30 bg-black overflow-y-auto no-scrollbar px-6 flex flex-col items-center pt-4";
 
     container.innerHTML = `
@@ -1319,14 +1322,12 @@ function renderNoticePage(noticeText) {
 
         <div class="w-full flex-grow min-h-[450px] relative flex flex-col mb-4">
             
-            <div class="bg-[#111] rounded-none border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-12 overflow-hidden z-10">
+            <div class="bg-[#111] rounded-none border border-neutral-800 shadow-lg relative flex-grow flex flex-col items-center justify-center p-6 overflow-hidden z-10">
                 
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(57,255,20,0.02)_0%,_transparent_70%)] pointer-events-none"></div>
 
                 <div class="relative z-20 w-full flex justify-center items-center">
-                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center w-full">
-                        ${cleanNotice}
-                    </p>
+                    <p class="text-white text-xl font-bold leading-relaxed break-keep whitespace-pre-wrap text-center w-full m-0 p-0">${cleanNotice}</p>
                 </div>
             </div>
 
