@@ -48,29 +48,25 @@ const bookDatabase = {
 };
 
 // ======================================================
-// 2. UI 및 유틸리티 (화면 전환 + 저장 기능 복구 완료)
+// 2. UI 및 유틸리티 (음성인식 버그 수정 + 저장 기능 포함)
 // ======================================================
 
-// [수정] 화면 전환 함수 (NOTICE 화면 겹침 & 네비게이션 색상 해결)
+// [수정] 화면 전환 함수
 function showBox(boxId) {
-    // 1. 관리할 모든 화면 ID 리스트
     const boxes = [
         'login-box', 'unit-selector', 'menu-box', 'study-box', 
         'repeat-box', 'dev-box', 'as-box', 'results-box', 
         'as-record-box', 'report-box', 'profile-box', 'notice-box'
     ];
   
-    // 2. 모든 박스를 강제로 숨김
     boxes.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.style.display = 'none';
     });
 
-    // 3. 선택된 박스만 켬
     const targetEl = document.getElementById(boxId);
     if(targetEl) targetEl.style.display = 'block';
 
-    // 4. 로그인 화면일 때는 앱 컨테이너/하단바 숨기기
     const app = document.getElementById("app");
     const loginBox = document.getElementById("login-box");
     const bottomNav = document.getElementById("bottom-nav");
@@ -85,12 +81,10 @@ function showBox(boxId) {
         if(bottomNav) bottomNav.style.display = 'flex';
     }
 
-    // 5. 화면 꺼짐 방지 (학습 화면일 때만)
     if (boxId === 'study-box' || boxId === 'repeat-box') {
         if (typeof requestWakeLock === 'function') requestWakeLock();
     }
 
-    // 6. 네비게이션 버튼 색상 업데이트
     updateNavStateInApp(boxId);
 }
 
@@ -99,7 +93,6 @@ function updateNavStateInApp(currentBox) {
     const navBtns = document.querySelectorAll('#bottom-nav button');
     if (navBtns.length === 0) return;
 
-    // [A] 초기화: 모든 버튼 회색(#737373)
     navBtns.forEach(btn => {
         const icon = btn.querySelector('.material-icons-round');
         const text = btn.querySelector('span:last-child');
@@ -107,27 +100,17 @@ function updateNavStateInApp(currentBox) {
         if(text) text.style.cssText = 'color: #737373 !important;';
     });
 
-    // [B] 켜야 할 버튼 번호 찾기
     let activeIndex = -1; 
-    
-    // 1번: UNIT (학습 관련 모든 화면)
     if (['unit-selector', 'menu-box', 'study-box', 'repeat-box', 'as-box', 'as-record-box', 'dev-box'].includes(currentBox)) {
         activeIndex = 0; 
-    } 
-    // 2번: PROGRESS REPORT
-    else if (['results-box', 'report-box'].includes(currentBox)) { 
+    } else if (['results-box', 'report-box'].includes(currentBox)) { 
         activeIndex = 1; 
-    } 
-    // 3번: PROFILE
-    else if (currentBox === 'profile-box') {
+    } else if (currentBox === 'profile-box') {
         activeIndex = 2; 
-    } 
-    // 4번: NOTICE
-    else if (currentBox === 'notice-box') {
+    } else if (currentBox === 'notice-box') {
         activeIndex = 3; 
     }
 
-    // [C] 해당 버튼만 형광 녹색(#39FF14)으로 켜기
     if (activeIndex >= 0 && navBtns[activeIndex]) {
         const activeBtn = navBtns[activeIndex];
         const icon = activeBtn.querySelector('.material-icons-round');
@@ -159,15 +142,25 @@ function closeCustomModal() {
     if (modalCallback) { modalCallback(); modalCallback = null; }
 }
 
-// [추가] UNIT 버튼 기능 (RETURN 버튼용)
+// [수정] UNIT 버튼 기능 (여기에 마이크 끄기 기능 추가!)
 window.goBackToUnits = function() {
+    // 1. 오디오 정지
     if(typeof stopRepeatAudio === 'function') stopRepeatAudio();
     if (typeof asTimer !== 'undefined' && asTimer) clearInterval(asTimer);
+    
+    // 2. [중요] 음성인식기(Script/Vocab)가 켜져 있다면 강제로 끄기
+    if (typeof recognizer !== 'undefined') {
+        try { recognizer.abort(); } catch(e) {} // 인식 중단
+        try { recognizer.stop(); } catch(e) {}  // 마이크 끄기
+    }
+
+    // 3. 화면 이동
     showBox('unit-selector');
 };
 
-// [수정] 메뉴 화면 이동
+// [수정] 메뉴 화면 이동 (여기에 마이크 끄기 기능 추가!)
 window.showMenu = function() {
+    // 1. 오디오/녹음기 정지
     if (typeof player !== 'undefined') player.pause();
     if (typeof stopRepeatAudio === 'function') stopRepeatAudio();
 
@@ -178,6 +171,14 @@ window.showMenu = function() {
         mediaRecorder.stop();
     }
 
+    // 2. [중요] 음성인식기(Script/Vocab)가 켜져 있다면 강제로 끄기
+    // 이 코드가 없어서 Vocab에서 나간 뒤에도 인식이 되었던 것입니다.
+    if (typeof recognizer !== 'undefined') {
+        try { recognizer.abort(); } catch(e) {} 
+        try { recognizer.stop(); } catch(e) {}
+    }
+
+    // 3. UI 정리
     const recUI = document.getElementById('recording-ui');
     const listenBtn = document.getElementById('as-listen-btn');
     const submitUI = document.getElementById('submit-ui');
@@ -191,10 +192,6 @@ window.showMenu = function() {
 
     showBox('menu-box');
 };
-
-// ======================================================
-// [복구됨] 학습 상태 저장 및 로드 (이게 없어서 기능이 안됐던 것!)
-// ======================================================
 
 // [수정] 학습 상태 저장
 function saveStatus() {
@@ -217,14 +214,14 @@ function saveStatus() {
   localStorage.setItem("myEnglishAppStatus_V2", JSON.stringify(allStatus));
 }
 
-// 학습 상태 불러오기 (기존 유지)
+// 학습 상태 불러오기
 function loadStatus() {
   const saved = localStorage.getItem("myEnglishAppStatus");
   if (saved) return JSON.parse(saved);
   return null;
 }
 
-// [복구됨] 이어하기 체크 (모드 진입 시 필수 함수)
+// 이어하기 체크
 function checkResumeStatus(partName) {
     const allStatus = JSON.parse(localStorage.getItem("myEnglishAppStatus_V2") || "{}");
     const key = `${currentUnit}_${partName}`;
