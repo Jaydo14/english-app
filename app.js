@@ -24,8 +24,19 @@ let repeatCountVal = 3;
 
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
-// 오디오 및 시스템 변수
+// -----------------------------------------------------------
+// [수정됨] 오디오 설정 (중복 제거 & 볼륨 조절 적용)
+// -----------------------------------------------------------
 const player = new Audio();
+player.volume = 1.0; // 문장 소리는 크게 (100%)
+
+const successSound = new Audio(BASE_URL + "common/success.mp3");
+successSound.volume = 0.3; // 딩동 소리는 작게 (30%)
+
+const failSound = new Audio(BASE_URL + "common/fail.mp3");
+failSound.volume = 0.3; // 땡 소리는 작게 (30%)
+// -----------------------------------------------------------
+
 let wakeLock = null; 
 let asTimer = null;
 let asSeconds = 0;
@@ -39,15 +50,6 @@ let audioChunks = [];
 let recordingTimer; 
 let recSeconds = 0; 
 let modalCallback = null; 
-
-const successSound = new Audio(BASE_URL + "common/success.mp3");
-successSound.volume = 0.5; // 소리 크기 30% (너무 작으면 0.5로 조절하세요)
-
-const failSound = new Audio(BASE_URL + "common/fail.mp3");
-failSound.volume = 0.5; // 소리 크기 30%
-
-const player = new Audio();
-player.volume = 1.0; // 문장 오디오는 무조건 최대 크기 (100%)
 
 const bookDatabase = {
   "hc12": { 1: "Music", 2: "Directions", 3: "Favorite beverage", 4: "Movies", 5: "Lunch", 6: "Vacation", 7: "New years", 8: "Switch lives" },
