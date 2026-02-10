@@ -31,10 +31,10 @@ const player = new Audio();
 player.volume = 1.0; // 문장 소리는 크게 (100%)
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
-successSound.volume = 0.5; // 딩동 소리는 작게 (30%)
+successSound.volume = 0.3; // 딩동 소리는 작게 (30%)
 
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
-failSound.volume = 0.5; // 땡 소리는 작게 (30%)
+failSound.volume = 0.3; // 땡 소리는 작게 (30%)
 // -----------------------------------------------------------
 
 let wakeLock = null; 
