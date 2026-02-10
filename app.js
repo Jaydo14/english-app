@@ -427,9 +427,10 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (아이폰 패치 적용)
+// 8. 재생 및 화면 표시 (아이폰 속도/안전성 최적화)
 // ----------------------
 function playSentence() {
+  // 1. 화면 초기화
   sentenceText.classList.remove("success", "fail");
   sentenceText.style.color = "#fff"; 
   
@@ -439,6 +440,13 @@ function playSentence() {
   
   updateProgress();
 
+  // 2. [중요] 오디오 시작 전에, 혹시 켜져 있을 마이크를 미리 꺼버립니다.
+  // (오디오랑 마이크가 겹치지 않게 미리 청소)
+  if (typeof recognizer !== 'undefined') {
+      try { recognizer.abort(); } catch(e) {}
+  }
+
+  // 3. 오디오 재생
   if (item.audio) {
     player.src = BASE_URL + currentType + "u/" + item.audio;
     player.play().catch(e => console.log("재생 오류", e));
@@ -446,26 +454,44 @@ function playSentence() {
     alert("오디오 파일 정보가 없습니다.");
   }
 
-  // ⭐ [핵심 수정] 오디오가 끝난 후 아이폰 대응 로직
+  // 4. 오디오가 끝났을 때 (스마트 재시도 로직)
   player.onended = () => {
-    sentenceText.style.color = "#ffff00"; 
+    sentenceText.style.color = "#ffff00"; // 글씨 노란색 (준비 완료 표시)
     
-    // 1. 혹시 켜져 있을 마이크를 확실히 끕니다.
-    if (typeof recognizer !== 'undefined') {
-        try { recognizer.abort(); } catch(e) {}
-    }
+    // 오디오 객체 완전 정지 (아이폰 충돌 방지)
+    player.pause();
+    player.currentTime = 0;
 
-    // 2. 아이폰은 0.8초 정도 넉넉히 기다려야 마이크 권한이 돌아옵니다.
+    // 🚀 [1차 시도] 0.15초 뒤에 빠르게 시도!
     setTimeout(() => {
-      try { 
-        if (typeof recognizer !== 'undefined') {
-            recognizer.start(); 
-        }
-      } catch(e) {
-        console.log("마이크 시작 오류 (재시도 필요)", e);
-      }
-    }, 300); // 300 -> 800으로 변경 (안전하게)
+        startRecognitionWithRetry();
+    }, 150);
   };
+}
+
+// [새로 추가] 마이크 켜기 재시도 함수
+function startRecognitionWithRetry(attempt = 1) {
+    try {
+        if (typeof recognizer !== 'undefined') {
+            recognizer.start();
+            console.log(`마이크 시작 성공 (시도 ${attempt}회)`);
+        }
+    } catch (e) {
+        console.warn(`마이크 시작 실패 (시도 ${attempt}회):`, e);
+        
+        // 실패했다면? 2번째 기회를 줍니다.
+        if (attempt === 1) {
+            console.log("0.3초 뒤 재시도합니다...");
+            setTimeout(() => {
+                startRecognitionWithRetry(2); // 2번째 시도
+            }, 300);
+        } else {
+            // 2번 다 실패하면 사용자에게 알림 (버튼 눌러서 하라고 유도)
+            sentenceText.innerText = "🎤 터치해서 다시 말해주세요";
+            sentenceText.style.color = "#aaa";
+            sentenceText.onclick = () => { playSentence(); }; // 텍스트 누르면 다시 재생
+        }
+    }
 }
 
 // ----------------------
