@@ -436,10 +436,9 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (아이폰 통화모드 탈출 코드 적용)
+// 8. 재생 및 화면 표시 (최종: 자동재생 보장 + 볼륨 해결)
 // ----------------------
 function playSentence() {
-  // 1. 화면 초기화
   sentenceText.classList.remove("success", "fail");
   sentenceText.style.color = "#fff"; 
   
@@ -449,51 +448,42 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. [매우 중요] 마이크가 켜져 있으면 "통화 모드"로 인식되므로 강제로 끕니다.
+  // 1. 마이크 확실히 끄기
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 3. 오디오 재생 로직 (아이폰 전용 강제 리셋)
+  // 2. 오디오 재생 (새로 만들지 않고 기존 것 재활용)
   if (item.audio) {
-    // (A) 기존 플레이어가 있다면 완전히 삭제 (메모리 해제)
-    if (player) {
-        player.pause();
-        player.src = ""; // 소스 비우기
-        player.load();   // 로딩 상태 초기화
-        player = null;   // 변수 삭제
-    }
-
-    // (B) 플레이어 새로 생성
-    player = new Audio(BASE_URL + currentType + "u/" + item.audio);
-    player.volume = 1.0; 
-
-    // (C) 재생 시도
+    player.pause(); // 일단 멈춤
+    player.src = BASE_URL + currentType + "u/" + item.audio;
+    player.load();  // ⭐ 중요: 아이폰에게 소스 변경 알림
+    
+    // 재생 시도
     var playPromise = player.play();
     if (playPromise !== undefined) {
         playPromise.catch(error => {
-            console.log("재생 오류(자동재생 막힘 등):", error);
+            console.log("자동 재생 막힘 (터치 필요):", error);
+            // 만약 막히면 텍스트를 눌러서 듣게 유도
+            sentenceText.innerText = "🔊 터치하여 듣기";
+            sentenceText.onclick = () => { player.play(); };
         });
     }
-
   } else {
-    alert("오디오 파일 정보가 없습니다.");
+    alert("오디오 파일 없음");
   }
 
-  // 4. 오디오가 끝난 후 다음 동작 (스마트 재시도)
-  if (player) {
-      player.onended = () => {
-        sentenceText.style.color = "#ffff00"; 
-        
-        // 끝나면 바로 정지
-        player.pause();
-        
-        // 0.15초 뒤 마이크 켜기
-        setTimeout(() => {
-            startRecognitionWithRetry();
-        }, 150);
-      };
-  }
+  // 3. 끝나면 마이크 켜기
+  player.onended = () => {
+    sentenceText.style.color = "#ffff00"; 
+    
+    // 0.3초 뒤에 마이크 켜기 (너무 빠르면 인식 오류남)
+    setTimeout(() => {
+        try {
+            if (typeof recognizer !== 'undefined') recognizer.start();
+        } catch(e) {}
+    }, 300);
+  };
 }
 
 // [새로 추가] 마이크 켜기 재시도 함수
