@@ -534,29 +534,34 @@ recognizer.continuous = false;
 
 // 👇 [이 부분이 잘려 있었습니다. 복구 완료!]
 recognizer.onresult = (event) => {
+  // ⭐ [핵심] 결과가 나오자마자 마이크부터 꺼버립니다! (볼륨 확보용)
+  try { recognizer.abort(); } catch(e) {}
+
   const spoken = event.results[0][0].transcript;
   const item = currentData[index];
   const target = item.en;
-  const sText = document.getElementById("sentence"); // 텍스트 요소 가져오기
+  
+  // 텍스트 요소가 없으면 가져옴
+  const sText = document.getElementById("sentence") || document.querySelector("#study-box #sentence");
 
   if (checkSimilarity(spoken, target) >= 0.5) {
-    successSound.play(); 
+    successSound.play().catch(()=>{}); // 효과음 재생
+    
     const praise = praiseList[Math.floor(Math.random() * praiseList.length)];
     sText.innerText = praise; 
     sText.style.color = "#39ff14";
-    
-    // 정답 시 흔들림 효과 제거
     sText.classList.remove("shake");
     
+    // 0.7초 뒤에 다음 문장으로 (마이크 꺼질 시간 벌어줌)
     setTimeout(nextStep, 700);
+
   } else {
-    failSound.play(); 
+    failSound.play().catch(()=>{});
+    
     sText.innerText = "Try again"; 
     sText.style.color = "#ff4b4b";
-    
-    // 오답 시 흔들림 효과
     sText.classList.remove("shake"); 
-    void sText.offsetWidth; // 리플로우 강제 (애니메이션 재시작용)
+    void sText.offsetWidth; 
     sText.classList.add("shake");
     
     setTimeout(playSentence, 800);
