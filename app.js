@@ -27,7 +27,7 @@ const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantast
 // -----------------------------------------------------------
 // [최종 수정] 오디오 변수 (아이폰 볼륨 문제 해결용)
 // -----------------------------------------------------------
-let player = new Audio(); // const가 아닌 let으로 선언 (교체 가능하도록)
+const player = new Audio(); // ✅ const로 선언하고 딱 한 번만 만듭니다!
 player.volume = 1.0; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -435,7 +435,7 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (최종: 찌꺼기 코드 제거됨)
+// 8. 재생 및 화면 표시 (자동재생 보장 + 소리 크기 해결)
 // ----------------------
 function playSentence() {
   // 1. 화면 초기화
@@ -448,51 +448,45 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. 마이크 강제 종료 (아이폰 볼륨 뺏김 방지)
+  // 2. [매우 중요] 마이크 강제 종료 (소리 작아짐 방지)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 3. 오디오 재생 (아이폰 강제 리셋 로직)
+  // 3. 오디오 재생 (기존 기계 재활용 + 시간차 공격)
   if (item.audio) {
-    // (A) 기존 플레이어가 있다면 멈춤
-    if (player) {
-        player.pause();
-        player.currentTime = 0;
-    }
-
-    // (B) 0.1초 텀을 줘서 아이폰이 "통화 모드"에서 빠져나오게 함
+    // (A) 일단 멈춤
+    player.pause();
+    
+    // (B) 0.3초 딜레이! (아이폰이 "통화 모드"에서 빠져나올 시간을 줍니다)
     setTimeout(() => {
-        // (C) 플레이어 새로 생성 (새 기계로 교체 -> 볼륨 100% 확보)
-        player = new Audio(BASE_URL + currentType + "u/" + item.audio);
-        player.volume = 1.0;
+        // 소스 교체 (새 기계 만들지 않음!)
+        player.src = BASE_URL + currentType + "u/" + item.audio;
+        player.load(); // 아이폰에게 "새 노래야!" 하고 알림
 
-        // (D) 재생 시도
+        // 재생 시도
         var playPromise = player.play();
         if (playPromise !== undefined) {
             playPromise.catch(error => {
                 console.log("자동재생 막힘:", error);
-                // 막히면 텍스트 눌러서 듣게 유도
                 sentenceText.innerText = "🔊 터치하여 듣기";
                 sentenceText.onclick = () => { player.play(); };
             });
         }
+    }, 300); // 🚨 0.1초는 너무 빨라서 소리가 작아집니다. 0.3초가 안전합니다.
 
-        // (E) 오디오가 끝났을 때 설정 (⭐ 보내주신 코드가 여기로 들어왔습니다!)
-        player.onended = () => {
-            sentenceText.style.color = "#ffff00"; 
-            
-            // 끝나면 오디오 정지
-            player.pause();
-            
-            // 0.2초 뒤 마이크 켜기
-            setTimeout(() => {
-                try {
-                    if (typeof recognizer !== 'undefined') recognizer.start();
-                } catch(e) {}
-            }, 200);
-        };
-    }, 100); // 0.1초 딜레이
+    // (C) 오디오가 끝났을 때
+    player.onended = () => {
+        sentenceText.style.color = "#ffff00"; 
+        player.pause();
+
+        // 0.2초 뒤 마이크 켜기
+        setTimeout(() => {
+            try {
+                if (typeof recognizer !== 'undefined') recognizer.start();
+            } catch(e) {}
+        }, 200);
+    };
 
   } else {
     alert("오디오 파일 없음");
