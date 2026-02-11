@@ -435,7 +435,7 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (최종 수정: 중복 제거 및 아이폰 최적화)
+// 8. 재생 및 화면 표시 (최종: 찌꺼기 코드 제거됨)
 // ----------------------
 function playSentence() {
   // 1. 화면 초기화
@@ -448,14 +448,14 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. [핵심] 마이크가 켜져 있다면 즉시 끄기 (아이폰 볼륨 뺏김 방지)
+  // 2. 마이크 강제 종료 (아이폰 볼륨 뺏김 방지)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
   // 3. 오디오 재생 (아이폰 강제 리셋 로직)
   if (item.audio) {
-    // (A) 기존 플레이어가 재생 중이면 멈춤 (삭제하지 않음)
+    // (A) 기존 플레이어가 있다면 멈춤
     if (player) {
         player.pause();
         player.currentTime = 0;
@@ -478,15 +478,14 @@ function playSentence() {
             });
         }
 
-        // (E) 오디오가 끝났을 때 설정
+        // (E) 오디오가 끝났을 때 설정 (⭐ 보내주신 코드가 여기로 들어왔습니다!)
         player.onended = () => {
             sentenceText.style.color = "#ffff00"; 
             
             // 끝나면 오디오 정지
             player.pause();
-            // 🚨 player = null; <-- 이거 삭제함 (로그인 에러 주범)
-
-            // 0.2초 뒤 마이크 켜기 (너무 빠르면 인식 안됨)
+            
+            // 0.2초 뒤 마이크 켜기
             setTimeout(() => {
                 try {
                     if (typeof recognizer !== 'undefined') recognizer.start();
@@ -498,19 +497,6 @@ function playSentence() {
   } else {
     alert("오디오 파일 없음");
   }
-}
-
-  // 3. 끝나면 마이크 켜기
-  player.onended = () => {
-    sentenceText.style.color = "#ffff00"; 
-    
-    // 0.3초 뒤에 마이크 켜기 (너무 빠르면 인식 오류남)
-    setTimeout(() => {
-        try {
-            if (typeof recognizer !== 'undefined') recognizer.start();
-        } catch(e) {}
-    }, 300);
-  };
 }
 
 // [새로 추가] 마이크 켜기 재시도 함수
