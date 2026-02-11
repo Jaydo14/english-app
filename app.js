@@ -434,9 +434,15 @@ window.startStudy = function () {
 
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
-// ----------------------
-// 8. 재생 및 화면 표시 (자동재생 보장 + 소리 크기 해결)
-// ----------------------
+// ======================================================
+// 8. 재생 및 화면 표시 (Web Audio API 적용: 아이폰 스피커 강제 전환)
+// ======================================================
+
+// [1] 오디오 컨텍스트 엔진 생성 (전역 변수)
+// 이 변수는 앱이 켜져있는 동안 계속 살아서 스피커를 관리합니다.
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = new AudioContext();
+
 function playSentence() {
   // 1. 화면 초기화
   sentenceText.classList.remove("success", "fail");
@@ -448,38 +454,64 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. [매우 중요] 마이크 강제 종료 (소리 작아짐 방지)
+  // 2. 마이크 강제 종료 (필수: 볼륨 뺏김 방지)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 3. 오디오 재생 (기존 기계 재활용 + 시간차 공격)
+  // 3. 오디오 재생 (Web Audio API 사용)
   if (item.audio) {
-    // (A) 일단 멈춤
-    player.pause();
-    
-    // (B) 0.3초 딜레이! (아이폰이 "통화 모드"에서 빠져나올 시간을 줍니다)
-    setTimeout(() => {
-        // 소스 교체 (새 기계 만들지 않음!)
-        player.src = BASE_URL + currentType + "u/" + item.audio;
-        player.load(); // 아이폰에게 "새 노래야!" 하고 알림
+    const audioUrl = BASE_URL + currentType + "u/" + item.audio;
+    // 일반 player.play() 대신, 스피커를 강제로 여는 함수를 사용합니다.
+    playAudioWithContext(audioUrl);
+  } else {
+    alert("오디오 파일 없음");
+  }
+}
 
-        // 재생 시도
-        var playPromise = player.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("자동재생 막힘:", error);
-                sentenceText.innerText = "🔊 터치하여 듣기";
-                sentenceText.onclick = () => { player.play(); };
-            });
-        }
-    }, 300); // 🚨 0.1초는 너무 빨라서 소리가 작아집니다. 0.3초가 안전합니다.
+// [핵심 기술] AudioContext로 스피커 모드 강제 전환 함수
+function playAudioWithContext(url) {
+    // 1. 기존 플레이어 정지 및 초기화 (중복 재생 방지)
+    if (player) {
+        player.pause();
+        player.src = "";
+        player = null; // 메모리 해제
+    }
 
-    // (C) 오디오가 끝났을 때
+    // 2. 새 오디오 객체 생성
+    // (매번 새로 만들어야 아이폰이 '새로운 음악'으로 인식합니다)
+    player = new Audio();
+    player.crossOrigin = "anonymous"; // 서버 보안 통과용
+    player.src = url;
+    player.volume = 1.0;
+
+    // 3. 오디오 엔진(AudioContext)과 연결
+    // 일반적인 <audio> 태그 재생이 아니라, '오디오 믹서'를 거치게 만듭니다.
+    // 이렇게 하면 아이폰이 통화 모드가 아닌 '미디어 모드'로 인식할 확률이 매우 높아집니다.
+    try {
+        const source = audioCtx.createMediaElementSource(player);
+        source.connect(audioCtx.destination);
+    } catch (e) {
+        console.log("오디오 소스 연결 중 오류 (무시 가능):", e);
+    }
+
+    // 4. 재생 시도
+    player.play().then(() => {
+        console.log("Web Audio API로 재생 성공");
+    }).catch(error => {
+        console.log("Web Audio 재생 막힘:", error);
+        // 자동 재생이 막히면 버튼을 보여줘서 터치 유도
+        sentenceText.innerText = "🔊 터치하여 듣기";
+        sentenceText.onclick = () => { 
+            audioCtx.resume(); // 엔진 깨우기
+            player.play(); 
+        };
+    });
+
+    // 5. 종료 후 처리
     player.onended = () => {
         sentenceText.style.color = "#ffff00"; 
-        player.pause();
-
+        
         // 0.2초 뒤 마이크 켜기
         setTimeout(() => {
             try {
@@ -487,35 +519,6 @@ function playSentence() {
             } catch(e) {}
         }, 200);
     };
-
-  } else {
-    alert("오디오 파일 없음");
-  }
-}
-
-// [새로 추가] 마이크 켜기 재시도 함수
-function startRecognitionWithRetry(attempt = 1) {
-    try {
-        if (typeof recognizer !== 'undefined') {
-            recognizer.start();
-            console.log(`마이크 시작 성공 (시도 ${attempt}회)`);
-        }
-    } catch (e) {
-        console.warn(`마이크 시작 실패 (시도 ${attempt}회):`, e);
-        
-        // 실패했다면? 2번째 기회를 줍니다.
-        if (attempt === 1) {
-            console.log("0.3초 뒤 재시도합니다...");
-            setTimeout(() => {
-                startRecognitionWithRetry(2); // 2번째 시도
-            }, 300);
-        } else {
-            // 2번 다 실패하면 사용자에게 알림 (버튼 눌러서 하라고 유도)
-            sentenceText.innerText = "🎤 터치해서 다시 말해주세요";
-            sentenceText.style.color = "#aaa";
-            sentenceText.onclick = () => { playSentence(); }; // 텍스트 누르면 다시 재생
-        }
-    }
 }
 
 // ----------------------
@@ -1513,21 +1516,22 @@ window.goBackToUnits = function() {
     showBox('unit-selector');
 };
 
-// [아이폰 전용] 오디오 잠금 해제 함수 (수정됨: 볼륨 유지)
+// [아이폰 전용] 오디오 잠금 해제 및 엔진 시동 함수
 function unlockIOSAudio() {
-    const audios = [successSound, failSound, player];
+    // 1. Web Audio API 엔진 시동 (가장 중요!)
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    // 2. 기존 오디오 태그들 잠금 해제
+    const audios = [successSound, failSound];
     audios.forEach(audio => {
-        if (!audio) return; // audio가 없으면 패스
-        
-        // 원래 볼륨 기억하기
+        if (!audio) return;
         const originalVolume = audio.volume;
-        
-        audio.volume = 0;      // 소리 안 나게
-        audio.play().catch(() => {}); // 강제 재생 시도
-        audio.pause();         // 바로 정지
-        audio.currentTime = 0; // 되감기
-        
-        // 원래 설정했던 볼륨(0.3 또는 1.0)으로 복구
+        audio.volume = 0;      
+        audio.play().catch(() => {}); 
+        audio.pause();         
+        audio.currentTime = 0; 
         audio.volume = originalVolume; 
     });
 }
