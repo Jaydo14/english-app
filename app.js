@@ -27,7 +27,7 @@ const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantast
 // -----------------------------------------------------------
 // [수정됨] 오디오 설정 (중복 제거 & 볼륨 조절 적용)
 // -----------------------------------------------------------
-let player = new Audio(); // const -> let으로 변경 (중요!)
+let player = null; // 처음에는 아무것도 없는 상태로 시작
 player.volume = 1.0; // 문장 소리는 크게 (100%)
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -435,7 +435,7 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (아이폰 볼륨 저하 완벽 해결)
+// 8. 재생 및 화면 표시 (아이폰 통화모드 탈출 코드 적용)
 // ----------------------
 function playSentence() {
   // 1. 화면 초기화
@@ -448,43 +448,51 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. [중요] 마이크가 켜져 있다면 강제로 끕니다. (볼륨 간섭 방지)
+  // 2. [매우 중요] 마이크가 켜져 있으면 "통화 모드"로 인식되므로 강제로 끕니다.
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 3. 오디오 재생 로직 (아이폰 볼륨 해결 핵심!)
+  // 3. 오디오 재생 로직 (아이폰 전용 강제 리셋)
   if (item.audio) {
-    // (A) 기존 오디오가 재생 중이라면 멈춥니다.
+    // (A) 기존 플레이어가 있다면 완전히 삭제 (메모리 해제)
     if (player) {
         player.pause();
-        player.currentTime = 0;
+        player.src = ""; // 소스 비우기
+        player.load();   // 로딩 상태 초기화
+        player = null;   // 변수 삭제
     }
 
-    // (B) ⭐ 플레이어를 아예 새로 만듭니다! (이게 비법입니다)
-    // 이렇게 해야 아이폰이 "통화 모드"에서 "미디어 모드"로 돌아옵니다.
+    // (B) 플레이어 새로 생성
     player = new Audio(BASE_URL + currentType + "u/" + item.audio);
-    player.volume = 1.0; // 볼륨 꽉 채우기
+    player.volume = 1.0; 
 
-    // (C) 재생
-    player.play().catch(e => console.log("재생 오류", e));
+    // (C) 재생 시도
+    var playPromise = player.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(error => {
+            console.log("재생 오류(자동재생 막힘 등):", error);
+        });
+    }
+
   } else {
     alert("오디오 파일 정보가 없습니다.");
   }
 
-  // 4. 오디오가 끝난 후 다음 동작 (스마트 재시도 유지)
-  player.onended = () => {
-    sentenceText.style.color = "#ffff00"; 
-    
-    // 오디오 정리
-    player.pause();
-    player.currentTime = 0;
-
-    // 0.15초 뒤 마이크 켜기 시도
-    setTimeout(() => {
-        startRecognitionWithRetry();
-    }, 150);
-  };
+  // 4. 오디오가 끝난 후 다음 동작 (스마트 재시도)
+  if (player) {
+      player.onended = () => {
+        sentenceText.style.color = "#ffff00"; 
+        
+        // 끝나면 바로 정지
+        player.pause();
+        
+        // 0.15초 뒤 마이크 켜기
+        setTimeout(() => {
+            startRecognitionWithRetry();
+        }, 150);
+      };
+  }
 }
 
 // [새로 추가] 마이크 켜기 재시도 함수
