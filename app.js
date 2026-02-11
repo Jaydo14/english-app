@@ -25,17 +25,16 @@ let repeatCountVal = 3;
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
 // -----------------------------------------------------------
-// [수정됨] 오디오 설정 (로그인 오류 해결 + 아이폰 볼륨 해결)
+// [최종 수정] 오디오 변수 (아이폰 볼륨 문제 해결용)
 // -----------------------------------------------------------
-// 🚨 중요: null이 아니라 new Audio()로 시작해야 로그인이 됩니다!
-let player = new Audio(); 
+let player = new Audio(); // const가 아닌 let으로 선언 (교체 가능하도록)
 player.volume = 1.0; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
-successSound.volume = 0.3; // 효과음 작게
+successSound.volume = 0.3; 
 
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
-failSound.volume = 0.3; // 효과음 작게
+failSound.volume = 0.3; 
 // -----------------------------------------------------------
 
 let wakeLock = null; 
@@ -436,9 +435,10 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (최종: 자동재생 보장 + 볼륨 해결)
+// 8. 재생 및 화면 표시 (아이폰 볼륨/반응속도 최종 해결)
 // ----------------------
 function playSentence() {
+  // 1. 화면 초기화
   sentenceText.classList.remove("success", "fail");
   sentenceText.style.color = "#fff"; 
   
@@ -448,31 +448,57 @@ function playSentence() {
   
   updateProgress();
 
-  // 1. 마이크 확실히 끄기
+  // 2. [핵심] 마이크가 켜져 있다면 즉시 끄기 (볼륨 뺏김 방지)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 2. 오디오 재생 (새로 만들지 않고 기존 것 재활용)
+  // 3. 오디오 재생 (아이폰 강제 리셋 로직)
   if (item.audio) {
-    player.pause(); // 일단 멈춤
-    player.src = BASE_URL + currentType + "u/" + item.audio;
-    player.load();  // ⭐ 중요: 아이폰에게 소스 변경 알림
-    
-    // 재생 시도
-    var playPromise = player.play();
-    if (playPromise !== undefined) {
-        playPromise.catch(error => {
-            console.log("자동 재생 막힘 (터치 필요):", error);
-            // 만약 막히면 텍스트를 눌러서 듣게 유도
-            sentenceText.innerText = "🔊 터치하여 듣기";
-            sentenceText.onclick = () => { player.play(); };
-        });
+    // (A) 기존 플레이어가 재생 중이면 멈추고 삭제
+    if (player) {
+        player.pause();
+        player.currentTime = 0;
     }
+
+    // (B) 아주 잠깐(0.1초) 텀을 줘서 아이폰이 "통화 끝남"을 인식하게 함
+    setTimeout(() => {
+        // (C) 플레이어 새로 생성 (이때 볼륨이 100%로 돌아옴)
+        player = new Audio(BASE_URL + currentType + "u/" + item.audio);
+        player.volume = 1.0;
+
+        // (D) 재생 시도
+        var playPromise = player.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("자동재생 막힘:", error);
+                // 막히면 텍스트 눌러서 듣게 유도
+                sentenceText.innerText = "🔊 터치하여 듣기";
+                sentenceText.onclick = () => { player.play(); };
+            });
+        }
+
+        // (E) 오디오가 끝났을 때 설정
+        player.onended = () => {
+            sentenceText.style.color = "#ffff00"; 
+            
+            // 끝나자마자 오디오 정지
+            player.pause();
+            player = null; // 메모리 해제
+
+            // 0.2초 뒤 마이크 켜기 (너무 빠르면 인식 안됨)
+            setTimeout(() => {
+                try {
+                    if (typeof recognizer !== 'undefined') recognizer.start();
+                } catch(e) {}
+            }, 200);
+        };
+    }, 100); // 0.1초 딜레이
+
   } else {
     alert("오디오 파일 없음");
   }
-
+}
   // 3. 끝나면 마이크 켜기
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; 
