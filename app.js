@@ -25,9 +25,10 @@ let repeatCountVal = 3;
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
 // -----------------------------------------------------------
-// [최종 수정] 오디오 변수 (아이폰 볼륨 문제 해결용)
+// [수정됨] 오디오 변수 (Web Audio API 호환용)
 // -----------------------------------------------------------
-const player = new Audio(); // ✅ const로 선언하고 딱 한 번만 만듭니다!
+// 🚨 중요: const가 아니라 let이어야 교체가 가능합니다!
+let player = new Audio(); 
 player.volume = 1.0; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
@@ -37,7 +38,10 @@ const failSound = new Audio(BASE_URL + "common/fail.mp3");
 failSound.volume = 0.3; 
 // -----------------------------------------------------------
 
+// 🚨 주의: wakeLock이 여기서 한 번만 선언되어야 합니다.
+// (혹시 아래쪽에 또 let wakeLock이 있다면 지워주세요!)
 let wakeLock = null; 
+
 let asTimer = null;
 let asSeconds = 0;
 let asData = null;
