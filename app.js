@@ -435,7 +435,7 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ----------------------
-// 8. 재생 및 화면 표시 (아이폰 볼륨/반응속도 최종 해결)
+// 8. 재생 및 화면 표시 (최종 수정: 중복 제거 및 아이폰 최적화)
 // ----------------------
 function playSentence() {
   // 1. 화면 초기화
@@ -448,22 +448,22 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. [핵심] 마이크가 켜져 있다면 즉시 끄기 (볼륨 뺏김 방지)
+  // 2. [핵심] 마이크가 켜져 있다면 즉시 끄기 (아이폰 볼륨 뺏김 방지)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
   // 3. 오디오 재생 (아이폰 강제 리셋 로직)
   if (item.audio) {
-    // (A) 기존 플레이어가 재생 중이면 멈추고 삭제
+    // (A) 기존 플레이어가 재생 중이면 멈춤 (삭제하지 않음)
     if (player) {
         player.pause();
         player.currentTime = 0;
     }
 
-    // (B) 아주 잠깐(0.1초) 텀을 줘서 아이폰이 "통화 끝남"을 인식하게 함
+    // (B) 0.1초 텀을 줘서 아이폰이 "통화 모드"에서 빠져나오게 함
     setTimeout(() => {
-        // (C) 플레이어 새로 생성 (이때 볼륨이 100%로 돌아옴)
+        // (C) 플레이어 새로 생성 (새 기계로 교체 -> 볼륨 100% 확보)
         player = new Audio(BASE_URL + currentType + "u/" + item.audio);
         player.volume = 1.0;
 
@@ -482,9 +482,9 @@ function playSentence() {
         player.onended = () => {
             sentenceText.style.color = "#ffff00"; 
             
-            // 끝나자마자 오디오 정지
+            // 끝나면 오디오 정지
             player.pause();
-            player = null; // 메모리 해제
+            // 🚨 player = null; <-- 이거 삭제함 (로그인 에러 주범)
 
             // 0.2초 뒤 마이크 켜기 (너무 빠르면 인식 안됨)
             setTimeout(() => {
@@ -499,6 +499,7 @@ function playSentence() {
     alert("오디오 파일 없음");
   }
 }
+
   // 3. 끝나면 마이크 켜기
   player.onended = () => {
     sentenceText.style.color = "#ffff00"; 
@@ -1532,14 +1533,21 @@ window.goBackToUnits = function() {
     showBox('unit-selector');
 };
 
-// [아이폰 전용] 오디오 잠금 해제 함수
+// [아이폰 전용] 오디오 잠금 해제 함수 (수정됨: 볼륨 유지)
 function unlockIOSAudio() {
     const audios = [successSound, failSound, player];
     audios.forEach(audio => {
+        if (!audio) return; // audio가 없으면 패스
+        
+        // 원래 볼륨 기억하기
+        const originalVolume = audio.volume;
+        
         audio.volume = 0;      // 소리 안 나게
         audio.play().catch(() => {}); // 강제 재생 시도
         audio.pause();         // 바로 정지
         audio.currentTime = 0; // 되감기
-        audio.volume = 1;      // 소리 다시 켜기
+        
+        // 원래 설정했던 볼륨(0.3 또는 1.0)으로 복구
+        audio.volume = originalVolume; 
     });
 }
