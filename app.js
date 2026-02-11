@@ -25,16 +25,17 @@ let repeatCountVal = 3;
 const praiseList = ["Excellent!", "Great job!", "Amazing!", "Perfect!", "Fantastic!", "Superb!", "Unbelievable!"];
 
 // -----------------------------------------------------------
-// [수정됨] 오디오 설정 (중복 제거 & 볼륨 조절 적용)
+// [수정됨] 오디오 설정 (로그인 오류 해결 + 아이폰 볼륨 해결)
 // -----------------------------------------------------------
-let player = null; // 처음에는 아무것도 없는 상태로 시작
-player.volume = 1.0; // 문장 소리는 크게 (100%)
+// 🚨 중요: null이 아니라 new Audio()로 시작해야 로그인이 됩니다!
+let player = new Audio(); 
+player.volume = 1.0; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
-successSound.volume = 0.3; // 딩동 소리는 작게 (30%)
+successSound.volume = 0.3; // 효과음 작게
 
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
-failSound.volume = 0.3; // 땡 소리는 작게 (30%)
+failSound.volume = 0.3; // 효과음 작게
 // -----------------------------------------------------------
 
 let wakeLock = null; 
