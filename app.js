@@ -32,10 +32,10 @@ let player = new Audio();
 player.volume = 1.0; 
 
 const successSound = new Audio(BASE_URL + "common/success.mp3");
-successSound.volume = 0.3; 
+successSound.volume = 0.8; 
 
 const failSound = new Audio(BASE_URL + "common/fail.mp3");
-failSound.volume = 0.3; 
+failSound.volume = 0.8; 
 // -----------------------------------------------------------
 
 // 🚨 주의: wakeLock이 여기서 한 번만 선언되어야 합니다.
