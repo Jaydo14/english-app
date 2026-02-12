@@ -439,11 +439,10 @@ window.startStudy = function () {
 window.skipSentence = function() { try { recognizer.abort(); } catch(e) {} nextStep(); };
 
 // ======================================================
-// 8. 재생 및 화면 표시 (Web Audio API 적용: 아이폰 스피커 강제 전환)
+// 8. 재생 및 화면 표시 (Web Audio API + 속도 최적화 버전)
 // ======================================================
 
-// [1] 오디오 컨텍스트 엔진 생성 (전역 변수)
-// 이 변수는 앱이 켜져있는 동안 계속 살아서 스피커를 관리합니다.
+// [1] 오디오 컨텍스트 엔진 생성
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 let audioCtx = new AudioContext();
 
@@ -458,70 +457,64 @@ function playSentence() {
   
   updateProgress();
 
-  // 2. 마이크 강제 종료 (필수: 볼륨 뺏김 방지)
+  // 2. 마이크 강제 종료 (아이폰은 끄는 건 빠름)
   if (typeof recognizer !== 'undefined') {
       try { recognizer.abort(); } catch(e) {}
   }
 
-  // 3. 오디오 재생 (Web Audio API 사용)
+  // 3. 오디오 재생
   if (item.audio) {
     const audioUrl = BASE_URL + currentType + "u/" + item.audio;
-    // 일반 player.play() 대신, 스피커를 강제로 여는 함수를 사용합니다.
     playAudioWithContext(audioUrl);
   } else {
     alert("오디오 파일 없음");
   }
 }
 
-// [핵심 기술] AudioContext로 스피커 모드 강제 전환 함수
+// [핵심 기술] AudioContext로 스피커 모드 강제 전환 + 속도 패치
 function playAudioWithContext(url) {
-    // 1. 기존 플레이어 정지 및 초기화 (중복 재생 방지)
+    // 1. 기존 플레이어 즉시 정지
     if (player) {
         player.pause();
         player.src = "";
-        player = null; // 메모리 해제
+        player = null; 
     }
 
     // 2. 새 오디오 객체 생성
-    // (매번 새로 만들어야 아이폰이 '새로운 음악'으로 인식합니다)
     player = new Audio();
-    player.crossOrigin = "anonymous"; // 서버 보안 통과용
+    player.crossOrigin = "anonymous"; 
     player.src = url;
     player.volume = 1.0;
 
-    // 3. 오디오 엔진(AudioContext)과 연결
-    // 일반적인 <audio> 태그 재생이 아니라, '오디오 믹서'를 거치게 만듭니다.
-    // 이렇게 하면 아이폰이 통화 모드가 아닌 '미디어 모드'로 인식할 확률이 매우 높아집니다.
+    // 3. 오디오 엔진 연결
     try {
         const source = audioCtx.createMediaElementSource(player);
         source.connect(audioCtx.destination);
     } catch (e) {
-        console.log("오디오 소스 연결 중 오류 (무시 가능):", e);
+        // 연결 에러는 무시해도 재생은 시도함
     }
 
     // 4. 재생 시도
-    player.play().then(() => {
-        console.log("Web Audio API로 재생 성공");
-    }).catch(error => {
-        console.log("Web Audio 재생 막힘:", error);
-        // 자동 재생이 막히면 버튼을 보여줘서 터치 유도
+    player.play().catch(error => {
+        console.log("재생 막힘:", error);
         sentenceText.innerText = "🔊 터치하여 듣기";
         sentenceText.onclick = () => { 
-            audioCtx.resume(); // 엔진 깨우기
+            audioCtx.resume(); 
             player.play(); 
         };
     });
 
-    // 5. 종료 후 처리
+    // 5. 종료 후 처리 (여기가 속도의 핵심!)
     player.onended = () => {
         sentenceText.style.color = "#ffff00"; 
         
-        // 0.2초 뒤 마이크 켜기
+        // [수정됨] 0.2초(200ms) -> 0.05초(50ms)로 대폭 단축!
+        // Web Audio API 덕분에 이제 짧게 쉬어도 소리가 안 작아집니다.
         setTimeout(() => {
             try {
                 if (typeof recognizer !== 'undefined') recognizer.start();
             } catch(e) {}
-        }, 200);
+        }, 50); 
     };
 }
 
